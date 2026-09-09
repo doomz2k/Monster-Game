@@ -1,4 +1,6 @@
 import * as THREE from 'three';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+import { createMonster } from './monster-model';
 import { ZONES, clampToIsland, nearestZone, type ZoneId } from './learning';
 import { COSMETICS, type Outfit } from './wardrobe';
 import { createCostume } from './monster-outfit';
@@ -34,13 +36,12 @@ export class MonsterWorld {
   private savedFacing = 0;
   private camera = new THREE.PerspectiveCamera(48, 1, 0.1, 220);
   private renderer: THREE.WebGLRenderer;
+  private environment: THREE.WebGLRenderTarget | null = null;
   private frame = 0;
   private observer: ResizeObserver;
   private player = new THREE.Group();
-  private rig = new THREE.Group();
-  private arms = [new THREE.Group(), new THREE.Group()];
-  private feet = [new THREE.Group(), new THREE.Group()];
-  private eyes = new THREE.Group();
+  private character = createMonster();
+  private rig = this.character.root;
   private shadow: THREE.Mesh;
   private guide: THREE.Mesh;
   private ornaments: {
@@ -62,7 +63,6 @@ export class MonsterWorld {
   private cylinder = new THREE.CylinderGeometry(1, 1, 1, 10);
   private cone = new THREE.ConeGeometry(1, 1, 12);
   private growingPlants: THREE.Group[] = [];
-  private walkTime = 0;
   private jumpY = 0;
   private jumpVelocity = 0;
   private angle = 0;
@@ -87,19 +87,28 @@ export class MonsterWorld {
     this.renderer.setClearColor('#b6e6ed');
     this.renderer.outputColorSpace = THREE.SRGBColorSpace;
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    this.renderer.toneMappingExposure = 1.25;
+    this.renderer.toneMappingExposure = 1.05;
+    const environmentRoom = new RoomEnvironment();
+    const environmentGenerator = new THREE.PMREMGenerator(this.renderer);
+    this.environment = environmentGenerator.fromScene(environmentRoom, 0.04);
+    this.scene.environment = this.showroom.environment =
+      this.environment.texture;
+    this.scene.environmentIntensity = 0.35;
+    this.showroom.environmentIntensity = 0.6;
+    environmentRoom.dispose();
+    environmentGenerator.dispose();
     host.appendChild(this.renderer.domElement);
     this.renderer.domElement.setAttribute(
       'aria-label',
-      'Clo exploring a three-dimensional island with meadows, woods, a beach and a garden',
+      'Monster exploring a three-dimensional island with meadows, woods, a beach and a garden',
     );
     this.renderer.domElement.addEventListener(
       'webglcontextlost',
       this.contextLost,
     );
     this.scene.fog = new THREE.Fog('#b6e6ed', 58, 125);
-    this.scene.add(new THREE.HemisphereLight('#ffffe8', '#79a976', 2.5));
-    const light = new THREE.DirectionalLight('#fff2c6', 3.4);
+    this.scene.add(new THREE.HemisphereLight('#ffffe8', '#79a976', 1.7));
+    const light = new THREE.DirectionalLight('#fff2c6', 3);
     light.position.set(-22, 40, 16);
     light.castShadow = true;
     light.shadow.mapSize.set(2048, 2048);
@@ -639,108 +648,90 @@ export class MonsterWorld {
     }
   }
   private buildMonster() {
-    const m = this.rig;
-    this.player.add(m);
-    this.ball(m, '#ffd448', 0, 1.35, 0, 0.84, 1.03, 0.68);
-    this.ball(m, '#ffe593', 0, 1.08, 0.57, 0.52, 0.6, 0.16);
-    for (const side of [-1, 1]) {
-      this.mesh(
-        m,
-        this.cone,
-        '#edbd68',
-        side * 0.51,
-        2.39,
-        -0.04,
-        0.19,
-        0.5,
-        0.18,
-      ).rotation.z = -side * 0.28;
-      this.ball(m, '#f5d294', side * 0.57, 2.58, -0.04, 0.095);
-      this.ball(this.eyes, '#fffefa', side * 0.29, 1.76, 0.57, 0.26, 0.3, 0.19);
-      this.ball(
-        this.eyes,
-        '#394442',
-        side * 0.27,
-        1.75,
-        0.746,
-        0.115,
-        0.145,
-        0.054,
-      );
-      this.ball(this.eyes, '#ffffff', side * 0.27 - 0.026, 1.8, 0.79, 0.04);
-      this.ball(m, '#f39a75', side * 0.49, 1.42, 0.579, 0.17, 0.09, 0.045);
-      this.ball(
-        m,
-        '#c79635',
-        side * 0.3,
-        2.13,
-        0.5,
-        0.18,
-        0.04,
-        0.04,
-      ).rotation.z = -side * 0.16;
-    }
-    m.add(this.eyes);
-    this.ball(m, '#774e3a', 0, 1.36, 0.693, 0.24, 0.135, 0.032);
-    this.ball(m, '#ffdc57', 0, 1.46, 0.7, 0.27, 0.11, 0.033);
-    this.mesh(m, this.box, '#fff9e6', 0.06, 1.325, 0.73, 0.1, 0.09, 0.025);
-    this.ball(m, '#ffe06c', 0, 1.54, 0.69, 0.12, 0.095, 0.11);
-    this.arms.forEach((arm, i) => {
-      const side = i ? 1 : -1;
-      arm.position.set(side * 0.75, 1.5, 0);
-      m.add(arm);
-      this.ball(arm, '#ffd448', side * 0.1, -0.3, 0, 0.22, 0.43, 0.23);
-      this.ball(arm, '#ffda56', side * 0.13, -0.58, 0.07, 0.25, 0.23, 0.25);
-    });
-    this.feet.forEach((foot, i) => {
-      foot.position.set(i ? 0.39 : -0.39, 0.37, 0);
-      m.add(foot);
-      this.ball(foot, '#edb735', 0, -0.16, 0.16, 0.3, 0.22, 0.41);
-    });
-    for (let i = 0; i < 3; i++)
-      this.ball(m, '#e8af3d', 0, 1.7 - i * 0.36, -0.63, 0.15, 0.17, 0.16);
+    this.player.add(this.rig);
     for (const item of COSMETICS) {
       const piece = createCostume(item.id);
       piece.visible = false;
-      m.add(piece);
+      this.rig.add(piece);
       this.costumePieces.set(item.id, piece);
     }
   }
   private buildShowroom() {
-    this.showroom.add(new THREE.HemisphereLight('#fffbe4', '#88a488', 2.8));
-    const light = new THREE.DirectionalLight('#fff3d4', 3);
-    light.position.set(-3, 6, 5);
-    this.showroom.add(light, this.showroomStage);
+    this.showroom.add(
+      new THREE.HemisphereLight('#fffbe4', '#8c9e80', 1.25),
+      this.showroomStage,
+    );
+    const key = new THREE.DirectionalLight('#fff0d2', 2.8);
+    key.position.set(-3, 5, 4);
+    key.castShadow = true;
+    key.shadow.mapSize.set(1024, 1024);
+    Object.assign(key.shadow.camera, {
+      left: -2.5,
+      right: 2.5,
+      top: 3.5,
+      bottom: -1.5,
+      near: 0.1,
+      far: 15,
+    });
+    key.shadow.normalBias = 0.018;
+    const fill = new THREE.DirectionalLight('#fff9ea', 0.8);
+    fill.position.set(3, 2, 4);
+    const rim = new THREE.DirectionalLight('#dcefff', 2.1);
+    rim.position.set(2, 4, -3);
+    this.showroomStage.add(key, key.target, fill, fill.target, rim, rim.target);
     this.mesh(
       this.showroomStage,
-      this.cylinder,
+      new THREE.CylinderGeometry(1.4, 1.38, 0.18, 96),
       '#e1d5b2',
       0,
-      -0.12,
+      -0.11,
       0,
-      1.4,
-      0.2,
-      1.4,
     );
     this.mesh(
       this.showroomStage,
-      this.cylinder,
+      new THREE.CylinderGeometry(1.42, 1.42, 0.09, 96),
       '#fff7dc',
       0,
       0,
       0,
-      1.42,
-      0.09,
-      1.42,
     );
     this.mesh(
       this.showroomStage,
-      new THREE.TorusGeometry(1.41, 0.03, 8, 48),
+      new THREE.TorusGeometry(1.41, 0.03, 12, 96),
       '#c8b982',
       0,
       -0.04,
       0,
     ).rotation.x = Math.PI / 2;
+    const size = 128,
+      pixels = new Uint8Array(size * size * 4);
+    for (let y = 0; y < size; y++)
+      for (let x = 0; x < size; x++) {
+        const offset = (y * size + x) * 4;
+        pixels[offset] = 69;
+        pixels[offset + 1] = 57;
+        pixels[offset + 2] = 31;
+        pixels[offset + 3] = Math.round(
+          65 *
+            Math.exp(
+              -(((x / size - 0.5) * 2) ** 2 + ((y / size - 0.5) * 2) ** 2) * 6,
+            ),
+        );
+      }
+    const contactTexture = new THREE.DataTexture(pixels, size, size);
+    contactTexture.needsUpdate = true;
+    contactTexture.magFilter = THREE.LinearFilter;
+    const contact = new THREE.Mesh(
+      new THREE.PlaneGeometry(2.6, 2.2),
+      new THREE.MeshBasicMaterial({
+        map: contactTexture,
+        transparent: true,
+        depthWrite: false,
+      }),
+    );
+    contact.rotation.x = -Math.PI / 2;
+    contact.position.y = 0.05;
+    this.showroomStage.add(contact);
   }
   private tick(dt: number, time: number) {
     const s = this.state(),
@@ -748,6 +739,7 @@ export class MonsterWorld {
     const show = Boolean(s.showcase);
     if (show !== this.inShowcase) {
       this.inShowcase = show;
+      this.renderer.setPixelRatio(Math.min(devicePixelRatio, show ? 2 : 1.5));
       this.renderer.setClearColor('#b6e6ed', show ? 0 : 1);
       if (show) {
         this.savedFacing = this.player.rotation.y;
@@ -806,7 +798,6 @@ export class MonsterWorld {
             Math.cos(target - this.player.rotation.y),
           ) *
           (1 - Math.exp(-12 * dt));
-        this.walkTime += dt * 10 * moving;
       }
       if (this.jumpY > 0 || this.jumpVelocity > 0) {
         this.jumpVelocity -= 13 * dt;
@@ -819,8 +810,6 @@ export class MonsterWorld {
       p.scale.setScalar(0.35 + Math.min(1.05, Math.max(0, blooms - i) * 0.28)),
     );
     this.celebration = Math.max(0, this.celebration - dt);
-    const wave = this.celebration > 0 || s.welcome,
-      bob = this.reducedMotion ? 0 : Math.sin(time * 2.4) * 0.034;
     this.player.position.y =
       height(this.player.position.x, this.player.position.z) +
       (show ? 0 : this.jumpY);
@@ -829,22 +818,15 @@ export class MonsterWorld {
       height(this.player.position.x, this.player.position.z) - 0.02,
       this.player.position.z,
     );
-    this.rig.position.y =
-      bob +
-      (moving ? Math.abs(Math.sin(this.walkTime)) * 0.09 : 0) +
-      (this.celebration ? Math.abs(Math.sin(time * 8)) * 0.23 : 0);
-    this.rig.rotation.z = moving
-      ? Math.sin(this.walkTime) * 0.045
-      : Math.sin(time * 1.7) * 0.018;
-    this.feet[0].rotation.x = Math.sin(this.walkTime) * moving * 0.5;
-    this.feet[1].rotation.x = -Math.sin(this.walkTime) * moving * 0.5;
-    this.arms[0].rotation.x = -Math.sin(this.walkTime) * moving * 0.55;
-    this.arms[1].rotation.x = Math.sin(this.walkTime) * moving * 0.55;
-    this.arms[1].rotation.z = wave ? -2.1 + Math.sin(time * 7) * 0.23 : -0.12;
-    this.arms[0].rotation.z = this.celebration ? 2.1 : 0.12;
-    const blink = Math.sin(time * 0.87) > 0.996;
-    this.eyes.scale.y = blink ? 0.09 : 1;
-    this.eyes.position.y = blink ? 1.6 : 0;
+    this.character.animate({
+      delta: dt,
+      time,
+      speed: moving,
+      airborne: show ? 0 : this.jumpY,
+      celebrating: this.celebration > 0,
+      greeting: s.welcome,
+      reducedMotion: this.reducedMotion,
+    });
     this.shadow.position.set(
       this.player.position.x,
       height(this.player.position.x, this.player.position.z) + 0.025,
@@ -983,13 +965,22 @@ export class MonsterWorld {
       this.contextLost,
     );
     const geometries = new Set<THREE.BufferGeometry>(),
-      materials = new Set<THREE.Material>();
+      materials = new Set<THREE.Material>(),
+      textures = new Set<THREE.Texture>();
     const collect = (o: THREE.Object3D) => {
       if (o instanceof THREE.Mesh) {
         geometries.add(o.geometry);
-        (Array.isArray(o.material) ? o.material : [o.material]).forEach((m) =>
-          materials.add(m),
-        );
+        (Array.isArray(o.material) ? o.material : [o.material]).forEach((m) => {
+          materials.add(m);
+          if (m instanceof THREE.MeshStandardMaterial && m.bumpMap)
+            textures.add(m.bumpMap);
+          if (
+            (m instanceof THREE.MeshStandardMaterial ||
+              m instanceof THREE.MeshBasicMaterial) &&
+            m.map
+          )
+            textures.add(m.map);
+        });
       }
       if (o instanceof THREE.Sprite) {
         o.material.map?.dispose();
@@ -1000,6 +991,8 @@ export class MonsterWorld {
     this.showroom.traverse(collect);
     geometries.forEach((g) => g.dispose());
     materials.forEach((m) => m.dispose());
+    textures.forEach((t) => t.dispose());
+    this.environment?.dispose();
     this.renderer.dispose();
     this.renderer.domElement.remove();
   }

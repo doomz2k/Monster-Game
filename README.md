@@ -1,10 +1,12 @@
 # Monster-Game
 
-Clover's Monster Game: **Clo's Little World**, a browser adventure for a four-year-old, starring an animated, friendly yellow monster.
+Clover's **Monster Game**, a browser adventure for a four-year-old, starring an animated, friendly yellow character named **Monster**.
 
 Explore a connected 3D island with soft boundaries, a follow camera, walking, hopping, blinking, waving and celebrations. There are no lives, timers or penalties. Progress stays in this browser.
 
-The launch screen lets the child start or continue an adventure, dress up Clo, or open grown-up settings. Dress-up is also available from Pause and immediately after earning a new outfit reward. The live 3D preview can be turned around; equipped pieces follow Clo throughout the island.
+Monster has a continuous sculpted body, a soft tummy that follows its surface, fine plush texture and short fur tufts, curved horns, detailed hazel eyes with independent eyelids, rounded fingers and toes, and a curled tail. The character rig smooths walking, breathing, waving, jumping and landing. Clothes follow the same rig; the explorer hat includes horn openings. The dressing room uses softer key/fill/rim lighting, environment reflections, contact shading and a smooth display stand. The character and its materials are generated locally in `lib/monster-model.ts`; no external model downloads are needed.
+
+The launch screen lets the child start or continue an adventure, dress up Monster, or open grown-up settings. Dress-up is also available from Pause and immediately after earning a new outfit reward. The live 3D preview can be turned around; equipped pieces follow Monster throughout the island.
 
 ## Dress-up and rewards
 
@@ -21,7 +23,7 @@ Choose one hat and one accessory. The bobble beanie, party hat, berry bow tie an
 
 Outfits save automatically in the existing browser save. Earlier saves keep their stars, sounds and settings and receive the starter outfit. Unlocking an item does not change the child's outfit automatically. Rewards are permanent while that browser save is retained; there are no purchases or random rewards.
 
-In the dressing room, use the stick/D-pad or arrows to choose an item and **A / Enter / Space** to wear it. **LB / RB** or **Q / E** switches between hats and accessories. **X / M** turns Clo by a quarter turn; the right stick also rotates the preview. **B / Escape** or **All dressed!** returns to the previous screen. Locked items remain selectable so their spoken unlock requirement can be heard with **Y**.
+In the dressing room, use the stick/D-pad or arrows to choose an item and **A / Enter / Space** to wear it. **LB / RB** or **Q / E** switches between hats and accessories. **X / M** turns Monster by a quarter turn; the right stick also rotates the preview. **B / Escape** or **All dressed!** returns to the previous screen. Locked items remain selectable so their spoken unlock requirement can be heard with **Y**.
 
 | Area             | Activities                                                                                                                          |
 | ---------------- | ----------------------------------------------------------------------------------------------------------------------------------- |

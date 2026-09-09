@@ -37,7 +37,7 @@ export function registerGameTools(
     {
       name: 'visit_monster_learning_area',
       description:
-        'Move Clo to an island learning area and enter exploration. This does not answer or complete an activity.',
+        'Move Monster to an island learning area and enter exploration. This does not answer or complete an activity.',
       inputSchema: {
         type: 'object',
         properties: {

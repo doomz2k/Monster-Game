@@ -138,7 +138,7 @@ test('corrupt or malicious local progress is contained', () => {
   assert.equal(p.mathsMax, 5);
   assert.equal(p.rounds.meadow, 0);
 });
-test('world boundaries keep Clo on the island and controller drift stays still', () => {
+test('world boundaries keep Monster on the island and controller drift stays still', () => {
   for (let i = 0; i < 100; i++) {
     const p = clampToIsland(Math.sin(i) * 100, Math.cos(i) * 100);
     assert.ok(Math.hypot(p.x, p.z) <= 38.000001);

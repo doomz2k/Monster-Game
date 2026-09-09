@@ -54,17 +54,17 @@ export function WardrobePanel({
   return (
     <section className="dressing-room" aria-labelledby="wardrobe-title">
       <div className="wardrobe-preview-note">
-        <span className="eyebrow">LOOKING LOVELY, CLO</span>
+        <span className="eyebrow">LOOKING LOVELY, MONSTER</span>
         <button className="turn-button" onClick={onTurn}>
-          <RotateCw size={18} /> Turn Clo{' '}
+          <RotateCw size={18} /> Turn Monster{' '}
           <span className="pad-key x-key">X</span>
         </button>
-        <small>Right stick turns Clo too</small>
+        <small>Right stick turns Monster too</small>
       </div>
       <div className="wardrobe-panel">
         <div className="wardrobe-heading">
           <span className="eyebrow">
-            <Shirt size={16} /> CLO’S DRESS-UP BOX
+            <Shirt size={16} /> MONSTER’S DRESS-UP BOX
           </span>
           <span className="wardrobe-stars">
             <Star size={17} fill="currentColor" /> {stars}

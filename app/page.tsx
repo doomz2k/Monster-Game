@@ -326,8 +326,8 @@ export default function Game() {
     setSelection(0);
     void audioDirector?.say(
       progress.completed.length
-        ? 'Welcome back, Clover! Clo is ready for another adventure.'
-        : 'Hello Clover! I’m Clo. Let’s explore! Follow the sparkle to Counting Meadow.',
+        ? 'Welcome back, Clover! Monster is ready for another adventure.'
+        : 'Hello Clover! I’m Monster. Let’s explore! Follow the sparkle to Counting Meadow.',
     );
   };
   const openParents = () => {
@@ -349,7 +349,9 @@ export default function Game() {
     );
     setWardrobeMessage('');
     setMode('wardrobe');
-    void audioDirector.say('Let’s dress up Clo! Choose a hat or an accessory.');
+    void audioDirector.say(
+      'Let’s dress up Monster! Choose a hat or an accessory.',
+    );
   };
   const switchWardrobe = (slot: OutfitSlot) => {
     setWardrobeSlot(slot);
@@ -382,14 +384,14 @@ export default function Game() {
     }));
     setWardrobeMessage(
       item.id.startsWith('no-')
-        ? 'Just right. Looking lovely, Clo!'
-        : item.name + '. Looking lovely, Clo!',
+        ? 'Just right. Looking lovely, Monster!'
+        : item.name + '. Looking lovely, Monster!',
     );
     audioDirector.chime();
     void audioDirector.say(
       item.id.startsWith('no-')
-        ? 'Looking lovely, Clo!'
-        : item.name + '. Looking lovely, Clo!',
+        ? 'Looking lovely, Monster!'
+        : item.name + '. Looking lovely, Monster!',
     );
   };
   const launch = () => {
@@ -441,7 +443,7 @@ export default function Game() {
     }
     if (mode === 'welcome') {
       void audioDirector.say(
-        'Hello Clover! I’m Clo. Choose let’s play, or dress me up for our adventure!',
+        'Hello Clover! I’m Monster. Choose let’s play, or dress me up for our adventure!',
       );
       return;
     }
@@ -751,7 +753,7 @@ export default function Game() {
             <Sparkles size={24} />
           </span>
           <div>
-            <span className="brand-kicker">CLO’S</span>
+            <span className="brand-kicker">MONSTER’S</span>
             <h1>
               little world<span>✦</span>
             </h1>
@@ -882,7 +884,7 @@ export default function Game() {
             }
           >
             <Key letter="a" />
-            {position.near ? 'Let’s play at ' + zone.name : 'Hop, Clo!'}
+            {position.near ? 'Let’s play at ' + zone.name : 'Hop, Monster!'}
             {position.near && <Sparkles size={20} />}
           </button>
           <span>
@@ -984,7 +986,7 @@ export default function Game() {
             <span className="eyebrow">
               {mode === 'challenge'
                 ? ZONES.find((z) => z.id === activity)!.name
-                : 'CLO’S LITTLE WORLD'}
+                : 'MONSTER’S LITTLE WORLD'}
             </span>
             <button
               className="icon-button"
@@ -999,7 +1001,7 @@ export default function Game() {
           <DialogTitle className="dialog-title">{modalTitle}</DialogTitle>
           <DialogDescription className="dialog-description">
             {mode === 'map'
-              ? 'Pick a place, and Clo will hop over.'
+              ? 'Pick a place, and Monster will hop over.'
               : mode === 'pause'
                 ? 'Your adventure will be right here.'
                 : mode === 'parents'
@@ -1053,7 +1055,7 @@ export default function Game() {
                   fn: () => setMode(resumeMode),
                 },
                 {
-                  text: 'Dress up Clo',
+                  text: 'Dress up Monster',
                   Icon: Shirt,
                   fn: () => openWardrobe('pause'),
                 },

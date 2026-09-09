@@ -52,7 +52,7 @@ export const COSMETICS = [
   {
     id: 'no-accessory',
     slot: 'accessory',
-    name: 'Just Clo',
+    name: 'Just Monster',
     icon: '💛',
     stars: 0,
     colour: '#fff1c5',

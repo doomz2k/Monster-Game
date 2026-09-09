@@ -1,10 +1,11 @@
 import * as THREE from 'three';
+import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
 
-// Each piece uses Clo's rig coordinates, so it follows every hop and sway.
+// Each piece uses Monster's rig coordinates, so it follows every hop and sway.
 export function createCostume(id: string): THREE.Group {
   const group = new THREE.Group();
   group.name = id;
-  const materials = new Map<string, THREE.MeshStandardMaterial>();
+  const materials = new Map<string, THREE.MeshPhysicalMaterial>();
   function add(
     geometry: THREE.BufferGeometry,
     colour: string,
@@ -17,9 +18,15 @@ export function createCostume(id: string): THREE.Group {
   ) {
     let material = materials.get(colour);
     if (!material) {
-      material = new THREE.MeshStandardMaterial({
+      const polished = id === 'crown' || id === 'medal' || id === 'glasses';
+      material = new THREE.MeshPhysicalMaterial({
         color: colour,
-        roughness: 0.75,
+        roughness: polished ? 0.36 : 0.8,
+        sheen: polished ? 0 : 0.75,
+        sheenColor: '#fff4d9',
+        sheenRoughness: 0.65,
+        clearcoat: polished ? 0.4 : 0,
+        metalness: id === 'crown' || id === 'medal' ? 0.22 : 0,
       });
       materials.set(colour, material);
     }
@@ -39,7 +46,7 @@ export function createCostume(id: string): THREE.Group {
     sx: number,
     sy = sx,
     sz = sx,
-  ) => add(new THREE.SphereGeometry(1, 16, 12), colour, x, y, z, sx, sy, sz);
+  ) => add(new THREE.SphereGeometry(1, 32, 24), colour, x, y, z, sx, sy, sz);
   const ring = (
     colour: string,
     radius: number,
@@ -47,7 +54,7 @@ export function createCostume(id: string): THREE.Group {
     x: number,
     y: number,
     z: number,
-  ) => add(new THREE.TorusGeometry(radius, tube, 8, 32), colour, x, y, z);
+  ) => add(new THREE.TorusGeometry(radius, tube, 12, 64), colour, x, y, z);
   const cylinder = (
     colour: string,
     radius: number,
@@ -55,7 +62,7 @@ export function createCostume(id: string): THREE.Group {
     y: number,
   ) =>
     add(
-      new THREE.CylinderGeometry(radius, radius, height, 24),
+      new THREE.CylinderGeometry(radius, radius, height, 64),
       colour,
       0,
       y,
@@ -63,10 +70,11 @@ export function createCostume(id: string): THREE.Group {
     );
   if (id === 'beanie') {
     ball('#6aafa2', 0, 2.4, -0.02, 0.66, 0.39, 0.59);
-    ring('#4f938c', 0.59, 0.095, 0, 2.34, 0).rotation.x = Math.PI / 2;
+    ring('#4f938c', 0.565, 0.055, 0, 2.34, 0).rotation.x = Math.PI / 2;
     ball('#fff0c9', 0, 2.83, 0, 0.18);
   } else if (id === 'party') {
-    add(new THREE.ConeGeometry(0.48, 0.95, 24), '#b28dd0', 0, 2.74, 0);
+    group.position.y = 0.08;
+    add(new THREE.ConeGeometry(0.48, 0.95, 48), '#b28dd0', 0, 2.74, 0);
     ring('#f2a6bb', 0.48, 0.07, 0, 2.29, 0).rotation.x = Math.PI / 2;
     ball('#ffe17b', 0, 3.26, 0, 0.14);
     for (const [x, y, z] of [
@@ -76,16 +84,33 @@ export function createCostume(id: string): THREE.Group {
     ])
       ball('#fff6cf', x, y, z, 0.065, 0.065, 0.035);
   } else if (id === 'explorer') {
-    cylinder('#d8bb7b', 0.95, 0.09, 2.35);
+    const brim = new THREE.Shape();
+    brim.absarc(0, 0, 0.95, 0, Math.PI * 2, false);
+    for (const side of [-1, 1]) {
+      const opening = new THREE.Path();
+      opening.absarc(side * 0.75, 0.1, 0.18, 0, Math.PI * 2, true);
+      brim.holes.push(opening);
+    }
+    const brimGeometry = new THREE.ExtrudeGeometry(brim, {
+      depth: 0.07,
+      bevelEnabled: true,
+      bevelSize: 0.01,
+      bevelThickness: 0.01,
+      bevelSegments: 2,
+      steps: 1,
+      curveSegments: 32,
+    });
+    brimGeometry.rotateX(-Math.PI / 2);
+    add(brimGeometry, '#d8bb7b', 0, 2.305, 0).name = 'Brim with horn openings';
     cylinder('#e6cd97', 0.62, 0.38, 2.55);
     cylinder('#8a9c67', 0.63, 0.12, 2.41);
     ball('#edddb3', 0, 2.77, 0, 0.6, 0.09, 0.6);
   } else if (id === 'flowers') {
-    ring('#719f62', 0.61, 0.075, 0, 2.34, 0).rotation.x = Math.PI / 2;
+    ring('#719f62', 0.555, 0.055, 0, 2.34, 0).rotation.x = Math.PI / 2;
     for (let n = 0; n < 7; n++) {
       const a = (n * Math.PI * 2) / 7,
-        x = Math.sin(a) * 0.62,
-        z = Math.cos(a) * 0.62;
+        x = Math.sin(a) * 0.56,
+        z = Math.cos(a) * 0.56;
       for (let p = 0; p < 5; p++) {
         const t = (p * Math.PI * 2) / 5;
         ball(
@@ -101,11 +126,11 @@ export function createCostume(id: string): THREE.Group {
       ball('#e7ad38', x, 2.37, z + 0.04, 0.065);
     }
   } else if (id === 'crown') {
-    ring('#e7b546', 0.61, 0.115, 0, 2.38, 0).rotation.x = Math.PI / 2;
+    ring('#e7b546', 0.56, 0.085, 0, 2.38, 0).rotation.x = Math.PI / 2;
     for (let n = 0; n < 6; n++) {
       const a = (n * Math.PI * 2) / 6,
-        x = Math.sin(a) * 0.6,
-        z = Math.cos(a) * 0.6;
+        x = Math.sin(a) * 0.55,
+        z = Math.cos(a) * 0.55;
       add(new THREE.ConeGeometry(0.17, 0.48, 4), '#f4ce64', x, 2.62, z);
       ball(['#8bc5b9', '#ea9fb6', '#b29cd4'][n % 3], x, 2.9, z, 0.1);
     }
@@ -116,9 +141,10 @@ export function createCostume(id: string): THREE.Group {
   } else if (id === 'scarf') {
     const collar = ring('#6eaba1', 0.71, 0.12, 0, 1.05, 0);
     collar.rotation.x = Math.PI / 2;
+    collar.scale.x = 1.2;
     collar.scale.y = 0.96;
     add(
-      new THREE.BoxGeometry(0.24, 0.55, 0.1),
+      new RoundedBoxGeometry(0.24, 0.55, 0.1, 3, 0.024),
       '#8ac0b4',
       0.33,
       0.77,
@@ -133,16 +159,22 @@ export function createCostume(id: string): THREE.Group {
     ).rotation.z = -0.16;
   } else if (id === 'glasses') {
     for (const side of [-1, 1]) {
-      ring('#8c74ad', 0.248, 0.033, side * 0.29, 1.76, 0.8);
+      ring('#8c74ad', 0.255, 0.033, side * 0.29, 1.79, 0.9);
       add(
         new THREE.BoxGeometry(0.04, 0.04, 0.46),
         '#8c74ad',
         side * 0.56,
-        1.78,
-        0.6,
+        1.81,
+        0.69,
       );
     }
-    add(new THREE.BoxGeometry(0.12, 0.033, 0.04), '#8c74ad', 0, 1.79, 0.81);
+    add(
+      new RoundedBoxGeometry(0.12, 0.033, 0.04, 2, 0.01),
+      '#8c74ad',
+      0,
+      1.82,
+      0.9,
+    );
   } else if (id === 'backpack') {
     ball('#699cba', 0, 1.2, -0.77, 0.58, 0.62, 0.28);
     ball('#8ab9cf', 0, 0.97, -1.01, 0.4, 0.27, 0.08);

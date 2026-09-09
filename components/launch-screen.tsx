@@ -38,7 +38,7 @@ export function LaunchScreen({
       </div>
       <div className="launch-copy">
         <div className="launch-eyebrow">
-          <Sparkles size={20} /> CLO’S LITTLE WORLD
+          <Sparkles size={20} /> MONSTER’S LITTLE WORLD
         </div>
         <h2 id="launch-title" className="launch-title">
           Monster
@@ -73,7 +73,7 @@ export function LaunchScreen({
           >
             <Shirt size={24} />
             <span>
-              Dress up Clo<small>Hats, little treasures & you</small>
+              Dress up Monster<small>Hats, little treasures & you</small>
             </span>
             <ArrowRight size={20} />
           </button>
@@ -95,7 +95,7 @@ export function LaunchScreen({
       </div>
       <div className="launch-stage-note">
         <span className="eyebrow">MEET YOUR ADVENTURE BUDDY</span>
-        <strong>Hello, I’m Clo!</strong>
+        <strong>Hello, I’m Monster!</strong>
         <p>
           {next ? (
             <>
