@@ -1,0 +1,234 @@
+/* Exploration leaves the island and Monster in charge of the screen. */
+.world-pause {
+  position: absolute;
+  top: max(20px, env(safe-area-inset-top));
+  right: max(20px, env(safe-area-inset-right));
+  width: 54px;
+  height: 54px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  color: #38503c;
+  background: #fffdf2e8;
+  border: 2px solid #fff;
+  box-shadow: 0 3px 12px #233d3920;
+}
+.world-pause.has-notice::after {
+  content: '';
+  position: absolute;
+  top: 1px;
+  right: 1px;
+  width: 13px;
+  height: 13px;
+  background: #e2a63b;
+  border: 2px solid white;
+  border-radius: 50%;
+}
+.activity-cue {
+  position: absolute;
+  bottom: max(28px, env(safe-area-inset-bottom));
+  left: 50%;
+  transform: translateX(-50%);
+  width: 102px;
+  min-height: 96px;
+  border: 3px solid white;
+  border-radius: 30px;
+  background: #fffdf2f5;
+  box-shadow:
+    0 6px 0 #9aaf6f,
+    0 10px 26px #344c3430;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  flex-direction: column;
+  padding: 9px;
+  animation: cue-arrive 240ms ease-out;
+}
+.activity-picture {
+  font-size: 39px;
+  line-height: 1.1;
+}
+.activity-cue .pad-key {
+  width: 28px;
+  height: 28px;
+  font-size: 17px;
+}
+.touch-hop {
+  display: none;
+}
+.game-dialog.picture-dialog .dialog-top {
+  margin-bottom: 16px;
+}
+.dialog-picture {
+  display: grid;
+  place-items: center;
+  font-size: 32px;
+}
+.dialog-picture > svg {
+  width: 30px;
+  height: 30px;
+}
+.game-dialog.picture-dialog .dialog-top .icon-button {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+}
+.picture-dialog .place-card,
+.picture-dialog .menu-button {
+  position: relative;
+  min-height: 128px;
+  padding: 20px 14px 38px;
+  align-items: center;
+  justify-content: center;
+}
+.picture-dialog .place-card .place-emoji {
+  font-size: 64px;
+  line-height: 1.2;
+}
+.picture-dialog .place-card > .pad-key,
+.picture-dialog .menu-button > .pad-key {
+  position: absolute;
+  bottom: 9px;
+  left: calc(50% - 12px);
+  color: white;
+}
+.picture-dialog .pause-menu {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+.picture-dialog .menu-button > svg {
+  margin: 0;
+}
+.pause-stars {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  grid-column: 1 / -1;
+  color: #947016;
+  font-size: 22px;
+  margin: 8px 0;
+}
+.grownup-help {
+  grid-column: 1 / -1;
+  font-size: 16px;
+  color: #52634b;
+  line-height: 1.6;
+}
+.grownup-help summary {
+  cursor: pointer;
+  padding: 12px 0;
+}
+.grownup-help p {
+  margin: 10px 0;
+}
+.picture-dialog .question-footer {
+  margin-top: 24px;
+  min-height: 56px;
+}
+.picture-dialog .question-footer .secondary-button,
+.picture-dialog .teaching-actions .secondary-button {
+  min-width: 82px;
+  min-height: 56px;
+}
+.picture-choice-hint {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  margin-left: auto;
+}
+.picture-dialog .success-scene > .primary-button {
+  min-width: 130px;
+  min-height: 64px;
+}
+.picture-dialog .success-scene > .text-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-width: 96px;
+  min-height: 56px;
+  margin: 18px auto 0;
+  background: #eef1e2;
+  border-radius: 18px;
+}
+.picture-dialog .outfit-reward .secondary-button {
+  min-width: 86px;
+  min-height: 60px;
+}
+.picture-dialog .picture-feedback {
+  display: flex;
+  justify-content: center;
+  color: #66814e;
+  margin-top: 12px;
+}
+.world-pause:focus-visible,
+.activity-cue:focus-visible,
+.touch-hop:focus-visible {
+  outline: 4px solid #365f42;
+  outline-offset: 5px;
+}
+@keyframes cue-arrive {
+  from {
+    opacity: 0;
+    scale: 0.8;
+  }
+  to {
+    opacity: 1;
+    scale: 1;
+  }
+}
+@media (pointer: coarse) {
+  .game-shell.playing .touch-controls {
+    bottom: max(24px, env(safe-area-inset-bottom));
+    left: max(20px, env(safe-area-inset-left));
+    grid-template-columns: repeat(3, 48px);
+    grid-template-rows: repeat(2, 48px);
+  }
+  .game-shell .touch-hop,
+  .game-shell .activity-cue {
+    position: absolute;
+    left: auto;
+    right: max(22px, env(safe-area-inset-right));
+    bottom: max(28px, env(safe-area-inset-bottom));
+    transform: none;
+  }
+  .touch-hop {
+    display: grid;
+    place-items: center;
+    width: 76px;
+    height: 76px;
+    background: #fffdf2e8;
+    color: #38503c;
+    border: 2px solid white;
+    border-radius: 50%;
+  }
+}
+.game-shell.controller-active .touch-controls,
+.game-shell.controller-active .touch-hop {
+  display: none;
+}
+@media (max-height: 540px) {
+  .game-dialog.picture-dialog .dialog-top {
+    margin-bottom: 4px;
+  }
+  .picture-dialog .place-card,
+  .picture-dialog .menu-button {
+    min-height: 100px;
+    padding-top: 10px;
+  }
+  .picture-dialog .place-card .place-emoji {
+    font-size: 44px;
+  }
+  .picture-dialog .pause-menu {
+    gap: 10px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .activity-cue {
+    animation: none;
+  }
+}

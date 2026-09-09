@@ -87,6 +87,7 @@ export type AudioStep =
   | { type: 'clip'; url: string };
 export class AudioDirector {
   private generation = 0;
+  private playingGeneration: number | null = null;
   private player: HTMLAudioElement | null = null;
   private settle: (() => void) | null = null;
   private context: AudioContext | null = null;
@@ -113,6 +114,7 @@ export class AudioDirector {
   }
   stop() {
     this.generation++;
+    this.playingGeneration = null;
     this.player?.pause();
     this.player = null;
     window.speechSynthesis?.cancel();
@@ -123,38 +125,49 @@ export class AudioDirector {
     this.stop();
     if (this.muted) return;
     const generation = this.generation;
-    for (const step of steps) {
-      if (generation !== this.generation || this.muted) return;
-      try {
-        if (step.type === 'phoneme') {
-          const path = approvedPath(step.grapheme, this.reviews());
-          if (!path)
-            throw new Error(
-              'This sound needs a grown-up to say it. Check or add its recording in Grown-ups → Sound studio.',
+    this.playingGeneration = generation;
+    try {
+      for (const step of steps) {
+        if (generation !== this.generation || this.muted) return;
+        try {
+          if (step.type === 'phoneme') {
+            const path = approvedPath(step.grapheme, this.reviews());
+            if (!path)
+              throw new Error(
+                'This sound needs a grown-up to say it. Check or add its recording in Grown-ups → Sound studio.',
+              );
+            await this.clip(path, generation);
+          } else if (step.type === 'clip') {
+            await this.clip(step.url, generation);
+          } else {
+            const path = (narration as Record<string, string>)[
+              step.text.toLowerCase()
+            ];
+            if (path) await this.clip(path, generation);
+            else await this.speak(step.text, generation);
+          }
+        } catch (e) {
+          if (generation === this.generation)
+            this.error(
+              e instanceof Error
+                ? e.message
+                : 'The audio could not play. Try Listen again.',
             );
-          await this.clip(path, generation);
-        } else if (step.type === 'clip') {
-          await this.clip(step.url, generation);
-        } else {
-          const path = (narration as Record<string, string>)[
-            step.text.toLowerCase()
-          ];
-          if (path) await this.clip(path, generation);
-          else await this.speak(step.text, generation);
+          return;
         }
-      } catch (e) {
-        if (generation === this.generation)
-          this.error(
-            e instanceof Error
-              ? e.message
-              : 'The audio could not play. Try Listen again.',
-          );
-        return;
       }
+    } finally {
+      if (this.playingGeneration === generation) this.playingGeneration = null;
     }
   }
   say(text: string) {
     return this.run([{ type: 'narration', text }]);
+  }
+  /** Optional world guidance must never interrupt a lesson or another prompt. */
+  trySay(text: string) {
+    if (this.playingGeneration !== null || this.muted) return false;
+    void this.say(text);
+    return true;
   }
   private clip(url: string, generation: number) {
     return new Promise<void>((resolve, reject) => {

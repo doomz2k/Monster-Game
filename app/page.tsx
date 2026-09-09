@@ -12,9 +12,10 @@ import {
   Play,
   Settings,
   Shirt,
-  Sparkles,
   Star,
-  Sun,
+  RotateCcw,
+  Footprints,
+  Hand,
   Volume2,
   VolumeX,
   X,
@@ -25,7 +26,6 @@ import {
   DialogDescription,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { Progress } from '@/components/ui/progress';
 import { ParentPanel } from '@/components/parent-panel';
 import { LaunchScreen } from '@/components/launch-screen';
 import { WardrobePanel } from '@/components/wardrobe-panel';
@@ -59,6 +59,12 @@ import {
   type ZoneId,
 } from '@/lib/learning';
 import { soundFor } from '@/lib/phonics';
+import {
+  ArrivalGuide,
+  explorationSpeech,
+  movePictureSelection,
+  pauseSpeech,
+} from '@/lib/play-guidance';
 type Mode =
   | 'welcome'
   | 'explore'
@@ -109,47 +115,6 @@ function Dice({ number }: { number: number }) {
     </svg>
   );
 }
-function MiniMap({ position }: { position: WorldUpdate }) {
-  return (
-    <svg viewBox="0 0 180 150" aria-label="Map of four learning areas">
-      <path
-        d="M30 20Q85 -2 142 27Q179 47 154 111Q119 157 57 132Q-3 119 15 59Z"
-        fill="#9cc88a"
-        stroke="#e9d9a5"
-        strokeWidth="8"
-      />
-      <path d="M111 14Q168 28 162 85Q152 126 118 139L100 89Z" fill="#f2d49d" />
-      <path d="M24 36Q44 13 76 15L71 87L19 97Z" fill="#baa8d5" />
-      <path d="M37 114Q89 140 113 131L104 99L64 92Z" fill="#e8b3bd" />
-      <path
-        d="M88 40L88 113M41 76L135 76"
-        fill="none"
-        stroke="#f9e9bc"
-        strokeWidth="6"
-        strokeLinecap="round"
-      />
-      {ZONES.map((z) => (
-        <circle
-          key={z.id}
-          cx={90 + z.x * 2}
-          cy={73 + z.z * 2}
-          r="5"
-          fill={z.colour}
-          stroke="white"
-          strokeWidth="2"
-        />
-      ))}
-      <circle
-        cx={90 + position.x * 2}
-        cy={73 + position.z * 2}
-        r="6"
-        fill="#ffd646"
-        stroke="#684d2e"
-        strokeWidth="2"
-      />
-    </svg>
-  );
-}
 export default function Game() {
   const host = useRef<HTMLDivElement>(null),
     world = useRef<MonsterWorld | null>(null),
@@ -189,6 +154,7 @@ export default function Game() {
   const [wardrobeMessage, setWardrobeMessage] = useState('');
   const [unlocks, setUnlocks] = useState<Cosmetic[]>([]);
   const answered = useRef(false);
+  const [arrivalGuide] = useState(() => new ArrivalGuide());
   const latest = useRef({
     mode,
     progress,
@@ -326,8 +292,8 @@ export default function Game() {
     setSelection(0);
     void audioDirector?.say(
       progress.completed.length
-        ? 'Welcome back, Clover! Monster is ready for another adventure.'
-        : 'Hello Clover! I’m Monster. Let’s explore! Follow the sparkle to Counting Meadow.',
+        ? 'Welcome back! ' + explorationSpeech(position.near, target)
+        : 'Hello! I’m Monster. ' + explorationSpeech(position.near, target),
     );
   };
   const openParents = () => {
@@ -408,9 +374,10 @@ export default function Game() {
     }
     if (mode === 'parents' || mode === 'wardrobe' || mode === 'welcome') return;
     setResumeMode(mode);
-    stop();
+    audioDirector.stop();
     setMode('pause');
     setSelection(0);
+    void audioDirector.say('Take a little rest. Press A to play again.');
   };
   const close = () => {
     stop();
@@ -447,12 +414,18 @@ export default function Game() {
       );
       return;
     }
-    if (!q) {
-      void audioDirector?.say(
-        'Follow the sparkle to ' +
-          ZONES.find((z) => z.id === target)!.name +
-          '. Press A at the glowing spot to play.',
-      );
+    if (mode === 'map') {
+      void audioDirector.say(ZONES[selection].name + '. Press A to visit.');
+      return;
+    }
+    if (mode === 'pause') {
+      void audioDirector.say(pauseSpeech(selection, muted));
+      return;
+    }
+    if (mode === 'explore' || !q) {
+      if (position.near)
+        arrivalGuide.acknowledge(position.near, performance.now());
+      void audioDirector.say(explorationSpeech(position.near, target));
       return;
     }
     if (success) {
@@ -491,6 +464,11 @@ export default function Game() {
     const led = Boolean(q.parts?.some((g) => !approvedPath(g, reviews)));
     setParentLed(led);
     setMode('challenge');
+    arrivalGuide.acknowledge(id, performance.now());
+    if (led)
+      void audioDirector.say(
+        'Let’s ask a grown-up to say these sounds with us.',
+      );
     if (q.introduce) {
       const s = soundFor(q.introduce)!;
       if (!led)
@@ -560,12 +538,15 @@ export default function Game() {
   const travel = (id: ZoneId) => {
     stop();
     setTarget(id);
+    setQuestion(null);
     setMode('explore');
+    arrivalGuide.acknowledge(id, performance.now());
     world.current?.travel(id);
     void audioDirector?.say(
       'Welcome to ' +
         ZONES.find((z) => z.id === id)!.name +
-        '. Press A to play.',
+        '. ' +
+        explorationSpeech(id, id),
     );
   };
   const openMap = () => {
@@ -577,11 +558,23 @@ export default function Game() {
     stop();
     setMode('map');
     setSelection(ZONES.findIndex((z) => z.id === target));
+    void audioDirector.say(
+      'Where shall we go? ' +
+        ZONES.find((z) => z.id === target)!.name +
+        '. Press A to visit.',
+    );
   };
   const toggleMute = () => {
     const next = !muted;
     setMuted(next);
     audioDirector.setMuted(next);
+  };
+  const selectPicture = (index: number) => {
+    setSelection(index);
+    audioDirector.unlock();
+    if (mode === 'map')
+      void audioDirector.say(ZONES[index].name + '. Press A to visit.');
+    if (mode === 'pause') void audioDirector.say(pauseSpeech(index, muted));
   };
   const handleAction = (action: Action) => {
     if (mode === 'parents' && action !== 'back') return;
@@ -642,19 +635,25 @@ export default function Game() {
       return;
     }
     if (['left', 'right', 'up', 'down'].includes(action)) {
+      if (mode === 'map' || mode === 'pause') {
+        selectPicture(
+          movePictureSelection(
+            selection,
+            action as 'left' | 'right' | 'up' | 'down',
+            mode === 'map' ? 4 : 6,
+          ),
+        );
+        return;
+      }
       const delta = action === 'left' || action === 'up' ? -1 : 1;
       const length =
         mode === 'challenge' && !success && !teach && !parentLed
           ? (question?.options.length ?? 1)
-          : mode === 'map'
-            ? 4
-            : mode === 'pause'
-              ? 6
-              : mode === 'welcome'
-                ? 3
-                : mode === 'challenge' && success && unlocks.length
-                  ? 2
-                  : 1;
+          : mode === 'welcome'
+            ? 3
+            : mode === 'challenge' && success && unlocks.length
+              ? 2
+              : 1;
       if (length > 1) setSelection((i) => (i + delta + length) % length);
       return;
     }
@@ -711,10 +710,18 @@ export default function Game() {
     visitAction.current = travel;
     handlers.current = handleAction;
   });
-  const zone = ZONES.find((z) => z.id === position.zone)!,
-    destination = ZONES.find((z) => z.id === target)!,
-    rounds = progress.rounds,
-    visited = ZONES.filter((z) => rounds[z.id] >= 3).length;
+  useEffect(() => {
+    const now = performance.now();
+    const near = arrivalGuide.offer(
+      mode === 'explore' ? position.near : null,
+      now,
+    );
+    if (near && audioDirector.trySay(explorationSpeech(near, target))) {
+      arrivalGuide.acknowledge(near, now);
+    }
+  }, [mode, position, target, audioDirector, arrivalGuide]);
+  const nearby = ZONES.find((z) => z.id === position.near);
+  const rounds = progress.rounds;
   const modal = ['challenge', 'map', 'pause', 'parents'].includes(mode);
   const modalTitle =
     mode === 'map'
@@ -737,6 +744,7 @@ export default function Game() {
     <main
       className={
         'game-shell ' +
+        (connected ? 'controller-active ' : '') +
         (mode === 'explore' ? 'playing' : '') +
         (mode === 'welcome'
           ? ' showcase-mode launch-mode'
@@ -747,106 +755,17 @@ export default function Game() {
     >
       <div ref={host} className="world-canvas" />
       <div className="world-vignette" />
-      <header className="game-header">
-        <div className="brand">
-          <span className="brand-symbol">
-            <Sparkles size={24} />
-          </span>
-          <div>
-            <span className="brand-kicker">MONSTER’S</span>
-            <h1>
-              little world<span>✦</span>
-            </h1>
-          </div>
-        </div>
-        <div className="location-pill">
-          <Sun size={19} />
-          <span>{zone.name}</span>
-          <span className="location-dot" />
-        </div>
-        <div className="header-actions">
-          <span
-            className="stars-pill"
-            aria-label={progress.completed.length + ' stars earned'}
-          >
-            <Star size={22} fill="currentColor" />
-            {progress.completed.length}
-            <span>stars</span>
-          </span>
-          <button
-            className="icon-button sound-toggle"
-            aria-label={muted ? 'Turn sound on' : 'Mute sound'}
-            onClick={toggleMute}
-          >
-            {muted ? <VolumeX size={21} /> : <Volume2 size={21} />}
-          </button>
-          <button
-            className="icon-button"
-            aria-label="Pause game"
-            onClick={pause}
-          >
-            <Pause size={21} />
-          </button>
-        </div>
-      </header>
-      <aside className="adventure-card">
-        <div className="eyebrow">
-          <Sparkles size={15} />
-          {visited === 4 ? 'HAPPY LITTLE EXPLORER' : 'A LITTLE ADVENTURE'}
-        </div>
-        <h2>
-          {mode === 'welcome' ? (
-            <>
-              Big discoveries.
-              <br />
-              Little steps.
-            </>
-          ) : (
-            <>
-              A little wonder
-              <br />
-              in every corner.
-            </>
-          )}
-        </h2>
-        <p>
-          {mode === 'welcome' ? (
-            <>
-              A whole world to explore,
-              <br />
-              one happy hop at a time.
-            </>
-          ) : (
-            <>
-              Play three activities in each place.
-              <br />
-              {visited} of 4 places explored.
-            </>
-          )}
-        </p>
-        {mode !== 'welcome' && (
-          <Progress
-            value={visited * 25}
-            className="adventure-progress"
-            aria-label="Places explored"
-          />
-        )}
-        <div className="adventure-divider" />
+      {mode === 'explore' && (
         <button
-          className="destination"
-          onClick={() => {
-            setTarget(destination.id);
-            listen();
-          }}
+          className={'world-pause' + (notice ? ' has-notice' : '')}
+          aria-label={
+            notice ? 'Pause game. Grown-up help available.' : 'Pause game'
+          }
+          onClick={pause}
         >
-          <span className="destination-icon">{destination.icon}</span>
-          <div>
-            <strong>{destination.name}</strong>
-            <span>{destination.short}</span>
-          </div>
-          <ArrowRight size={18} />
+          <Pause size={25} aria-hidden="true" />
         </button>
-      </aside>
+      )}
       {mode === 'welcome' && (
         <LaunchScreen
           stars={progress.completed.length}
@@ -873,26 +792,26 @@ export default function Game() {
           onTurn={() => world.current?.turnShowcase()}
         />
       )}
-      {mode === 'explore' && (
-        <div className="explore-prompt">
-          <button
-            className="play-prompt"
-            onClick={() =>
-              position.near
-                ? openQuestion(position.near)
-                : world.current?.jump()
-            }
-          >
-            <Key letter="a" />
-            {position.near ? 'Let’s play at ' + zone.name : 'Hop, Monster!'}
-            {position.near && <Sparkles size={20} />}
-          </button>
-          <span>
-            {position.near
-              ? zone.intro
-              : 'Follow the sparkle, or explore your own way.'}
+      {mode === 'explore' && nearby && (
+        <button
+          className="activity-cue"
+          aria-label={'Play at ' + nearby.name}
+          onClick={() => openQuestion(nearby.id)}
+        >
+          <span className="activity-picture" aria-hidden="true">
+            {nearby.icon}
           </span>
-        </div>
+          <Key letter="a" />
+        </button>
+      )}
+      {mode === 'explore' && !nearby && (
+        <button
+          className="touch-hop"
+          aria-label="Hop, Monster"
+          onClick={() => world.current?.jump()}
+        >
+          <Footprints size={30} aria-hidden="true" />
+        </button>
       )}
       {mode === 'explore' && (
         <div className="touch-controls" aria-label="Touch movement controls">
@@ -931,38 +850,7 @@ export default function Game() {
           </button>
         </div>
       )}
-      <button className="map-card" onClick={openMap} disabled={!ready}>
-        <div className="map-heading">
-          <span>
-            <Map size={17} /> Your little world
-          </span>
-          <Key letter="x" />
-        </div>
-        <div className="mini-map">
-          <MiniMap position={position} />
-          <span className="map-north">N</span>
-        </div>
-        <span className="map-caption">Four places. So much to discover.</span>
-      </button>
-      <footer className="control-bar">
-        <div className="control-group">
-          <span className="stick-key">L</span>
-          <span>Move</span>
-          <Key letter="a" />
-          <span>Hop / Play</span>
-          <Key letter="y" />
-          <span>Listen</span>
-        </div>
-        <span className="gentle-note">
-          <Sun size={16} /> No rush. Just wonder.
-        </span>
-        <span className="keyboard-hint">
-          {connected
-            ? 'Controller connected · right stick to look'
-            : 'WASD / arrows · Space · M for map'}
-        </span>
-      </footer>
-      {notice && !modal && (
+      {notice && !modal && mode !== 'explore' && (
         <output className="floating-notice">
           {notice}
           <button onClick={() => setNotice('')} aria-label="Dismiss message">
@@ -979,14 +867,21 @@ export default function Game() {
         <DialogContent
           showCloseButton={false}
           className={
-            'game-dialog ' + (mode === 'parents' ? 'parents-dialog' : '')
+            'game-dialog ' +
+            (mode === 'parents' ? 'parents-dialog' : 'picture-dialog')
           }
         >
           <div className="dialog-top">
-            <span className="eyebrow">
-              {mode === 'challenge'
-                ? ZONES.find((z) => z.id === activity)!.name
-                : 'MONSTER’S LITTLE WORLD'}
+            <span className="dialog-picture" aria-hidden="true">
+              {mode === 'challenge' ? (
+                ZONES.find((z) => z.id === activity)!.icon
+              ) : mode === 'map' ? (
+                <Map />
+              ) : mode === 'pause' ? (
+                <Pause />
+              ) : (
+                <Settings />
+              )}
             </span>
             <button
               className="icon-button"
@@ -998,8 +893,22 @@ export default function Game() {
               <X size={20} />
             </button>
           </div>
-          <DialogTitle className="dialog-title">{modalTitle}</DialogTitle>
-          <DialogDescription className="dialog-description">
+          <DialogTitle
+            className={
+              mode === 'parents' || (parentLed && mode === 'challenge')
+                ? 'dialog-title'
+                : 'sr-only'
+            }
+          >
+            {modalTitle}
+          </DialogTitle>
+          <DialogDescription
+            className={
+              mode === 'parents' || (parentLed && mode === 'challenge')
+                ? 'dialog-description'
+                : 'sr-only'
+            }
+          >
             {mode === 'map'
               ? 'Pick a place, and Monster will hop over.'
               : mode === 'pause'
@@ -1016,7 +925,7 @@ export default function Game() {
                           ? 'Listen, then choose the matching letters.'
                           : question?.kind === 'blend'
                             ? 'Say each sound, then blend them together.'
-                            : 'Take your time. Let’s try it together.'}
+                            : question?.speech}
           </DialogDescription>
           {mode === 'map' && (
             <div className="places-grid">
@@ -1026,12 +935,14 @@ export default function Game() {
                   className={
                     'place-card ' + (selection === i ? 'selected' : '')
                   }
-                  onFocus={() => setSelection(i)}
+                  aria-label={'Visit ' + z.name}
+                  onFocus={() => selectPicture(i)}
                   onClick={() => travel(z.id)}
                 >
-                  <span className="place-emoji">{z.icon}</span>
-                  <strong>{z.name}</strong>
-                  <span>{z.skill}</span>
+                  <span className="place-emoji" aria-hidden="true">
+                    {z.icon}
+                  </span>
+                  {selection === i && <Key letter="a" />}
                   <div className="place-stars">
                     {[0, 1, 2].map((n) => (
                       <Star
@@ -1077,17 +988,37 @@ export default function Game() {
                   className={
                     'menu-button ' + (selection === i ? 'selected' : '')
                   }
-                  onFocus={() => setSelection(i)}
+                  aria-label={text}
+                  onFocus={() => selectPicture(i)}
                   onClick={fn}
                 >
-                  <Icon size={21} />
-                  {text}
-                  <ChevronRight size={18} />
+                  <Icon size={42} aria-hidden="true" />
+                  {selection === i && <Key letter="a" />}
                 </button>
               ))}
-              <p className="saved-note">
-                {progress.completed.length} stars · Saved on this device
-              </p>
+              <span
+                className="pause-stars"
+                aria-label={progress.completed.length + ' stars earned'}
+              >
+                <Star size={24} fill="currentColor" aria-hidden="true" />{' '}
+                {progress.completed.length}
+              </span>
+              <details className="grownup-help">
+                <summary>Grown-up help</summary>
+                <p>
+                  Move with the left stick or arrow keys. A / Space hops or
+                  plays; Y repeats the spoken guide. X / M opens the map. B /
+                  Escape goes back. Menu / P pauses.
+                </p>
+                <p>
+                  {connected
+                    ? 'Controller connected.'
+                    : 'Keyboard and touch controls are available.'}{' '}
+                  Progress is saved on this device.
+                </p>
+                {question && <p>Activity prompt: {question.speech}</p>}
+                {notice && <output>{notice}</output>}
+              </details>
             </div>
           )}
           {mode === 'parents' && (
@@ -1108,9 +1039,11 @@ export default function Game() {
                       <span key={i}>{g}</span>
                     ))}
                   </div>
-                  <p>
-                    {question.parts?.map((g) => soundFor(g)?.tip).join(' ')}
-                  </p>
+                  {parentLed && (
+                    <p>
+                      {question.parts?.map((g) => soundFor(g)?.tip).join(' ')}
+                    </p>
+                  )}
                   <div className="teaching-actions">
                     {question.parts?.every((g) => approvedPath(g, reviews)) ? (
                       <button
@@ -1123,18 +1056,18 @@ export default function Game() {
                         }}
                       >
                         <Volume2 size={20} />
-                        Hear the sound
+                        <span className="sr-only">Hear the sound</span>
                       </button>
                     ) : (
                       <p className="grownup-tip">
                         Grown-up: model the sound
                         {(question.parts?.length ?? 0) > 1 ? 's' : ''} above,
-                        then choose “Ready”.
+                        then choose the arrow.
                       </p>
                     )}
                     <button className="primary-button" onClick={finishTeaching}>
                       <Key letter="a" />
-                      Ready to try
+                      <span className="sr-only">Ready to try</span>
                       <ArrowRight size={20} />
                     </button>
                   </div>
@@ -1144,14 +1077,14 @@ export default function Game() {
                   <div className="success-star">
                     <Star size={76} fill="currentColor" strokeWidth={1.5} />
                   </div>
-                  <p>{question.encouragement}</p>
+                  <p className="sr-only">{question.encouragement}</p>
                   {unlocks.length > 0 && (
                     <div className="outfit-reward">
-                      <span className="eyebrow">A NEW DRESS-UP SURPRISE!</span>
+                      <span className="sr-only">A new dress-up surprise!</span>
                       {unlocks.map((item) => (
                         <div key={item.id}>
                           <span aria-hidden="true">{item.icon}</span>
-                          <strong>{item.name}</strong>
+                          <strong className="sr-only">{item.name}</strong>
                         </div>
                       ))}
                       <button
@@ -1162,7 +1095,8 @@ export default function Game() {
                         onFocus={() => setSelection(1)}
                         onClick={() => openWardrobe('challenge')}
                       >
-                        <Shirt size={18} /> Try it on
+                        <Shirt size={32} aria-hidden="true" />
+                        <span className="sr-only">Try it on</span>
                       </button>
                     </div>
                   )}
@@ -1183,16 +1117,29 @@ export default function Game() {
                     onClick={() => openQuestion(activity)}
                   >
                     <Key letter="a" />
-                    Play another
+                    <RotateCcw size={30} aria-hidden="true" />
+                    <span className="sr-only">Play another</span>
                     <ArrowRight size={20} />
                   </button>
                   <button className="text-button" onClick={close}>
-                    Back to exploring
+                    <Key letter="b" />
+                    <Footprints size={28} aria-hidden="true" />
+                    <span className="sr-only">Back to exploring</span>
                   </button>
                 </div>
               ) : (
                 <>
                   <div className="question-visual">
+                    {(question.kind === 'shape' ||
+                      question.kind === 'compare') && (
+                      <button
+                        className="listen-orb"
+                        onClick={() => listen()}
+                        aria-label="Hear what to find"
+                      >
+                        <Volume2 size={48} aria-hidden="true" />
+                      </button>
+                    )}
                     {question.kind === 'count' && (
                       <div className="count-items">
                         {Array.from(
@@ -1250,7 +1197,7 @@ export default function Game() {
                         aria-label="Hear the sound again"
                       >
                         <Volume2 size={48} />
-                        <span>Listen</span>
+                        <span className="sr-only">Listen</span>
                       </button>
                     )}
                     {question.kind === 'blend' && (
@@ -1335,23 +1282,45 @@ export default function Game() {
                     ))}
                   </div>
                   <div className="question-footer">
-                    <button
-                      className="secondary-button"
-                      onClick={() => listen()}
+                    {!['shape', 'compare', 'sound'].includes(question.kind) && (
+                      <button
+                        className="secondary-button"
+                        onClick={() => listen()}
+                      >
+                        <Key letter="y" />
+                        <Volume2 size={25} aria-hidden="true" />
+                        <span className="sr-only">Listen again</span>
+                      </button>
+                    )}
+                    <span
+                      className="picture-choice-hint"
+                      aria-label="Move left or right, then press A to choose"
                     >
-                      <Key letter="y" />
-                      Listen again
-                    </button>
-                    <span>← → choose · A to pick</span>
+                      <ChevronLeft />
+                      <Hand />
+                      <ChevronRight />
+                      <Key letter="a" />
+                    </span>
                   </div>
-                  <output className="feedback">
-                    {feedback || 'You can have as many tries as you like.'}
-                  </output>
+                  {(muted || notice) && (
+                    <details className="grownup-help">
+                      <summary>Grown-up help</summary>
+                      <p>{question.speech}</p>
+                    </details>
+                  )}
+                  {feedback && (
+                    <output className="feedback picture-feedback">
+                      <RotateCcw size={24} aria-hidden="true" />
+                      <span className="sr-only">{feedback}</span>
+                    </output>
+                  )}
                 </>
               )}
             </>
           )}
-          {notice && <output className="notice">{notice}</output>}
+          {notice && mode !== 'pause' && (
+            <output className="notice">{notice}</output>
+          )}
         </DialogContent>
       </Dialog>
     </main>

@@ -2,6 +2,7 @@
 @import 'tw-animate-css';
 @import 'shadcn/tailwind.css';
 @import './wardrobe.css';
+@import './play.css';
 @custom-variant dark (&:is(.dark *));
 @theme inline {
   --color-background: var(--background);

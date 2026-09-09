@@ -223,25 +223,25 @@ export class MonsterWorld {
   }
   private label(text: string, colour: string) {
     const canvas = document.createElement('canvas');
-    canvas.width = 512;
-    canvas.height = 160;
+    canvas.width = 256;
+    canvas.height = 256;
     const ctx = canvas.getContext('2d')!;
     ctx.fillStyle = '#fffdf0';
     ctx.beginPath();
-    ctx.roundRect(7, 7, 498, 146, 38);
+    ctx.roundRect(8, 8, 240, 240, 90);
     ctx.fill();
     ctx.strokeStyle = colour;
     ctx.lineWidth = 9;
     ctx.stroke();
     ctx.fillStyle = colour;
-    ctx.font = 'bold 66px "Trebuchet MS", sans-serif';
+    ctx.font = '136px "Segoe UI Emoji", "Apple Color Emoji", sans-serif';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.fillText(text, 256, 84);
+    ctx.fillText(text, 128, 138);
     const texture = new THREE.CanvasTexture(canvas);
     texture.colorSpace = THREE.SRGBColorSpace;
     const s = new THREE.Sprite(new THREE.SpriteMaterial({ map: texture }));
-    s.scale.set(4.8, 1.5, 1);
+    s.scale.set(1.8, 1.8, 1);
     return s;
   }
   private buildIsland() {
@@ -346,7 +346,7 @@ export class MonsterWorld {
       const marker = new THREE.Group();
       activity.add(marker);
       marker.position.y = 2.4;
-      marker.add(this.label(zone.symbol, zone.colour));
+      marker.add(this.label(zone.icon, zone.colour));
       const ring = new THREE.Mesh(
         new THREE.TorusGeometry(0.88, 0.08, 8, 40),
         this.mat('#ffcf46'),

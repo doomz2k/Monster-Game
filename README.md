@@ -8,6 +8,10 @@ Monster has a continuous sculpted body, a soft tummy that follows its surface, f
 
 The launch screen lets the child start or continue an adventure, dress up Monster, or open grown-up settings. Dress-up is also available from Pause and immediately after earning a new outfit reward. The live 3D preview can be turned around; equipped pieces follow Monster throughout the island.
 
+Exploration keeps the screen clear: one pause button, with a picture and green A cue only beside an activity. The island's floating pictures match the picture map. A short spoken invitation plays after arriving, waits for existing audio to finish, and does not repeat while the child stays at the same spot. Y repeats guidance on demand. Touch movement and hopping controls appear only on touch devices without an active controller.
+
+The map, star total, sound switch and grown-up settings live in Pause. Picture menus speak their selected action; stick/D-pad navigation follows their two-column layout. Activities use spoken instructions, objects and symbols, retaining letters, words and numbers as learning targets. Written control help is tucked into Pause → Grown-up help. When narration is muted or unavailable, activities also expose a grown-up prompt; unverified phonemes still require an adult to model them.
+
 ## Dress-up and rewards
 
 Choose one hat and one accessory. The bobble beanie, party hat, berry bow tie and cosy scarf are available from the start, along with options to remove either item. More pieces unlock with stars earned for distinct challenges; replaying an already completed challenge does not create another star.
