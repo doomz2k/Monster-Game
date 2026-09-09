@@ -6,11 +6,12 @@ import {
   ChevronLeft,
   ChevronRight,
   ChevronUp,
-  Gamepad2,
+  House,
   Map,
   Pause,
   Play,
   Settings,
+  Shirt,
   Sparkles,
   Star,
   Sun,
@@ -26,6 +27,17 @@ import {
 } from '@/components/ui/dialog';
 import { Progress } from '@/components/ui/progress';
 import { ParentPanel } from '@/components/parent-panel';
+import { LaunchScreen } from '@/components/launch-screen';
+import { WardrobePanel } from '@/components/wardrobe-panel';
+import {
+  equipItem,
+  isUnlocked,
+  itemsFor,
+  moveWardrobeSelection,
+  newlyUnlocked,
+  type Cosmetic,
+  type OutfitSlot,
+} from '@/lib/wardrobe';
 import type { MonsterWorld, WorldState, WorldUpdate } from '@/lib/world';
 import { registerGameTools } from '@/lib/webmcp';
 import { GameInput, type Action } from '@/lib/input';
@@ -47,7 +59,14 @@ import {
   type ZoneId,
 } from '@/lib/learning';
 import { soundFor } from '@/lib/phonics';
-type Mode = 'welcome' | 'explore' | 'challenge' | 'map' | 'pause' | 'parents';
+type Mode =
+  | 'welcome'
+  | 'explore'
+  | 'challenge'
+  | 'map'
+  | 'pause'
+  | 'parents'
+  | 'wardrobe';
 const SAVE = 'monster-game-progress-v1';
 function Key({ letter }: { letter: 'a' | 'b' | 'x' | 'y' }) {
   return (
@@ -160,6 +179,15 @@ export default function Game() {
     [parentLed, setParentLed] = useState(false);
   const [saveReady, setSaveReady] = useState(false);
   const [resumeMode, setResumeMode] = useState<Mode>('explore');
+  const [wardrobeReturn, setWardrobeReturn] = useState<
+    'welcome' | 'pause' | 'challenge'
+  >('welcome');
+  const [parentsReturn, setParentsReturn] = useState<'welcome' | 'pause'>(
+    'pause',
+  );
+  const [wardrobeSlot, setWardrobeSlot] = useState<OutfitSlot>('hat');
+  const [wardrobeMessage, setWardrobeMessage] = useState('');
+  const [unlocks, setUnlocks] = useState<Cosmetic[]>([]);
   const answered = useRef(false);
   const latest = useRef({
     mode,
@@ -185,6 +213,8 @@ export default function Game() {
     turn: 0,
     completed: [],
     target: 'meadow',
+    showcase: 'launch',
+    outfit: progress.outfit,
   });
   const handlers = useRef<(a: Action) => void>(() => {});
   useEffect(() => {
@@ -252,6 +282,7 @@ export default function Game() {
         area: latest.current.position.zone,
         stars: latest.current.progress.completed.length,
         knownSounds: latest.current.progress.knownSounds,
+        outfit: latest.current.progress.outfit,
         question: latest.current.question
           ? {
               kind: latest.current.question.kind,
@@ -288,19 +319,92 @@ export default function Game() {
     setNotice('');
   };
   const start = () => {
-    if (!ready) return;
+    if (!ready || failed) return;
     audioDirector?.unlock();
     setMode('explore');
+    setQuestion(null);
+    setSelection(0);
     void audioDirector?.say(
-      'Hello Clover! I’m Clo. Let’s explore! Follow the sparkle to Counting Meadow.',
+      progress.completed.length
+        ? 'Welcome back, Clover! Clo is ready for another adventure.'
+        : 'Hello Clover! I’m Clo. Let’s explore! Follow the sparkle to Counting Meadow.',
     );
+  };
+  const openParents = () => {
+    stop();
+    setParentsReturn(mode === 'welcome' ? 'welcome' : 'pause');
+    setMode('parents');
+  };
+  const openWardrobe = (from: 'welcome' | 'pause' | 'challenge') => {
+    if (!ready || failed) return;
+    stop();
+    audioDirector.unlock();
+    setWardrobeReturn(from);
+    setWardrobeSlot('hat');
+    setSelection(
+      Math.max(
+        0,
+        itemsFor('hat').findIndex((item) => item.id === progress.outfit.hat),
+      ),
+    );
+    setWardrobeMessage('');
+    setMode('wardrobe');
+    void audioDirector.say('Let’s dress up Clo! Choose a hat or an accessory.');
+  };
+  const switchWardrobe = (slot: OutfitSlot) => {
+    setWardrobeSlot(slot);
+    setSelection(
+      Math.max(
+        0,
+        itemsFor(slot).findIndex((item) => item.id === progress.outfit[slot]),
+      ),
+    );
+    setWardrobeMessage('');
+  };
+  const wear = (item: Cosmetic) => {
+    audioDirector.unlock();
+    if (!isUnlocked(item, progress.completed.length)) {
+      const remaining = item.stars - progress.completed.length;
+      const message =
+        remaining +
+        ' more ' +
+        (remaining === 1 ? 'star' : 'stars') +
+        ' to discover the ' +
+        item.name.toLowerCase() +
+        '. Keep exploring!';
+      setWardrobeMessage(message);
+      void audioDirector.say(message);
+      return;
+    }
+    setProgress((p) => ({
+      ...p,
+      outfit: equipItem(p.outfit, item.id, p.completed.length),
+    }));
+    setWardrobeMessage(
+      item.id.startsWith('no-')
+        ? 'Just right. Looking lovely, Clo!'
+        : item.name + '. Looking lovely, Clo!',
+    );
+    audioDirector.chime();
+    void audioDirector.say(
+      item.id.startsWith('no-')
+        ? 'Looking lovely, Clo!'
+        : item.name + '. Looking lovely, Clo!',
+    );
+  };
+  const launch = () => {
+    stop();
+    setQuestion(null);
+    setSuccess(false);
+    setSelection(0);
+    setMode('welcome');
   };
   const pause = () => {
     if (mode === 'pause') {
       setMode(resumeMode);
       return;
     }
-    if (mode === 'parents') return;
+    if (mode === 'parents' || mode === 'wardrobe' || mode === 'welcome') return;
     setResumeMode(mode);
     stop();
     setMode('pause');
@@ -308,9 +412,12 @@ export default function Game() {
   };
   const close = () => {
     stop();
-    if (mode === 'parents') {
-      setMode('pause');
-      setSelection(0);
+    if (mode === 'wardrobe') {
+      setMode(wardrobeReturn);
+      setSelection(wardrobeReturn === 'challenge' ? 0 : 1);
+    } else if (mode === 'parents') {
+      setMode(parentsReturn);
+      setSelection(parentsReturn === 'welcome' ? 2 : 4);
     } else if (mode === 'pause') setMode(resumeMode);
     else if (mode === 'challenge' || mode === 'map') {
       setMode('explore');
@@ -320,13 +427,29 @@ export default function Game() {
   const listen = (q = question) => {
     audioDirector?.unlock();
     setNotice('');
+    if (mode === 'wardrobe') {
+      const item = itemsFor(wardrobeSlot)[selection];
+      void audioDirector.say(
+        item
+          ? item.name +
+              (isUnlocked(item, progress.completed.length)
+                ? '. Press A to wear it.'
+                : '. Keep playing to earn ' + item.stars + ' stars.')
+          : 'All dressed! Press A to go back.',
+      );
+      return;
+    }
+    if (mode === 'welcome') {
+      void audioDirector.say(
+        'Hello Clover! I’m Clo. Choose let’s play, or dress me up for our adventure!',
+      );
+      return;
+    }
     if (!q) {
       void audioDirector?.say(
-        mode === 'welcome'
-          ? 'Hello Clover! I’m Clo. Let’s play!'
-          : 'Follow the sparkle to ' +
-              ZONES.find((z) => z.id === target)!.name +
-              '. Press A at the glowing spot to play.',
+        'Follow the sparkle to ' +
+          ZONES.find((z) => z.id === target)!.name +
+          '. Press A at the glowing spot to play.',
       );
       return;
     }
@@ -357,6 +480,7 @@ export default function Game() {
     setActivity(id);
     setQuestion(q);
     setSuccess(false);
+    setUnlocks([]);
     answered.current = false;
     setSelection(0);
     setFeedback('');
@@ -406,11 +530,26 @@ export default function Game() {
     if (question.options[index] === question.answer) {
       answered.current = true;
       setSuccess(true);
+      setSelection(0);
       setFeedback('Lovely work, Clover!');
-      setProgress((p) => award(p, activity, question));
+      const before = latest.current.progress;
+      const earned = award(before, activity, question);
+      const rewards = newlyUnlocked(
+        before.completed.length,
+        earned.completed.length,
+      );
+      setProgress(earned);
+      setUnlocks(rewards);
       audioDirector?.chime();
       world.current?.celebrate();
-      void audioDirector?.say(question.encouragement);
+      void audioDirector?.say(
+        question.encouragement +
+          (rewards.length
+            ? ' A new dress-up surprise! You found the ' +
+              rewards.map((item) => item.name).join(' and ') +
+              '.'
+            : ''),
+      );
     } else {
       setFeedback('Let’s try another one. You’ve got this!');
       void audioDirector?.say('Let’s have another try. Take your time.');
@@ -443,6 +582,38 @@ export default function Game() {
     audioDirector.setMuted(next);
   };
   const handleAction = (action: Action) => {
+    if (mode === 'parents' && action !== 'back') return;
+    if (mode === 'wardrobe') {
+      if (action === 'previousTab' || action === 'nextTab') {
+        switchWardrobe(wardrobeSlot === 'hat' ? 'accessory' : 'hat');
+        return;
+      }
+      if (action === 'map') {
+        world.current?.turnShowcase();
+        return;
+      }
+      if (
+        action === 'left' ||
+        action === 'right' ||
+        action === 'up' ||
+        action === 'down'
+      ) {
+        setSelection((index) =>
+          moveWardrobeSelection(index, action, itemsFor(wardrobeSlot).length),
+        );
+        return;
+      }
+      if (action === 'confirm') {
+        const item = itemsFor(wardrobeSlot)[selection];
+        if (item) wear(item);
+        else close();
+        return;
+      }
+    }
+    if (mode === 'welcome' && action === 'map') {
+      openWardrobe('welcome');
+      return;
+    }
     if (action === 'suspend') {
       if (mode === 'explore' || mode === 'challenge') pause();
       return;
@@ -476,30 +647,38 @@ export default function Game() {
           : mode === 'map'
             ? 4
             : mode === 'pause'
-              ? 4
-              : 1;
+              ? 6
+              : mode === 'welcome'
+                ? 3
+                : mode === 'challenge' && success && unlocks.length
+                  ? 2
+                  : 1;
       if (length > 1) setSelection((i) => (i + delta + length) % length);
       return;
     }
     if (action !== 'confirm') return;
     audioDirector?.unlock();
-    if (mode === 'welcome') start();
-    else if (mode === 'explore') {
+    if (mode === 'welcome') {
+      if (selection === 0) start();
+      if (selection === 1) openWardrobe('welcome');
+      if (selection === 2) openParents();
+    } else if (mode === 'explore') {
       if (position.near) openQuestion(position.near);
       else world.current?.jump();
     } else if (mode === 'challenge') {
       if (teach || parentLed) finishTeaching();
-      else if (success) openQuestion(activity);
-      else choose(selection);
+      else if (success) {
+        if (selection === 1 && unlocks.length) openWardrobe('challenge');
+        else openQuestion(activity);
+      } else choose(selection);
     } else if (mode === 'map') travel(ZONES[selection % 4].id);
     else if (mode === 'pause') {
       if (selection === 0) setMode(resumeMode);
-      if (selection === 1) openMap();
-      if (selection === 2) toggleMute();
-      if (selection === 3) {
-        setMode('parents');
-        stop();
-      }
+      if (selection === 1) openWardrobe('pause');
+      if (selection === 2) openMap();
+      if (selection === 3) toggleMute();
+      if (selection === 4) openParents();
+      if (selection === 5) launch();
     }
   };
   // The imperative animation and controller loops only see committed React state.
@@ -523,6 +702,9 @@ export default function Game() {
       welcome: mode === 'welcome',
       completed: progress.completed,
       target,
+      showcase:
+        mode === 'welcome' ? 'launch' : mode === 'wardrobe' ? 'wardrobe' : null,
+      outfit: progress.outfit,
     });
     visitAction.current = travel;
     handlers.current = handleAction;
@@ -550,7 +732,17 @@ export default function Game() {
     if (input.current) input.current.touch = { x, y };
   };
   return (
-    <main className={'game-shell ' + (mode === 'explore' ? 'playing' : '')}>
+    <main
+      className={
+        'game-shell ' +
+        (mode === 'explore' ? 'playing' : '') +
+        (mode === 'welcome'
+          ? ' showcase-mode launch-mode'
+          : mode === 'wardrobe'
+            ? ' showcase-mode wardrobe-mode'
+            : '')
+      }
+    >
       <div ref={host} className="world-canvas" />
       <div className="world-vignette" />
       <header className="game-header">
@@ -654,33 +846,30 @@ export default function Game() {
         </button>
       </aside>
       {mode === 'welcome' && (
-        <>
-          <div className="world-label">
-            <span>✦</span> A world of wonder awaits
-          </div>
-          <section className="welcome-card">
-            <span className="eyebrow">MEET YOUR NEW LITTLE FRIEND</span>
-            <h2>
-              Hello, I’m Clo<span>!</span>
-            </h2>
-            <p>Shall we go on an adventure?</p>
-            <button
-              className="primary-button"
-              disabled={!ready || failed}
-              onClick={start}
-            >
-              <Key letter="a" />
-              {ready ? 'Let’s play' : 'Growing your world…'}
-              <ArrowRight size={22} />
-            </button>
-            <div className="start-hint">
-              <Gamepad2 size={18} />
-              {connected
-                ? 'Click once for sound · then press A'
-                : 'Click to play · Xbox controller or keyboard'}
-            </div>
-          </section>
-        </>
+        <LaunchScreen
+          stars={progress.completed.length}
+          ready={ready && !failed && saveReady}
+          connected={connected}
+          selection={selection}
+          onSelection={setSelection}
+          onPlay={start}
+          onDress={() => openWardrobe('welcome')}
+          onParents={openParents}
+        />
+      )}
+      {mode === 'wardrobe' && (
+        <WardrobePanel
+          stars={progress.completed.length}
+          outfit={progress.outfit}
+          slot={wardrobeSlot}
+          selection={selection}
+          message={wardrobeMessage}
+          onSlot={switchWardrobe}
+          onSelection={setSelection}
+          onEquip={wear}
+          onClose={close}
+          onTurn={() => world.current?.turnShowcase()}
+        />
       )}
       {mode === 'explore' && (
         <div className="explore-prompt">
@@ -863,6 +1052,11 @@ export default function Game() {
                   Icon: Play,
                   fn: () => setMode(resumeMode),
                 },
+                {
+                  text: 'Dress up Clo',
+                  Icon: Shirt,
+                  fn: () => openWardrobe('pause'),
+                },
                 { text: 'Visit another place', Icon: Map, fn: openMap },
                 {
                   text: muted ? 'Turn sound on' : 'Turn sound off',
@@ -872,11 +1066,9 @@ export default function Game() {
                 {
                   text: 'Grown-ups',
                   Icon: Settings,
-                  fn: () => {
-                    setMode('parents');
-                    stop();
-                  },
+                  fn: openParents,
                 },
+                { text: 'Launch screen', Icon: House, fn: launch },
               ].map(({ text, Icon, fn }, i) => (
                 <button
                   key={i}
@@ -951,6 +1143,27 @@ export default function Game() {
                     <Star size={76} fill="currentColor" strokeWidth={1.5} />
                   </div>
                   <p>{question.encouragement}</p>
+                  {unlocks.length > 0 && (
+                    <div className="outfit-reward">
+                      <span className="eyebrow">A NEW DRESS-UP SURPRISE!</span>
+                      {unlocks.map((item) => (
+                        <div key={item.id}>
+                          <span aria-hidden="true">{item.icon}</span>
+                          <strong>{item.name}</strong>
+                        </div>
+                      ))}
+                      <button
+                        className={
+                          'secondary-button ' +
+                          (selection === 1 ? 'selected' : '')
+                        }
+                        onFocus={() => setSelection(1)}
+                        onClick={() => openWardrobe('challenge')}
+                      >
+                        <Shirt size={18} /> Try it on
+                      </button>
+                    </div>
+                  )}
                   {activity === 'garden' && (
                     <div className="bloom-reward">🌷 🌼 🌷</div>
                   )}
@@ -961,7 +1174,10 @@ export default function Game() {
                     <div className="bloom-reward">🐠 🫧 🐚</div>
                   )}
                   <button
-                    className="primary-button"
+                    className={
+                      'primary-button ' + (selection === 0 ? 'selected' : '')
+                    }
+                    onFocus={() => setSelection(0)}
                     onClick={() => openQuestion(activity)}
                   >
                     <Key letter="a" />

@@ -47,6 +47,21 @@ test('Xbox controls use rising button edges, stick deadzone and disconnect pause
   pad.buttons[0].pressed = true;
   poll(1300);
   assert.equal(actions.filter((a) => a === 'confirm').length, 2);
+  pad.buttons[4].pressed = true;
+  pad.buttons[5].pressed = true;
+  poll(1350);
+  poll(1360);
+  assert.equal(actions.filter((a) => a === 'previousTab').length, 1);
+  assert.equal(actions.filter((a) => a === 'nextTab').length, 1);
+  const keyboardEvent = (code) => ({
+    code,
+    repeat: false,
+    preventDefault() {},
+  });
+  events.get('keydown')(keyboardEvent('KeyQ'));
+  events.get('keydown')(keyboardEvent('KeyE'));
+  assert.equal(actions.filter((a) => a === 'previousTab').length, 2);
+  assert.equal(actions.filter((a) => a === 'nextTab').length, 2);
   pad.axes[0] = 1;
   poll(1400);
   assert.equal(moves.at(-1)[0], 1);

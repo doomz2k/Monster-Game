@@ -6,6 +6,8 @@ export type Action =
   | 'listen'
   | 'pause'
   | 'suspend'
+  | 'previousTab'
+  | 'nextTab'
   | 'left'
   | 'right'
   | 'up'
@@ -44,6 +46,8 @@ export class GameInput {
       KeyM: 'map',
       KeyY: 'listen',
       KeyP: 'pause',
+      KeyQ: 'previousTab',
+      KeyE: 'nextTab',
       ArrowLeft: 'left',
       ArrowRight: 'right',
       ArrowUp: 'up',
@@ -104,6 +108,8 @@ export class GameInput {
           1: 'back',
           2: 'map',
           3: 'listen',
+          4: 'previousTab',
+          5: 'nextTab',
           9: 'pause',
           12: 'up',
           13: 'down',

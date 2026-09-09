@@ -1,0 +1,704 @@
+/* Launch and dress-up share a live close-up of Clo, separate from the island HUD. */
+.game-shell.showcase-mode {
+  background:
+    radial-gradient(
+      ellipse at 73% 44%,
+      #fbf4d9 0%,
+      #f4f0d9 25%,
+      transparent 57%
+    ),
+    linear-gradient(130deg, #e1ecd8, #f2eed6 65%, #dce9d4);
+}
+.showcase-mode::before,
+.showcase-mode::after {
+  content: '';
+  position: absolute;
+  width: 460px;
+  height: 460px;
+  border: 1px solid #a6bd942b;
+  border-radius: 50%;
+  pointer-events: none;
+}
+.showcase-mode::before {
+  left: -290px;
+  top: -260px;
+  box-shadow:
+    0 0 0 60px #a8be950c,
+    0 0 0 120px #a8be950b;
+}
+.showcase-mode::after {
+  right: -260px;
+  bottom: -310px;
+  box-shadow: 0 0 0 65px #a8be950c;
+}
+.showcase-mode .game-header,
+.showcase-mode .adventure-card,
+.showcase-mode .map-card,
+.showcase-mode .control-bar,
+.showcase-mode .world-vignette {
+  display: none;
+}
+.game-shell.showcase-mode .world-canvas {
+  z-index: 1;
+  top: 10%;
+  bottom: 16%;
+  left: 1%;
+  right: auto;
+  width: 47%;
+}
+.game-shell.launch-mode .world-canvas {
+  left: 48%;
+  top: 9%;
+  bottom: 15%;
+  width: 49%;
+}
+.launch-screen,
+.dressing-room {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  pointer-events: none;
+}
+.launch-screen button,
+.wardrobe-panel,
+.wardrobe-preview-note button {
+  pointer-events: auto;
+}
+.launch-copy {
+  position: absolute;
+  left: 8%;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 37%;
+  max-width: 450px;
+}
+.launch-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 2.4px;
+  color: #5f7c57;
+}
+.launch-eyebrow svg {
+  color: #c8a64b;
+}
+.launch-title {
+  margin: 22px 0 15px;
+  font-size: clamp(56px, 6.3vw, 94px);
+  font-weight: 900;
+  letter-spacing: -4px;
+  line-height: 0.98;
+  color: #36543f;
+}
+.launch-title > span {
+  display: block;
+  color: #769565;
+}
+.title-sparkle {
+  display: inline-block;
+  font-size: 0.43em;
+  margin-left: 14px;
+  vertical-align: middle;
+  color: #c8a24e;
+}
+.launch-intro {
+  margin: 20px 0 28px;
+  font-size: 20px;
+  line-height: 1.5;
+  color: #64735b;
+}
+.launch-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 12px;
+}
+.launch-play,
+.launch-dress {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  border-radius: 19px;
+  min-height: 67px;
+  padding: 17px 22px;
+  font-size: 19px;
+  font-weight: 800;
+  text-align: left;
+}
+.launch-play {
+  border: 1px solid #45784f;
+  background: #4f8056;
+  color: #fff9e7;
+  box-shadow: 0 6px 0 #365d3e;
+}
+.launch-play > svg,
+.launch-dress > svg:last-child {
+  margin-left: auto;
+}
+.launch-dress {
+  margin-top: 6px;
+  background: #fffbed;
+  border: 1px solid #d5dcc2;
+  color: #536e48;
+  box-shadow: 0 4px 0 #d6ddc2;
+}
+.launch-dress small {
+  display: block;
+  font-size: 12px;
+  font-weight: 400;
+  color: #79826b;
+  margin-top: 4px;
+}
+.launch-parents {
+  display: flex;
+  align-items: center;
+  align-self: flex-start;
+  gap: 8px;
+  color: #68795e;
+  font-size: 13px;
+  padding: 12px 5px;
+  background: none;
+  border: 0;
+  border-radius: 8px;
+}
+.launch-connection {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  font-size: 12px;
+  color: #73816b;
+  margin-top: 14px;
+}
+.launch-connection small {
+  flex-basis: 100%;
+  margin-left: 28px;
+  font-size: 11px;
+}
+.launch-stars {
+  position: absolute;
+  right: 4%;
+  top: 30px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  color: #aa8833;
+  background: #fffbecb3;
+  border: 1px solid #fff;
+  padding: 11px 18px;
+  border-radius: 30px;
+}
+.launch-stars span {
+  color: #788368;
+  font-size: 12px;
+  font-weight: 400;
+}
+.launch-stage-note {
+  position: absolute;
+  left: 51%;
+  right: 5%;
+  bottom: 10%;
+  text-align: center;
+}
+.launch-stage-note strong {
+  display: block;
+  font-size: 27px;
+  margin: 9px 0;
+}
+.launch-stage-note p {
+  font-size: 13px;
+  color: #768568;
+  margin: 0;
+}
+.launch-bottom-note {
+  position: absolute;
+  left: 8%;
+  bottom: 26px;
+  font-size: 11px;
+  color: #86927b;
+  letter-spacing: 0.5px;
+}
+.wardrobe-panel {
+  position: absolute;
+  top: 5%;
+  bottom: 5%;
+  left: 49%;
+  right: 4%;
+  max-width: 670px;
+  background: #fffdf4ed;
+  padding: clamp(20px, 2.4vw, 34px);
+  border: 1px solid #fff;
+  border-radius: 30px;
+  box-shadow: 0 15px 50px #5b754114;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+.wardrobe-heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+}
+.wardrobe-heading > .eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 10px;
+  letter-spacing: 1.6px;
+}
+.wardrobe-stars {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #b08b32;
+  font-weight: 700;
+}
+.wardrobe-panel h2 {
+  margin: 18px 0 8px;
+  font-size: clamp(24px, 2.6vw, 36px);
+  letter-spacing: -1px;
+  font-weight: 800;
+  line-height: 1.15;
+}
+.wardrobe-intro {
+  margin: 0 0 22px;
+  font-size: 13px;
+  color: #78806b;
+}
+.wardrobe-tabs {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin: 0 0 15px;
+}
+.wardrobe-tabs button {
+  border: 1px solid transparent;
+  background: #f0f0e3;
+  color: #7c836f;
+  padding: 11px 15px;
+  font-size: 13px;
+  border-radius: 12px;
+}
+.wardrobe-tabs button[aria-pressed='true'] {
+  background: #e0ead5;
+  border-color: #a7bd96;
+  color: #466747;
+  font-weight: 700;
+}
+.wardrobe-tabs > span {
+  margin-left: auto;
+  font-size: 10px;
+  color: #8b927e;
+}
+.wardrobe-choices {
+  padding: 5px;
+  margin: -5px;
+}
+.wardrobe-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+.outfit-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  padding: 14px 6px 12px;
+  border: 1px solid #e2e5d4;
+  border-radius: 17px;
+  background: #fffef8;
+  text-align: center;
+  color: #536748;
+  min-height: 137px;
+}
+.outfit-icon {
+  position: relative;
+  width: 62px;
+  height: 62px;
+  border-radius: 20px;
+  display: grid;
+  place-items: center;
+  font-size: 33px;
+  margin-bottom: 10px;
+}
+.outfit-icon > svg {
+  position: absolute;
+  bottom: -3px;
+  right: -3px;
+  background: #f3eedc;
+  border-radius: 7px;
+  box-sizing: content-box;
+  padding: 5px;
+  color: #8e866e;
+}
+.wearing-check {
+  display: grid;
+  place-items: center;
+  position: absolute;
+  bottom: -3px;
+  right: -3px;
+  width: 23px;
+  height: 23px;
+  background: #66835b;
+  color: #fff;
+  border: 2px solid #fffdf5;
+  border-radius: 50%;
+}
+.outfit-card strong {
+  font-size: 12px;
+  line-height: 1.3;
+}
+.outfit-card small {
+  font-size: 10px;
+  color: #90977f;
+  margin-top: 5px;
+}
+.outfit-card.wearing {
+  border-color: #a6bd93;
+  background: #f0f5e6;
+}
+.outfit-card.wearing small {
+  color: #698354;
+}
+.outfit-card.locked {
+  background: #f6f5ed;
+  border-style: dashed;
+  color: #7f8275;
+  cursor: pointer;
+}
+.outfit-card.locked .outfit-icon {
+  filter: saturate(0.6);
+}
+.showcase-mode .selected,
+.outfit-reward .selected,
+.success-scene > .selected {
+  outline: 3px solid #a995c9;
+  outline-offset: 3px;
+}
+.wardrobe-done.primary-button {
+  width: 100%;
+  min-height: 49px;
+  font-size: 15px;
+  margin-top: 17px;
+  justify-content: center;
+}
+.wardrobe-done .pad-key {
+  margin-left: auto;
+}
+.wardrobe-message {
+  display: block;
+  font-size: 12px;
+  line-height: 1.4;
+  color: #7c856c;
+  margin-top: 16px;
+  min-height: 2.8em;
+}
+.next-outfit {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  border-top: 1px solid #e7e8d9;
+  padding-top: 15px;
+  margin-top: 5px;
+  color: #9b8450;
+}
+.next-outfit > div {
+  flex: 1;
+  font-size: 11px;
+  color: #778266;
+}
+.next-outfit [data-slot='progress'] {
+  margin-top: 7px;
+  height: 5px;
+  background: #e9e9d9;
+}
+.next-outfit > span {
+  display: flex;
+  gap: 3px;
+  align-items: center;
+  font-size: 10px;
+}
+.wardrobe-help {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 16px;
+  font-size: 10px;
+  color: #8c957d;
+}
+.wardrobe-help button {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  background: none;
+  border: 0;
+  color: #677c5c;
+  border-radius: 8px;
+  padding: 5px;
+}
+.wardrobe-preview-note {
+  position: absolute;
+  left: 4%;
+  width: 40%;
+  bottom: 9%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+}
+.wardrobe-preview-note .eyebrow {
+  letter-spacing: 2px;
+  font-size: 11px;
+}
+.wardrobe-preview-note small {
+  color: #8a927a;
+  font-size: 11px;
+}
+.turn-button {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: 1px solid #d4ddc1;
+  border-radius: 30px;
+  background: #fffbedbd;
+  color: #61784f;
+  padding: 10px 20px;
+  font-size: 13px;
+}
+.outfit-reward {
+  width: min(100%, 360px);
+  border: 1px solid #d9c8e8;
+  background: #f5eef9;
+  border-radius: 19px;
+  padding: 16px;
+  margin: 4px auto 15px;
+}
+.outfit-reward .eyebrow {
+  font-size: 10px;
+  color: #9774ac;
+}
+.outfit-reward > div {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: center;
+  margin: 8px 0 14px;
+  font-size: 15px;
+}
+.outfit-reward > div > span {
+  font-size: 29px;
+}
+.outfit-reward button {
+  margin: 0 auto;
+}
+@media (min-width: 1500px) {
+  .launch-copy {
+    left: 12%;
+  }
+  .launch-bottom-note {
+    left: 12%;
+  }
+  .wardrobe-panel {
+    right: 7%;
+  }
+}
+@media (max-height: 760px) and (min-width: 761px) {
+  .launch-title {
+    font-size: clamp(48px, 5.5vw, 70px);
+    margin: 14px 0;
+  }
+  .launch-intro {
+    font-size: 17px;
+    margin: 13px 0 20px;
+  }
+  .launch-play,
+  .launch-dress {
+    min-height: 56px;
+    padding: 12px 17px;
+    font-size: 17px;
+  }
+  .launch-bottom-note {
+    display: none;
+  }
+  .outfit-card {
+    min-height: 108px;
+    padding: 10px 5px;
+  }
+  .outfit-icon {
+    width: 46px;
+    height: 46px;
+    font-size: 27px;
+    border-radius: 15px;
+    margin-bottom: 8px;
+  }
+  .wardrobe-panel h2 {
+    margin-top: 12px;
+  }
+  .wardrobe-intro {
+    margin-bottom: 15px;
+  }
+  .wardrobe-message {
+    min-height: 0;
+  }
+}
+@media (max-width: 760px) {
+  .game-shell.showcase-mode {
+    min-height: 600px;
+  }
+  .game-shell.launch-mode .world-canvas {
+    left: 24%;
+    top: 1%;
+    width: 71%;
+    height: 39%;
+    bottom: auto;
+  }
+  .launch-copy {
+    left: 7%;
+    top: 39%;
+    width: 86%;
+    max-width: none;
+    transform: none;
+    bottom: 15px;
+    overflow-y: auto;
+    padding: 5px;
+  }
+  .launch-eyebrow {
+    font-size: 10px;
+    letter-spacing: 1.5px;
+  }
+  .launch-title {
+    font-size: 43px;
+    letter-spacing: -2px;
+    margin: 12px 0 8px;
+  }
+  .launch-title > span {
+    display: inline;
+    margin-left: 10px;
+  }
+  .title-sparkle {
+    display: none;
+  }
+  .launch-intro {
+    font-size: 14px;
+    margin: 9px 0 19px;
+  }
+  .launch-intro br {
+    display: none;
+  }
+  .launch-actions {
+    gap: 10px;
+  }
+  .launch-play,
+  .launch-dress {
+    padding: 12px 17px;
+    min-height: 54px;
+    font-size: 16px;
+    border-radius: 15px;
+  }
+  .launch-dress small {
+    font-size: 10px;
+  }
+  .launch-parents {
+    padding: 10px 4px;
+  }
+  .launch-stars {
+    left: 7%;
+    right: auto;
+    top: 24px;
+    font-size: 14px;
+    padding: 9px 12px;
+  }
+  .launch-stars span,
+  .launch-stage-note,
+  .launch-bottom-note {
+    display: none;
+  }
+  .launch-connection {
+    font-size: 10px;
+    margin-top: 4px;
+  }
+  .game-shell.wardrobe-mode .world-canvas {
+    left: 5%;
+    width: 63%;
+    top: 0;
+    height: 36%;
+    bottom: auto;
+  }
+  .wardrobe-preview-note {
+    left: auto;
+    right: 5%;
+    width: 31%;
+    bottom: auto;
+    top: 13%;
+    gap: 12px;
+    text-align: center;
+  }
+  .wardrobe-preview-note .eyebrow {
+    font-size: 9px;
+    letter-spacing: 1px;
+  }
+  .wardrobe-preview-note small {
+    display: none;
+  }
+  .turn-button {
+    gap: 7px;
+    padding: 9px 12px;
+    font-size: 11px;
+  }
+  .turn-button .pad-key {
+    display: none;
+  }
+  .wardrobe-panel {
+    left: 3%;
+    right: 3%;
+    top: 35%;
+    bottom: 2%;
+    padding: 20px;
+    border-radius: 24px;
+    max-width: none;
+  }
+  .wardrobe-panel h2 {
+    font-size: 25px;
+    margin: 12px 0 7px;
+  }
+  .wardrobe-intro {
+    font-size: 11px;
+    margin-bottom: 16px;
+  }
+  .wardrobe-tabs > span {
+    font-size: 9px;
+  }
+  .wardrobe-tabs button {
+    padding: 9px 12px;
+    font-size: 12px;
+  }
+  .wardrobe-grid {
+    gap: 9px;
+  }
+  .outfit-card {
+    min-height: 109px;
+    padding: 9px 4px;
+  }
+  .outfit-card strong {
+    font-size: 10px;
+  }
+  .outfit-card small {
+    font-size: 9px;
+  }
+  .outfit-icon {
+    width: 43px;
+    height: 43px;
+    font-size: 25px;
+    border-radius: 14px;
+    margin-bottom: 9px;
+  }
+  .wardrobe-message {
+    min-height: 0;
+    font-size: 11px;
+  }
+}

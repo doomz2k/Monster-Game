@@ -1,5 +1,7 @@
 import * as THREE from 'three';
 import { ZONES, clampToIsland, nearestZone, type ZoneId } from './learning';
+import { COSMETICS, type Outfit } from './wardrobe';
+import { createCostume } from './monster-outfit';
 export type WorldState = {
   active: boolean;
   welcome: boolean;
@@ -8,6 +10,8 @@ export type WorldState = {
   turn: number;
   completed: string[];
   target: ZoneId;
+  showcase: 'launch' | 'wardrobe' | null;
+  outfit: Outfit;
 };
 export type WorldUpdate = {
   x: number;
@@ -22,6 +26,12 @@ const height = (x: number, z: number) =>
   Math.sin((x + z) * 0.09) * 0.3;
 export class MonsterWorld {
   private scene = new THREE.Scene();
+  private showroom = new THREE.Scene();
+  private showroomStage = new THREE.Group();
+  private costumePieces = new Map<string, THREE.Group>();
+  private inShowcase = false;
+  private showcaseAngle = 0;
+  private savedFacing = 0;
   private camera = new THREE.PerspectiveCamera(48, 1, 0.1, 220);
   private renderer: THREE.WebGLRenderer;
   private frame = 0;
@@ -68,6 +78,7 @@ export class MonsterWorld {
   ) {
     this.renderer = new THREE.WebGLRenderer({
       antialias: true,
+      alpha: true,
       powerPreference: 'high-performance',
     });
     this.renderer.setPixelRatio(Math.min(devicePixelRatio, 1.5));
@@ -104,6 +115,7 @@ export class MonsterWorld {
     this.scene.add(light);
     this.buildIsland();
     this.buildMonster();
+    this.buildShowroom();
     this.scene.add(this.player);
     this.player.position.set(0, height(0, 5), 5);
     this.shadow = new THREE.Mesh(
@@ -150,7 +162,10 @@ export class MonsterWorld {
           near: Math.hypot(x - zone.x, z - zone.z) < 3.8 ? zone.id : null,
         });
       }
-      this.renderer.render(this.scene, this.camera);
+      this.renderer.render(
+        this.inShowcase ? this.showroom : this.scene,
+        this.camera,
+      );
     };
     this.frame = requestAnimationFrame(animate);
   }
@@ -684,10 +699,76 @@ export class MonsterWorld {
     });
     for (let i = 0; i < 3; i++)
       this.ball(m, '#e8af3d', 0, 1.7 - i * 0.36, -0.63, 0.15, 0.17, 0.16);
+    for (const item of COSMETICS) {
+      const piece = createCostume(item.id);
+      piece.visible = false;
+      m.add(piece);
+      this.costumePieces.set(item.id, piece);
+    }
+  }
+  private buildShowroom() {
+    this.showroom.add(new THREE.HemisphereLight('#fffbe4', '#88a488', 2.8));
+    const light = new THREE.DirectionalLight('#fff3d4', 3);
+    light.position.set(-3, 6, 5);
+    this.showroom.add(light, this.showroomStage);
+    this.mesh(
+      this.showroomStage,
+      this.cylinder,
+      '#e1d5b2',
+      0,
+      -0.12,
+      0,
+      1.4,
+      0.2,
+      1.4,
+    );
+    this.mesh(
+      this.showroomStage,
+      this.cylinder,
+      '#fff7dc',
+      0,
+      0,
+      0,
+      1.42,
+      0.09,
+      1.42,
+    );
+    this.mesh(
+      this.showroomStage,
+      new THREE.TorusGeometry(1.41, 0.03, 8, 48),
+      '#c8b982',
+      0,
+      -0.04,
+      0,
+    ).rotation.x = Math.PI / 2;
   }
   private tick(dt: number, time: number) {
     const s = this.state(),
       moving = s.active ? Math.min(1, Math.hypot(s.moveX, s.moveY)) : 0;
+    const show = Boolean(s.showcase);
+    if (show !== this.inShowcase) {
+      this.inShowcase = show;
+      this.renderer.setClearColor('#b6e6ed', show ? 0 : 1);
+      if (show) {
+        this.savedFacing = this.player.rotation.y;
+        this.showcaseAngle = 0;
+        this.showroom.add(this.player);
+        this.player.rotation.y = 0;
+      } else {
+        this.scene.add(this.player);
+        this.player.rotation.y = this.savedFacing;
+      }
+    }
+    for (const [id, piece] of this.costumePieces)
+      piece.visible = id === s.outfit.hat || id === s.outfit.accessory;
+    if (show) {
+      if (s.showcase === 'wardrobe') this.showcaseAngle += s.turn * dt * 2;
+      this.player.rotation.y = THREE.MathUtils.lerp(
+        this.player.rotation.y,
+        this.showcaseAngle,
+        1 - Math.exp(-7 * dt),
+      );
+    }
     if (s.active) {
       this.angle += s.turn * dt * 1.65;
       const length = Math.max(1, Math.hypot(s.moveX, s.moveY)),
@@ -741,7 +822,13 @@ export class MonsterWorld {
     const wave = this.celebration > 0 || s.welcome,
       bob = this.reducedMotion ? 0 : Math.sin(time * 2.4) * 0.034;
     this.player.position.y =
-      height(this.player.position.x, this.player.position.z) + this.jumpY;
+      height(this.player.position.x, this.player.position.z) +
+      (show ? 0 : this.jumpY);
+    this.showroomStage.position.set(
+      this.player.position.x,
+      height(this.player.position.x, this.player.position.z) - 0.02,
+      this.player.position.z,
+    );
     this.rig.position.y =
       bob +
       (moving ? Math.abs(Math.sin(this.walkTime)) * 0.09 : 0) +
@@ -811,8 +898,12 @@ export class MonsterWorld {
         this.particles.splice(i, 1);
       }
     }
-    const follow = s.welcome
-      ? new THREE.Vector3(8, 11, 22)
+    const follow = show
+      ? new THREE.Vector3(
+          this.player.position.x + 0.15,
+          this.player.position.y + 2.15,
+          this.player.position.z + (this.camera.aspect < 0.75 ? 6.7 : 5.4),
+        )
       : new THREE.Vector3(
           Math.sin(this.angle) * 10,
           6.5,
@@ -824,16 +915,24 @@ export class MonsterWorld {
             this.player.position.z,
           ),
         );
-    this.camera.position.lerp(follow, 1 - Math.exp(-3 * dt));
+    if (show) this.camera.position.copy(follow);
+    else this.camera.position.lerp(follow, 1 - Math.exp(-3 * dt));
     this.camera.lookAt(
-      s.welcome
-        ? new THREE.Vector3(-1, 1, 0)
+      show
+        ? new THREE.Vector3(
+            this.player.position.x,
+            this.player.position.y + 1.5,
+            this.player.position.z,
+          )
         : new THREE.Vector3(
             this.player.position.x,
             this.player.position.y + 1.1,
             this.player.position.z,
           ),
     );
+  }
+  turnShowcase() {
+    this.showcaseAngle += Math.PI / 2;
   }
   jump() {
     if (this.jumpY === 0 && this.state().active) this.jumpVelocity = 5.8;
@@ -885,7 +984,7 @@ export class MonsterWorld {
     );
     const geometries = new Set<THREE.BufferGeometry>(),
       materials = new Set<THREE.Material>();
-    this.scene.traverse((o) => {
+    const collect = (o: THREE.Object3D) => {
       if (o instanceof THREE.Mesh) {
         geometries.add(o.geometry);
         (Array.isArray(o.material) ? o.material : [o.material]).forEach((m) =>
@@ -896,7 +995,9 @@ export class MonsterWorld {
         o.material.map?.dispose();
         materials.add(o.material);
       }
-    });
+    };
+    this.scene.traverse(collect);
+    this.showroom.traverse(collect);
     geometries.forEach((g) => g.dispose());
     materials.forEach((m) => m.dispose());
     this.renderer.dispose();

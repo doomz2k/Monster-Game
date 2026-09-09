@@ -4,6 +4,25 @@ Clover's Monster Game: **Clo's Little World**, a browser adventure for a four-ye
 
 Explore a connected 3D island with soft boundaries, a follow camera, walking, hopping, blinking, waving and celebrations. There are no lives, timers or penalties. Progress stays in this browser.
 
+The launch screen lets the child start or continue an adventure, dress up Clo, or open grown-up settings. Dress-up is also available from Pause and immediately after earning a new outfit reward. The live 3D preview can be turned around; equipped pieces follow Clo throughout the island.
+
+## Dress-up and rewards
+
+Choose one hat and one accessory. The bobble beanie, party hat, berry bow tie and cosy scarf are available from the start, along with options to remove either item. More pieces unlock with stars earned for distinct challenges; replaying an already completed challenge does not create another star.
+
+| Stars | New item        |
+| ----- | --------------- |
+| 3     | Explorer hat    |
+| 5     | Round glasses   |
+| 8     | Flower crown    |
+| 12    | Little backpack |
+| 16    | Rainbow crown   |
+| 24    | Superstar medal |
+
+Outfits save automatically in the existing browser save. Earlier saves keep their stars, sounds and settings and receive the starter outfit. Unlocking an item does not change the child's outfit automatically. Rewards are permanent while that browser save is retained; there are no purchases or random rewards.
+
+In the dressing room, use the stick/D-pad or arrows to choose an item and **A / Enter / Space** to wear it. **LB / RB** or **Q / E** switches between hats and accessories. **X / M** turns Clo by a quarter turn; the right stick also rotates the preview. **B / Escape** or **All dressed!** returns to the previous screen. Locked items remain selectable so their spoken unlock requirement can be heard with **Y**.
+
 | Area             | Activities                                                                                                                          |
 | ---------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
 | Counting Meadow  | Count objects, touch each object to count aloud, recognise circles, squares and triangles                                           |
