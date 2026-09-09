@@ -1,6 +1,6 @@
 import { SOUNDS } from './phonics';
-import builtIn from '../public/audio/phonemes.json';
-import narration from '../public/audio/narration.json';
+import builtIn from './audio-data/phonemes.json';
+import narration from './audio-data/narration.json';
 export type SoundReview = {
   approved: boolean;
   data?: string;

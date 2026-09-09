@@ -25,7 +25,7 @@ registerHooks({
         }).outputText,
         shortCircuit: true,
       };
-    if (url.includes('/public/audio/') && url.endsWith('.json'))
+    if (url.includes('/lib/audio-data/') && url.endsWith('.json'))
       return {
         format: 'module',
         source: 'export default ' + readFileSync(new URL(url), 'utf8'),

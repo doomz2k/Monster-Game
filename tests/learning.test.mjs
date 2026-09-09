@@ -190,7 +190,7 @@ test('missing phonemes never fall through to text-to-speech', async () => {
   delete globalThis.window;
 });
 test('copied phoneme candidates are real Ogg files, all flagged unreviewed', () => {
-  const manifest = JSON.parse(fs.readFileSync('public/audio/phonemes.json'));
+  const manifest = JSON.parse(fs.readFileSync('lib/audio-data/phonemes.json'));
   assert.equal(Object.keys(manifest).length, 26);
   for (const value of Object.values(manifest)) {
     const bytes = fs.readFileSync('public' + value.path);
