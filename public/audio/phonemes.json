@@ -1,0 +1,158 @@
+{
+  "m": {
+    "path": "/audio/phonemes/m.ogg",
+    "origin": "doomz2k/clover-games (sound-lab live candidate)",
+    "sourceReference": "https://commons.wikimedia.org/wiki/File:Bilabial%20nasal.ogg",
+    "reviewed": false
+  },
+  "a": {
+    "path": "/audio/phonemes/a.ogg",
+    "origin": "doomz2k/clover-games (sound-lab live candidate)",
+    "sourceReference": "https://commons.wikimedia.org/wiki/File:Near-open%20front%20unrounded%20vowel.ogg",
+    "reviewed": false
+  },
+  "s": {
+    "path": "/audio/phonemes/s.ogg",
+    "origin": "doomz2k/clover-games (sound-lab live candidate)",
+    "sourceReference": "https://commons.wikimedia.org/wiki/File:Voiceless%20alveolar%20sibilant.ogg",
+    "reviewed": false
+  },
+  "d": {
+    "path": "/audio/phonemes/d.ogg",
+    "origin": "doomz2k/clover-games (sound-lab live candidate)",
+    "sourceReference": "https://commons.wikimedia.org/wiki/File:Voiced%20alveolar%20plosive.ogg",
+    "reviewed": false
+  },
+  "t": {
+    "path": "/audio/phonemes/t.ogg",
+    "origin": "doomz2k/clover-games (sound-lab live candidate)",
+    "sourceReference": "https://commons.wikimedia.org/wiki/File:Voiceless%20alveolar%20plosive.ogg",
+    "reviewed": false
+  },
+  "i": {
+    "path": "/audio/phonemes/i.ogg",
+    "origin": "doomz2k/clover-games (sound-lab live candidate)",
+    "sourceReference": "https://commons.wikimedia.org/wiki/File:Near-close%20near-front%20unrounded%20vowel.ogg",
+    "reviewed": false
+  },
+  "n": {
+    "path": "/audio/phonemes/n.ogg",
+    "origin": "doomz2k/clover-games (sound-lab live candidate)",
+    "sourceReference": "https://commons.wikimedia.org/wiki/File:Alveolar%20nasal.ogg",
+    "reviewed": false
+  },
+  "p": {
+    "path": "/audio/phonemes/p.ogg",
+    "origin": "doomz2k/clover-games (sound-lab live candidate)",
+    "sourceReference": "https://commons.wikimedia.org/wiki/File:Voiceless%20bilabial%20plosive.ogg",
+    "reviewed": false
+  },
+  "g": {
+    "path": "/audio/phonemes/g.ogg",
+    "origin": "doomz2k/clover-games (sound-lab live candidate)",
+    "sourceReference": "https://commons.wikimedia.org/wiki/File:Voiced%20velar%20plosive.ogg",
+    "reviewed": false
+  },
+  "o": {
+    "path": "/audio/phonemes/o.ogg",
+    "origin": "doomz2k/clover-games (sound-lab live candidate)",
+    "sourceReference": "https://commons.wikimedia.org/wiki/File:Open%20back%20rounded%20vowel.ogg",
+    "reviewed": false
+  },
+  "c": {
+    "path": "/audio/phonemes/c.ogg",
+    "origin": "doomz2k/clover-games (sound-lab live candidate)",
+    "sourceReference": "https://commons.wikimedia.org/wiki/File:Voiceless%20velar%20plosive.ogg",
+    "reviewed": false
+  },
+  "k": {
+    "path": "/audio/phonemes/k.ogg",
+    "origin": "doomz2k/clover-games (sound-lab live candidate)",
+    "sourceReference": "https://commons.wikimedia.org/wiki/File:Voiceless%20velar%20plosive.ogg",
+    "reviewed": false
+  },
+  "u": {
+    "path": "/audio/phonemes/u.ogg",
+    "origin": "doomz2k/clover-games (sound-lab live candidate)",
+    "sourceReference": "https://commons.wikimedia.org/wiki/File:Open-mid%20back%20unrounded%20vowel.ogg",
+    "reviewed": false
+  },
+  "b": {
+    "path": "/audio/phonemes/b.ogg",
+    "origin": "doomz2k/clover-games (sound-lab live candidate)",
+    "sourceReference": "https://commons.wikimedia.org/wiki/File:Voiced%20bilabial%20plosive.ogg",
+    "reviewed": false
+  },
+  "f": {
+    "path": "/audio/phonemes/f.ogg",
+    "origin": "doomz2k/clover-games (sound-lab live candidate)",
+    "sourceReference": "https://commons.wikimedia.org/wiki/File:Voiceless%20labiodental%20fricative.ogg",
+    "reviewed": false
+  },
+  "e": {
+    "path": "/audio/phonemes/e.ogg",
+    "origin": "doomz2k/clover-games (sound-lab live candidate)",
+    "sourceReference": "https://commons.wikimedia.org/wiki/File:Open-mid%20front%20unrounded%20vowel.ogg",
+    "reviewed": false
+  },
+  "l": {
+    "path": "/audio/phonemes/l.ogg",
+    "origin": "doomz2k/clover-games (sound-lab live candidate)",
+    "sourceReference": "https://commons.wikimedia.org/wiki/File:Alveolar%20lateral%20approximant.ogg",
+    "reviewed": false
+  },
+  "h": {
+    "path": "/audio/phonemes/h.ogg",
+    "origin": "doomz2k/clover-games (sound-lab live candidate)",
+    "sourceReference": "https://commons.wikimedia.org/wiki/File:Voiceless%20glottal%20fricative.ogg",
+    "reviewed": false
+  },
+  "r": {
+    "path": "/audio/phonemes/r.ogg",
+    "origin": "doomz2k/clover-games (sound-lab live candidate)",
+    "sourceReference": "https://commons.wikimedia.org/wiki/File:Alveolar%20approximant.ogg",
+    "reviewed": false
+  },
+  "sh": {
+    "path": "/audio/phonemes/sh.ogg",
+    "origin": "doomz2k/clover-games (sound-lab live candidate)",
+    "sourceReference": "https://commons.wikimedia.org/wiki/File:Voiceless%20postalveolar%20fricative.ogg",
+    "reviewed": false
+  },
+  "th": {
+    "path": "/audio/phonemes/th.ogg",
+    "origin": "doomz2k/clover-games (sound-lab live candidate)",
+    "sourceReference": "https://commons.wikimedia.org/wiki/File:Voiceless%20dental%20fricative.ogg",
+    "reviewed": false
+  },
+  "ch": {
+    "path": "/audio/phonemes/ch.ogg",
+    "origin": "doomz2k/clover-games (sound-lab live candidate)",
+    "sourceReference": "https://commons.wikimedia.org/wiki/File:Voiceless%20palato-alveolar%20affricate.ogg",
+    "reviewed": false
+  },
+  "qu": {
+    "path": "/audio/phonemes/qu.ogg",
+    "origin": "doomz2k/clover-games (sound-lab live candidate)",
+    "sourceReference": null,
+    "reviewed": false
+  },
+  "ng": {
+    "path": "/audio/phonemes/ng.ogg",
+    "origin": "doomz2k/clover-games (sound-lab live candidate)",
+    "sourceReference": "https://commons.wikimedia.org/wiki/File:Velar%20nasal.ogg",
+    "reviewed": false
+  },
+  "nk": {
+    "path": "/audio/phonemes/nk.ogg",
+    "origin": "doomz2k/clover-games (sound-lab live candidate)",
+    "sourceReference": null,
+    "reviewed": false
+  },
+  "ck": {
+    "path": "/audio/phonemes/ck.ogg",
+    "origin": "doomz2k/clover-games (sound-lab live candidate)",
+    "sourceReference": "https://commons.wikimedia.org/wiki/File:Voiceless%20velar%20plosive.ogg",
+    "reviewed": false
+  }
+}

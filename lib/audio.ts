@@ -1,0 +1,269 @@
+import { SOUNDS } from './phonics';
+import builtIn from '../public/audio/phonemes.json';
+import narration from '../public/audio/narration.json';
+export type SoundReview = {
+  approved: boolean;
+  data?: string;
+  checkedAt?: string;
+};
+export type SoundReviews = Record<string, SoundReview>;
+const STORAGE = 'monster-game-sounds-v1';
+export function loadReviews(): SoundReviews {
+  try {
+    const raw = JSON.parse(localStorage.getItem(STORAGE) ?? '{}');
+    const out: SoundReviews = {};
+    for (const s of SOUNDS) {
+      const v = raw[s.grapheme];
+      if (v && typeof v.approved === 'boolean')
+        out[s.grapheme] = {
+          approved: v.approved,
+          data:
+            typeof v.data === 'string' &&
+            v.data.startsWith('data:audio/') &&
+            v.data.length < 2800000
+              ? v.data
+              : undefined,
+          checkedAt: typeof v.checkedAt === 'string' ? v.checkedAt : undefined,
+        };
+    }
+    return out;
+  } catch {
+    return {};
+  }
+}
+export function saveReviews(reviews: SoundReviews) {
+  localStorage.setItem(STORAGE, JSON.stringify(reviews));
+}
+export function candidatePath(g: string, reviews: SoundReviews): string | null {
+  return (
+    reviews[g]?.data ??
+    (builtIn as Record<string, { path: string }>)[g]?.path ??
+    null
+  );
+}
+export function approvedPath(g: string, reviews: SoundReviews): string | null {
+  return reviews[g]?.approved ? candidatePath(g, reviews) : null;
+}
+export async function importRecording(file: File): Promise<string> {
+  if (file.size > 2_000_000)
+    throw new Error('Please choose a sound recording smaller than 2 MB.');
+  if (
+    !file.type.startsWith('audio/') &&
+    !/\.(wav|mp3|ogg|m4a|webm)$/i.test(file.name)
+  )
+    throw new Error('Please choose an audio recording.');
+  const bytes = await file.arrayBuffer();
+  const ctx = new AudioContext();
+  try {
+    const decoded = await ctx.decodeAudioData(bytes.slice(0));
+    if (decoded.duration < 0.05 || decoded.duration > 5)
+      throw new Error(
+        'Choose a single sound lasting between 0.05 and 5 seconds.',
+      );
+  } finally {
+    await ctx.close();
+  }
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (typeof reader.result !== 'string') {
+        reject(new Error('Could not read the recording.'));
+        return;
+      }
+      resolve(
+        reader.result.replace(
+          /^data:[^;]+;/,
+          'data:audio/' + (file.type.split('/')[1] || 'wav') + ';',
+        ),
+      );
+    };
+    reader.onerror = () => reject(new Error('Could not read the recording.'));
+    reader.readAsDataURL(file);
+  });
+}
+export type AudioStep =
+  | { type: 'narration'; text: string }
+  | { type: 'phoneme'; grapheme: string }
+  | { type: 'clip'; url: string };
+export class AudioDirector {
+  private generation = 0;
+  private player: HTMLAudioElement | null = null;
+  private settle: (() => void) | null = null;
+  private context: AudioContext | null = null;
+  public muted = false;
+  setMuted(value: boolean) {
+    this.muted = value;
+    this.stop();
+    if (!value) this.unlock();
+  }
+  constructor(
+    private reviews: () => SoundReviews,
+    private error: (message: string) => void,
+  ) {}
+  setReviews(reviews: SoundReviews) {
+    this.reviews = () => reviews;
+  }
+  unlock() {
+    try {
+      this.context ??= new AudioContext();
+      void this.context.resume();
+    } catch {
+      /* Spoken and visual instructions still work. */
+    }
+  }
+  stop() {
+    this.generation++;
+    this.player?.pause();
+    this.player = null;
+    window.speechSynthesis?.cancel();
+    this.settle?.();
+    this.settle = null;
+  }
+  async run(steps: AudioStep[]) {
+    this.stop();
+    if (this.muted) return;
+    const generation = this.generation;
+    for (const step of steps) {
+      if (generation !== this.generation || this.muted) return;
+      try {
+        if (step.type === 'phoneme') {
+          const path = approvedPath(step.grapheme, this.reviews());
+          if (!path)
+            throw new Error(
+              'This sound needs a grown-up to say it. Check or add its recording in Grown-ups → Sound studio.',
+            );
+          await this.clip(path, generation);
+        } else if (step.type === 'clip') {
+          await this.clip(step.url, generation);
+        } else {
+          const path = (narration as Record<string, string>)[
+            step.text.toLowerCase()
+          ];
+          if (path) await this.clip(path, generation);
+          else await this.speak(step.text, generation);
+        }
+      } catch (e) {
+        if (generation === this.generation)
+          this.error(
+            e instanceof Error
+              ? e.message
+              : 'The audio could not play. Try Listen again.',
+          );
+        return;
+      }
+    }
+  }
+  say(text: string) {
+    return this.run([{ type: 'narration', text }]);
+  }
+  private clip(url: string, generation: number) {
+    return new Promise<void>((resolve, reject) => {
+      if (generation !== this.generation) {
+        resolve();
+        return;
+      }
+      const audio = new Audio(url);
+      this.player = audio;
+      let finished = false;
+      const end = (err?: Error) => {
+        if (finished) return;
+        finished = true;
+        clearTimeout(timer);
+        audio.onended = null;
+        audio.onerror = null;
+        audio.pause();
+        if (this.player === audio) this.player = null;
+        this.settle = null;
+        if (err) reject(err);
+        else resolve();
+      };
+      this.settle = () => end();
+      audio.onended = () => end();
+      audio.onerror = () =>
+        end(
+          new Error(
+            'That recording could not play. Please try another audio file in Sound studio.',
+          ),
+        );
+      const timer = setTimeout(
+        () =>
+          end(
+            new Error('Audio took too long to load. Please try Listen again.'),
+          ),
+        15000,
+      );
+      audio
+        .play()
+        .catch(() =>
+          end(new Error('Tap Listen once to enable sound in this browser.')),
+        );
+    });
+  }
+  private speak(text: string, generation: number) {
+    return new Promise<void>((resolve) => {
+      if (generation !== this.generation) {
+        resolve();
+        return;
+      }
+      if (!('speechSynthesis' in window)) {
+        this.error(
+          'Spoken instructions are unavailable in this browser. A grown-up can read the prompt.',
+        );
+        resolve();
+        return;
+      }
+      const voices = speechSynthesis.getVoices(),
+        gb = voices.filter((v) => /^en[-_]GB$/i.test(v.lang)),
+        voice =
+          gb.find((v) => /Sonia|Libby|Hazel|Kate|Serena/i.test(v.name)) ??
+          gb[0];
+      if (voices.length && !voice) {
+        this.error(
+          'A British English voice is not installed. Written prompts and checked recordings are available.',
+        );
+        resolve();
+        return;
+      }
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = 'en-GB';
+      if (voice) u.voice = voice;
+      u.rate = 0.84;
+      u.pitch = 1.06;
+      let finished = false;
+      const done = () => {
+        if (finished) return;
+        finished = true;
+        clearTimeout(timer);
+        this.settle = null;
+        resolve();
+      };
+      const timer = setTimeout(done, 20000);
+      this.settle = done;
+      u.onend = done;
+      u.onerror = done;
+      speechSynthesis.speak(u);
+    });
+  }
+  chime() {
+    if (this.muted || !this.context) return;
+    const ctx = this.context,
+      t = ctx.currentTime;
+    [523, 659, 784, 1047].forEach((frequency, i) => {
+      const o = ctx.createOscillator(),
+        g = ctx.createGain();
+      o.type = 'sine';
+      o.frequency.value = frequency;
+      g.gain.setValueAtTime(0, t + i * 0.1);
+      g.gain.linearRampToValueAtTime(0.045, t + i * 0.1 + 0.015);
+      g.gain.exponentialRampToValueAtTime(0.001, t + i * 0.1 + 0.38);
+      o.connect(g).connect(ctx.destination);
+      o.start(t + i * 0.1);
+      o.stop(t + i * 0.1 + 0.4);
+    });
+  }
+  dispose() {
+    this.stop();
+    void this.context?.close();
+    this.context = null;
+  }
+}
