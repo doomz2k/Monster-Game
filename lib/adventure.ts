@@ -1,96 +1,104 @@
+import { WORLD_SCALE } from './world-layout';
+import { spaceCard } from './space-learning';
 import type { ProgressData } from './learning';
 import { decodableWords, SOUNDS, soundChoices } from './phonics';
 
-export const PLACES = [
-  {
-    id: 'home',
-    name: 'My home',
-    friend: 'Monster',
-    icon: '🏡',
-    x: 11,
-    z: 12,
-    colour: '#e9ad65',
-    kind: 'home',
-    intro: 'home',
-  },
-  {
-    id: 'meadow',
-    name: 'Bramble’s pizza shop',
-    friend: 'Bramble',
-    icon: '🍕',
-    x: 0,
-    z: -14,
-    colour: '#ec995f',
-    kind: 'fox',
-    intro: 'bramble-hello',
-  },
-  {
-    id: 'woods',
-    name: 'Olive’s story tree',
-    friend: 'Olive',
-    icon: '🦉',
-    x: -20,
-    z: 0,
-    colour: '#b28acb',
-    kind: 'owl',
-    intro: 'olive-hello',
-  },
-  {
-    id: 'cove',
-    name: 'Marina’s harbour',
-    friend: 'Marina',
-    icon: '🐧',
-    x: 21,
-    z: 0,
-    colour: '#78b9d8',
-    kind: 'penguin',
-    intro: 'marina-hello',
-  },
-  {
-    id: 'garden',
-    name: 'Tilly’s growing patch',
-    friend: 'Tilly',
-    icon: '🐸',
-    x: 0,
-    z: 22,
-    colour: '#8fb968',
-    kind: 'frog',
-    intro: 'tilly-hello',
-  },
-  {
-    id: 'shop',
-    name: 'Poppy’s little shops',
-    friend: 'Poppy',
-    icon: '🐰',
-    x: -12,
-    z: 16,
-    colour: '#e59cbd',
-    kind: 'rabbit',
-    intro: 'poppy-hello',
-  },
-  {
-    id: 'rocket',
-    name: 'Pip’s crashed rocket',
-    friend: 'Pip',
-    icon: '👽',
-    x: -13,
-    z: -27,
-    colour: '#83c8b6',
-    kind: 'alien',
-    intro: 'pip-hello',
-  },
-  {
-    id: 'moon',
-    name: 'Moon meadow',
-    friend: 'Nova',
-    icon: '🌙',
-    x: 10,
-    z: -7,
-    colour: '#c1b6eb',
-    kind: 'alien',
-    intro: 'nova-hello',
-  },
-] as const;
+export const PLACES = (
+  [
+    {
+      id: 'home',
+      name: 'My home',
+      friend: 'Monster',
+      icon: '🏡',
+      x: 11,
+      z: 12,
+      colour: '#e9ad65',
+      kind: 'home',
+      intro: 'home',
+    },
+    {
+      id: 'meadow',
+      name: 'Bramble’s pizza shop',
+      friend: 'Bramble',
+      icon: '🍕',
+      x: 0,
+      z: -14,
+      colour: '#ec995f',
+      kind: 'fox',
+      intro: 'bramble-hello',
+    },
+    {
+      id: 'woods',
+      name: 'Olive’s story tree',
+      friend: 'Olive',
+      icon: '🦉',
+      x: -20,
+      z: 0,
+      colour: '#b28acb',
+      kind: 'owl',
+      intro: 'olive-hello',
+    },
+    {
+      id: 'cove',
+      name: 'Marina’s harbour',
+      friend: 'Marina',
+      icon: '🐧',
+      x: 21,
+      z: 0,
+      colour: '#78b9d8',
+      kind: 'penguin',
+      intro: 'marina-hello',
+    },
+    {
+      id: 'garden',
+      name: 'Tilly’s growing patch',
+      friend: 'Tilly',
+      icon: '🐸',
+      x: 0,
+      z: 22,
+      colour: '#8fb968',
+      kind: 'frog',
+      intro: 'tilly-hello',
+    },
+    {
+      id: 'shop',
+      name: 'Poppy’s little shops',
+      friend: 'Poppy',
+      icon: '🐰',
+      x: -12,
+      z: 16,
+      colour: '#e59cbd',
+      kind: 'rabbit',
+      intro: 'poppy-hello',
+    },
+    {
+      id: 'rocket',
+      name: 'Pip’s crashed rocket',
+      friend: 'Pip',
+      icon: '👽',
+      x: -13,
+      z: -27,
+      colour: '#83c8b6',
+      kind: 'alien',
+      intro: 'pip-hello',
+    },
+    {
+      id: 'moon',
+      name: 'Moon meadow',
+      friend: 'Nova',
+      icon: '🌙',
+      x: 10,
+      z: -7,
+      colour: '#c1b6eb',
+      kind: 'alien',
+      intro: 'nova-hello',
+    },
+  ] as const
+).map((place) => ({
+  ...place,
+  x: place.x * WORLD_SCALE,
+  z: place.z * WORLD_SCALE,
+}));
 export type PlaceId = (typeof PLACES)[number]['id'];
 export type QuestId = Exclude<PlaceId, 'home' | 'shop'>;
 export type Region = 'island' | 'moon';
@@ -602,18 +610,15 @@ export function missionFor(npc: QuestId, p: ProgressData): Mission {
     m.voice = 'nova';
     m.title = 'Nova’s space discoveries';
     m.kind = 'space';
-    const cards = [
-      { prompt: 'earth', choices: ['🌍', '☀️', '🌙'], answer: '🌍' },
-      { prompt: 'sun', choices: ['🌙', '☀️', '🪐'], answer: '☀️' },
-      { prompt: 'saturn', choices: ['🌍', '🪐', '☀️'], answer: '🪐' },
-      { prompt: 'moon', choices: ['🌙', '🌍', '🪐'], answer: '🌙' },
-    ];
-    Object.assign(m, cards[round % cards.length]);
-    if (round % 5 === 4) {
-      m.kind = 'pack';
-      m.icon = '⭐';
-      m.prompt = 'stars-' + target;
-    }
+    const card = spaceCard(round);
+    m.kind = card.kind as Mission['kind'];
+    m.prompt = card.id;
+    m.choices = card.choices;
+    m.answer = card.answer;
+    m.sequence = card.sequence ?? [];
+    m.icon = card.icon ?? '🌙';
+    m.target = card.target ?? 0;
+    m.total = p.mathsMax;
   }
   if (m.kind === 'add' || m.kind === 'take')
     m.choices = ['0', ...numbers(p.mathsMax)];

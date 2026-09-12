@@ -1,0 +1,362 @@
+[
+  {
+    "id": "space-earth-home",
+    "kind": "space",
+    "text": "Earth is our home. Can you find our blue and green planet?",
+    "answer": "earth",
+    "choices": ["earth", "mars", "saturn"]
+  },
+  {
+    "id": "space-sun-star",
+    "kind": "space",
+    "text": "The Sun is a star. Which picture shows the Sun?",
+    "answer": "sun",
+    "choices": ["sun", "moon", "earth"]
+  },
+  {
+    "id": "space-mars-red",
+    "kind": "space",
+    "text": "Mars is called the red planet. Can you find Mars?",
+    "answer": "mars",
+    "choices": ["mars", "earth", "neptune"]
+  },
+  {
+    "id": "space-saturn-rings",
+    "kind": "space",
+    "text": "Saturn has lovely wide rings. Can you find Saturn?",
+    "answer": "saturn",
+    "choices": ["saturn", "venus", "mars"]
+  },
+  {
+    "id": "space-collect-1",
+    "kind": "pack",
+    "text": "Can you collect 1 star for our Moon station?",
+    "icon": "⭐",
+    "target": 1,
+    "answer": "1",
+    "choices": []
+  },
+  {
+    "id": "space-pattern-1",
+    "kind": "pattern",
+    "text": "Our Moon station needs a picture code. Which picture comes next?",
+    "sequence": ["⭐", "🌙", "⭐", "🌙"],
+    "answer": "⭐",
+    "choices": ["⭐", "🌙", "🔺"]
+  },
+  {
+    "id": "space-mercury-small",
+    "kind": "space",
+    "text": "Mercury is the smallest planet. Find the little grey planet.",
+    "answer": "mercury",
+    "choices": ["mercury", "jupiter", "earth"]
+  },
+  {
+    "id": "space-venus-hot",
+    "kind": "space",
+    "text": "Venus is the hottest planet. Find the yellow cloudy planet.",
+    "answer": "venus",
+    "choices": ["venus", "neptune", "earth"]
+  },
+  {
+    "id": "space-jupiter-big",
+    "kind": "space",
+    "text": "Jupiter is the biggest planet. Find the big stripy planet.",
+    "answer": "jupiter",
+    "choices": ["jupiter", "mars", "mercury"]
+  },
+  {
+    "id": "space-neptune-far",
+    "kind": "space",
+    "text": "Neptune is the planet furthest from the Sun. Find the deep blue planet.",
+    "answer": "neptune",
+    "choices": ["neptune", "mars", "venus"]
+  },
+  {
+    "id": "space-collect-2",
+    "kind": "pack",
+    "text": "Can you collect 2 Moon rocks for our Moon station?",
+    "icon": "🪨",
+    "target": 2,
+    "answer": "2",
+    "choices": []
+  },
+  {
+    "id": "space-pattern-2",
+    "kind": "pattern",
+    "text": "Our Moon station needs a picture code. Which picture comes next?",
+    "sequence": ["🚀", "🚀", "🪐", "🚀", "🚀"],
+    "answer": "🪐",
+    "choices": ["🚀", "🪐", "🔺"]
+  },
+  {
+    "id": "space-uranus-roll",
+    "kind": "space",
+    "text": "Uranus spins on its side. Can you find the pale blue planet?",
+    "answer": "uranus",
+    "choices": ["uranus", "jupiter", "mars"]
+  },
+  {
+    "id": "space-moon-neighbour",
+    "kind": "space",
+    "text": "The Moon travels around Earth. Can you find the grey Moon?",
+    "answer": "moon",
+    "choices": ["moon", "sun", "saturn"]
+  },
+  {
+    "id": "space-earth-oceans",
+    "kind": "space",
+    "text": "Which planet has the oceans where whales swim?",
+    "answer": "earth",
+    "choices": ["earth", "mars", "venus"]
+  },
+  {
+    "id": "space-earth-garden",
+    "kind": "space",
+    "text": "Which planet has real trees and gardens for us to enjoy?",
+    "answer": "earth",
+    "choices": ["earth", "mercury", "neptune"]
+  },
+  {
+    "id": "space-collect-3",
+    "kind": "pack",
+    "text": "Can you collect 3 crystals for our Moon station?",
+    "icon": "💎",
+    "target": 3,
+    "answer": "3",
+    "choices": []
+  },
+  {
+    "id": "space-pattern-3",
+    "kind": "pattern",
+    "text": "Our Moon station needs a picture code. Which picture comes next?",
+    "sequence": ["🔵", "🟨", "🔵", "🟨"],
+    "answer": "🔵",
+    "choices": ["🔵", "🟨", "🔺"]
+  },
+  {
+    "id": "space-mercury-near",
+    "kind": "space",
+    "text": "Mercury is closest to the Sun. Find Mercury, the little grey planet.",
+    "answer": "mercury",
+    "choices": ["mercury", "saturn", "neptune"]
+  },
+  {
+    "id": "space-venus-clouds",
+    "kind": "space",
+    "text": "Venus is wrapped in thick clouds. Find our yellow cloudy planet.",
+    "answer": "venus",
+    "choices": ["venus", "mars", "earth"]
+  },
+  {
+    "id": "space-jupiter-storm",
+    "kind": "space",
+    "text": "Jupiter has a giant storm called the Great Red Spot. Find the stripy planet with a spot.",
+    "answer": "jupiter",
+    "choices": ["jupiter", "neptune", "mercury"]
+  },
+  {
+    "id": "space-mars-robots",
+    "kind": "space",
+    "text": "Our robot rovers explore Mars. Find the red planet they drive on.",
+    "answer": "mars",
+    "choices": ["mars", "saturn", "sun"]
+  },
+  {
+    "id": "space-collect-4",
+    "kind": "pack",
+    "text": "Can you collect 4 toy rockets for our Moon station?",
+    "icon": "🚀",
+    "target": 4,
+    "answer": "4",
+    "choices": []
+  },
+  {
+    "id": "space-pattern-4",
+    "kind": "pattern",
+    "text": "Our Moon station needs a picture code. Which picture comes next?",
+    "sequence": ["🌍", "🌍", "☀️", "🌍", "🌍"],
+    "answer": "☀️",
+    "choices": ["🌍", "☀️", "🔺"]
+  },
+  {
+    "id": "space-moon-craters",
+    "kind": "space",
+    "text": "The Moon has lots of round craters. Find the grey, crater-covered Moon.",
+    "answer": "moon",
+    "choices": ["moon", "earth", "sun"]
+  },
+  {
+    "id": "space-moon-visit",
+    "kind": "space",
+    "text": "People have walked on the Moon. Can you find the Moon?",
+    "answer": "moon",
+    "choices": ["moon", "jupiter", "neptune"]
+  },
+  {
+    "id": "space-sun-light",
+    "kind": "space",
+    "text": "Which star gives Earth daylight?",
+    "answer": "sun",
+    "choices": ["sun", "earth", "moon"]
+  },
+  {
+    "id": "space-moon-reflects",
+    "kind": "space",
+    "text": "The Moon reflects sunlight. Can you find the Moon?",
+    "answer": "moon",
+    "choices": ["moon", "mars", "saturn"]
+  },
+  {
+    "id": "space-collect-5",
+    "kind": "pack",
+    "text": "Can you collect 5 batteries for our Moon station?",
+    "icon": "🔋",
+    "target": 5,
+    "answer": "5",
+    "choices": []
+  },
+  {
+    "id": "space-pattern-5",
+    "kind": "pattern",
+    "text": "Our Moon station needs a picture code. Which picture comes next?",
+    "sequence": ["💎", "🔩", "💎", "🔩"],
+    "answer": "💎",
+    "choices": ["💎", "🔩", "🔺"]
+  },
+  {
+    "id": "space-rocket-launch",
+    "kind": "space",
+    "text": "Which vehicle blasts off into space?",
+    "answer": "rocket",
+    "choices": ["rocket", "boat", "bicycle"]
+  },
+  {
+    "id": "space-astronaut-job",
+    "kind": "space",
+    "text": "An astronaut is a space explorer. Can you find the astronaut?",
+    "answer": "astronaut",
+    "choices": ["astronaut", "owl", "frog"]
+  },
+  {
+    "id": "space-space-suit",
+    "kind": "space",
+    "text": "Who is wearing a spacesuit to help them breathe in space?",
+    "answer": "astronaut",
+    "choices": ["astronaut", "fox", "penguin"]
+  },
+  {
+    "id": "space-telescope-look",
+    "kind": "space",
+    "text": "A telescope helps us see faraway things in space. Find the telescope.",
+    "answer": "telescope",
+    "choices": ["telescope", "bicycle", "boat"]
+  },
+  {
+    "id": "space-collect-6",
+    "kind": "pack",
+    "text": "Can you collect 2 Moon flowers for our Moon station?",
+    "icon": "🌼",
+    "target": 2,
+    "answer": "2",
+    "choices": []
+  },
+  {
+    "id": "space-pattern-6",
+    "kind": "pattern",
+    "text": "Our Moon station needs a picture code. Which picture comes next?",
+    "sequence": ["🛰️", "🛰️", "⭐", "🛰️", "🛰️"],
+    "answer": "⭐",
+    "choices": ["🛰️", "⭐", "🔺"]
+  },
+  {
+    "id": "space-satellite-orbit",
+    "kind": "space",
+    "text": "Satellites travel around planets and send us information. Find the satellite.",
+    "answer": "satellite",
+    "choices": ["satellite", "bicycle", "flower"]
+  },
+  {
+    "id": "space-moon-rocks",
+    "kind": "space",
+    "text": "Astronauts brought Moon rocks home to study. Which picture shows a rock?",
+    "answer": "rock",
+    "choices": ["rock", "flower", "fish"]
+  },
+  {
+    "id": "space-sun-warmth",
+    "kind": "space",
+    "text": "Which star sends warmth to Earth?",
+    "answer": "sun",
+    "choices": ["sun", "saturn", "moon"]
+  },
+  {
+    "id": "space-earth-air",
+    "kind": "space",
+    "text": "Earth has air we can breathe. Find our blue and green home.",
+    "answer": "earth",
+    "choices": ["earth", "moon", "mars"]
+  },
+  {
+    "id": "space-collect-7",
+    "kind": "pack",
+    "text": "Can you collect 3 toy satellites for our Moon station?",
+    "icon": "🛰️",
+    "target": 3,
+    "answer": "3",
+    "choices": []
+  },
+  {
+    "id": "space-pattern-7",
+    "kind": "pattern",
+    "text": "Our Moon station needs a picture code. Which picture comes next?",
+    "sequence": ["🌼", "🪨", "🌼", "🪨"],
+    "answer": "🌼",
+    "choices": ["🌼", "🪨", "🔺"]
+  },
+  {
+    "id": "space-mars-two-moons",
+    "kind": "space",
+    "text": "Mars has two little moons. Find the red planet.",
+    "answer": "mars",
+    "choices": ["mars", "venus", "mercury"]
+  },
+  {
+    "id": "space-venus-no-moon",
+    "kind": "space",
+    "text": "Venus has no moons. Can you find the yellow cloudy planet?",
+    "answer": "venus",
+    "choices": ["venus", "earth", "mars"]
+  },
+  {
+    "id": "space-moon-low-gravity",
+    "kind": "space",
+    "text": "You could jump higher on the Moon than on Earth. Find the Moon.",
+    "answer": "moon",
+    "choices": ["moon", "earth", "jupiter"]
+  },
+  {
+    "id": "space-sun-centre",
+    "kind": "space",
+    "text": "The planets travel around the Sun. Which picture belongs in the middle of our solar system?",
+    "answer": "sun",
+    "choices": ["sun", "moon", "earth"]
+  },
+  {
+    "id": "space-collect-8",
+    "kind": "pack",
+    "text": "Can you collect 4 rocket bolts for our Moon station?",
+    "icon": "🔩",
+    "target": 4,
+    "answer": "4",
+    "choices": []
+  },
+  {
+    "id": "space-pattern-8",
+    "kind": "pattern",
+    "text": "Our Moon station needs a picture code. Which picture comes next?",
+    "sequence": ["🔋", "🔋", "🚀", "🔋", "🔋"],
+    "answer": "🚀",
+    "choices": ["🔋", "🚀", "🔺"]
+  }
+]

@@ -1,8 +1,13 @@
 import * as THREE from 'three';
+import { WORLD_SCALE, SHORE_RADIUS } from './world-layout';
+import { surfaceMaterial, type WorldTextures } from './world-materials';
 import { PLACES, SHOP_ITEMS, type AdventureProgress } from './adventure';
 import { createNeighbour } from './neighbours';
 
-export function createVillage(height: (x: number, z: number) => number) {
+export function createVillage(
+  height: (x: number, z: number) => number,
+  textures: WorldTextures,
+) {
   const root = new THREE.Group(),
     moon = new THREE.Group(),
     home = new THREE.Group(),
@@ -21,10 +26,7 @@ export function createVillage(height: (x: number, z: number) => number) {
     sy = sx,
     sz = sx,
   ) {
-    const m = new THREE.Mesh(
-      geometry,
-      new THREE.MeshStandardMaterial({ color: colour, roughness: 0.85 }),
-    );
+    const m = new THREE.Mesh(geometry, surfaceMaterial(colour, textures));
     m.position.set(x, y, z);
     m.scale.set(sx, sy, sz);
     m.castShadow = m.receiveShadow = true;
@@ -237,7 +239,19 @@ export function createVillage(height: (x: number, z: number) => number) {
   }
   marker(rocket, '🚀', 0, 6.8, 0);
   // The moon is a separate playable location, sharing the same movement rig.
-  mesh(moon, new THREE.CylinderGeometry(51, 54, 2, 96), '#b4aecb', 0, -1.1, 0);
+  const moonGround = mesh(
+    moon,
+    new THREE.CylinderGeometry(SHORE_RADIUS, SHORE_RADIUS + 3, 2, 128),
+    '#c8c5db',
+    0,
+    -1.02,
+    0,
+  );
+  moonGround.material = new THREE.MeshStandardMaterial({
+    map: textures.rock,
+    color: '#aaaac6',
+    roughness: 1,
+  });
   for (let i = 0; i < 34; i++) {
     const a = i * 2.39996,
       radius = 13 + (i % 7) * 4;
@@ -274,6 +288,18 @@ export function createVillage(height: (x: number, z: number) => number) {
   const landing = box(moon, '#716f9b', 0, 0.03, 6, 5, 0.15, 5);
   landing.name = 'Return launch pad';
   moon.visible = false;
+  // Increase distances, keeping houses and characters at their original human scale.
+  const npcRoots = new Set<THREE.Object3D>(neighbours.map((n) => n.root));
+  for (const object of root.children) {
+    if (npcRoots.has(object)) continue;
+    const oldGround = height(object.position.x, object.position.z);
+    object.position.x *= WORLD_SCALE;
+    object.position.z *= WORLD_SCALE;
+    object.position.y +=
+      height(object.position.x, object.position.z) - oldGround;
+  }
+  home.position.y = height(home.position.x, home.position.z);
+  beds.position.y = height(beds.position.x, beds.position.z);
   let contentsKey = '';
   function clear(group: THREE.Group) {
     group.traverse((o) => {
@@ -287,7 +313,8 @@ export function createVillage(height: (x: number, z: number) => number) {
     group.clear();
   }
   function update(a: AdventureProgress, playerX: number, playerZ: number) {
-    roof.visible = Math.hypot(playerX - 11, playerZ - 8.5) > 8;
+    roof.visible =
+      Math.hypot(playerX - home.position.x, playerZ - home.position.z) > 8;
     rocket.rotation.z = Math.max(0, 3 - a.rounds.rocket) * 0.11;
     parts.forEach((part, i) => {
       part.visible = a.rounds.rocket > i;

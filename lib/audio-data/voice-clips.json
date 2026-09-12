@@ -150,9 +150,9 @@
     "text": "Let's ask a grown-up to say this sound with us. Then you can find the matching letters."
   },
   "add": {
-    "path": "/audio/voices/add-8367ea84d87c3bb7.ogg",
+    "path": "/audio/voices/add-8c657cf1959595ec.ogg",
     "voice": "bf_lily",
-    "text": "Here are two little groups of flowers. Put them together in the flower bed. How many flowers are there altogether?"
+    "text": "How many flowers are there altogether? Choose your number, then press the green button."
   },
   "pattern": {
     "path": "/audio/voices/pattern-f06f6d67971051d9.ogg",
@@ -160,9 +160,9 @@
     "text": "The control panel has a pattern. Look along the coloured shapes. Which shape comes next?"
   },
   "battery": {
-    "path": "/audio/voices/battery-f8233a8d2f63456e.ogg",
+    "path": "/audio/voices/battery-61ef491fa95129fa.ogg",
     "voice": "bm_fable",
-    "text": "We need to join these two groups of power cells. Move them into the battery. How many power cells are there altogether?"
+    "text": "How many star batteries are there altogether? Choose your number, then press the green button."
   },
   "earth": {
     "path": "/audio/voices/earth-b4bc63cca7176823.ogg",
@@ -230,9 +230,9 @@
     "text": "Please put 1 apple in the picnic basket. Touch an apple to pack it. Touch it again to put it back."
   },
   "fuel-1": {
-    "path": "/audio/voices/fuel-1-c640cf8fd0cdfefa.ogg",
+    "path": "/audio/voices/fuel-1-84fff312574ce61e.ogg",
     "voice": "bm_fable",
-    "text": "The rocket needs 1 crystal. Put them in the fuel tank, then press the tick."
+    "text": "We need 1 crystals. Choose that many, then press the green button."
   },
   "stars-1": {
     "path": "/audio/voices/stars-1-f1142697b11eedde.ogg",
@@ -240,9 +240,9 @@
     "text": "Let's collect 1 star for our moon map. Choose them, then press the tick."
   },
   "take-1": {
-    "path": "/audio/voices/take-1-3d6473fc8a1e7cf4.ogg",
+    "path": "/audio/voices/take-1-0893752de49133cf.ogg",
     "voice": "bf_emma",
-    "text": "Let's send 1 fish away on the boat. Touch the fish to send them. How many fish are left?"
+    "text": "1 fish swim away. How many are left? Choose your number, then press the green button."
   },
   "number-2": {
     "path": "/audio/voices/number-2-90957944291d6ea8.ogg",
@@ -255,9 +255,9 @@
     "text": "Please put 2 apples in the picnic basket. Touch an apple to pack it. Touch it again to put it back."
   },
   "fuel-2": {
-    "path": "/audio/voices/fuel-2-7c73b769d7fb7be8.ogg",
+    "path": "/audio/voices/fuel-2-4ef6f2fae239cd74.ogg",
     "voice": "bm_fable",
-    "text": "The rocket needs 2 crystals. Put them in the fuel tank, then press the tick."
+    "text": "We need 2 crystals. Choose that many, then press the green button."
   },
   "stars-2": {
     "path": "/audio/voices/stars-2-5f2e5c9f3da9ce10.ogg",
@@ -265,9 +265,9 @@
     "text": "Let's collect 2 stars for our moon map. Choose them, then press the tick."
   },
   "take-2": {
-    "path": "/audio/voices/take-2-61d2aaeef3654852.ogg",
+    "path": "/audio/voices/take-2-51029bb959513294.ogg",
     "voice": "bf_emma",
-    "text": "Let's send 2 fish away on the boat. Touch the fish to send them. How many fish are left?"
+    "text": "2 fish swim away. How many are left? Choose your number, then press the green button."
   },
   "number-3": {
     "path": "/audio/voices/number-3-ef753d1b6a7d085e.ogg",
@@ -280,9 +280,9 @@
     "text": "Please put 3 apples in the picnic basket. Touch an apple to pack it. Touch it again to put it back."
   },
   "fuel-3": {
-    "path": "/audio/voices/fuel-3-0e8629af34f8ea1f.ogg",
+    "path": "/audio/voices/fuel-3-bf028e8e11992d58.ogg",
     "voice": "bm_fable",
-    "text": "The rocket needs 3 crystals. Put them in the fuel tank, then press the tick."
+    "text": "We need 3 crystals. Choose that many, then press the green button."
   },
   "stars-3": {
     "path": "/audio/voices/stars-3-d0bb0cad995faef6.ogg",
@@ -290,9 +290,9 @@
     "text": "Let's collect 3 stars for our moon map. Choose them, then press the tick."
   },
   "take-3": {
-    "path": "/audio/voices/take-3-47bc71e65ad61a60.ogg",
+    "path": "/audio/voices/take-3-cc4ffd93b47555ec.ogg",
     "voice": "bf_emma",
-    "text": "Let's send 3 fish away on the boat. Touch the fish to send them. How many fish are left?"
+    "text": "3 fish swim away. How many are left? Choose your number, then press the green button."
   },
   "number-4": {
     "path": "/audio/voices/number-4-ab221bdf9d6ad7ae.ogg",
@@ -305,9 +305,9 @@
     "text": "Please put 4 apples in the picnic basket. Touch an apple to pack it. Touch it again to put it back."
   },
   "fuel-4": {
-    "path": "/audio/voices/fuel-4-b1bc245394d56182.ogg",
+    "path": "/audio/voices/fuel-4-5102346d8fd57c44.ogg",
     "voice": "bm_fable",
-    "text": "The rocket needs 4 crystals. Put them in the fuel tank, then press the tick."
+    "text": "We need 4 crystals. Choose that many, then press the green button."
   },
   "stars-4": {
     "path": "/audio/voices/stars-4-6726da91fb2e3d74.ogg",
@@ -315,9 +315,9 @@
     "text": "Let's collect 4 stars for our moon map. Choose them, then press the tick."
   },
   "take-4": {
-    "path": "/audio/voices/take-4-123964085dfdc2be.ogg",
+    "path": "/audio/voices/take-4-ed9059d71dc5c238.ogg",
     "voice": "bf_emma",
-    "text": "Let's send 4 fish away on the boat. Touch the fish to send them. How many fish are left?"
+    "text": "4 fish swim away. How many are left? Choose your number, then press the green button."
   },
   "number-5": {
     "path": "/audio/voices/number-5-63ce3af7ecf2cc8a.ogg",
@@ -330,9 +330,9 @@
     "text": "Please put 5 apples in the picnic basket. Touch an apple to pack it. Touch it again to put it back."
   },
   "fuel-5": {
-    "path": "/audio/voices/fuel-5-c855778fbf28e8eb.ogg",
+    "path": "/audio/voices/fuel-5-bcddf0fb90d69c84.ogg",
     "voice": "bm_fable",
-    "text": "The rocket needs 5 crystals. Put them in the fuel tank, then press the tick."
+    "text": "We need 5 crystals. Choose that many, then press the green button."
   },
   "stars-5": {
     "path": "/audio/voices/stars-5-5896d334c53b0ef2.ogg",
@@ -340,9 +340,9 @@
     "text": "Let's collect 5 stars for our moon map. Choose them, then press the tick."
   },
   "take-5": {
-    "path": "/audio/voices/take-5-b916794218b108e3.ogg",
+    "path": "/audio/voices/take-5-a945454643562d2e.ogg",
     "voice": "bf_emma",
-    "text": "Let's send 5 fish away on the boat. Touch the fish to send them. How many fish are left?"
+    "text": "5 fish swim away. How many are left? Choose your number, then press the green button."
   },
   "number-6": {
     "path": "/audio/voices/number-6-3c158ec2cb17293e.ogg",
@@ -355,9 +355,9 @@
     "text": "Please put 6 apples in the picnic basket. Touch an apple to pack it. Touch it again to put it back."
   },
   "fuel-6": {
-    "path": "/audio/voices/fuel-6-874f97526c5a80dc.ogg",
+    "path": "/audio/voices/fuel-6-f5f3b2cb559da8fe.ogg",
     "voice": "bm_fable",
-    "text": "The rocket needs 6 crystals. Put them in the fuel tank, then press the tick."
+    "text": "We need 6 crystals. Choose that many, then press the green button."
   },
   "stars-6": {
     "path": "/audio/voices/stars-6-48296bcc950f3446.ogg",
@@ -365,9 +365,9 @@
     "text": "Let's collect 6 stars for our moon map. Choose them, then press the tick."
   },
   "take-6": {
-    "path": "/audio/voices/take-6-5173094b9923bad0.ogg",
+    "path": "/audio/voices/take-6-c1ba3cda502963c3.ogg",
     "voice": "bf_emma",
-    "text": "Let's send 6 fish away on the boat. Touch the fish to send them. How many fish are left?"
+    "text": "6 fish swim away. How many are left? Choose your number, then press the green button."
   },
   "number-7": {
     "path": "/audio/voices/number-7-587a7691b2c36bb1.ogg",
@@ -380,9 +380,9 @@
     "text": "Please put 7 apples in the picnic basket. Touch an apple to pack it. Touch it again to put it back."
   },
   "fuel-7": {
-    "path": "/audio/voices/fuel-7-7719337bb243e11f.ogg",
+    "path": "/audio/voices/fuel-7-f8b54f05709f4e9c.ogg",
     "voice": "bm_fable",
-    "text": "The rocket needs 7 crystals. Put them in the fuel tank, then press the tick."
+    "text": "We need 7 crystals. Choose that many, then press the green button."
   },
   "stars-7": {
     "path": "/audio/voices/stars-7-17b8a376b6a9ff3e.ogg",
@@ -390,9 +390,9 @@
     "text": "Let's collect 7 stars for our moon map. Choose them, then press the tick."
   },
   "take-7": {
-    "path": "/audio/voices/take-7-539017f6b8f1c604.ogg",
+    "path": "/audio/voices/take-7-60b7b9a7f7a0684e.ogg",
     "voice": "bf_emma",
-    "text": "Let's send 7 fish away on the boat. Touch the fish to send them. How many fish are left?"
+    "text": "7 fish swim away. How many are left? Choose your number, then press the green button."
   },
   "number-8": {
     "path": "/audio/voices/number-8-dcbf1b5e8cca7d1c.ogg",
@@ -405,9 +405,9 @@
     "text": "Please put 8 apples in the picnic basket. Touch an apple to pack it. Touch it again to put it back."
   },
   "fuel-8": {
-    "path": "/audio/voices/fuel-8-dcb3df868e5d6319.ogg",
+    "path": "/audio/voices/fuel-8-532d12844401bd2f.ogg",
     "voice": "bm_fable",
-    "text": "The rocket needs 8 crystals. Put them in the fuel tank, then press the tick."
+    "text": "We need 8 crystals. Choose that many, then press the green button."
   },
   "stars-8": {
     "path": "/audio/voices/stars-8-9a6d436dffdbf346.ogg",
@@ -415,9 +415,9 @@
     "text": "Let's collect 8 stars for our moon map. Choose them, then press the tick."
   },
   "take-8": {
-    "path": "/audio/voices/take-8-07de3a37e2c0ec5b.ogg",
+    "path": "/audio/voices/take-8-bf338edfd11a3c68.ogg",
     "voice": "bf_emma",
-    "text": "Let's send 8 fish away on the boat. Touch the fish to send them. How many fish are left?"
+    "text": "8 fish swim away. How many are left? Choose your number, then press the green button."
   },
   "number-9": {
     "path": "/audio/voices/number-9-6d3de6a4e5f6a9ed.ogg",
@@ -430,9 +430,9 @@
     "text": "Please put 9 apples in the picnic basket. Touch an apple to pack it. Touch it again to put it back."
   },
   "fuel-9": {
-    "path": "/audio/voices/fuel-9-e6e79645f25b8a2c.ogg",
+    "path": "/audio/voices/fuel-9-a4c7d47304be40ee.ogg",
     "voice": "bm_fable",
-    "text": "The rocket needs 9 crystals. Put them in the fuel tank, then press the tick."
+    "text": "We need 9 crystals. Choose that many, then press the green button."
   },
   "stars-9": {
     "path": "/audio/voices/stars-9-91f6049e9ce58607.ogg",
@@ -440,9 +440,9 @@
     "text": "Let's collect 9 stars for our moon map. Choose them, then press the tick."
   },
   "take-9": {
-    "path": "/audio/voices/take-9-b558b29addc830cb.ogg",
+    "path": "/audio/voices/take-9-a0096bc25ff460b6.ogg",
     "voice": "bf_emma",
-    "text": "Let's send 9 fish away on the boat. Touch the fish to send them. How many fish are left?"
+    "text": "9 fish swim away. How many are left? Choose your number, then press the green button."
   },
   "number-10": {
     "path": "/audio/voices/number-10-9a8fbea1c6f20df0.ogg",
@@ -455,9 +455,9 @@
     "text": "Please put 10 apples in the picnic basket. Touch an apple to pack it. Touch it again to put it back."
   },
   "fuel-10": {
-    "path": "/audio/voices/fuel-10-4109c937c63c575d.ogg",
+    "path": "/audio/voices/fuel-10-b6b558090397090b.ogg",
     "voice": "bm_fable",
-    "text": "The rocket needs 10 crystals. Put them in the fuel tank, then press the tick."
+    "text": "We need 10 crystals. Choose that many, then press the green button."
   },
   "stars-10": {
     "path": "/audio/voices/stars-10-d9913094a6438daf.ogg",
@@ -465,9 +465,9 @@
     "text": "Let's collect 10 stars for our moon map. Choose them, then press the tick."
   },
   "take-10": {
-    "path": "/audio/voices/take-10-8e2abb3526858e7b.ogg",
+    "path": "/audio/voices/take-10-c162a6538e94aea9.ogg",
     "voice": "bf_emma",
-    "text": "Let's send 10 fish away on the boat. Touch the fish to send them. How many fish are left?"
+    "text": "10 fish swim away. How many are left? Choose your number, then press the green button."
   },
   "spell-mat": {
     "path": "/audio/voices/spell-mat-f3905bd361b66399.ogg",
@@ -860,13 +860,253 @@
     "text": "All the toppings match the recipe! Into the oven it goes. What a wonderful pizza!"
   },
   "pizza-retry": {
-    "path": "/audio/voices/pizza-retry-006d34319d839dce.ogg",
+    "path": "/audio/voices/pizza-retry-f942eb1712bdc645.ogg",
     "voice": "bm_george",
-    "text": "Let's check this topping together. Count the little pictures in the recipe. You can add one, or take one off."
+    "text": "Let\u2019s count the recipe pictures. Choose how many toppings we need."
   },
   "pizza-next": {
-    "path": "/audio/voices/pizza-next-9c1cd030caf9e489.ogg",
+    "path": "/audio/voices/pizza-next-f0137a1dbdd9dc08.ogg",
     "voice": "bm_george",
-    "text": "That's just right! Let's look at the next topping in our recipe."
+    "text": "Lovely! Let\u2019s add the next topping."
+  },
+  "space-earth-home": {
+    "path": "/audio/voices/space-earth-home-b690368855f8bc46.ogg",
+    "voice": "bf_isabella",
+    "text": "Earth is our home. Can you find our blue and green planet?"
+  },
+  "space-sun-star": {
+    "path": "/audio/voices/space-sun-star-d8285a0600486aa1.ogg",
+    "voice": "bf_isabella",
+    "text": "The Sun is a star. Which picture shows the Sun?"
+  },
+  "space-mars-red": {
+    "path": "/audio/voices/space-mars-red-8b315a3679eed19d.ogg",
+    "voice": "bf_isabella",
+    "text": "Mars is called the red planet. Can you find Mars?"
+  },
+  "space-saturn-rings": {
+    "path": "/audio/voices/space-saturn-rings-6634cf8819ee72a6.ogg",
+    "voice": "bf_isabella",
+    "text": "Saturn has lovely wide rings. Can you find Saturn?"
+  },
+  "space-collect-1": {
+    "path": "/audio/voices/space-collect-1-7a65fd83938a0b8e.ogg",
+    "voice": "bf_isabella",
+    "text": "Can you collect 1 star for our Moon station?"
+  },
+  "space-pattern-1": {
+    "path": "/audio/voices/space-pattern-1-d9f416c3122772b6.ogg",
+    "voice": "bf_isabella",
+    "text": "Our Moon station needs a picture code. Which picture comes next?"
+  },
+  "space-mercury-small": {
+    "path": "/audio/voices/space-mercury-small-deddce01dec1e9a2.ogg",
+    "voice": "bf_isabella",
+    "text": "Mercury is the smallest planet. Find the little grey planet."
+  },
+  "space-venus-hot": {
+    "path": "/audio/voices/space-venus-hot-568db136fbea146a.ogg",
+    "voice": "bf_isabella",
+    "text": "Venus is the hottest planet. Find the yellow cloudy planet."
+  },
+  "space-jupiter-big": {
+    "path": "/audio/voices/space-jupiter-big-1609e0c60fd4dc7b.ogg",
+    "voice": "bf_isabella",
+    "text": "Jupiter is the biggest planet. Find the big stripy planet."
+  },
+  "space-neptune-far": {
+    "path": "/audio/voices/space-neptune-far-6c8efe10cc80f458.ogg",
+    "voice": "bf_isabella",
+    "text": "Neptune is the planet furthest from the Sun. Find the deep blue planet."
+  },
+  "space-collect-2": {
+    "path": "/audio/voices/space-collect-2-7c93fe2718fa3b0f.ogg",
+    "voice": "bf_isabella",
+    "text": "Can you collect 2 Moon rocks for our Moon station?"
+  },
+  "space-pattern-2": {
+    "path": "/audio/voices/space-pattern-2-d9f416c3122772b6.ogg",
+    "voice": "bf_isabella",
+    "text": "Our Moon station needs a picture code. Which picture comes next?"
+  },
+  "space-uranus-roll": {
+    "path": "/audio/voices/space-uranus-roll-a426562056a7b706.ogg",
+    "voice": "bf_isabella",
+    "text": "Uranus spins on its side. Can you find the pale blue planet?"
+  },
+  "space-moon-neighbour": {
+    "path": "/audio/voices/space-moon-neighbour-cce2a0be8721a3f1.ogg",
+    "voice": "bf_isabella",
+    "text": "The Moon travels around Earth. Can you find the grey Moon?"
+  },
+  "space-earth-oceans": {
+    "path": "/audio/voices/space-earth-oceans-ac7e7a5ee1ac3f4c.ogg",
+    "voice": "bf_isabella",
+    "text": "Which planet has the oceans where whales swim?"
+  },
+  "space-earth-garden": {
+    "path": "/audio/voices/space-earth-garden-033281924a91d24e.ogg",
+    "voice": "bf_isabella",
+    "text": "Which planet has real trees and gardens for us to enjoy?"
+  },
+  "space-collect-3": {
+    "path": "/audio/voices/space-collect-3-452355e7b229c861.ogg",
+    "voice": "bf_isabella",
+    "text": "Can you collect 3 crystals for our Moon station?"
+  },
+  "space-pattern-3": {
+    "path": "/audio/voices/space-pattern-3-d9f416c3122772b6.ogg",
+    "voice": "bf_isabella",
+    "text": "Our Moon station needs a picture code. Which picture comes next?"
+  },
+  "space-mercury-near": {
+    "path": "/audio/voices/space-mercury-near-a8f9cbee5544d741.ogg",
+    "voice": "bf_isabella",
+    "text": "Mercury is closest to the Sun. Find Mercury, the little grey planet."
+  },
+  "space-venus-clouds": {
+    "path": "/audio/voices/space-venus-clouds-0b727057b7d6646e.ogg",
+    "voice": "bf_isabella",
+    "text": "Venus is wrapped in thick clouds. Find our yellow cloudy planet."
+  },
+  "space-jupiter-storm": {
+    "path": "/audio/voices/space-jupiter-storm-57f29aadca105c42.ogg",
+    "voice": "bf_isabella",
+    "text": "Jupiter has a giant storm called the Great Red Spot. Find the stripy planet with a spot."
+  },
+  "space-mars-robots": {
+    "path": "/audio/voices/space-mars-robots-4463bf674e535d11.ogg",
+    "voice": "bf_isabella",
+    "text": "Our robot rovers explore Mars. Find the red planet they drive on."
+  },
+  "space-collect-4": {
+    "path": "/audio/voices/space-collect-4-73156b363e531aeb.ogg",
+    "voice": "bf_isabella",
+    "text": "Can you collect 4 toy rockets for our Moon station?"
+  },
+  "space-pattern-4": {
+    "path": "/audio/voices/space-pattern-4-d9f416c3122772b6.ogg",
+    "voice": "bf_isabella",
+    "text": "Our Moon station needs a picture code. Which picture comes next?"
+  },
+  "space-moon-craters": {
+    "path": "/audio/voices/space-moon-craters-6588e6dc8e94dad6.ogg",
+    "voice": "bf_isabella",
+    "text": "The Moon has lots of round craters. Find the grey, crater-covered Moon."
+  },
+  "space-moon-visit": {
+    "path": "/audio/voices/space-moon-visit-b917a643702a1c48.ogg",
+    "voice": "bf_isabella",
+    "text": "People have walked on the Moon. Can you find the Moon?"
+  },
+  "space-sun-light": {
+    "path": "/audio/voices/space-sun-light-efd2b9e91fcd95b7.ogg",
+    "voice": "bf_isabella",
+    "text": "Which star gives Earth daylight?"
+  },
+  "space-moon-reflects": {
+    "path": "/audio/voices/space-moon-reflects-87a81d090dd43233.ogg",
+    "voice": "bf_isabella",
+    "text": "The Moon reflects sunlight. Can you find the Moon?"
+  },
+  "space-collect-5": {
+    "path": "/audio/voices/space-collect-5-010bd4c3a12a57e3.ogg",
+    "voice": "bf_isabella",
+    "text": "Can you collect 5 batteries for our Moon station?"
+  },
+  "space-pattern-5": {
+    "path": "/audio/voices/space-pattern-5-d9f416c3122772b6.ogg",
+    "voice": "bf_isabella",
+    "text": "Our Moon station needs a picture code. Which picture comes next?"
+  },
+  "space-rocket-launch": {
+    "path": "/audio/voices/space-rocket-launch-0fe2ee50079e9501.ogg",
+    "voice": "bf_isabella",
+    "text": "Which vehicle blasts off into space?"
+  },
+  "space-astronaut-job": {
+    "path": "/audio/voices/space-astronaut-job-92526cf64d2f4911.ogg",
+    "voice": "bf_isabella",
+    "text": "An astronaut is a space explorer. Can you find the astronaut?"
+  },
+  "space-space-suit": {
+    "path": "/audio/voices/space-space-suit-6c9cd97909f74056.ogg",
+    "voice": "bf_isabella",
+    "text": "Who is wearing a spacesuit to help them breathe in space?"
+  },
+  "space-telescope-look": {
+    "path": "/audio/voices/space-telescope-look-cd0caf2048b105a9.ogg",
+    "voice": "bf_isabella",
+    "text": "A telescope helps us see faraway things in space. Find the telescope."
+  },
+  "space-collect-6": {
+    "path": "/audio/voices/space-collect-6-6df37a41ea21de4a.ogg",
+    "voice": "bf_isabella",
+    "text": "Can you collect 2 Moon flowers for our Moon station?"
+  },
+  "space-pattern-6": {
+    "path": "/audio/voices/space-pattern-6-d9f416c3122772b6.ogg",
+    "voice": "bf_isabella",
+    "text": "Our Moon station needs a picture code. Which picture comes next?"
+  },
+  "space-satellite-orbit": {
+    "path": "/audio/voices/space-satellite-orbit-68fc800885eca8b4.ogg",
+    "voice": "bf_isabella",
+    "text": "Satellites travel around planets and send us information. Find the satellite."
+  },
+  "space-moon-rocks": {
+    "path": "/audio/voices/space-moon-rocks-c0ea9f15e654775f.ogg",
+    "voice": "bf_isabella",
+    "text": "Astronauts brought Moon rocks home to study. Which picture shows a rock?"
+  },
+  "space-sun-warmth": {
+    "path": "/audio/voices/space-sun-warmth-399f462b9083c82e.ogg",
+    "voice": "bf_isabella",
+    "text": "Which star sends warmth to Earth?"
+  },
+  "space-earth-air": {
+    "path": "/audio/voices/space-earth-air-cbb6a69eab5b7580.ogg",
+    "voice": "bf_isabella",
+    "text": "Earth has air we can breathe. Find our blue and green home."
+  },
+  "space-collect-7": {
+    "path": "/audio/voices/space-collect-7-b9355679322f936c.ogg",
+    "voice": "bf_isabella",
+    "text": "Can you collect 3 toy satellites for our Moon station?"
+  },
+  "space-pattern-7": {
+    "path": "/audio/voices/space-pattern-7-d9f416c3122772b6.ogg",
+    "voice": "bf_isabella",
+    "text": "Our Moon station needs a picture code. Which picture comes next?"
+  },
+  "space-mars-two-moons": {
+    "path": "/audio/voices/space-mars-two-moons-881c60291726bd4e.ogg",
+    "voice": "bf_isabella",
+    "text": "Mars has two little moons. Find the red planet."
+  },
+  "space-venus-no-moon": {
+    "path": "/audio/voices/space-venus-no-moon-936ba501eb39b206.ogg",
+    "voice": "bf_isabella",
+    "text": "Venus has no moons. Can you find the yellow cloudy planet?"
+  },
+  "space-moon-low-gravity": {
+    "path": "/audio/voices/space-moon-low-gravity-ead82270d0ca11c6.ogg",
+    "voice": "bf_isabella",
+    "text": "You could jump higher on the Moon than on Earth. Find the Moon."
+  },
+  "space-sun-centre": {
+    "path": "/audio/voices/space-sun-centre-ecbfe499ff2373cc.ogg",
+    "voice": "bf_isabella",
+    "text": "The planets travel around the Sun. Which picture belongs in the middle of our solar system?"
+  },
+  "space-collect-8": {
+    "path": "/audio/voices/space-collect-8-dce1530668d9fe21.ogg",
+    "voice": "bf_isabella",
+    "text": "Can you collect 4 rocket bolts for our Moon station?"
+  },
+  "space-pattern-8": {
+    "path": "/audio/voices/space-pattern-8-d9f416c3122772b6.ogg",
+    "voice": "bf_isabella",
+    "text": "Our Moon station needs a picture code. Which picture comes next?"
   }
 }

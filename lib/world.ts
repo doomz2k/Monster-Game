@@ -1,4 +1,13 @@
 import * as THREE from 'three';
+import {
+  groundHeight as height,
+  WORLD_SCALE,
+  SHORE_RADIUS,
+  LANDMARKS,
+  clampToPlayArea,
+} from './world-layout';
+import { worldTextures } from './world-materials';
+import { createAtmosphere } from './world-atmosphere';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 import { createMonster } from './monster-model';
 import { ZONES, clampToIsland, nearestZone, type ZoneId } from './learning';
@@ -35,12 +44,11 @@ export type WorldUpdate = {
   near: ZoneId | null;
   place?: PlaceId | null;
 };
-const height = (x: number, z: number) =>
-  0.32 +
-  Math.sin(x * 0.105) * 0.5 +
-  Math.cos(z * 0.12) * 0.45 +
-  Math.sin((x + z) * 0.09) * 0.3;
 export class MonsterWorld {
+  private textures = worldTextures();
+  private atmosphere: ReturnType<typeof createAtmosphere>;
+  private sun = new THREE.DirectionalLight('#ffedc6', 2.35);
+  private skyLight = new THREE.HemisphereLight('#c9edff', '#557348', 0.95);
   private scene = new THREE.Scene();
   private showroom = new THREE.Scene();
   private showroomStage = new THREE.Group();
@@ -51,6 +59,7 @@ export class MonsterWorld {
   private camera = new THREE.PerspectiveCamera(48, 1, 0.1, 220);
   private renderer: THREE.WebGLRenderer;
   private environment: THREE.WebGLRenderTarget | null = null;
+  private windTime = { value: 0 };
   private frame = 0;
   private observer: ResizeObserver;
   private player = new THREE.Group();
@@ -66,7 +75,7 @@ export class MonsterWorld {
     object: THREE.Object3D;
     phase: number;
     y: number;
-    kind: 'cloud' | 'butterfly' | 'marker';
+    kind: 'cloud' | 'butterfly' | 'marker' | 'tree';
   }[] = [];
   private colliders: { x: number; z: number; r: number }[] = [];
   private particles: {
@@ -102,16 +111,16 @@ export class MonsterWorld {
     this.renderer.setPixelRatio(Math.min(devicePixelRatio, 1.5));
     this.renderer.shadowMap.enabled = true;
     this.renderer.shadowMap.type = THREE.PCFShadowMap;
-    this.renderer.setClearColor('#b6e6ed');
+    this.renderer.setClearColor('#b9dbdf');
     this.renderer.outputColorSpace = THREE.SRGBColorSpace;
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    this.renderer.toneMappingExposure = 1.05;
+    this.renderer.toneMappingExposure = 0.91;
     const environmentRoom = new RoomEnvironment();
     const environmentGenerator = new THREE.PMREMGenerator(this.renderer);
     this.environment = environmentGenerator.fromScene(environmentRoom, 0.04);
     this.scene.environment = this.showroom.environment =
       this.environment.texture;
-    this.scene.environmentIntensity = 0.35;
+    this.scene.environmentIntensity = 0.2;
     this.showroom.environmentIntensity = 0.6;
     environmentRoom.dispose();
     environmentGenerator.dispose();
@@ -124,24 +133,28 @@ export class MonsterWorld {
       'webglcontextlost',
       this.contextLost,
     );
-    this.scene.fog = new THREE.Fog('#b6e6ed', 58, 125);
-    this.scene.add(new THREE.HemisphereLight('#ffffe8', '#79a976', 1.7));
-    const light = new THREE.DirectionalLight('#fff2c6', 3);
-    light.position.set(-22, 40, 16);
+    this.scene.fog = new THREE.Fog('#b9dbdf', 65, 180);
+    this.scene.add(this.skyLight);
+    const light = this.sun;
+    light.position.set(-30, 44, 24);
+    this.scene.add(light.target);
     light.castShadow = true;
     light.shadow.mapSize.set(2048, 2048);
     Object.assign(light.shadow.camera, {
-      left: -40,
-      right: 40,
-      top: 40,
-      bottom: -40,
+      left: -27,
+      right: 27,
+      top: 27,
+      bottom: -27,
       near: 1,
       far: 110,
     });
     light.shadow.normalBias = 0.04;
     this.scene.add(light);
     this.buildIsland();
-    this.village = createVillage(height);
+    this.village = createVillage(height, this.textures);
+    this.atmosphere = createAtmosphere(height, this.textures);
+    this.scene.add(this.atmosphere.root);
+    this.village.moon.add(this.atmosphere.moon);
     this.scene.add(this.village.root);
     this.islandObjects = this.scene.children.filter(
       (o) => !(o instanceof THREE.Light),
@@ -150,8 +163,9 @@ export class MonsterWorld {
     this.colliders = this.colliders.filter(
       (c) =>
         !PLACES.some((p) => Math.hypot(c.x - p.x, c.z - p.z) < 6) &&
-        Math.hypot(c.x - 11, c.z - 9) > 8,
+        Math.hypot(c.x - 11 * WORLD_SCALE, c.z - 9 * WORLD_SCALE) > 9,
     );
+    this.colliders.push(...this.atmosphere.islandColliders);
     this.buildMonster();
     this.buildShowroom();
     this.scene.add(this.player);
@@ -286,7 +300,7 @@ export class MonsterWorld {
     return s;
   }
   private buildIsland() {
-    const ground = new THREE.PlaneGeometry(110, 110, 100, 100);
+    const ground = new THREE.PlaneGeometry(200, 200, 140, 140);
     ground.rotateX(-Math.PI / 2);
     const pos = ground.attributes.position,
       colours: number[] = [],
@@ -295,65 +309,88 @@ export class MonsterWorld {
       const x = pos.getX(i),
         z = pos.getZ(i),
         r = Math.hypot(x, z);
-      pos.setY(i, height(x, z) - Math.max(0, r - 51) * 0.42);
-      c.set('#91c65c');
-      if (x < -8)
-        c.lerp(new THREE.Color('#80ad8c'), Math.min(1, (-x - 8) / 10));
-      if (x > 10)
-        c.lerp(new THREE.Color('#efcf87'), Math.min(1, (x - 10) / 10));
+      pos.setY(i, height(x, z) - Math.max(0, r - SHORE_RADIUS) * 0.42);
+      c.set('#e6ecdd');
+      if (x < -8 * WORLD_SCALE)
+        c.lerp(
+          new THREE.Color('#c7dacf'),
+          Math.min(1, (-x - 8 * WORLD_SCALE) / 24),
+        );
+      if (x > 10 * WORLD_SCALE)
+        c.lerp(
+          new THREE.Color('#fff0d7'),
+          Math.min(1, (x - 10 * WORLD_SCALE) / 24),
+        );
       if (z > 12)
-        c.lerp(new THREE.Color('#a6c776'), Math.min(1, (z - 12) / 10));
+        c.lerp(new THREE.Color('#eff0d8'), Math.min(1, (z - 12) / 10));
       c.multiplyScalar(0.97 + Math.sin(x * 0.8) * Math.cos(z * 0.7) * 0.035);
       colours.push(c.r, c.g, c.b);
     }
     ground.setAttribute('color', new THREE.Float32BufferAttribute(colours, 3));
     ground.computeVertexNormals();
-    const earth = new THREE.Mesh(
-      ground,
-      new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 1 }),
-    );
+    const terrainMaterial = new THREE.MeshStandardMaterial({
+      vertexColors: true,
+      roughness: 1,
+      map: this.textures.grass,
+    });
+    terrainMaterial.onBeforeCompile = (shader) => {
+      shader.uniforms.rockMap = { value: this.textures.rock };
+      shader.vertexShader =
+        'varying vec3 vTerrain;\n' +
+        shader.vertexShader.replace(
+          '#include <begin_vertex>',
+          '#include <begin_vertex>\nvTerrain = position;',
+        );
+      shader.fragmentShader =
+        'uniform sampler2D rockMap; varying vec3 vTerrain;\n' +
+        shader.fragmentShader.replace(
+          '#include <map_fragment>',
+          `
+        vec4 meadow = texture2D(map, vMapUv);
+        vec4 beach = texture2D(rockMap, vMapUv * .65) * vec4(1.12, .95, .7, 1.0);
+        float coast = max(smoothstep(22.0, 32.0, vTerrain.x), smoothstep(76.0, 83.0, length(vTerrain.xz)));
+        diffuseColor *= mix(meadow, beach, coast);
+      `,
+        );
+    };
+    const earth = new THREE.Mesh(ground, terrainMaterial);
     earth.receiveShadow = true;
     this.scene.add(earth);
-    const sea = new THREE.Mesh(
-      new THREE.PlaneGeometry(1000, 1000),
+    const plazaGeometry = new THREE.CircleGeometry(7.5, 64);
+    plazaGeometry.rotateX(-Math.PI / 2);
+    const plazaPositions = plazaGeometry.attributes.position;
+    for (let i = 0; i < plazaPositions.count; i++)
+      plazaPositions.setY(
+        i,
+        height(plazaPositions.getX(i), plazaPositions.getZ(i)) + 0.048,
+      );
+    plazaGeometry.computeVertexNormals();
+    const plaza = new THREE.Mesh(
+      plazaGeometry,
       new THREE.MeshStandardMaterial({
-        color: '#67cddc',
-        roughness: 0.3,
-        metalness: 0.12,
+        map: this.textures.stone,
+        color: '#d8c8a3',
+        roughness: 1,
       }),
     );
-    sea.rotation.x = -Math.PI / 2;
-    sea.position.y = -1.25;
-    this.scene.add(sea);
-    for (let r = 42; r < 49; r += 2) {
-      const ring = new THREE.Mesh(
-        new THREE.RingGeometry(r, r + 0.14, 128),
-        new THREE.MeshBasicMaterial({
-          color: '#d7faff',
-          transparent: true,
-          opacity: 0.38,
-          side: THREE.DoubleSide,
-        }),
-      );
-      ring.rotation.x = -Math.PI / 2;
-      ring.position.y = -1.22;
-      this.scene.add(ring);
-    }
-    ZONES.forEach((zone) => {
+    plaza.receiveShadow = true;
+    this.scene.add(plaza);
+    PLACES.filter((p) => p.id !== 'moon').forEach((zone) => {
       const vertices: number[] = [],
-        indices: number[] = [];
-      for (let i = 0; i <= 55; i++) {
-        const f = i / 55,
-          x = zone.x * f,
-          z = zone.z * f,
-          a = Math.atan2(zone.z, zone.x) + Math.PI / 2;
+        indices: number[] = [],
+        uvs: number[] = [];
+      for (let i = 0; i <= 70; i++) {
+        const f = i / 70,
+          bend = Math.sin(f * Math.PI) * 1.8;
+        const angle = Math.atan2(zone.z, zone.x) + Math.PI / 2;
         for (const side of [-1, 1]) {
-          const px = x + Math.cos(a) * 1.25 * side,
-            pz = z + Math.sin(a) * 1.25 * side;
-          vertices.push(px, height(px, pz) + 0.022, pz);
+          const x = zone.x * f + Math.cos(angle) * (1.5 * side + bend),
+            z = zone.z * f + Math.sin(angle) * (1.5 * side + bend);
+          vertices.push(x, height(x, z) + 0.032, z);
+          uvs.push(side === -1 ? 0 : 1, f * 14);
         }
       }
-      for (let i = 0; i < 55; i++) {
+      for (let i = 0; i < 70; i++) {
         const n = i * 2;
         indices.push(n, n + 2, n + 1, n + 1, n + 2, n + 3);
       }
@@ -362,66 +399,49 @@ export class MonsterWorld {
         'position',
         new THREE.Float32BufferAttribute(vertices, 3),
       );
+      geo.setAttribute('uv', new THREE.Float32BufferAttribute(uvs, 2));
       geo.setIndex(indices);
       geo.computeVertexNormals();
-      const path = new THREE.Mesh(geo, this.mat('#eddaa4'));
-      path.material.side = THREE.DoubleSide;
+      const path = new THREE.Mesh(
+        geo,
+        new THREE.MeshStandardMaterial({
+          map: this.textures.stone,
+          color: '#dac99e',
+          roughness: 1,
+          side: THREE.DoubleSide,
+        }),
+      );
       path.receiveShadow = true;
       this.scene.add(path);
-      const activity = new THREE.Group();
-      activity.position.set(zone.x, height(zone.x, zone.z), zone.z);
-      this.scene.add(activity);
-      this.mesh(activity, this.cylinder, '#ebd797', 0, 0.12, 0, 2.5, 0.22, 2.5);
-      this.mesh(
-        activity,
-        this.cylinder,
-        zone.colour,
-        0,
-        0.28,
-        0,
-        1.9,
-        0.14,
-        1.9,
-      );
-      this.mesh(activity, this.cylinder, '#fff6ce', 0, 0.38, 0, 1.7, 0.1, 1.7);
-      const marker = new THREE.Group();
-      activity.add(marker);
-      marker.position.y = 2.4;
-      marker.add(this.label(zone.icon, zone.colour));
-      const ring = new THREE.Mesh(
-        new THREE.TorusGeometry(0.88, 0.08, 8, 40),
-        this.mat('#ffcf46'),
-      );
-      ring.rotation.x = Math.PI / 2;
-      ring.position.y = -1.75;
-      marker.add(ring);
-      this.ornaments.push({ object: marker, phase: 0, y: 2.4, kind: 'marker' });
-      for (let i = 0; i < 5; i++) {
-        const a = (i * Math.PI * 2) / 5;
-        this.ball(
-          activity,
-          '#fff3a6',
-          Math.cos(a) * 2.05,
-          0.75 + Math.sin(i) * 0.2,
-          Math.sin(a) * 2.05,
-          0.1,
-        );
-      }
     });
     let seed = 149;
     const random = () => {
       seed = (seed * 16807) % 2147483647;
       return (seed - 1) / 2147483646;
     };
-    for (let i = 0; i < 86; i++) {
-      const x = (random() - 0.5) * 75,
-        z = (random() - 0.5) * 75;
+    const canopyInstances = new Map<string, THREE.Matrix4[]>();
+    const canopyGeometry = new THREE.IcosahedronGeometry(1, 2);
+    const canopyPart = new THREE.Object3D();
+    for (let i = 0; i < 190; i++) {
+      const x = (random() - 0.5) * 145,
+        z = (random() - 0.5) * 145;
       if (
-        Math.hypot(x, z) > 37 ||
+        Math.hypot(x, z) > 73 ||
         Math.hypot(x, z) < 8 ||
         Math.abs(x) < 3.2 ||
         Math.abs(z) < 3.2 ||
-        ZONES.some((a) => Math.hypot(x - a.x, z - a.z) < 5)
+        LANDMARKS.some(([px, pz]) => Math.hypot(x - px, z - pz) < 10) ||
+        [
+          ...PLACES.filter((p) => p.id !== 'moon').map((p) => [p.x, p.z]),
+          ...LANDMARKS,
+        ].some(([px, pz]) => {
+          const f = Math.max(
+            0,
+            Math.min(1, (x * px + z * pz) / (px * px + pz * pz)),
+          );
+          return Math.hypot(x - px * f, z - pz * f) < 4;
+        }) ||
+        PLACES.some((a) => Math.hypot(x - a.x, z - a.z) < 9)
       )
         continue;
       const tree = new THREE.Group();
@@ -429,7 +449,22 @@ export class MonsterWorld {
       this.scene.add(tree);
       const scale = 0.7 + random() * 0.65;
       tree.scale.setScalar(scale);
-      this.mesh(tree, this.cylinder, '#94704f', 0, 1.35, 0, 0.24, 2.7, 0.24);
+      const trunk = this.mesh(
+        tree,
+        this.cylinder,
+        '#b29472',
+        0,
+        1.35,
+        0,
+        0.28,
+        2.7,
+        0.28,
+      );
+      trunk.material = new THREE.MeshStandardMaterial({
+        map: this.textures.timber,
+        color: '#bda483',
+        roughness: 1,
+      });
       if (x > 17) {
         for (let j = 0; j < 6; j++) {
           const a = (j * Math.PI) / 3;
@@ -450,13 +485,44 @@ export class MonsterWorld {
       } else {
         const palette =
           x < -8
-            ? ['#a293d1', '#c2a9df', '#91b1ba']
+            ? ['#507568', '#769487', '#73977c']
             : z > 12
               ? ['#edafc0', '#f2c1c5', '#b7d884']
-              : ['#73b677', '#8bc16b', '#acd07b'];
-        this.ball(tree, palette[i % 3], 0, 3.2, 0, 1.4, 1.55, 1.3);
-        this.ball(tree, palette[(i + 1) % 3], -0.85, 2.8, 0.2, 0.86, 1, 0.95);
-        this.ball(tree, palette[i % 3], 0.75, 3.55, 0.1, 0.85, 1, 0.9);
+              : ['#509153', '#76a852', '#91b766'];
+        for (const side of [-1, 1]) {
+          const branch = this.mesh(
+            tree,
+            this.cylinder,
+            '#b29472',
+            side * 0.3,
+            2.3,
+            0,
+            0.13,
+            1.5,
+            0.13,
+          );
+          branch.material = trunk.material;
+          branch.rotation.z = -side * 0.5;
+        }
+        for (let leaf = 0; leaf < 10; leaf++) {
+          const a = leaf * 2.39996,
+            radius = leaf < 7 ? 1.05 : 0.45;
+          canopyPart.position.set(
+            x + Math.cos(a) * radius * scale,
+            height(x, z) + (2.8 + (leaf % 3) * 0.48) * scale,
+            z + Math.sin(a) * radius * scale,
+          );
+          canopyPart.scale.set(
+            0.87 * scale,
+            (0.68 + (leaf % 2) * 0.18) * scale,
+            0.87 * scale,
+          );
+          canopyPart.rotation.set(leaf * 0.3, a, 0.12);
+          canopyPart.updateMatrix();
+          const tone = palette[leaf % 3];
+          if (!canopyInstances.has(tone)) canopyInstances.set(tone, []);
+          canopyInstances.get(tone)!.push(canopyPart.matrix.clone());
+        }
         if (z > 12)
           for (let j = 0; j < 4; j++)
             this.ball(
@@ -470,14 +536,43 @@ export class MonsterWorld {
       }
       this.colliders.push({ x, z, r: 0.6 * scale });
     }
-    for (let i = 0; i < 100; i++) {
-      const x = (random() - 0.5) * 76,
-        z = (random() - 0.5) * 76;
+    for (const [tone, matrices] of canopyInstances) {
+      const material = new THREE.MeshStandardMaterial({
+        color: tone,
+        roughness: 1,
+        flatShading: true,
+      });
+      material.onBeforeCompile = (shader) => {
+        shader.uniforms.windTime = this.windTime;
+        shader.vertexShader =
+          'uniform float windTime;\n' +
+          shader.vertexShader.replace(
+            '#include <begin_vertex>',
+            `#include <begin_vertex>
+          #ifdef USE_INSTANCING
+          transformed.x += sin(windTime*.85+instanceMatrix[3].x*.3)*.06;
+          transformed.z += cos(windTime*.7+instanceMatrix[3].z*.25)*.035;
+          #endif`,
+          );
+      };
+      const crowns = new THREE.InstancedMesh(
+        canopyGeometry,
+        material,
+        matrices.length,
+      );
+      matrices.forEach((matrix, i) => crowns.setMatrixAt(i, matrix));
+      crowns.instanceMatrix.needsUpdate = true;
+      crowns.castShadow = crowns.receiveShadow = true;
+      this.scene.add(crowns);
+    }
+    for (let i = 0; i < 240; i++) {
+      const x = (random() - 0.5) * 145,
+        z = (random() - 0.5) * 145;
       if (
-        Math.hypot(x, z) > 36 ||
+        Math.hypot(x, z) > 73 ||
         Math.abs(x) < 2 ||
         Math.abs(z) < 2 ||
-        ZONES.some((a) => Math.hypot(x - a.x, z - a.z) < 3)
+        PLACES.some((a) => Math.hypot(x - a.x, z - a.z) < 5)
       )
         continue;
       const g = new THREE.Group();
@@ -679,9 +774,9 @@ export class MonsterWorld {
       this.ball(
         this.scene,
         ['#83bda9', '#a2cabc', '#91c7b7'][i % 3],
-        Math.cos(a) * 90,
+        Math.cos(a) * 150,
         -0.5,
-        Math.sin(a) * 90,
+        Math.sin(a) * 150,
         12,
         6 + (i % 4) * 2,
         10,
@@ -769,21 +864,26 @@ export class MonsterWorld {
     this.showroomStage.add(contact);
   }
   private tick(dt: number, time: number) {
+    this.windTime.value = this.reducedMotion ? 0 : time;
+    this.atmosphere.update(this.windTime.value);
     const s = this.state(),
       moving = s.active ? Math.min(1, Math.hypot(s.moveX, s.moveY)) : 0;
     const region = s.adventure?.region ?? 'island';
     if (region !== this.region) {
       this.region = region;
+      this.skyLight.intensity = region === 'moon' ? 0.5 : 0.95;
+      this.sun.intensity = region === 'moon' ? 1.6 : 2.35;
+      this.sun.color.set(region === 'moon' ? '#cbd8ff' : '#ffedc6');
       this.islandObjects.forEach((o) => {
         o.visible = region === 'island';
       });
       this.village.moon.visible = region === 'moon';
       this.scene.fog = new THREE.Fog(
-        region === 'moon' ? '#252344' : '#b6e6ed',
-        58,
-        125,
+        region === 'moon' ? '#252344' : '#b9dbdf',
+        65,
+        180,
       );
-      this.renderer.setClearColor(region === 'moon' ? '#252344' : '#b6e6ed');
+      this.renderer.setClearColor(region === 'moon' ? '#252344' : '#b9dbdf');
       this.player.position.set(0, 0, region === 'moon' ? 6 : 5);
       this.jumpY = 0;
       this.jumpVelocity = 0;
@@ -857,7 +957,7 @@ export class MonsterWorld {
       this.inShowcase = show;
       this.renderer.setPixelRatio(Math.min(devicePixelRatio, show ? 2 : 1.5));
       this.renderer.setClearColor(
-        this.region === 'moon' ? '#252344' : '#b6e6ed',
+        this.region === 'moon' ? '#252344' : '#b9dbdf',
         show ? 0 : 1,
       );
       if (show) {
@@ -886,12 +986,12 @@ export class MonsterWorld {
         dx =
           ((s.moveX * Math.cos(this.angle) + s.moveY * Math.sin(this.angle)) *
             dt *
-            5.3) /
+            6.7) /
           length,
         dz =
           ((-s.moveX * Math.sin(this.angle) + s.moveY * Math.cos(this.angle)) *
             dt *
-            5.3) /
+            6.7) /
           length;
       if (moving > 0.03) {
         const next = s.adventure
@@ -900,12 +1000,10 @@ export class MonsterWorld {
               this.player.position.x + dx,
               this.player.position.z + dz,
             );
-        const radius = Math.hypot(next.x, next.z);
-        if (radius > 49) {
-          next.x *= 49 / radius;
-          next.z *= 49 / radius;
-        }
-        for (const o of this.region === 'island' ? this.colliders : []) {
+        Object.assign(next, clampToPlayArea(next.x, next.z));
+        for (const o of this.region === 'island'
+          ? this.colliders
+          : this.atmosphere.moonColliders) {
           const x = next.x - o.x,
             z = next.z - o.z,
             d = Math.hypot(x, z),
@@ -939,13 +1037,18 @@ export class MonsterWorld {
     this.player.position.y =
       (this.region === 'moon'
         ? 0
-        : height(this.player.position.x, this.player.position.z)) +
-      (show ? 0 : this.jumpY);
+        : this.atmosphere.surfaceHeight(
+            this.player.position.x,
+            this.player.position.z,
+          )) + (show ? 0 : this.jumpY);
     this.showroomStage.position.set(
       this.player.position.x,
       (this.region === 'moon'
         ? 0
-        : height(this.player.position.x, this.player.position.z)) - 0.02,
+        : this.atmosphere.surfaceHeight(
+            this.player.position.x,
+            this.player.position.z,
+          )) - 0.02,
       this.player.position.z,
     );
     this.character.animate({
@@ -961,11 +1064,18 @@ export class MonsterWorld {
       this.player.position.x,
       (this.region === 'moon'
         ? 0
-        : height(this.player.position.x, this.player.position.z)) + 0.025,
+        : this.atmosphere.surfaceHeight(
+            this.player.position.x,
+            this.player.position.z,
+          )) + 0.025,
       this.player.position.z,
     );
     this.shadow.scale.setScalar(1 - this.jumpY * 0.14);
     for (const o of this.ornaments) {
+      if (o.kind === 'tree' && !this.reducedMotion) {
+        o.object.rotation.z = Math.sin(time * 0.8 + o.phase) * 0.014;
+        o.object.rotation.x = Math.cos(time * 0.65 + o.phase) * 0.008;
+      }
       if (o.kind === 'marker')
         o.object.position.y =
           o.y + (this.reducedMotion ? 0 : Math.sin(time * 2) * 0.12);
@@ -1014,6 +1124,13 @@ export class MonsterWorld {
         this.particles.splice(i, 1);
       }
     }
+    if (!show) {
+      this.sun.position
+        .copy(this.player.position)
+        .add(new THREE.Vector3(-30, 44, 24));
+      this.sun.target.position.copy(this.player.position);
+      this.sun.target.updateMatrixWorld();
+    }
     const follow = show
       ? new THREE.Vector3(
           this.player.position.x + 0.15,
@@ -1021,13 +1138,16 @@ export class MonsterWorld {
           this.player.position.z + (this.camera.aspect < 0.75 ? 6.7 : 5.4),
         )
       : new THREE.Vector3(
-          Math.sin(this.angle) * 10,
-          6.5,
-          Math.cos(this.angle) * 10,
+          Math.sin(this.angle) * 12,
+          7.8,
+          Math.cos(this.angle) * 12,
         ).add(
           new THREE.Vector3(
             this.player.position.x,
-            height(this.player.position.x, this.player.position.z),
+            this.atmosphere.surfaceHeight(
+              this.player.position.x,
+              this.player.position.z,
+            ),
             this.player.position.z,
           ),
         );
@@ -1106,7 +1226,7 @@ export class MonsterWorld {
       materials = new Set<THREE.Material>(),
       textures = new Set<THREE.Texture>();
     const collect = (o: THREE.Object3D) => {
-      if (o instanceof THREE.Mesh) {
+      if (o instanceof THREE.Mesh || o instanceof THREE.Points) {
         geometries.add(o.geometry);
         (Array.isArray(o.material) ? o.material : [o.material]).forEach((m) => {
           materials.add(m);
@@ -1130,6 +1250,7 @@ export class MonsterWorld {
     geometries.forEach((g) => g.dispose());
     materials.forEach((m) => m.dispose());
     textures.forEach((t) => t.dispose());
+    this.textures.dispose();
     this.environment?.dispose();
     this.renderer.dispose();
     this.renderer.domElement.remove();

@@ -121,7 +121,7 @@
   },
   "add": {
     "voice": "tilly",
-    "text": "Here are two little groups of flowers. Put them together in the flower bed. How many flowers are there altogether?"
+    "text": "How many flowers are there altogether? Choose your number, then press the green button."
   },
   "pattern": {
     "voice": "pip",
@@ -129,7 +129,7 @@
   },
   "battery": {
     "voice": "pip",
-    "text": "We need to join these two groups of power cells. Move them into the battery. How many power cells are there altogether?"
+    "text": "How many star batteries are there altogether? Choose your number, then press the green button."
   },
   "earth": {
     "voice": "nova",
@@ -185,7 +185,7 @@
   },
   "fuel-1": {
     "voice": "pip",
-    "text": "The rocket needs 1 crystal. Put them in the fuel tank, then press the tick."
+    "text": "We need 1 crystals. Choose that many, then press the green button."
   },
   "stars-1": {
     "voice": "nova",
@@ -193,7 +193,7 @@
   },
   "take-1": {
     "voice": "marina",
-    "text": "Let's send 1 fish away on the boat. Touch the fish to send them. How many fish are left?"
+    "text": "1 fish swim away. How many are left? Choose your number, then press the green button."
   },
   "number-2": {
     "voice": "narrator",
@@ -205,7 +205,7 @@
   },
   "fuel-2": {
     "voice": "pip",
-    "text": "The rocket needs 2 crystals. Put them in the fuel tank, then press the tick."
+    "text": "We need 2 crystals. Choose that many, then press the green button."
   },
   "stars-2": {
     "voice": "nova",
@@ -213,7 +213,7 @@
   },
   "take-2": {
     "voice": "marina",
-    "text": "Let's send 2 fish away on the boat. Touch the fish to send them. How many fish are left?"
+    "text": "2 fish swim away. How many are left? Choose your number, then press the green button."
   },
   "number-3": {
     "voice": "narrator",
@@ -225,7 +225,7 @@
   },
   "fuel-3": {
     "voice": "pip",
-    "text": "The rocket needs 3 crystals. Put them in the fuel tank, then press the tick."
+    "text": "We need 3 crystals. Choose that many, then press the green button."
   },
   "stars-3": {
     "voice": "nova",
@@ -233,7 +233,7 @@
   },
   "take-3": {
     "voice": "marina",
-    "text": "Let's send 3 fish away on the boat. Touch the fish to send them. How many fish are left?"
+    "text": "3 fish swim away. How many are left? Choose your number, then press the green button."
   },
   "number-4": {
     "voice": "narrator",
@@ -245,7 +245,7 @@
   },
   "fuel-4": {
     "voice": "pip",
-    "text": "The rocket needs 4 crystals. Put them in the fuel tank, then press the tick."
+    "text": "We need 4 crystals. Choose that many, then press the green button."
   },
   "stars-4": {
     "voice": "nova",
@@ -253,7 +253,7 @@
   },
   "take-4": {
     "voice": "marina",
-    "text": "Let's send 4 fish away on the boat. Touch the fish to send them. How many fish are left?"
+    "text": "4 fish swim away. How many are left? Choose your number, then press the green button."
   },
   "number-5": {
     "voice": "narrator",
@@ -265,7 +265,7 @@
   },
   "fuel-5": {
     "voice": "pip",
-    "text": "The rocket needs 5 crystals. Put them in the fuel tank, then press the tick."
+    "text": "We need 5 crystals. Choose that many, then press the green button."
   },
   "stars-5": {
     "voice": "nova",
@@ -273,7 +273,7 @@
   },
   "take-5": {
     "voice": "marina",
-    "text": "Let's send 5 fish away on the boat. Touch the fish to send them. How many fish are left?"
+    "text": "5 fish swim away. How many are left? Choose your number, then press the green button."
   },
   "number-6": {
     "voice": "narrator",
@@ -285,7 +285,7 @@
   },
   "fuel-6": {
     "voice": "pip",
-    "text": "The rocket needs 6 crystals. Put them in the fuel tank, then press the tick."
+    "text": "We need 6 crystals. Choose that many, then press the green button."
   },
   "stars-6": {
     "voice": "nova",
@@ -293,7 +293,7 @@
   },
   "take-6": {
     "voice": "marina",
-    "text": "Let's send 6 fish away on the boat. Touch the fish to send them. How many fish are left?"
+    "text": "6 fish swim away. How many are left? Choose your number, then press the green button."
   },
   "number-7": {
     "voice": "narrator",
@@ -305,7 +305,7 @@
   },
   "fuel-7": {
     "voice": "pip",
-    "text": "The rocket needs 7 crystals. Put them in the fuel tank, then press the tick."
+    "text": "We need 7 crystals. Choose that many, then press the green button."
   },
   "stars-7": {
     "voice": "nova",
@@ -313,7 +313,7 @@
   },
   "take-7": {
     "voice": "marina",
-    "text": "Let's send 7 fish away on the boat. Touch the fish to send them. How many fish are left?"
+    "text": "7 fish swim away. How many are left? Choose your number, then press the green button."
   },
   "number-8": {
     "voice": "narrator",
@@ -325,7 +325,7 @@
   },
   "fuel-8": {
     "voice": "pip",
-    "text": "The rocket needs 8 crystals. Put them in the fuel tank, then press the tick."
+    "text": "We need 8 crystals. Choose that many, then press the green button."
   },
   "stars-8": {
     "voice": "nova",
@@ -333,7 +333,7 @@
   },
   "take-8": {
     "voice": "marina",
-    "text": "Let's send 8 fish away on the boat. Touch the fish to send them. How many fish are left?"
+    "text": "8 fish swim away. How many are left? Choose your number, then press the green button."
   },
   "number-9": {
     "voice": "narrator",
@@ -345,7 +345,7 @@
   },
   "fuel-9": {
     "voice": "pip",
-    "text": "The rocket needs 9 crystals. Put them in the fuel tank, then press the tick."
+    "text": "We need 9 crystals. Choose that many, then press the green button."
   },
   "stars-9": {
     "voice": "nova",
@@ -353,7 +353,7 @@
   },
   "take-9": {
     "voice": "marina",
-    "text": "Let's send 9 fish away on the boat. Touch the fish to send them. How many fish are left?"
+    "text": "9 fish swim away. How many are left? Choose your number, then press the green button."
   },
   "number-10": {
     "voice": "narrator",
@@ -365,7 +365,7 @@
   },
   "fuel-10": {
     "voice": "pip",
-    "text": "The rocket needs 10 crystals. Put them in the fuel tank, then press the tick."
+    "text": "We need 10 crystals. Choose that many, then press the green button."
   },
   "stars-10": {
     "voice": "nova",
@@ -373,7 +373,7 @@
   },
   "take-10": {
     "voice": "marina",
-    "text": "Let's send 10 fish away on the boat. Touch the fish to send them. How many fish are left?"
+    "text": "10 fish swim away. How many are left? Choose your number, then press the green button."
   },
   "spell-mat": {
     "voice": "olive",
@@ -689,10 +689,202 @@
   },
   "pizza-retry": {
     "voice": "bramble",
-    "text": "Let's check this topping together. Count the little pictures in the recipe. You can add one, or take one off."
+    "text": "Let’s count the recipe pictures. Choose how many toppings we need."
   },
   "pizza-next": {
     "voice": "bramble",
-    "text": "That's just right! Let's look at the next topping in our recipe."
+    "text": "Lovely! Let’s add the next topping."
+  },
+  "space-earth-home": {
+    "voice": "nova",
+    "text": "Earth is our home. Can you find our blue and green planet?"
+  },
+  "space-sun-star": {
+    "voice": "nova",
+    "text": "The Sun is a star. Which picture shows the Sun?"
+  },
+  "space-mars-red": {
+    "voice": "nova",
+    "text": "Mars is called the red planet. Can you find Mars?"
+  },
+  "space-saturn-rings": {
+    "voice": "nova",
+    "text": "Saturn has lovely wide rings. Can you find Saturn?"
+  },
+  "space-collect-1": {
+    "voice": "nova",
+    "text": "Can you collect 1 star for our Moon station?"
+  },
+  "space-pattern-1": {
+    "voice": "nova",
+    "text": "Our Moon station needs a picture code. Which picture comes next?"
+  },
+  "space-mercury-small": {
+    "voice": "nova",
+    "text": "Mercury is the smallest planet. Find the little grey planet."
+  },
+  "space-venus-hot": {
+    "voice": "nova",
+    "text": "Venus is the hottest planet. Find the yellow cloudy planet."
+  },
+  "space-jupiter-big": {
+    "voice": "nova",
+    "text": "Jupiter is the biggest planet. Find the big stripy planet."
+  },
+  "space-neptune-far": {
+    "voice": "nova",
+    "text": "Neptune is the planet furthest from the Sun. Find the deep blue planet."
+  },
+  "space-collect-2": {
+    "voice": "nova",
+    "text": "Can you collect 2 Moon rocks for our Moon station?"
+  },
+  "space-pattern-2": {
+    "voice": "nova",
+    "text": "Our Moon station needs a picture code. Which picture comes next?"
+  },
+  "space-uranus-roll": {
+    "voice": "nova",
+    "text": "Uranus spins on its side. Can you find the pale blue planet?"
+  },
+  "space-moon-neighbour": {
+    "voice": "nova",
+    "text": "The Moon travels around Earth. Can you find the grey Moon?"
+  },
+  "space-earth-oceans": {
+    "voice": "nova",
+    "text": "Which planet has the oceans where whales swim?"
+  },
+  "space-earth-garden": {
+    "voice": "nova",
+    "text": "Which planet has real trees and gardens for us to enjoy?"
+  },
+  "space-collect-3": {
+    "voice": "nova",
+    "text": "Can you collect 3 crystals for our Moon station?"
+  },
+  "space-pattern-3": {
+    "voice": "nova",
+    "text": "Our Moon station needs a picture code. Which picture comes next?"
+  },
+  "space-mercury-near": {
+    "voice": "nova",
+    "text": "Mercury is closest to the Sun. Find Mercury, the little grey planet."
+  },
+  "space-venus-clouds": {
+    "voice": "nova",
+    "text": "Venus is wrapped in thick clouds. Find our yellow cloudy planet."
+  },
+  "space-jupiter-storm": {
+    "voice": "nova",
+    "text": "Jupiter has a giant storm called the Great Red Spot. Find the stripy planet with a spot."
+  },
+  "space-mars-robots": {
+    "voice": "nova",
+    "text": "Our robot rovers explore Mars. Find the red planet they drive on."
+  },
+  "space-collect-4": {
+    "voice": "nova",
+    "text": "Can you collect 4 toy rockets for our Moon station?"
+  },
+  "space-pattern-4": {
+    "voice": "nova",
+    "text": "Our Moon station needs a picture code. Which picture comes next?"
+  },
+  "space-moon-craters": {
+    "voice": "nova",
+    "text": "The Moon has lots of round craters. Find the grey, crater-covered Moon."
+  },
+  "space-moon-visit": {
+    "voice": "nova",
+    "text": "People have walked on the Moon. Can you find the Moon?"
+  },
+  "space-sun-light": {
+    "voice": "nova",
+    "text": "Which star gives Earth daylight?"
+  },
+  "space-moon-reflects": {
+    "voice": "nova",
+    "text": "The Moon reflects sunlight. Can you find the Moon?"
+  },
+  "space-collect-5": {
+    "voice": "nova",
+    "text": "Can you collect 5 batteries for our Moon station?"
+  },
+  "space-pattern-5": {
+    "voice": "nova",
+    "text": "Our Moon station needs a picture code. Which picture comes next?"
+  },
+  "space-rocket-launch": {
+    "voice": "nova",
+    "text": "Which vehicle blasts off into space?"
+  },
+  "space-astronaut-job": {
+    "voice": "nova",
+    "text": "An astronaut is a space explorer. Can you find the astronaut?"
+  },
+  "space-space-suit": {
+    "voice": "nova",
+    "text": "Who is wearing a spacesuit to help them breathe in space?"
+  },
+  "space-telescope-look": {
+    "voice": "nova",
+    "text": "A telescope helps us see faraway things in space. Find the telescope."
+  },
+  "space-collect-6": {
+    "voice": "nova",
+    "text": "Can you collect 2 Moon flowers for our Moon station?"
+  },
+  "space-pattern-6": {
+    "voice": "nova",
+    "text": "Our Moon station needs a picture code. Which picture comes next?"
+  },
+  "space-satellite-orbit": {
+    "voice": "nova",
+    "text": "Satellites travel around planets and send us information. Find the satellite."
+  },
+  "space-moon-rocks": {
+    "voice": "nova",
+    "text": "Astronauts brought Moon rocks home to study. Which picture shows a rock?"
+  },
+  "space-sun-warmth": {
+    "voice": "nova",
+    "text": "Which star sends warmth to Earth?"
+  },
+  "space-earth-air": {
+    "voice": "nova",
+    "text": "Earth has air we can breathe. Find our blue and green home."
+  },
+  "space-collect-7": {
+    "voice": "nova",
+    "text": "Can you collect 3 toy satellites for our Moon station?"
+  },
+  "space-pattern-7": {
+    "voice": "nova",
+    "text": "Our Moon station needs a picture code. Which picture comes next?"
+  },
+  "space-mars-two-moons": {
+    "voice": "nova",
+    "text": "Mars has two little moons. Find the red planet."
+  },
+  "space-venus-no-moon": {
+    "voice": "nova",
+    "text": "Venus has no moons. Can you find the yellow cloudy planet?"
+  },
+  "space-moon-low-gravity": {
+    "voice": "nova",
+    "text": "You could jump higher on the Moon than on Earth. Find the Moon."
+  },
+  "space-sun-centre": {
+    "voice": "nova",
+    "text": "The planets travel around the Sun. Which picture belongs in the middle of our solar system?"
+  },
+  "space-collect-8": {
+    "voice": "nova",
+    "text": "Can you collect 4 rocket bolts for our Moon station?"
+  },
+  "space-pattern-8": {
+    "voice": "nova",
+    "text": "Our Moon station needs a picture code. Which picture comes next?"
   }
 }

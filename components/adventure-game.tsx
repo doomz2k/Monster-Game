@@ -830,6 +830,14 @@ export default function AdventureGame() {
           className={
             'adventure-dialog ' + (mode === 'parents' ? 'adult-dialog' : '')
           }
+          finalFocus={() =>
+            (mode === 'mission'
+              ? missionSurface.current
+              : surface.current
+            )?.querySelector<HTMLElement>(
+              '[data-game-choice]:not(:disabled)',
+            ) ?? false
+          }
           initialFocus={() =>
             modalSurface.current?.querySelector<HTMLElement>(
               '[data-game-choice]:not(:disabled)',

@@ -4,6 +4,8 @@ import { RotateCcw, Undo2, Volume2 } from 'lucide-react';
 import { type Mission, placeFor } from '@/lib/adventure';
 import { AudioDirector, approvedPath, type SoundReviews } from '@/lib/audio';
 import { soundFor } from '@/lib/phonics';
+import { SPACE_OBJECTS } from '@/lib/space-learning';
+import { SpaceObject } from './space-object';
 import { QuantityDial } from './quantity-dial';
 import { PizzaKitchen } from './pizza-kitchen';
 import script from '@/lib/audio-data/adventure-script.json';
@@ -30,6 +32,13 @@ export function MissionPanel({
   const adultNeeded = m.parts.some((g) => !approvedPath(g, reviews));
   const [modelled, setModelled] = useState(!m.introduce && !adultNeeded);
   const completed = useRef(false);
+  const celebration = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (done)
+      celebration.current
+        ?.querySelector<HTMLButtonElement>('[data-game-choice]')
+        ?.focus();
+  }, [done]);
   const friend = placeFor(m.npc);
   const speak = () =>
     audio.lines(
@@ -62,7 +71,7 @@ export function MissionPanel({
   };
   if (done)
     return (
-      <div className="mission-celebration">
+      <div className="mission-celebration" ref={celebration}>
         <div className="reward-stars">⭐ ⭐</div>
         <h2>You helped {friend.friend}!</h2>
         {m.npc === 'rocket' && m.round < 3 && (
@@ -312,21 +321,15 @@ export function MissionPanel({
                     <button
                       data-game-choice
                       key={symbol}
-                      aria-label={
-                        {
-                          '🌍': 'Earth',
-                          '☀️': 'The Sun',
-                          '🌙': 'The Moon',
-                          '🪐': 'Saturn',
-                        }[symbol]
-                      }
+                      aria-label={SPACE_OBJECTS[symbol]?.name ?? symbol}
                       aria-pressed={answer === symbol}
                       onClick={() => {
                         setAnswer(symbol);
                         finish(symbol === m.answer);
                       }}
                     >
-                      {symbol}
+                      <SpaceObject id={symbol} />
+                      <strong>{SPACE_OBJECTS[symbol]?.name ?? symbol}</strong>
                     </button>
                   ))}
                 </div>
