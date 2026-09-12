@@ -60,3 +60,5 @@ The recommended slice (1, 2, 4, 6, 7, 9, 11 and 16) now has its implementation a
 Recommended next work: obtain the phonics/listening sign-off, observe Clover using the new tutorial and hints (50), then tackle character art (3), camera behaviour (8) and sensory controls (10).
 
 Continuous improvement checkpoint: [COMFORT-AND-RECOVERY.md](COMFORT-AND-RECOVERY.md) now records implemented camera guidance (8), sensory settings (10), automatic backups and adult export/import (13), plus suspension of invisible world rendering. Remaining hardware, family and listening acceptance is explicitly tracked.
+
+The next checkpoint, [DISCOVERIES-AND-FRIENDS.md](DISCOVERIES-AND-FRIENDS.md), adds a twelve-entry illustrated discovery book (21), persistent friendship hearts and presents (23), optional exploration rewards (39/45), full-screen animated neighbour portraits and a controller-operable Moon return craft. The broader proposals in those rows still have room to expand.

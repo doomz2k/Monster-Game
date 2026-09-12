@@ -285,8 +285,94 @@ export function createVillage(
   for (let i = 0; i < 5; i++)
     ball(moon, '#7cb58f', -29 + i * 1.6, 22 + (i % 3) * 2, -48.9, 1.4, 2, 0.2);
   marker(moon, '🚀', 0, 2.4, 6);
-  const landing = box(moon, '#716f9b', 0, 0.03, 6, 5, 0.15, 5);
+  const landing = new THREE.Group();
+  landing.position.set(0, 0, 6);
+  moon.add(landing);
   landing.name = 'Return launch pad';
+  mesh(
+    landing,
+    new THREE.CylinderGeometry(3.3, 3.6, 0.24, 48),
+    '#575975',
+    0,
+    0.02,
+    0,
+  );
+  mesh(
+    landing,
+    new THREE.CylinderGeometry(2.9, 2.9, 0.03, 48),
+    '#b4b8cf',
+    0,
+    0.16,
+    0,
+  );
+  const landingRing = mesh(
+    landing,
+    new THREE.TorusGeometry(2.55, 0.06, 8, 64),
+    '#f4d581',
+    0,
+    0.2,
+    0,
+  );
+  landingRing.rotation.x = Math.PI / 2;
+  for (let i = 0; i < 8; i++) {
+    const a = (i * Math.PI) / 4;
+    const lamp = ball(
+      landing,
+      '#a5e0d6',
+      Math.cos(a) * 3.15,
+      0.25,
+      Math.sin(a) * 3.15,
+      0.13,
+      0.08,
+      0.13,
+    );
+    (lamp.material as THREE.MeshStandardMaterial).emissive.set('#5caaab');
+    (lamp.material as THREE.MeshStandardMaterial).emissiveIntensity = 0.6;
+  }
+  // The return craft sits behind the walkable centre of the pad.
+  const returnCraft = new THREE.Group();
+  returnCraft.position.set(0, 0, -3.5);
+  landing.add(returnCraft);
+  mesh(
+    returnCraft,
+    new THREE.CylinderGeometry(0.65, 0.85, 2.6, 24),
+    '#e6e4d7',
+    0,
+    1.7,
+    0,
+  );
+  mesh(
+    returnCraft,
+    new THREE.ConeGeometry(0.65, 1.15, 24),
+    '#d18777',
+    0,
+    3.57,
+    0,
+  );
+  const windowRim = mesh(
+    returnCraft,
+    new THREE.TorusGeometry(0.28, 0.07, 8, 24),
+    '#d5ac65',
+    0,
+    2.2,
+    0.7,
+  );
+  windowRim.rotation.x = 0.08;
+  ball(returnCraft, '#81bed0', 0, 2.2, 0.7, 0.25, 0.25, 0.09);
+  for (const side of [-1, 1]) {
+    const fin = box(
+      returnCraft,
+      '#ca837b',
+      side * 0.8,
+      0.65,
+      0,
+      0.22,
+      1.3,
+      0.9,
+    );
+    fin.rotation.z = -side * 0.25;
+    box(returnCraft, '#666e82', side * 0.95, 0.13, 0, 0.75, 0.15, 1.1);
+  }
   moon.visible = false;
   // Increase distances, keeping houses and characters at their original human scale.
   const npcRoots = new Set<THREE.Object3D>(neighbours.map((n) => n.root));

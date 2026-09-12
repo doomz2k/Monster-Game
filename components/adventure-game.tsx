@@ -14,6 +14,8 @@ import {
   ChevronLeft,
   ChevronRight,
   Footprints,
+  BookOpen,
+  Heart,
 } from 'lucide-react';
 import {
   Dialog,
@@ -25,6 +27,17 @@ import { ControllerTutorial } from './controller-tutorial';
 import { tutorialAction, TUTORIAL_STEPS } from '@/lib/tutorial';
 import { PreferencesContext, useMotionPreference } from './game-preferences';
 import { SaveAndComfort } from './save-and-comfort';
+import { DiscoveryBook } from './discovery-book';
+import { GamePicture } from './game-picture';
+import { NeighbourPortrait } from './neighbour-portrait';
+import { collectDiscovery } from '@/lib/discoveries';
+import { discoveryFor, nearbyDiscovery } from '@/lib/discovery-catalogue';
+import {
+  canClaimFriendGift,
+  claimFriendGift,
+  FRIEND_GIFTS,
+  friendshipLevel,
+} from '@/lib/friendship';
 import { loadRecoverableProgress, saveRecoverably } from '@/lib/save-recovery';
 import { ParentPanel } from '@/components/parent-panel';
 import { AppearancePanel } from '@/components/appearance-panel';
@@ -43,6 +56,7 @@ import {
 } from '@/lib/wardrobe';
 import {
   PLACES,
+  SHOP_ITEMS,
   changeRegion,
   finishMission,
   lifetimeStars,
@@ -72,13 +86,15 @@ type Mode =
   | 'mission'
   | 'home'
   | 'shop'
-  | 'flight';
+  | 'flight'
+  | 'scrapbook';
 const CHOICE = { 'data-game-choice': true };
 export default function AdventureGame() {
   const host = useRef<HTMLDivElement>(null),
     surface = useRef<HTMLDivElement>(null),
     modalSurface = useRef<HTMLDivElement>(null),
     missionSurface = useRef<HTMLDivElement>(null),
+    bookSurface = useRef<HTMLDivElement>(null),
     world = useRef<MonsterWorld | null>(null),
     input = useRef<GameInput | null>(null),
     actionRef = useRef<(action: Action) => void>(() => {});
@@ -133,10 +149,13 @@ export default function AdventureGame() {
     if (next === 2) setTutorialChoice(0);
     setTutorialStep(next);
   };
+  const [bookEntry, setBookEntry] = useState<string | null>(null),
+    [discoveryTarget, setDiscoveryTarget] = useState<string | null>(null);
+  const bookReturnMode = useRef<Mode>('explore');
   const [flightTo, setFlightTo] = useState<Region>('moon');
+  const [parentReturnMode, setParentReturnMode] = useState<Mode>('explore');
   const returnMode = useRef<Mode>('welcome'),
     resumeMode = useRef<Mode>('explore'),
-    parentReturnMode = useRef<Mode>('explore'),
     currentMode = useRef<Mode>('welcome');
   const runtime = useRef<WorldState>({
     active: false,
@@ -162,7 +181,32 @@ export default function AdventureGame() {
     visit: async () => ({}),
   });
   const stars = lifetimeStars(p),
-    nearby = position.place ? placeFor(position.place) : null;
+    nearby = position.place ? placeFor(position.place) : null,
+    find = nearbyDiscovery(
+      p.adventure.region,
+      position.x,
+      position.z,
+      p.adventure.discoveries,
+    );
+  const nearLaunchPad =
+    p.adventure.region === 'moon' &&
+    Math.hypot(position.x, position.z - 6) < 3.6;
+  const openBook = (id: string | null = null) => {
+    bookReturnMode.current =
+      mode === 'map' || mode === 'pause' ? mode : 'explore';
+    setBookEntry(id);
+    go('scrapbook', id ? 'discovery-' + id : 'scrapbook');
+  };
+  const collect = () => {
+    if (!find) return;
+    const next = collectDiscovery(p, find.id, position.x, position.z);
+    if (next === p) return;
+    setP(next);
+    setDiscoveryTarget(null);
+    world.current?.celebrate();
+    audio.chime();
+    openBook(find.id);
+  };
   const modal = ![
     'welcome',
     'tutorial',
@@ -170,6 +214,7 @@ export default function AdventureGame() {
     'creator',
     'flight',
     'mission',
+    'scrapbook',
   ].includes(mode);
   const change = (next: ProgressData) => setP(next);
   const stop = () => {
@@ -288,11 +333,13 @@ export default function AdventureGame() {
     if (mode === 'explore' || mode === 'parents' || mode === 'flight') return;
     const frame = requestAnimationFrame(() => {
       const root =
-        mode === 'mission'
-          ? missionSurface.current
-          : modal
-            ? modalSurface.current
-            : surface.current;
+        mode === 'scrapbook'
+          ? bookSurface.current
+          : mode === 'mission'
+            ? missionSurface.current
+            : modal
+              ? modalSurface.current
+              : surface.current;
       root
         ?.querySelector<HTMLElement>('[data-game-choice]:not(:disabled)')
         ?.focus({ preventScroll: true });
@@ -389,6 +436,7 @@ export default function AdventureGame() {
       return;
     }
     setPlace(id);
+    setDiscoveryTarget(null);
     world.current?.travel(id);
     recentArrival.current = { id, at: 0, said: true };
     go('explore', 'visit-' + id);
@@ -409,6 +457,12 @@ export default function AdventureGame() {
     world.current?.celebrate();
   };
   const repeat = () => {
+    if (mode === 'scrapbook') {
+      bookSurface.current
+        ?.querySelector<HTMLButtonElement>('[data-repeat-prompt]')
+        ?.click();
+      return;
+    }
     if (mode === 'tutorial') {
       teach('listen');
       return;
@@ -438,6 +492,12 @@ export default function AdventureGame() {
     );
   };
   const back = () => {
+    if (mode === 'scrapbook') {
+      bookSurface.current
+        ?.querySelector<HTMLButtonElement>('[data-book-back]')
+        ?.click();
+      return;
+    }
     if (mode === 'tutorial') {
       teach('back');
       return;
@@ -449,7 +509,7 @@ export default function AdventureGame() {
       return;
     }
     stop();
-    if (mode === 'parents') setMode(parentReturnMode.current);
+    if (mode === 'parents') setMode(parentReturnMode);
     else if (mode === 'creator') setMode(returnMode.current);
     else if (mode === 'mission') setMode('dialogue');
     else if (mode === 'pause') setMode(resumeMode.current);
@@ -463,7 +523,7 @@ export default function AdventureGame() {
       back();
       return;
     }
-    parentReturnMode.current = mode;
+    setParentReturnMode(mode);
     go('parents');
   };
   const handleAction = (action: Action) => {
@@ -503,17 +563,21 @@ export default function AdventureGame() {
     if (mode === 'explore') {
       if (action === 'confirm') {
         audio.unlock();
-        if (position.place) talk(position.place);
+        if (find) collect();
+        else if (nearLaunchPad) launch('island');
+        else if (position.place) talk(position.place);
         else world.current?.jump();
       }
       return;
     }
     const base =
-      mode === 'mission'
-        ? missionSurface.current
-        : modal
-          ? modalSurface.current
-          : surface.current;
+      mode === 'scrapbook'
+        ? bookSurface.current
+        : mode === 'mission'
+          ? missionSurface.current
+          : modal
+            ? modalSurface.current
+            : surface.current;
     const root =
       base?.querySelector<HTMLElement>('[data-choice-scope]') ?? base;
     if (!root) return;
@@ -580,7 +644,12 @@ export default function AdventureGame() {
       welcome: mode === 'welcome',
       preferences: p.preferences,
       reducedMotion,
-      visible: mode !== 'mission' && mode !== 'parents',
+      visible:
+        mode !== 'mission' &&
+        mode !== 'parents' &&
+        mode !== 'scrapbook' &&
+        mode !== 'dialogue',
+      discoveryTarget,
       completed: p.completed,
       appearance: p.appearance,
       outfit: p.outfit,
@@ -700,7 +769,27 @@ export default function AdventureGame() {
                   <Map />
                 </button>
               </div>
-              {nearby && (
+              {find && mode === 'explore' && (
+                <button
+                  className="talk-cue discovery-cue"
+                  onClick={collect}
+                  aria-label={'Discover ' + find.name}
+                >
+                  <GamePicture symbol={find.picture} />
+                  <b className="pad-key a-key">A</b>
+                </button>
+              )}
+              {nearLaunchPad && !find && (
+                <button
+                  className="talk-cue"
+                  onClick={() => launch('island')}
+                  aria-label="Fly home from the landing pad"
+                >
+                  <GamePicture symbol="🚀" />
+                  <b className="pad-key a-key">A</b>
+                </button>
+              )}
+              {nearby && !find && !nearLaunchPad && (
                 <button
                   className="talk-cue"
                   onClick={() => talk(nearby.id)}
@@ -742,7 +831,7 @@ export default function AdventureGame() {
                   </button>
                 ))}
               </div>
-              {!nearby && (
+              {!nearby && !find && !nearLaunchPad && (
                 <button
                   className="touch-hop"
                   aria-label="Hop"
@@ -752,6 +841,24 @@ export default function AdventureGame() {
                 </button>
               )}
             </>
+          )}
+          {(mode === 'scrapbook' ||
+            (mode === 'parents' && parentReturnMode === 'scrapbook')) && (
+            <div ref={bookSurface} hidden={mode !== 'scrapbook'}>
+              <DiscoveryBook
+                progress={p}
+                audio={audio}
+                initialId={bookEntry}
+                onClose={() => go(bookReturnMode.current)}
+                onExplore={() => go('explore')}
+                onFind={(id) => {
+                  const d = discoveryFor(id);
+                  if (!d) return;
+                  visit(d.friend);
+                  setDiscoveryTarget(id);
+                }}
+              />
+            </div>
           )}
           {mode === 'creator' && (
             <section className="monster-studio">
@@ -940,9 +1047,17 @@ export default function AdventureGame() {
         >
           <DialogContent
             data-reduced-motion={reducedMotion}
+            data-contrast={p.preferences.contrast}
+            data-text-size={p.preferences.textSize}
+            data-calm={p.preferences.calm}
             showCloseButton={false}
             className={
-              'adventure-dialog ' + (mode === 'parents' ? 'adult-dialog' : '')
+              'adventure-dialog ' +
+              (mode === 'parents'
+                ? 'adult-dialog'
+                : mode === 'dialogue'
+                  ? 'conversation-dialog'
+                  : '')
             }
             finalFocus={() =>
               (mode === 'mission'
@@ -1021,6 +1136,14 @@ export default function AdventureGame() {
                       </button>
                     ))}
                   </div>
+                  <button
+                    {...CHOICE}
+                    className="scrapbook-open"
+                    onClick={() => openBook()}
+                  >
+                    <BookOpen /> My discoveries{' '}
+                    <span>{p.adventure.discoveries.length} / 12</span>
+                  </button>
                 </>
               )}
               {mode === 'pause' && (
@@ -1039,12 +1162,9 @@ export default function AdventureGame() {
                       <Map />
                       <span>Our island</span>
                     </button>
-                    <button
-                      {...CHOICE}
-                      onClick={() => go('welcome', 'welcome')}
-                    >
-                      <span>🏡</span>
-                      <span>Main menu</span>
+                    <button {...CHOICE} onClick={() => openBook()}>
+                      <BookOpen />
+                      <span>My discoveries</span>
                     </button>
                   </div>
                 </>
@@ -1090,6 +1210,12 @@ export default function AdventureGame() {
                   >
                     Replay controller lesson
                   </button>
+                  <button
+                    className="secondary-button"
+                    onClick={() => go('welcome', 'welcome')}
+                  >
+                    Return to main menu
+                  </button>
                   <SaveAndComfort progress={p} onProgress={change} />
                   <ParentPanel
                     progress={p}
@@ -1102,66 +1228,120 @@ export default function AdventureGame() {
               )}
               {mode === 'dialogue' && (
                 <div className="friend-dialogue">
-                  <span
-                    className="dialogue-portrait"
-                    style={{ background: placeFor(place).colour }}
-                  >
-                    {placeFor(place).icon}
-                  </span>
-                  <p className="game-eyebrow">A LITTLE HELP FOR A FRIEND</p>
-                  <h2>{placeFor(place).friend}</h2>
-                  <p>
-                    {
-                      (script as Record<string, { text: string }>)[
-                        place === 'rocket' && rocketParts(p) === 3
-                          ? 'pip-repaired'
-                          : placeFor(place).intro
-                      ]?.text
-                    }
-                  </p>
-                  {place === 'rocket' && (
-                    <div className="rocket-parts">
-                      {['🧩', '💎', '⚡'].map((icon, i) => (
-                        <span
-                          key={icon}
-                          className={i < rocketParts(p) ? 'fixed' : ''}
-                        >
-                          {icon}
-                          {i < rocketParts(p) && <Check />}
-                        </span>
-                      ))}
-                    </div>
-                  )}
-                  <div className="big-actions">
-                    <button
-                      {...CHOICE}
-                      className="adventure-primary"
-                      onClick={
-                        place === 'rocket' && rocketParts(p) === 3
-                          ? () => launch('moon')
-                          : beginMission
+                  <NeighbourPortrait id={place} />
+                  <div className="friend-chat-copy">
+                    <p className="game-eyebrow">A LITTLE HELP FOR A FRIEND</p>
+                    <h2>{placeFor(place).friend}</h2>
+                    <div
+                      className="friendship-row"
+                      aria-label={
+                        friendshipLevel(p.adventure.rounds[place as QuestId]) +
+                        ' friendship hearts'
                       }
                     >
-                      <b className="pad-key a-key">A</b>
-                      <span>
-                        {place === 'rocket' && rocketParts(p) === 3
-                          ? '🚀 Let’s fly!'
-                          : 'Yes, let’s help!'}
-                      </span>
-                    </button>
-                    <button className="adventure-secondary" onClick={back}>
-                      <b className="pad-key b-key">B</b> Not now
-                    </button>
+                      {[0, 1, 2, 3].map((i) => (
+                        <Heart
+                          key={i}
+                          className={
+                            i <
+                            friendshipLevel(
+                              p.adventure.rounds[place as QuestId],
+                            )
+                              ? ''
+                              : 'empty-heart'
+                          }
+                          fill={
+                            i <
+                            friendshipLevel(
+                              p.adventure.rounds[place as QuestId],
+                            )
+                              ? 'currentColor'
+                              : 'none'
+                          }
+                        />
+                      ))}
+                    </div>
+                    <p>
+                      {
+                        (script as Record<string, { text: string }>)[
+                          place === 'rocket' && rocketParts(p) === 3
+                            ? 'pip-repaired'
+                            : placeFor(place).intro
+                        ]?.text
+                      }
+                    </p>
+                    {place === 'rocket' && (
+                      <div className="rocket-parts">
+                        {['🧩', '💎', '⚡'].map((icon, i) => (
+                          <span
+                            key={icon}
+                            className={i < rocketParts(p) ? 'fixed' : ''}
+                          >
+                            {icon}
+                            {i < rocketParts(p) && <Check />}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                    <div className="big-actions">
+                      <button
+                        {...CHOICE}
+                        className="adventure-primary"
+                        onClick={
+                          place === 'rocket' && rocketParts(p) === 3
+                            ? () => launch('moon')
+                            : beginMission
+                        }
+                      >
+                        <b className="pad-key a-key">A</b>
+                        <span>
+                          {place === 'rocket' && rocketParts(p) === 3
+                            ? '🚀 Let’s fly!'
+                            : 'Yes, let’s help!'}
+                        </span>
+                      </button>
+                      <button className="adventure-secondary" onClick={back}>
+                        <b className="pad-key b-key">B</b> Not now
+                      </button>
+                    </div>
+                    {canClaimFriendGift(p, place as QuestId) && (
+                      <button
+                        {...CHOICE}
+                        className="friend-gift"
+                        onClick={() => {
+                          const owned = p.adventure.inventory.includes(
+                            FRIEND_GIFTS[place as QuestId],
+                          );
+                          setP((old) => claimFriendGift(old, place as QuestId));
+                          world.current?.celebrate();
+                          say(owned ? 'friend-gift-stars' : 'friend-gift');
+                        }}
+                      >
+                        <span>
+                          {
+                            SHOP_ITEMS.find(
+                              (i) => i.id === FRIEND_GIFTS[place as QuestId],
+                            )?.icon
+                          }
+                        </span>{' '}
+                        A thank-you present <Heart />
+                      </button>
+                    )}
+                    {p.adventure.friendshipGifts.includes(place as QuestId) && (
+                      <output className="friend-gift-received">
+                        <Check /> Thank-you present received
+                      </output>
+                    )}
+                    {place === 'moon' && (
+                      <button
+                        {...CHOICE}
+                        className="home-flight-button"
+                        onClick={() => launch('island')}
+                      >
+                        🚀 Fly home
+                      </button>
+                    )}
                   </div>
-                  {place === 'moon' && (
-                    <button
-                      {...CHOICE}
-                      className="home-flight-button"
-                      onClick={() => launch('island')}
-                    >
-                      🚀 Fly home
-                    </button>
-                  )}
                 </div>
               )}
               {mode === 'home' && (
@@ -1190,20 +1370,23 @@ export default function AdventureGame() {
             </button>
           </output>
         )}
-        {mode !== 'parents' && mode !== 'flight' && mode !== 'mission' && (
-          <footer className="controller-legend">
-            <span>
-              <b className="pad-key a-key">A</b> Yes
-            </span>
-            <button onClick={back}>
-              <b className="pad-key b-key">B</b> No / back
-            </button>
-            <button onClick={repeat}>
-              <b className="pad-key y-key">Y</b>
-              <Volume2 size={18} />
-            </button>
-          </footer>
-        )}
+        {mode !== 'parents' &&
+          mode !== 'flight' &&
+          mode !== 'mission' &&
+          mode !== 'scrapbook' && (
+            <footer className="controller-legend">
+              <span>
+                <b className="pad-key a-key">A</b> Yes
+              </span>
+              <button onClick={back}>
+                <b className="pad-key b-key">B</b> No / back
+              </button>
+              <button onClick={repeat}>
+                <b className="pad-key y-key">Y</b>
+                <Volume2 size={18} />
+              </button>
+            </footer>
+          )}
       </main>
     </PreferencesContext.Provider>
   );

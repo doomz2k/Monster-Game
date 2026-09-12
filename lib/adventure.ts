@@ -1,4 +1,5 @@
 import { WORLD_SCALE } from './world-layout';
+import { discoveryFor } from './discovery-catalogue';
 import { spaceCard } from './space-learning';
 import type { ProgressData } from './learning';
 import { decodableWords, SOUNDS, soundChoices } from './phonics';
@@ -115,6 +116,8 @@ export type AdventureProgress = {
   furniture: (string | null)[];
   region: Region;
   moonVisits: number;
+  discoveries: string[];
+  friendshipGifts: QuestId[];
 };
 export const SHOP_ITEMS = [
   {
@@ -264,6 +267,8 @@ export const freshAdventure = (legacyStars = 0): AdventureProgress => ({
   furniture: ['table', null, null, null, null, null],
   region: 'island',
   moonVisits: 0,
+  discoveries: [],
+  friendshipGifts: [],
 });
 const integer = (v: unknown, max = 100000) =>
   typeof v === 'number' && Number.isSafeInteger(v) && v >= 0
@@ -326,6 +331,30 @@ export function readAdventure(
   });
   p.region = v.region === 'moon' && p.rounds.rocket >= 3 ? 'moon' : 'island';
   p.moonVisits = integer(v.moonVisits);
+  p.discoveries = [
+    ...new Set(
+      Array.isArray(v.discoveries)
+        ? v.discoveries.filter(
+            (id): id is string =>
+              typeof id === 'string' &&
+              !!discoveryFor(id) &&
+              (discoveryFor(id)!.region !== 'moon' || p.rounds.rocket >= 3),
+          )
+        : [],
+    ),
+  ];
+  p.friendshipGifts = [
+    ...new Set(
+      Array.isArray(v.friendshipGifts)
+        ? v.friendshipGifts.filter(
+            (id): id is QuestId =>
+              typeof id === 'string' &&
+              Object.hasOwn(p.rounds, id) &&
+              p.rounds[id as QuestId] >= 3,
+          )
+        : [],
+    ),
+  ];
   return p;
 }
 export const lifetimeStars = (p: ProgressData) =>

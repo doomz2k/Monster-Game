@@ -74,7 +74,7 @@ export function NeighbourPortrait({
     <figure
       ref={host}
       className="neighbour-portrait"
-      aria-label={placeFor(id).friend + ' demonstrates'}
+      aria-label={placeFor(id).friend + ', your neighbour'}
     />
   );
 }

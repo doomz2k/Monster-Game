@@ -1253,5 +1253,140 @@
     "path": "/audio/voices/hint-pattern-e793a6e105d24070.ogg",
     "voice": "bm_fable",
     "text": "Look at the pictures that repeat. Say the pattern together, then try the next picture."
+  },
+  "scrapbook": {
+    "path": "/audio/voices/scrapbook-adffc16bb01bfce5.ogg",
+    "voice": "bf_emma",
+    "text": "Our little discovery book. Choose a picture to hear a memory, or find a clue. Look for a golden star in the world, then press the green A button."
+  },
+  "friend-gift": {
+    "path": "/audio/voices/friend-gift-5306e17b4d671971.ogg",
+    "voice": "bf_emma",
+    "text": "A thank-you present from your friend! You can put it in your home or garden. How lovely."
+  },
+  "friend-gift-stars": {
+    "path": "/audio/voices/friend-gift-stars-c54b09589e7d49c9.ogg",
+    "voice": "bf_emma",
+    "text": "Your friend has given you two extra stars. You already have this present, so you can choose something lovely from the shop."
+  },
+  "discovery-welcome-daisy": {
+    "path": "/audio/voices/discovery-welcome-daisy-bc34bd067f66514f.ogg",
+    "voice": "bf_emma",
+    "text": "A little daisy for our home. What shall we plant beside it?"
+  },
+  "discovery-clue-welcome-daisy": {
+    "path": "/audio/voices/discovery-clue-welcome-daisy-5b9f556426244f17.ogg",
+    "voice": "bf_emma",
+    "text": "Look beside the garden at your house. Look for a golden star, then press the green A button."
+  },
+  "discovery-pizza-tomato": {
+    "path": "/audio/voices/discovery-pizza-tomato-aa046992a9b85e38.ogg",
+    "voice": "bf_emma",
+    "text": "Bramble saved a shiny tomato for the next pizza. What toppings would you choose?"
+  },
+  "discovery-clue-pizza-tomato": {
+    "path": "/audio/voices/discovery-clue-pizza-tomato-43ec0a4ed3355ae2.ogg",
+    "voice": "bf_emma",
+    "text": "Look beside Bramble\u2019s pizza shop. Look for a golden star, then press the green A button."
+  },
+  "discovery-story-owl": {
+    "path": "/audio/voices/discovery-story-owl-efe4865844fc17ae.ogg",
+    "voice": "bf_emma",
+    "text": "A tiny owl ornament is watching the story tree. Shall we make up an owl adventure?"
+  },
+  "discovery-clue-story-owl": {
+    "path": "/audio/voices/discovery-clue-story-owl-858c121123f8cc18.ogg",
+    "voice": "bf_emma",
+    "text": "Look beside Olive\u2019s story tree. Look for a golden star, then press the green A button."
+  },
+  "discovery-harbour-boat": {
+    "path": "/audio/voices/discovery-harbour-boat-32e2a6065a87628d.ogg",
+    "voice": "bf_emma",
+    "text": "A little boat is ready for an imaginary voyage. Where shall it sail?"
+  },
+  "discovery-clue-harbour-boat": {
+    "path": "/audio/voices/discovery-clue-harbour-boat-6e6892fb2c3d3102.ogg",
+    "voice": "bf_emma",
+    "text": "Look along the path beside Marina\u2019s harbour. Look for a golden star, then press the green A button."
+  },
+  "discovery-garden-flower": {
+    "path": "/audio/voices/discovery-garden-flower-33ce7f050eeb5d4e.ogg",
+    "voice": "bf_emma",
+    "text": "Tilly has picked a lovely flower for our book. Can you spot another flower nearby?"
+  },
+  "discovery-clue-garden-flower": {
+    "path": "/audio/voices/discovery-clue-garden-flower-b0412c0798dd3dd2.ogg",
+    "voice": "bf_emma",
+    "text": "Look beside Tilly\u2019s growing patch. Look for a golden star, then press the green A button."
+  },
+  "discovery-market-basket": {
+    "path": "/audio/voices/discovery-market-basket-d84f5bc4d63170df.ogg",
+    "voice": "bf_emma",
+    "text": "A picnic basket! We could invite all our friends. What would you bring?"
+  },
+  "discovery-clue-market-basket": {
+    "path": "/audio/voices/discovery-clue-market-basket-f181c51feafb0fe5.ogg",
+    "voice": "bf_emma",
+    "text": "Look near Poppy\u2019s little shops. Look for a golden star, then press the green A button."
+  },
+  "discovery-rocket-bolt": {
+    "path": "/audio/voices/discovery-rocket-bolt-f17ff3c5e6711258.ogg",
+    "voice": "bf_emma",
+    "text": "Pip has found a spare bolt. It is a souvenir of our rocket adventure."
+  },
+  "discovery-clue-rocket-bolt": {
+    "path": "/audio/voices/discovery-clue-rocket-bolt-2e1099a64b9efee4.ogg",
+    "voice": "bf_emma",
+    "text": "Look along the path beside Pip\u2019s rocket. Look for a golden star, then press the green A button."
+  },
+  "discovery-woodland-mushroom": {
+    "path": "/audio/voices/discovery-woodland-mushroom-0a6dce1cf7560568.ogg",
+    "voice": "bf_emma",
+    "text": "A mushroom beside a cosy woodland clearing. It looks like a tiny stool for a tiny friend."
+  },
+  "discovery-clue-woodland-mushroom": {
+    "path": "/audio/voices/discovery-clue-woodland-mushroom-29531a72baed61cb.ogg",
+    "voice": "bf_emma",
+    "text": "From Olive, follow the trees towards the woodland lookout. Look for a golden star, then press the green A button."
+  },
+  "discovery-sea-glass": {
+    "path": "/audio/voices/discovery-sea-glass-ba653cc0a9c4266f.ogg",
+    "voice": "bf_emma",
+    "text": "A sparkling pebble beside the sea. Let\u2019s leave the beach just as lovely as we found it."
+  },
+  "discovery-clue-sea-glass": {
+    "path": "/audio/voices/discovery-clue-sea-glass-8f76a9b7d134fbae.ogg",
+    "voice": "bf_emma",
+    "text": "From Marina, follow the shore towards the lighthouse. Look for a golden star, then press the green A button."
+  },
+  "discovery-meadow-star": {
+    "path": "/audio/voices/discovery-meadow-star-bc2e7ba0c8117ca2.ogg",
+    "voice": "bf_emma",
+    "text": "A little wooden star is hiding in the meadow. What lovely thing shall we wish for?"
+  },
+  "discovery-clue-meadow-star": {
+    "path": "/audio/voices/discovery-clue-meadow-star-0767c4c1076f799c.ogg",
+    "voice": "bf_emma",
+    "text": "From Tilly, explore the meadow towards the windmill. Look for a golden star, then press the green A button."
+  },
+  "discovery-moon-pebble": {
+    "path": "/audio/voices/discovery-moon-pebble-0ea1aad406149021.ogg",
+    "voice": "bf_emma",
+    "text": "Our first Moon pebble! Let\u2019s draw it in the book and remember our journey."
+  },
+  "discovery-clue-moon-pebble": {
+    "path": "/audio/voices/discovery-clue-moon-pebble-944f164f3dcc6f7a.ogg",
+    "voice": "bf_emma",
+    "text": "On the Moon, look beside the landing pad. Look for a golden star, then press the green A button."
+  },
+  "discovery-moon-telescope": {
+    "path": "/audio/voices/discovery-moon-telescope-1ae8f47d397bf036.ogg",
+    "voice": "bf_emma",
+    "text": "A telescope for our Moon camp. What would you like to look at in the sky?"
+  },
+  "discovery-clue-moon-telescope": {
+    "path": "/audio/voices/discovery-clue-moon-telescope-7aac4ad1536669ef.ogg",
+    "voice": "bf_emma",
+    "text": "On the Moon, explore just beyond Nova\u2019s camp. Look for a golden star, then press the green A button."
   }
 }

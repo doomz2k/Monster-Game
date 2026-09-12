@@ -1,0 +1,398 @@
+.game-shell.adventure-shell:has(.discovery-book) {
+  min-height: 0;
+}
+.discovery-book {
+  position: fixed;
+  inset: 0;
+  z-index: 35;
+  background:
+    radial-gradient(ellipse at 16% 30%, #f8e6b4 0, transparent 40%), #faf5e8;
+  color: #374e48;
+  padding: clamp(16px, 3vw, 48px);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(10px, 2vh, 24px);
+}
+.book-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+}
+.book-heading h1 {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: clamp(20px, 2.5vw, 38px);
+  margin: 0;
+}
+.book-heading button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px;
+  border-radius: 18px;
+  background: #fffaf0;
+  font-weight: 800;
+  border: 2px solid #ddd7c5;
+}
+.book-progress {
+  display: flex;
+  justify-content: space-between;
+  font-weight: 700;
+  color: #68776c;
+}
+.discovery-grid {
+  min-height: 0;
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+  gap: clamp(12px, 2vw, 28px);
+}
+.discovery-card {
+  position: relative;
+  border: 3px dashed #c5c9b6;
+  background: #f0edde;
+  border-radius: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  min-height: 0;
+  gap: 4px;
+  padding: 12px;
+  font-size: clamp(14px, 1.6vw, 24px);
+  box-shadow: 0 5px 0 #c5bc9c33;
+}
+.discovery-card .game-picture {
+  flex: 1;
+  min-height: 0;
+  width: auto;
+  max-height: 150px;
+  aspect-ratio: 1;
+  opacity: 0.55;
+  filter: saturate(0.45);
+}
+.discovery-card.collected {
+  background: #fffdf5;
+  border-style: solid;
+  border-color: #9eba96;
+}
+.discovery-card.collected .game-picture {
+  opacity: 1;
+  filter: none;
+}
+.discovery-card-mark {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  color: #628568;
+}
+.discovery-book button:focus-visible,
+.discovery-book [data-game-choice]:focus {
+  outline: 5px solid #28844e;
+  outline-offset: 3px;
+}
+.book-pages {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 28px;
+  font-weight: 800;
+}
+.book-pages button {
+  background: #dce5ce;
+  border-radius: 18px;
+  padding: 12px 30px;
+}
+.book-pages button:disabled {
+  opacity: 0.25;
+}
+.discovery-spread {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  align-items: center;
+  gap: clamp(24px, 5vw, 80px);
+  padding: 2vh 5vw;
+}
+.discovery-art {
+  background: color-mix(in srgb, var(--discovery-colour) 25%, #fff9e8);
+  border: 12px solid #fffaf1;
+  box-shadow: 0 18px 50px #7d664426;
+  border-radius: 35px;
+  aspect-ratio: 1;
+  max-height: 58vh;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.discovery-art .game-picture {
+  width: 86%;
+  height: 86%;
+}
+.book-stamp {
+  position: absolute;
+  right: -15px;
+  bottom: -15px;
+  border-radius: 50%;
+  background: #63916d;
+  color: white;
+  padding: 18px;
+  border: 6px solid #fff5e4;
+}
+.book-stamp svg {
+  width: 38px;
+  height: 38px;
+}
+.discovery-story {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  gap: clamp(10px, 2vh, 24px);
+}
+.discovery-story h2 {
+  font-size: clamp(28px, 3.5vw, 56px);
+  line-height: 1.05;
+  margin: 0;
+}
+.discovery-story p:not(.game-eyebrow) {
+  font-size: clamp(18px, 2vw, 28px);
+  line-height: 1.45;
+  margin: 0;
+}
+.book-secondary {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  font-weight: 800;
+  padding: 10px 16px;
+  background: #e3e9d7;
+  border-radius: 14px;
+}
+.scrapbook-open {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 18px;
+  padding: 14px;
+  margin: 18px auto 0;
+  background: #f1e2b5;
+  color: #465b45;
+  font-weight: 800;
+}
+.talk-cue.discovery-cue {
+  background: #fff2bd;
+  border-color: #eac558;
+}
+.discovery-cue .game-picture {
+  width: 70px;
+  height: 70px;
+}
+.friendship-row {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin: 8px 0;
+  color: #d2677e;
+}
+.friendship-row svg {
+  width: 23px;
+  height: 23px;
+}
+.friendship-row .empty-heart {
+  color: #d4c9be;
+}
+.friend-gift {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 18px;
+  margin: 12px auto 0;
+  border-radius: 18px;
+  background: #f8e7b2;
+  font-weight: 800;
+}
+.friend-gift > span:first-child {
+  font-size: 30px;
+}
+.friend-gift-received {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #537852;
+  font-weight: 700;
+  padding: 7px;
+}
+.friend-dialogue .neighbour-portrait {
+  width: 150px;
+  height: 160px;
+  margin: -6px auto 2px;
+}
+.adventure-dialog.conversation-dialog {
+  width: 100vw;
+  max-width: none;
+  height: 100dvh;
+  max-height: 100dvh;
+  padding: clamp(18px, 3vw, 45px);
+  border: 0;
+  border-radius: 0;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at 22% 65%, #e6e8c9 0, transparent 50%), #fff8e9;
+}
+.conversation-dialog > div {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+.conversation-dialog .friend-dialogue {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 0.85fr 1.15fr;
+  align-items: center;
+  gap: 3vw;
+  padding: 0 4vw;
+}
+.conversation-dialog .neighbour-portrait {
+  width: 100%;
+  height: min(70vh, 600px);
+  margin: 0;
+}
+.friend-chat-copy {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(4px, 1.2vh, 14px);
+}
+.conversation-dialog h2 {
+  font-size: clamp(32px, 4vw, 60px);
+  margin: 0;
+}
+.conversation-dialog .friend-dialogue p:not(.game-eyebrow) {
+  font-size: clamp(18px, 1.8vw, 27px);
+  line-height: 1.45;
+  margin: 0;
+}
+.conversation-dialog .big-actions {
+  margin: 12px 0 0;
+  gap: 12px;
+}
+.conversation-dialog .rocket-parts {
+  margin: 4px;
+}
+.conversation-dialog .friend-gift {
+  margin: 4px 0;
+}
+.conversation-dialog .friendship-row {
+  margin: 4px;
+}
+@media (max-height: 600px) {
+  .conversation-dialog .friend-dialogue {
+    grid-template-columns: 0.65fr 1.35fr;
+  }
+  .conversation-dialog .neighbour-portrait {
+    height: 66vh;
+  }
+  .conversation-dialog .big-actions > button {
+    min-height: 54px;
+    padding: 9px 14px;
+  }
+  .conversation-dialog .rocket-parts > span {
+    width: 45px;
+    height: 45px;
+    font-size: 26px;
+  }
+  .conversation-dialog .friend-gift {
+    padding: 7px 14px;
+  }
+  .conversation-dialog .game-eyebrow {
+    font-size: 10px;
+  }
+}
+[data-contrast='high'] .discovery-book {
+  color: #132e24;
+  background: #fff9e9;
+}
+[data-text-size='large'] .discovery-story p:not(.game-eyebrow) {
+  font-size: clamp(21px, 2.4vw, 33px);
+}
+@media (max-height: 600px) {
+  .discovery-book {
+    padding: 12px 24px;
+    gap: 10px;
+  }
+  .book-heading h1 {
+    font-size: 23px;
+  }
+  .book-heading button {
+    padding: 7px;
+  }
+  .discovery-card .game-picture {
+    max-height: 105px;
+  }
+  .discovery-story {
+    gap: 10px;
+  }
+  .discovery-story h2 {
+    font-size: 30px;
+  }
+  .discovery-spread {
+    padding: 0 4vw;
+  }
+  .discovery-story small {
+    display: none;
+  }
+  .friend-dialogue .neighbour-portrait {
+    height: 105px;
+    width: 105px;
+  }
+}
+@media (max-width: 700px) {
+  .book-heading h1 {
+    font-size: 17px;
+  }
+  .book-heading h1 svg {
+    display: none;
+  }
+  .book-back {
+    font-size: 0;
+  }
+  .book-back b {
+    font-size: 16px;
+  }
+  .book-progress {
+    font-size: 13px;
+  }
+  .discovery-card {
+    border-radius: 15px;
+    padding: 9px;
+  }
+  .discovery-card-mark {
+    top: 4px;
+    right: 4px;
+  }
+  .discovery-card-mark svg {
+    width: 17px;
+  }
+  .discovery-spread {
+    gap: 20px;
+    padding: 0;
+  }
+  .discovery-story p:not(.game-eyebrow) {
+    font-size: 16px;
+  }
+  .discovery-story h2 {
+    font-size: 25px;
+  }
+  .discovery-story button {
+    font-size: 15px;
+    padding: 10px;
+  }
+}

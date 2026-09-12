@@ -23,6 +23,8 @@ import {
   type Region,
 } from './adventure';
 import { createVillage } from './village';
+import { createDiscoveryMarkers } from './discovery-markers';
+import { discoveryFor } from './discovery-catalogue';
 import { defaultAppearance, type Appearance } from './appearance';
 export type WorldState = {
   active: boolean;
@@ -41,6 +43,7 @@ export type WorldState = {
   preferences?: GamePreferences;
   reducedMotion?: boolean;
   visible?: boolean;
+  discoveryTarget?: string | null;
 };
 export type WorldUpdate = {
   x: number;
@@ -72,6 +75,7 @@ export class MonsterWorld {
   private rig = this.character.root;
   private appearanceKey = JSON.stringify(defaultAppearance());
   private village: ReturnType<typeof createVillage>;
+  private discoveryMarkers: ReturnType<typeof createDiscoveryMarkers>;
   private islandObjects: THREE.Object3D[] = [];
   private region: Region = 'island';
   private shadow: THREE.Mesh;
@@ -167,6 +171,9 @@ export class MonsterWorld {
     this.scene.add(light);
     this.buildIsland();
     this.village = createVillage(height, this.textures);
+    this.discoveryMarkers = createDiscoveryMarkers(height);
+    this.scene.add(this.discoveryMarkers.island);
+    this.village.moon.add(this.discoveryMarkers.moon);
     this.atmosphere = createAtmosphere(height, this.textures);
     this.scene.add(this.atmosphere.root);
     this.village.moon.add(this.atmosphere.moon);
@@ -883,6 +890,11 @@ export class MonsterWorld {
     this.reducedMotion = s.reducedMotion ?? this.reducedMotion;
     this.windTime.value = this.reducedMotion ? 0 : time;
     this.atmosphere.update(this.windTime.value);
+    this.discoveryMarkers.update(
+      time,
+      s.adventure?.discoveries ?? [],
+      this.reducedMotion,
+    );
     const moving = s.active ? Math.min(1, Math.hypot(s.moveX, s.moveY)) : 0;
     if (moving > 0.03 && !this.wasMoving) this.movementAngle = this.angle;
     this.wasMoving = moving > 0.03;
@@ -1115,9 +1127,17 @@ export class MonsterWorld {
         });
       }
     }
-    const target = s.destination
-        ? placeFor(s.destination)
-        : ZONES.find((z) => z.id === s.target)!,
+    const discovery = s.discoveryTarget
+      ? discoveryFor(s.discoveryTarget)
+      : undefined;
+    const target =
+        discovery &&
+        discovery.region === this.region &&
+        !s.adventure?.discoveries.includes(discovery.id)
+          ? discovery
+          : s.destination
+            ? placeFor(s.destination)
+            : ZONES.find((z) => z.id === s.target)!,
       d = Math.hypot(
         target.x - this.player.position.x,
         target.z - this.player.position.z,
