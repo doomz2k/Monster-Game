@@ -10,7 +10,12 @@ import {
   clampToIsland,
   deadzone,
 } from '../lib/learning.ts';
-import { approvedPath, candidatePath, AudioDirector } from '../lib/audio.ts';
+import {
+  approvedPath,
+  candidatePath,
+  reviewSource,
+  AudioDirector,
+} from '../lib/audio.ts';
 
 test('Set 1 uses the published order and distinct grapheme entries', () => {
   assert.equal(
@@ -149,33 +154,56 @@ test('world boundaries keep Monster on the island and controller drift stays sti
   assert.equal(deadzone(1), 1);
   assert.equal(deadzone(-1), -1);
 });
-test('candidates cannot become teaching audio without explicit review', () => {
+test('only explicit reviews tied to the exact candidate can enable teaching audio', () => {
   assert.ok(candidatePath('m', {}));
   assert.equal(approvedPath('m', {}), null);
-  assert.equal(approvedPath('m', { m: { approved: false } }), null);
   assert.equal(
     approvedPath('m', { m: { approved: true, standard: 'british-pure-v1' } }),
-    '/audio/phonemes/m.ogg',
+    null,
+    'Old reviews cannot certify unidentified recordings',
+  );
+  const reviewed = {
+    m: {
+      approved: true,
+      standard: 'rwi-set1-v2',
+      reviewer: 'Parent',
+      reviewerRole: 'parent',
+      approvedSource: reviewSource('m', {}),
+    },
+  };
+  assert.equal(approvedPath('m', reviewed), '/audio/phonemes/m.ogg');
+  assert.equal(
+    approvedPath('m', {
+      m: { ...reviewed.m, approvedSource: 'old-file-hash' },
+    }),
+    null,
   );
   assert.equal(
-    approvedPath('m', { m: { approved: true } }),
+    approvedPath('m', {
+      m: { ...reviewed.m, data: 'data:audio/wav;base64,NEW' },
+    }),
     null,
-    'Old approvals do not certify British pure sounds',
+    'Replacing an approved candidate clears its authority',
   );
-  assert.equal(
-    approvedPath('j', { j: { approved: true, standard: 'british-pure-v1' } }),
-    null,
-  );
+  const data = 'data:audio/wav;base64,AAA';
+  const imported = {
+    j: {
+      approved: true,
+      standard: 'rwi-set1-v2',
+      reviewer: 'Teacher',
+      reviewerRole: 'uk-phonics-specialist',
+      data,
+      approvedSource: data,
+    },
+  };
+  assert.equal(approvedPath('j', imported), data);
   assert.equal(
     approvedPath('j', {
-      j: {
-        approved: true,
-        standard: 'british-pure-v1',
-        data: 'data:audio/wav;base64,AAA',
-      },
+      j: { ...imported.j, data: 'data:audio/wav;base64,BBB' },
     }),
-    'data:audio/wav;base64,AAA',
+    null,
   );
+  assert.equal(approvedPath('j', { j: { ...imported.j, reviewer: '' } }), null);
 });
 test('missing phonemes never fall through to text-to-speech', async () => {
   let spoken = 0,

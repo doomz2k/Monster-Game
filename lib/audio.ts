@@ -1,12 +1,17 @@
 import { SOUNDS } from './phonics';
+import { Soundscape, type SoundScene } from './soundscape';
 import builtIn from './audio-data/phonemes.json';
 import voiceClips from './audio-data/voice-clips.json';
 import adventureScript from './audio-data/adventure-script.json';
+import audit from './audio-data/audio-audit.json';
 export type SoundReview = {
   approved: boolean;
   data?: string;
   checkedAt?: string;
-  standard?: 'british-pure-v1';
+  standard?: 'british-pure-v1' | 'rwi-set1-v2';
+  approvedSource?: string;
+  reviewer?: string;
+  reviewerRole?: 'parent' | 'uk-phonics-specialist';
 };
 export type SoundReviews = Record<string, SoundReview>;
 const STORAGE = 'monster-game-sounds-v1';
@@ -18,8 +23,21 @@ export function loadReviews(): SoundReviews {
       const v = raw[s.grapheme];
       if (v && typeof v.approved === 'boolean')
         out[s.grapheme] = {
-          approved: v.approved && v.standard === 'british-pure-v1',
-          standard: v.standard === 'british-pure-v1' ? v.standard : undefined,
+          approved: v.approved && v.standard === 'rwi-set1-v2',
+          standard: v.standard === 'rwi-set1-v2' ? v.standard : undefined,
+          approvedSource:
+            typeof v.approvedSource === 'string' &&
+            v.approvedSource.length < 2800000
+              ? v.approvedSource
+              : undefined,
+          reviewer:
+            typeof v.reviewer === 'string'
+              ? v.reviewer.slice(0, 120)
+              : undefined,
+          reviewerRole:
+            v.reviewerRole === 'uk-phonics-specialist'
+              ? v.reviewerRole
+              : 'parent',
           data:
             typeof v.data === 'string' &&
             v.data.startsWith('data:audio/') &&
@@ -45,9 +63,27 @@ export function candidatePath(g: string, reviews: SoundReviews): string | null {
   );
 }
 export function approvedPath(g: string, reviews: SoundReviews): string | null {
-  return reviews[g]?.approved && reviews[g]?.standard === 'british-pure-v1'
+  const technical = (audit.phonemes as Record<string, { warnings: string[] }>)[
+    g
+  ];
+  if (!reviews[g]?.data && technical?.warnings.includes('near-clipping'))
+    return null;
+  return reviews[g]?.approved &&
+    reviews[g]?.standard === 'rwi-set1-v2' &&
+    Boolean(reviews[g]?.reviewer?.trim()) &&
+    reviews[g]?.approvedSource === reviewSource(g, reviews)
     ? candidatePath(g, reviews)
     : null;
+}
+/** Imported bytes are compared exactly; bundled files are bound to audited SHA-256. */
+export function reviewSource(
+  g: string,
+  reviews: SoundReviews,
+): string | undefined {
+  return (
+    reviews[g]?.data ??
+    (audit.phonemes as Record<string, { sha256: string }>)[g]?.sha256
+  );
 }
 export async function importRecording(file: File): Promise<string> {
   if (file.size > 2_000_000)
@@ -96,10 +132,23 @@ export class AudioDirector {
   private player: HTMLAudioElement | null = null;
   private settle: (() => void) | null = null;
   private context: AudioContext | null = null;
+  private soundscape: Soundscape | null = null;
+  private scene: SoundScene = {
+    active: false,
+    region: 'island',
+    x: 0,
+    z: 0,
+    moving: false,
+  };
+  setScene(scene: SoundScene) {
+    this.scene = scene;
+    this.soundscape?.update(scene);
+  }
   public muted = false;
   setMuted(value: boolean) {
     this.muted = value;
     this.stop();
+    this.soundscape?.update(this.scene);
     if (!value) this.unlock();
   }
   constructor(
@@ -112,6 +161,11 @@ export class AudioDirector {
   unlock() {
     try {
       this.context ??= new AudioContext();
+      this.soundscape ??= new Soundscape(
+        this.context,
+        () => this.muted || this.busy,
+      );
+      this.soundscape.update(this.scene);
       void this.context.resume();
     } catch {
       /* Spoken and visual instructions still work. */
@@ -131,6 +185,7 @@ export class AudioDirector {
     if (this.muted) return;
     const generation = this.generation;
     this.playingGeneration = generation;
+    this.soundscape?.update(this.scene);
     try {
       for (const step of steps) {
         if (generation !== this.generation || this.muted) return;
@@ -266,6 +321,8 @@ export class AudioDirector {
   }
   dispose() {
     this.stop();
+    this.soundscape?.dispose();
+    this.soundscape = null;
     void this.context?.close();
     this.context = null;
   }

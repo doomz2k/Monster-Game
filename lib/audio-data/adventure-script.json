@@ -886,5 +886,121 @@
   "space-pattern-8": {
     "voice": "nova",
     "text": "Our Moon station needs a picture code. Which picture comes next?"
+  },
+  "tutorial-hello": {
+    "voice": "narrator",
+    "text": "Hello! Let us learn the buttons together. Press the green A button to begin."
+  },
+  "tutorial-move": {
+    "voice": "narrator",
+    "text": "Take your monster for a little walk. Use the control pad, or the stick."
+  },
+  "tutorial-choose": {
+    "voice": "narrator",
+    "text": "Choose the apple. Move right on your control pad."
+  },
+  "tutorial-confirm": {
+    "voice": "narrator",
+    "text": "Lovely! Press the green A button to choose it."
+  },
+  "tutorial-back": {
+    "voice": "narrator",
+    "text": "The apple is in our basket. Press the red B button to go back."
+  },
+  "tutorial-done": {
+    "voice": "narrator",
+    "text": "You did it! Green A says yes. Red B goes back. Yellow Y helps you listen again. Press A to explore."
+  },
+  "demo-bramble-pizza": {
+    "voice": "bramble",
+    "text": "Watch me. One tomato, and one more tomato, makes two. Move right to choose two. Then press the green A button. Your turn!"
+  },
+  "demo-tilly-add": {
+    "voice": "tilly",
+    "text": "Watch me. One apple, and one more apple, makes two. Move right to choose two, then press the green A button. Your turn!"
+  },
+  "demo-marina-take": {
+    "voice": "marina",
+    "text": "Watch me. Three apples. Take one away. Two are left. Move right to choose two, then press the green A button. Your turn!"
+  },
+  "demo-pip-pattern": {
+    "voice": "pip",
+    "text": "Watch the pattern. Circle, triangle, circle. A triangle comes next. Choose the picture, then press the green A button. Your turn!"
+  },
+  "demo-pip-pack": {
+    "voice": "pip",
+    "text": "Watch me pack two apples. One, two. Move right to choose two, then press the green A button. Your turn!"
+  },
+  "demo-pip-add": {
+    "voice": "pip",
+    "text": "Watch me. One apple, and one more apple, makes two. Move right to choose two, then press the green A button. Your turn!"
+  },
+  "demo-olive-sound": {
+    "voice": "olive",
+    "text": "First, listen to the sound with your grown-up. Then choose its letters, and press the green A button. Yellow Y lets you watch this again."
+  },
+  "demo-olive-spell": {
+    "voice": "olive",
+    "text": "Watch me choose the letters for a word. Choose each sound with the green A button. Blue X takes the last one back. Now try your word with your grown-up."
+  },
+  "demo-nova-space": {
+    "voice": "nova",
+    "text": "Look at the pictures. A rocket can fly into space. Choose its picture, then press the green A button. Your turn!"
+  },
+  "demo-nova-pattern": {
+    "voice": "nova",
+    "text": "Watch the pattern. Circle, triangle, circle. A triangle comes next. Choose the picture, then press the green A button. Your turn!"
+  },
+  "demo-nova-pack": {
+    "voice": "nova",
+    "text": "Watch me pack two apples. One, two. Move right to choose two, then press the green A button. Your turn!"
+  },
+  "hint-bramble-more": {
+    "voice": "bramble",
+    "text": "We need a few more. Look at the empty spaces. Move right to fill them."
+  },
+  "hint-bramble-fewer": {
+    "voice": "bramble",
+    "text": "We have a few extra. Look at the marked pictures. Move left to take the extras away."
+  },
+  "hint-tilly-more": {
+    "voice": "tilly",
+    "text": "We need a few more. Look at the empty spaces. Move right to fill them."
+  },
+  "hint-tilly-fewer": {
+    "voice": "tilly",
+    "text": "We have a few extra. Look at the marked pictures. Move left to take the extras away."
+  },
+  "hint-marina-more": {
+    "voice": "marina",
+    "text": "We need a few more. Look at the empty spaces. Move right to fill them."
+  },
+  "hint-marina-fewer": {
+    "voice": "marina",
+    "text": "We have a few extra. Look at the marked pictures. Move left to take the extras away."
+  },
+  "hint-pip-more": {
+    "voice": "pip",
+    "text": "We need a few more. Look at the empty spaces. Move right to fill them."
+  },
+  "hint-pip-fewer": {
+    "voice": "pip",
+    "text": "We have a few extra. Look at the marked pictures. Move left to take the extras away."
+  },
+  "hint-nova-more": {
+    "voice": "nova",
+    "text": "We need a few more. Look at the empty spaces. Move right to fill them."
+  },
+  "hint-nova-fewer": {
+    "voice": "nova",
+    "text": "We have a few extra. Look at the marked pictures. Move left to take the extras away."
+  },
+  "hint-spell": {
+    "voice": "olive",
+    "text": "Look at the glowing sound space. Try saying the sounds together. Blue X takes the last one back."
+  },
+  "hint-pattern": {
+    "voice": "pip",
+    "text": "Look at the pictures that repeat. Say the pattern together, then try the next picture."
   }
 }

@@ -79,6 +79,7 @@ export type Question = {
 };
 export type ProgressData = {
   version: 1;
+  tutorialComplete: boolean;
   completed: string[];
   rounds: Record<ZoneId, number>;
   knownSounds: string[];
@@ -90,6 +91,7 @@ export type ProgressData = {
 };
 export const freshProgress = (): ProgressData => ({
   version: 1,
+  tutorialComplete: false,
   completed: [],
   rounds: { meadow: 0, woods: 0, cove: 0, garden: 0 },
   knownSounds: [],
@@ -104,6 +106,7 @@ export function readProgress(raw: string | null): ProgressData {
     const p = JSON.parse(raw ?? 'null');
     if (p?.version !== 1) return freshProgress();
     const clean = freshProgress();
+    clean.tutorialComplete = p.tutorialComplete === true;
     clean.completed = Array.isArray(p.completed)
       ? [
           ...new Set<string>(

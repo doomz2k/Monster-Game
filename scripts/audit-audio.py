@@ -1,4 +1,4 @@
-"""Decode and measure delivered audio. These checks cannot certify pronunciation."""
+"""Reproducible technical checks, never a substitute for a phonics/listening review."""
 import hashlib
 import json
 from pathlib import Path
@@ -6,36 +6,38 @@ import numpy as np
 import soundfile as sf
 
 ROOT = Path(__file__).resolve().parents[1]
-
-def measure(path):
-    samples, rate = sf.read(path, always_2d=True)
+def inspect(path):
+    file = ROOT / 'public' / path.lstrip('/')
+    samples, rate = sf.read(file, always_2d=True)
     if not len(samples) or not np.isfinite(samples).all():
-        raise ValueError(f'Invalid samples: {path}')
-    peak = float(np.abs(samples).max())
-    if peak < .001:
-        raise ValueError(f'Silent file: {path}')
-    mono = samples.mean(axis=1)
-    active = np.flatnonzero(np.abs(mono) > max(.008, peak * .035))
-    return {'sha256': hashlib.sha256(path.read_bytes()).hexdigest(), 'seconds': round(len(samples) / rate, 3), 'sampleRate': rate, 'channels': samples.shape[1], 'peak': round(peak, 4), 'leadingQuietSeconds': round(int(active[0]) / rate, 3), 'trailingQuietSeconds': round((len(samples) - int(active[-1])) / rate, 3)}
+        raise ValueError('Empty or non-finite audio: ' + path)
+    envelope = np.max(np.abs(samples), axis=1)
+    peak = float(envelope.max())
+    active = np.flatnonzero(envelope > max(.001, peak * .01))
+    if not len(active): raise ValueError('Silent audio: ' + path)
+    sounding = samples[active]
+    rms = float(np.sqrt(np.mean(sounding ** 2)))
+    warnings = []
+    if peak >= .99: warnings.append('near-clipping')
+    if rms < .015: warnings.append('quiet: listen and compare')
+    if active[0] / rate > .4: warnings.append('long lead-in')
+    if (len(samples) - active[-1] - 1) / rate > .75: warnings.append('long tail')
+    return {'sha256': hashlib.sha256(file.read_bytes()).hexdigest(), 'seconds': round(len(samples)/rate,3), 'sampleRate': rate, 'channels': samples.shape[1], 'peakDbfs': round(20*np.log10(max(peak,1e-9)),1), 'activeRmsDbfs': round(20*np.log10(max(rms,1e-9)),1), 'leadingSilenceMs': round(active[0]/rate*1000), 'trailingSilenceMs': round((len(samples)-active[-1]-1)/rate*1000), 'warnings': warnings}
 
-phonemes = json.loads((ROOT / 'lib/audio-data/phonemes.json').read_text(encoding='utf-8'))
+report = {'method': 'Decoded PCM; active RMS uses samples above max(0.001, 1% peak), not LUFS. Technical checks cannot establish pronunciation, accent or warmth.', 'voices': {}, 'phonemes': {}}
+for kind, filename in [('voices','voice-clips.json'),('phonemes','phonemes.json')]:
+    manifest = json.loads((ROOT/'lib/audio-data'/filename).read_text(encoding='utf-8'))
+    for key, value in manifest.items():
+        if kind == 'voices':
+            assert value['voice'].startswith(('bf_', 'bm_')), 'Non-British voice profile: ' + key
+        report[kind][key] = inspect(value['path'])
+        if kind == 'voices':
+            assert .05 < report[kind][key]['seconds'] < 60, 'Unexpected narration duration: ' + key
+out = ROOT/'lib/audio-data/audio-audit.json'
+out.write_text(json.dumps(report, indent=2)+'\n',encoding='utf-8')
 order = 'm a s d t i n p g o c k u b f e l h r j v y w z x sh th ch qu ng nk ck'.split()
-results = []
-for grapheme in order:
-    entry = phonemes.get(grapheme)
-    result = {'grapheme': grapheme, 'status': 'unverified' if entry else 'missing', 'britishPronunciationVerified': False, 'pureSoundVerified': False}
-    if entry:
-        result.update({'path': entry['path'], **measure(ROOT / 'public' / entry['path'].lstrip('/'))})
-        result['provenance'] = 'Inherited sound-lab snapshot; historical source references do not identify the final speaker or synthesis input.'
-    results.append(result)
-report = {'auditedOn': '2026-09-12', 'method': 'Decoded actual Ogg files with libsndfile; measured duration, sample rate, peak and quiet boundaries; SHA-256 of delivered bytes. This session cannot receive audio input, so no auditory verification was possible.', 'reference': 'https://home.oxfordowl.co.uk/phonics-videos/', 'teachingDefault': 'Disabled unless explicitly reviewed in the British pure-sound review flow. No TTS phoneme fallback.', 'sounds': results}
-(ROOT / 'docs/phonics-audit.json').write_text(json.dumps(report, indent=2) + '\n', encoding='utf-8')
-voices = json.loads((ROOT / 'lib/audio-data/voice-clips.json').read_text(encoding='utf-8'))
-duration = 0
-for key, entry in voices.items():
-    assert entry['voice'].startswith(('bf_', 'bm_')), key
-    info = measure(ROOT / 'public' / entry['path'].lstrip('/'))
-    assert .05 < info['seconds'] < 60, key
-    assert info['peak'] < 1, key
-    duration += info['seconds']
-print(json.dumps({'phonicsPresent': len(phonemes), 'phonicsMissing': len(order) - len(phonemes), 'phonicsAuditorilyVerified': 0, 'BritishNarrationFilesDecoded': len(voices), 'narrationSeconds': round(duration, 1)}))
+phonics = {'auditedOn': '2026-09-12', 'programme': 'Read Write Inc. Set 1, confirmed by Clover’s parent', 'method': report['method'], 'reference': 'https://home.oxfordowl.co.uk/phonics-videos/', 'teachingDefault': 'Disabled without a named local review tied to the exact source. Built-in nk requires replacement because its decoded peak exceeds full scale. No synthetic phoneme fallback.', 'sounds': [{'grapheme':g,'status':'unverified' if g in report['phonemes'] else 'missing','britishPronunciationVerified':False,'pureSoundVerified':False,**report['phonemes'].get(g,{})} for g in order]}
+(ROOT/'docs/phonics-audit.json').write_text(json.dumps(phonics,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+for kind in ['voices','phonemes']:
+    values = report[kind]
+    print(f'{kind}: {len(values)} decoded files; {sum(bool(v["warnings"]) for v in values.values())} need technical attention; all require human listening review.')

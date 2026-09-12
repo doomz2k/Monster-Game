@@ -1108,5 +1108,150 @@
     "path": "/audio/voices/space-pattern-8-d9f416c3122772b6.ogg",
     "voice": "bf_isabella",
     "text": "Our Moon station needs a picture code. Which picture comes next?"
+  },
+  "tutorial-hello": {
+    "path": "/audio/voices/tutorial-hello-a7d35713fb8eb83c.ogg",
+    "voice": "bf_emma",
+    "text": "Hello! Let us learn the buttons together. Press the green A button to begin."
+  },
+  "tutorial-move": {
+    "path": "/audio/voices/tutorial-move-ba534dd4b721c7a0.ogg",
+    "voice": "bf_emma",
+    "text": "Take your monster for a little walk. Use the control pad, or the stick."
+  },
+  "tutorial-choose": {
+    "path": "/audio/voices/tutorial-choose-4e47b822c6db1dfd.ogg",
+    "voice": "bf_emma",
+    "text": "Choose the apple. Move right on your control pad."
+  },
+  "tutorial-confirm": {
+    "path": "/audio/voices/tutorial-confirm-105d95e8c6f5a832.ogg",
+    "voice": "bf_emma",
+    "text": "Lovely! Press the green A button to choose it."
+  },
+  "tutorial-back": {
+    "path": "/audio/voices/tutorial-back-8398521eedacadbe.ogg",
+    "voice": "bf_emma",
+    "text": "The apple is in our basket. Press the red B button to go back."
+  },
+  "tutorial-done": {
+    "path": "/audio/voices/tutorial-done-b65b23a0eb8e1df1.ogg",
+    "voice": "bf_emma",
+    "text": "You did it! Green A says yes. Red B goes back. Yellow Y helps you listen again. Press A to explore."
+  },
+  "demo-bramble-pizza": {
+    "path": "/audio/voices/demo-bramble-pizza-fe665e8d28cb19ae.ogg",
+    "voice": "bm_george",
+    "text": "Watch me. One tomato, and one more tomato, makes two. Move right to choose two. Then press the green A button. Your turn!"
+  },
+  "demo-tilly-add": {
+    "path": "/audio/voices/demo-tilly-add-b073189922c44628.ogg",
+    "voice": "bf_lily",
+    "text": "Watch me. One apple, and one more apple, makes two. Move right to choose two, then press the green A button. Your turn!"
+  },
+  "demo-marina-take": {
+    "path": "/audio/voices/demo-marina-take-a4aa7db391361dd4.ogg",
+    "voice": "bf_emma",
+    "text": "Watch me. Three apples. Take one away. Two are left. Move right to choose two, then press the green A button. Your turn!"
+  },
+  "demo-pip-pattern": {
+    "path": "/audio/voices/demo-pip-pattern-977b9ee47aa5c644.ogg",
+    "voice": "bm_fable",
+    "text": "Watch the pattern. Circle, triangle, circle. A triangle comes next. Choose the picture, then press the green A button. Your turn!"
+  },
+  "demo-pip-pack": {
+    "path": "/audio/voices/demo-pip-pack-b185e66a7bc49f61.ogg",
+    "voice": "bm_fable",
+    "text": "Watch me pack two apples. One, two. Move right to choose two, then press the green A button. Your turn!"
+  },
+  "demo-pip-add": {
+    "path": "/audio/voices/demo-pip-add-f2f8b7f668e0125f.ogg",
+    "voice": "bm_fable",
+    "text": "Watch me. One apple, and one more apple, makes two. Move right to choose two, then press the green A button. Your turn!"
+  },
+  "demo-olive-sound": {
+    "path": "/audio/voices/demo-olive-sound-2fe8b099bc1aa659.ogg",
+    "voice": "bf_isabella",
+    "text": "First, listen to the sound with your grown-up. Then choose its letters, and press the green A button. Yellow Y lets you watch this again."
+  },
+  "demo-olive-spell": {
+    "path": "/audio/voices/demo-olive-spell-947564f3c04d3e9a.ogg",
+    "voice": "bf_isabella",
+    "text": "Watch me choose the letters for a word. Choose each sound with the green A button. Blue X takes the last one back. Now try your word with your grown-up."
+  },
+  "demo-nova-space": {
+    "path": "/audio/voices/demo-nova-space-974eb18c24873f19.ogg",
+    "voice": "bf_isabella",
+    "text": "Look at the pictures. A rocket can fly into space. Choose its picture, then press the green A button. Your turn!"
+  },
+  "demo-nova-pattern": {
+    "path": "/audio/voices/demo-nova-pattern-7ce12eb68b0faaa8.ogg",
+    "voice": "bf_isabella",
+    "text": "Watch the pattern. Circle, triangle, circle. A triangle comes next. Choose the picture, then press the green A button. Your turn!"
+  },
+  "demo-nova-pack": {
+    "path": "/audio/voices/demo-nova-pack-e92bffee171608c8.ogg",
+    "voice": "bf_isabella",
+    "text": "Watch me pack two apples. One, two. Move right to choose two, then press the green A button. Your turn!"
+  },
+  "hint-bramble-more": {
+    "path": "/audio/voices/hint-bramble-more-1bb2b25d6f7a366b.ogg",
+    "voice": "bm_george",
+    "text": "We need a few more. Look at the empty spaces. Move right to fill them."
+  },
+  "hint-bramble-fewer": {
+    "path": "/audio/voices/hint-bramble-fewer-a45ae8d306038d72.ogg",
+    "voice": "bm_george",
+    "text": "We have a few extra. Look at the marked pictures. Move left to take the extras away."
+  },
+  "hint-tilly-more": {
+    "path": "/audio/voices/hint-tilly-more-d2439105404ea488.ogg",
+    "voice": "bf_lily",
+    "text": "We need a few more. Look at the empty spaces. Move right to fill them."
+  },
+  "hint-tilly-fewer": {
+    "path": "/audio/voices/hint-tilly-fewer-a6aecc8f86d8047b.ogg",
+    "voice": "bf_lily",
+    "text": "We have a few extra. Look at the marked pictures. Move left to take the extras away."
+  },
+  "hint-marina-more": {
+    "path": "/audio/voices/hint-marina-more-b3020fcb145b2f96.ogg",
+    "voice": "bf_emma",
+    "text": "We need a few more. Look at the empty spaces. Move right to fill them."
+  },
+  "hint-marina-fewer": {
+    "path": "/audio/voices/hint-marina-fewer-bf779c1cde56d3f0.ogg",
+    "voice": "bf_emma",
+    "text": "We have a few extra. Look at the marked pictures. Move left to take the extras away."
+  },
+  "hint-pip-more": {
+    "path": "/audio/voices/hint-pip-more-3e6439d07d80afb0.ogg",
+    "voice": "bm_fable",
+    "text": "We need a few more. Look at the empty spaces. Move right to fill them."
+  },
+  "hint-pip-fewer": {
+    "path": "/audio/voices/hint-pip-fewer-6fc26ac5a68e7fe5.ogg",
+    "voice": "bm_fable",
+    "text": "We have a few extra. Look at the marked pictures. Move left to take the extras away."
+  },
+  "hint-nova-more": {
+    "path": "/audio/voices/hint-nova-more-ae2a7031d81ff85d.ogg",
+    "voice": "bf_isabella",
+    "text": "We need a few more. Look at the empty spaces. Move right to fill them."
+  },
+  "hint-nova-fewer": {
+    "path": "/audio/voices/hint-nova-fewer-e15134810013d082.ogg",
+    "voice": "bf_isabella",
+    "text": "We have a few extra. Look at the marked pictures. Move left to take the extras away."
+  },
+  "hint-spell": {
+    "path": "/audio/voices/hint-spell-2e137fad4555ecd7.ogg",
+    "voice": "bf_isabella",
+    "text": "Look at the glowing sound space. Try saying the sounds together. Blue X takes the last one back."
+  },
+  "hint-pattern": {
+    "path": "/audio/voices/hint-pattern-e793a6e105d24070.ogg",
+    "voice": "bm_fable",
+    "text": "Look at the pictures that repeat. Say the pattern together, then try the next picture."
   }
 }

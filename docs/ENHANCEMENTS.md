@@ -55,4 +55,6 @@ These are proposals beyond this release, not claims that the features already ex
 | 49 | P3 | A parent-controlled photo album | Capture the monster’s outfits and discoveries locally, with export hidden from the child’s normal controls. |
 | 50 | P3 | Repeated observed family playtests | Watch a range of early readers play, measure confusion and abandonment, then tune the game around real behaviour. |
 
-Recommended next slice: 1, 2, 4, 6, 7, 9, 11 and 16. Trustworthy teaching, coherent art, atmospheric audio and clear feedback will improve every session before adding another large region.
+The recommended slice (1, 2, 4, 6, 7, 9, 11 and 16) now has its implementation and technical checks recorded in [LEARNING-POLISH.md](LEARNING-POLISH.md). Items 1 and 2 still require actual listening reviews; item 11 still needs physical controller/TV acceptance. These are explicit outstanding checks, not completed certifications.
+
+Recommended next work: obtain the phonics/listening sign-off, observe Clover using the new tutorial and hints (50), then tackle character art (3), camera behaviour (8) and sensory controls (10).

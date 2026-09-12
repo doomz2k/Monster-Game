@@ -1,6 +1,7 @@
 'use client';
 import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
+import { GamePicture } from './game-picture';
 import { SPACE_OBJECTS } from '@/lib/space-learning';
 
 /** Game-native planet models; schematic sizes, never a to-scale astronomy diagram. */
@@ -142,7 +143,7 @@ export function SpaceObject({ id }: { id: string }) {
   }, [id, item]);
   return (
     <span className="space-object" ref={host} aria-hidden="true">
-      {!item?.colour && (item?.icon ?? id)}
+      {!item?.colour && <GamePicture symbol={item?.icon ?? id} />}
     </span>
   );
 }

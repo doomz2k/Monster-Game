@@ -19,6 +19,9 @@ export class GameInput {
   private lastRepeat = 0;
   private axisDirection = '';
   private connected = false;
+  private padIdentity = '';
+  private armed = false;
+  private lastFace = -Infinity;
   public touch = { x: 0, y: 0 };
   constructor(
     private action: (a: Action) => void,
@@ -70,6 +73,8 @@ export class GameInput {
     this.keys.clear();
     this.touch = { x: 0, y: 0 };
     this.movement(0, 0, 0);
+    this.armed = false;
+    this.axisDirection = '';
   };
   private visibility = () => {
     if (document.hidden) this.clear();
@@ -84,12 +89,16 @@ export class GameInput {
     } catch {
       /* Keyboard remains available when Gamepad API is restricted. */
     }
-    if (Boolean(pad) !== this.connected) {
+    const identity = pad ? `${pad.index}:${pad.id}` : '';
+    if (identity !== this.padIdentity) {
       const wasConnected = this.connected;
+      this.padIdentity = identity;
       this.connected = Boolean(pad);
       this.connection(this.connected, pad?.id ?? '');
       this.previous = [];
-      if (wasConnected && !pad) this.action('suspend');
+      this.armed = false;
+      this.axisDirection = '';
+      if (wasConnected) this.action('suspend');
     }
     let x =
       Number(this.keys.has('KeyD') || this.keys.has('ArrowRight')) -
@@ -99,41 +108,59 @@ export class GameInput {
       Number(this.keys.has('KeyS') || this.keys.has('ArrowDown')) -
       Number(this.keys.has('KeyW') || this.keys.has('ArrowUp')) +
       this.touch.y;
-    let turn = 0;
+    const turn = 0;
     if (pad && !document.hidden) {
-      const pressed = pad.buttons.map((b) => b.pressed),
-        map: Record<number, Action> = {
-          0: 'confirm',
-          1: 'back',
-          2: 'map',
-          3: 'listen',
-          9: 'pause',
-          12: 'up',
-          13: 'down',
-          14: 'left',
-          15: 'right',
-        };
-      for (const [key, a] of Object.entries(map)) {
-        const i = Number(key);
-        if (pressed[i] && !this.previous[i]) this.action(a);
-      }
-      this.previous = pressed;
+      const pressed = pad.buttons.map((b) => b.pressed);
       const px = deadzone(pad.axes[0] ?? 0),
         py = deadzone(pad.axes[1] ?? 0);
+      // Connecting/returning with a held button must never choose an answer.
+      if (!this.armed) {
+        this.armed =
+          ![0, 1, 2, 3, 9, 12, 13, 14, 15].some((i) => pressed[i]) &&
+          !px &&
+          !py;
+        this.previous = pressed;
+        this.movement(0, 0, 0);
+        return;
+      }
+      const map: Record<number, Action> = {
+        0: 'confirm',
+        1: 'back',
+        2: 'map',
+        3: 'listen',
+        9: 'pause',
+        12: 'up',
+        13: 'down',
+        14: 'left',
+        15: 'right',
+      };
+      // One face action per frame; Start and Back win over an accidental A.
+      const face = [9, 1, 0, 2, 3].find((i) => pressed[i] && !this.previous[i]);
+      if (
+        face !== undefined &&
+        (face === 9 || face === 1 || now - this.lastFace >= 220)
+      ) {
+        this.action(map[face]);
+        this.lastFace = now;
+      }
+      this.previous = pressed;
       x += px + Number(pressed[15]) - Number(pressed[14]);
       y += py + Number(pressed[13]) - Number(pressed[12]);
-      turn = deadzone(pad.axes[2] ?? 0);
+      // All movement uses the left stick or D-pad; no second-stick dependency.
+      const dx = px + Number(pressed[15]) - Number(pressed[14]);
+      const dy = py + Number(pressed[13]) - Number(pressed[12]);
       const direction =
-        Math.abs(px) > 0.55
-          ? px > 0
+        Math.abs(dx) > 0.55
+          ? dx > 0
             ? 'right'
             : 'left'
-          : Math.abs(py) > 0.55
-            ? py > 0
+          : Math.abs(dy) > 0.55
+            ? dy > 0
               ? 'down'
               : 'up'
             : '';
       if (
+        face === undefined &&
         direction &&
         (direction !== this.axisDirection || now - this.lastRepeat > 300)
       ) {
@@ -141,6 +168,10 @@ export class GameInput {
         this.lastRepeat = now;
       }
       this.axisDirection = direction;
+    }
+    if (document.hidden) {
+      this.movement(0, 0, 0);
+      return;
     }
     this.movement(
       Math.max(-1, Math.min(1, x)),

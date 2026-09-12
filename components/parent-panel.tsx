@@ -1,5 +1,7 @@
 'use client';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { VoiceReview } from './voice-review';
+import audit from '@/lib/audio-data/audio-audit.json';
 import { Check, ExternalLink, Upload, Volume2 } from 'lucide-react';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
@@ -11,12 +13,15 @@ import {
 } from '@/components/ui/select';
 import {
   SOUNDS,
+  BLENDING_WORDS,
   SOUND_GROUPS,
   PHONICS_SOURCE,
   PRONUNCIATION_SOURCE,
 } from '@/lib/phonics';
 import {
   candidatePath,
+  approvedPath,
+  reviewSource,
   importRecording,
   saveReviews,
   type SoundReviews,
@@ -38,6 +43,14 @@ export function ParentPanel({
 }) {
   const [error, setError] = useState('');
   const [selected, setSelected] = useState('m');
+  const [reviewer, setReviewer] = useState(''),
+    [reviewerRole, setReviewerRole] = useState<
+      'parent' | 'uk-phonics-specialist'
+    >('parent');
+  const currentReviews = useRef(reviews);
+  useEffect(() => {
+    currentReviews.current = reviews;
+  }, [reviews]);
   const s = SOUNDS.find((s) => s.grapheme === selected)!;
   const update = (next: SoundReviews) => {
     try {
@@ -51,9 +64,13 @@ export function ParentPanel({
     }
   };
   const load = async (file: File) => {
+    const grapheme = selected;
     try {
       const data = await importRecording(file);
-      update({ ...reviews, [selected]: { data, approved: false } });
+      update({
+        ...currentReviews.current,
+        [grapheme]: { data, approved: false },
+      });
     } catch (e) {
       setError(
         e instanceof Error ? e.message : 'Could not import the recording.',
@@ -61,10 +78,12 @@ export function ParentPanel({
     }
   };
   const path = candidatePath(selected, reviews),
-    checked = SOUNDS.filter(
-      (s) =>
-        reviews[s.grapheme]?.approved && candidatePath(s.grapheme, reviews),
-    ).length;
+    checked = SOUNDS.filter((s) => approvedPath(s.grapheme, reviews)).length;
+  const technicalIssue =
+    !reviews[selected]?.data &&
+    (audit.phonemes as Record<string, { warnings: string[] }>)[
+      selected
+    ]?.warnings.includes('near-clipping');
   return (
     <div className="parent-panel" data-parent-controls>
       <p className="parent-intro">
@@ -114,6 +133,31 @@ export function ParentPanel({
           </Select>
         </label>
       </div>
+      <div className="reviewer-details">
+        <label htmlFor="reviewer-name">
+          Reviewer name
+          <input
+            id="reviewer-name"
+            value={reviewer}
+            maxLength={120}
+            onChange={(e) => setReviewer(e.target.value)}
+            autoComplete="name"
+          />
+        </label>
+        <label htmlFor="reviewer-role">
+          Review role
+          <select
+            id="reviewer-role"
+            value={reviewerRole}
+            onChange={(e) =>
+              setReviewerRole(e.target.value as typeof reviewerRole)
+            }
+          >
+            <option value="parent">Parent: local approval</option>
+            <option value="uk-phonics-specialist">UK phonics specialist</option>
+          </select>
+        </label>
+      </div>
       <h3>
         Sound studio{' '}
         <span>
@@ -121,7 +165,8 @@ export function ParentPanel({
         </span>
       </h3>
       <p>
-        Use the official pronunciation guide to compare each clip. Check the
+        Clover’s school uses Read Write Inc. Use the official pronunciation
+        guide to compare each clip, then check it in a blend below. Check the
         sound is British English, uses the sound rather than the letter name,
         and adds no “uh”. Imported clips also need a check.
       </p>
@@ -148,7 +193,7 @@ export function ParentPanel({
             aria-pressed={sound.grapheme === selected}
           >
             {sound.grapheme}
-            {reviews[sound.grapheme]?.approved && <Check size={11} />}
+            {approvedPath(sound.grapheme, reviews) && <Check size={11} />}
           </button>
         ))}
       </fieldset>
@@ -194,19 +239,58 @@ export function ParentPanel({
               ? 'Unverified candidate from your clover-games sound lab.'
               : 'No recording yet. Add one, or say this sound together.'}{' '}
           Previewing does not enable a recording.
+          {technicalIssue &&
+            ' This candidate exceeds the peak limit. Add a replacement before approving it.'}
+        </p>
+        <div className="blend-checks">
+          <strong>Check in a word</strong>
+          <p>
+            Adult audition only: compare each pure sound and the joined word
+            with the official guidance. These previews do not approve any audio.
+          </p>
+          {BLENDING_WORDS.filter((w) => w.parts.includes(selected))
+            .slice(0, 4)
+            .map((w) => (
+              <button
+                key={w.word}
+                className="secondary-button"
+                disabled={w.parts.some((g) => !candidatePath(g, reviews))}
+                onClick={() =>
+                  void audio?.run(
+                    w.parts.map((g) => ({
+                      type: 'clip' as const,
+                      url: candidatePath(g, reviews)!,
+                    })),
+                  )
+                }
+              >
+                {w.word} · {w.parts.join(' · ')}
+              </button>
+            ))}
+        </div>
+        <p className="audio-origin">
+          {reviews[selected]?.checkedAt
+            ? `Last recorded review: ${reviews[selected].reviewer ?? 'unnamed'} · ${reviews[selected].reviewerRole ?? 'parent'} · ${reviews[selected].checkedAt?.slice(0, 10)}`
+            : 'Awaiting review. No specialist sign-off recorded.'}{' '}
+          Old approvals without a recording fingerprint need a fresh check.
         </p>
         <label className="review-checkbox" htmlFor="approve-recording">
           <Checkbox
             id="approve-recording"
-            checked={Boolean(reviews[selected]?.approved)}
-            disabled={!path}
+            checked={Boolean(approvedPath(selected, reviews))}
+            disabled={!path || !reviewer.trim() || technicalIssue}
             onCheckedChange={(approved) =>
               update({
                 ...reviews,
                 [selected]: {
                   ...reviews[selected],
                   approved,
-                  standard: approved ? 'british-pure-v1' : undefined,
+                  standard: approved ? 'rwi-set1-v2' : undefined,
+                  approvedSource: approved
+                    ? reviewSource(selected, reviews)
+                    : undefined,
+                  reviewer: reviewer.trim(),
+                  reviewerRole,
                   checkedAt: approved ? new Date().toISOString() : undefined,
                 },
               })
@@ -214,7 +298,9 @@ export function ParentPanel({
           />
           <span>
             I listened and checked this is the correct British pure sound, with
-            no letter name, added “uh”, or extra syllable. Use it in play.
+            no letter name, added “uh”, or extra syllable. I also checked it in
+            a blend where available. Approve this exact recording for play on
+            this device.
           </span>
         </label>
       </div>
@@ -223,6 +309,7 @@ export function ParentPanel({
           {error}
         </p>
       )}
+      <VoiceReview audio={audio} phonics={reviews} reviewer={reviewer} />
       <div className="parent-note">
         <strong>About the phonics</strong>
         <p>
@@ -233,7 +320,8 @@ export function ParentPanel({
         </p>
         <p>
           Read Write Inc. is a programme from Ruth Miskin and Oxford University
-          Press. This independent game is not endorsed or certified by them. The
+          Press. This independent game is not endorsed or certified by them.
+          Parent approval is a local decision, not specialist certification. The
           supplied candidate recordings have not been teacher-verified.
           Instructions use recorded British Kokoro voices. Browser
           text-to-speech is disabled, and no synthetic fallback is allowed for

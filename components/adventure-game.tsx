@@ -21,6 +21,8 @@ import {
   DialogDescription,
   DialogTitle,
 } from '@/components/ui/dialog';
+import { ControllerTutorial } from './controller-tutorial';
+import { tutorialAction, TUTORIAL_STEPS } from '@/lib/tutorial';
 import { ParentPanel } from '@/components/parent-panel';
 import { AppearancePanel } from '@/components/appearance-panel';
 import { MissionPanel } from '@/components/mission-panel';
@@ -56,6 +58,7 @@ import type { Appearance } from '@/lib/appearance';
 import script from '@/lib/audio-data/adventure-script.json';
 
 type Mode =
+  | 'tutorial'
   | 'welcome'
   | 'explore'
   | 'creator'
@@ -99,9 +102,38 @@ export default function AdventureGame() {
     [creatorTab, setCreatorTab] = useState<'look' | 'clothes'>('look'),
     [slot, setSlot] = useState<OutfitSlot>('hat'),
     [creatorMessage, setCreatorMessage] = useState('');
+  const [tutorialStep, setTutorialStep] = useState(0),
+    [tutorialChoice, setTutorialChoice] = useState(0);
+  const walkStart = useRef({ x: 0, z: 0 });
+  const finishTutorial = () => {
+    setP((old) => ({ ...old, tutorialComplete: true }));
+    go('explore', 'explore');
+  };
+  const teach = (action: Action) => {
+    audio.unlock();
+    if (tutorialStep === 0 && action === 'back') {
+      go('welcome');
+      return;
+    }
+    if (action === 'listen') {
+      say('tutorial-' + TUTORIAL_STEPS[tutorialStep]);
+      return;
+    }
+    if (tutorialStep === 5 && action === 'confirm') {
+      finishTutorial();
+      return;
+    }
+    const next = tutorialAction(tutorialStep, action, tutorialChoice);
+    if (next === 1 && tutorialStep !== 1)
+      walkStart.current = { x: position.x, z: position.z };
+    if (next === 3) setTutorialChoice(1);
+    if (next === 2) setTutorialChoice(0);
+    setTutorialStep(next);
+  };
   const [flightTo, setFlightTo] = useState<Region>('moon');
   const returnMode = useRef<Mode>('welcome'),
     resumeMode = useRef<Mode>('explore'),
+    parentReturnMode = useRef<Mode>('explore'),
     currentMode = useRef<Mode>('welcome');
   const runtime = useRef<WorldState>({
     active: false,
@@ -130,6 +162,7 @@ export default function AdventureGame() {
     nearby = position.place ? placeFor(position.place) : null;
   const modal = ![
     'welcome',
+    'tutorial',
     'explore',
     'creator',
     'flight',
@@ -195,7 +228,8 @@ export default function AdventureGame() {
       audio.stop();
       if (
         currentMode.current === 'explore' ||
-        currentMode.current === 'mission'
+        currentMode.current === 'mission' ||
+        currentMode.current === 'tutorial'
       ) {
         resumeMode.current = currentMode.current;
         setMode('pause');
@@ -276,6 +310,32 @@ export default function AdventureGame() {
     }
   }, [mode, position, audio]);
 
+  useEffect(() => {
+    if (
+      mode === 'tutorial' &&
+      tutorialStep === 1 &&
+      Math.hypot(
+        position.x - walkStart.current.x,
+        position.z - walkStart.current.z,
+      ) > 2.5
+    ) {
+      /* oxlint-disable-next-line react/react-compiler -- The renderer reports actual movement. */
+      setTutorialStep(2);
+      setTutorialChoice(0);
+      audio.chime();
+    }
+  }, [mode, tutorialStep, position, audio]);
+
+  useEffect(() => {
+    audio.setScene({
+      active: mode === 'explore' || (mode === 'tutorial' && tutorialStep === 1),
+      region: p.adventure.region,
+      x: position.x,
+      z: position.z,
+      moving: Math.hypot(runtime.current.moveX, runtime.current.moveY) > 0.1,
+    });
+  }, [audio, mode, tutorialStep, position, p.adventure.region]);
+
   const openCreator = () => {
     returnMode.current = mode === 'welcome' ? 'welcome' : 'explore';
     setCreatorTab('look');
@@ -283,7 +343,11 @@ export default function AdventureGame() {
   };
   const start = () => {
     if (!ready || !loaded) return;
-    go('explore', 'explore');
+    if (!p.tutorialComplete) {
+      setTutorialStep(0);
+      setTutorialChoice(0);
+      go('tutorial');
+    } else go('explore', 'explore');
   };
   const talk = (id: PlaceId) => {
     setPlace(id);
@@ -332,6 +396,10 @@ export default function AdventureGame() {
     world.current?.celebrate();
   };
   const repeat = () => {
+    if (mode === 'tutorial') {
+      teach('listen');
+      return;
+    }
     if (mode === 'mission' && mission) {
       missionSurface.current
         ?.querySelector<HTMLButtonElement>('[data-repeat-prompt]')
@@ -357,6 +425,10 @@ export default function AdventureGame() {
     );
   };
   const back = () => {
+    if (mode === 'tutorial') {
+      teach('back');
+      return;
+    }
     const reject =
       modalSurface.current?.querySelector<HTMLButtonElement>('[data-reject]');
     if (reject) {
@@ -364,7 +436,7 @@ export default function AdventureGame() {
       return;
     }
     stop();
-    if (mode === 'parents') setMode(resumeMode.current);
+    if (mode === 'parents') setMode(parentReturnMode.current);
     else if (mode === 'creator') setMode(returnMode.current);
     else if (mode === 'mission') setMode('dialogue');
     else if (mode === 'pause') setMode(resumeMode.current);
@@ -378,7 +450,7 @@ export default function AdventureGame() {
       back();
       return;
     }
-    resumeMode.current = mode;
+    parentReturnMode.current = mode;
     go('parents');
   };
   const handleAction = (action: Action) => {
@@ -386,12 +458,16 @@ export default function AdventureGame() {
       openParents();
       return;
     }
+    if (mode === 'tutorial' && action !== 'suspend') {
+      teach(action);
+      return;
+    }
     if (action === 'back') {
       back();
       return;
     }
     if (action === 'suspend') {
-      if (mode === 'explore' || mode === 'mission') {
+      if (mode === 'explore' || mode === 'mission' || mode === 'tutorial') {
         resumeMode.current = mode;
         go('pause');
       }
@@ -487,7 +563,7 @@ export default function AdventureGame() {
       },
     };
     Object.assign(runtime.current, {
-      active: mode === 'explore',
+      active: mode === 'explore' || (mode === 'tutorial' && tutorialStep === 1),
       welcome: mode === 'welcome',
       completed: p.completed,
       appearance: p.appearance,
@@ -540,6 +616,16 @@ export default function AdventureGame() {
       <div ref={host} className="world-canvas" />
       <div className="world-vignette" />
       <div ref={surface}>
+        {mode === 'tutorial' && (
+          <ControllerTutorial
+            step={tutorialStep}
+            selected={tutorialChoice}
+            audio={audio}
+            onAction={teach}
+            onFinish={finishTutorial}
+            onMove={touching}
+          />
+        )}
         {mode === 'welcome' && (
           <section className="adventure-launch">
             <div className="launch-title-block">
@@ -574,7 +660,8 @@ export default function AdventureGame() {
             <span className="launch-buddy-note">Hello, little friend.</span>
           </section>
         )}
-        {mode === 'explore' && (
+        {(mode === 'explore' ||
+          (mode === 'tutorial' && tutorialStep === 1)) && (
           <>
             <div className="adventure-hud">
               <span className="wallet">⭐ {p.adventure.wallet}</span>
@@ -792,6 +879,7 @@ export default function AdventureGame() {
             <MissionPanel
               key={mission.npc + '-' + mission.round}
               mission={mission}
+              active={mode === 'mission'}
               audio={audio}
               reviews={reviews}
               onComplete={complete}
@@ -955,6 +1043,16 @@ export default function AdventureGame() {
                   voices and played from recorded files. No voice service runs
                   during play.
                 </p>
+                <button
+                  className="secondary-button"
+                  onClick={() => {
+                    setTutorialStep(0);
+                    setTutorialChoice(0);
+                    go('tutorial');
+                  }}
+                >
+                  Replay controller lesson
+                </button>
                 <ParentPanel
                   progress={p}
                   onProgress={change}

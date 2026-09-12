@@ -1,4 +1,6 @@
 'use client';
+import { GamePicture } from './game-picture';
+import { QuantityHint } from './quantity-hint';
 import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { Check, Volume2 } from 'lucide-react';
@@ -230,11 +232,13 @@ function Pizza({
 
 export function PizzaKitchen({
   recipe,
+  active = true,
   max,
   audio,
   onComplete,
 }: {
   recipe: PizzaRecipe;
+  active?: boolean;
   max: number;
   audio: AudioDirector;
   onComplete: () => void;
@@ -251,13 +255,9 @@ export function PizzaKitchen({
   const repeat = () =>
     void audio.lines([recipe.intro, 'topping-' + topping.id, current.prompt]);
   useEffect(() => {
-    void audio.lines([
-      recipe.intro,
-      'topping-' + recipe.steps[0].topping,
-      recipe.steps[0].prompt,
-    ]);
+    if (active) repeat();
     return () => audio.stop();
-  }, [recipe, audio]);
+  }, [recipe, audio, active]); // eslint-disable-line react-hooks/exhaustive-deps -- Resume the current topping after a demonstration without interrupting number changes.
   useEffect(() => {
     if (!baking) return;
     const timer = setTimeout(onComplete, 2200);
@@ -270,8 +270,11 @@ export function PizzaKitchen({
   };
   const next = () => {
     if ((counts[topping.id] ?? 0) !== current.quantity) {
-      setFeedback('Count the recipe pictures together');
-      void audio.lines(['pizza-retry', current.prompt]);
+      setFeedback('Let’s match the recipe');
+      void audio.line(
+        'hint-bramble-' +
+          ((counts[topping.id] ?? 0) < current.quantity ? 'more' : 'fewer'),
+      );
       return;
     }
     if (step < recipe.steps.length - 1) {
@@ -293,13 +296,14 @@ export function PizzaKitchen({
   return (
     <div className={'pizza-kitchen ' + (baking ? 'pizza-baking' : '')}>
       <div className="pizza-customer">
-        <span style={{ background: customer.colour }}>{customer.icon}</span>
+        <span style={{ background: customer.colour }}>
+          <GamePicture symbol={customer.icon} />
+        </span>
         <div>
           <small>{customer.friend} would like…</small>
           <h3>{recipe.name}</h3>
         </div>
         <button
-          data-repeat-prompt
           className="round-control"
           onClick={repeat}
           aria-label="Hear the customer and recipe"
@@ -322,14 +326,16 @@ export function PizzaKitchen({
                   className={'recipe-step ' + (i === step ? 'current' : '')}
                   aria-label={t.name + (i < step ? ', finished' : '')}
                 >
-                  <span>{t.icon}</span>
+                  <span>
+                    <GamePicture symbol={t.icon} />
+                  </span>
                   {i < step && <Check size={18} />}
                 </span>
               );
             })}
           </div>
           <h4>
-            {topping.icon} {topping.name}
+            <GamePicture symbol={topping.icon} /> {topping.name}
           </h4>
           <div className="recipe-sum">
             <strong>{current.left}</strong>
@@ -343,14 +349,18 @@ export function PizzaKitchen({
               <>
                 <span>
                   {Array.from({ length: current.left }, (_, i) => (
-                    <i key={i}>{topping.icon}</i>
+                    <i key={i}>
+                      <GamePicture symbol={topping.icon} />
+                    </i>
                   ))}
                   {!current.left && '0'}
                 </span>
                 <b>+</b>
                 <span>
                   {Array.from({ length: current.right }, (_, i) => (
-                    <i key={i}>{topping.icon}</i>
+                    <i key={i}>
+                      <GamePicture symbol={topping.icon} />
+                    </i>
                   ))}
                 </span>
               </>
@@ -361,12 +371,17 @@ export function PizzaKitchen({
                     key={i}
                     className={i >= current.quantity ? 'crossed-out' : ''}
                   >
-                    {topping.icon}
+                    <GamePicture symbol={topping.icon} />
                   </i>
                 ))}
               </span>
             )}
           </div>
+          <QuantityHint
+            chosen={feedback ? (counts[topping.id] ?? 0) : current.quantity}
+            target={current.quantity}
+            symbol={topping.icon}
+          />
           <QuantityDial
             value={counts[topping.id] ?? 0}
             max={max}
