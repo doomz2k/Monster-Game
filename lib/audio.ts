@@ -132,6 +132,20 @@ export class AudioDirector {
   private player: HTMLAudioElement | null = null;
   private settle: (() => void) | null = null;
   private context: AudioContext | null = null;
+  private speechVolume = 1;
+  private environmentVolume = 0.65;
+  setLevels(speech: number, environment: number) {
+    this.speechVolume = Math.max(
+      0,
+      Math.min(1, Number.isFinite(speech) ? speech : 1),
+    );
+    this.environmentVolume = Math.max(
+      0,
+      Math.min(1, Number.isFinite(environment) ? environment : 0.65),
+    );
+    if (this.player) this.player.volume = this.speechVolume;
+    this.soundscape?.setVolume(this.environmentVolume);
+  }
   private soundscape: Soundscape | null = null;
   private scene: SoundScene = {
     active: false,
@@ -166,6 +180,7 @@ export class AudioDirector {
         () => this.muted || this.busy,
       );
       this.soundscape.update(this.scene);
+      this.soundscape.setVolume(this.environmentVolume);
       void this.context.resume();
     } catch {
       /* Spoken and visual instructions still work. */
@@ -266,6 +281,7 @@ export class AudioDirector {
         return;
       }
       const audio = new Audio(url);
+      audio.volume = this.speechVolume;
       this.player = audio;
       let finished = false;
       const end = (err?: Error) => {
@@ -312,7 +328,10 @@ export class AudioDirector {
       o.type = 'sine';
       o.frequency.value = frequency;
       g.gain.setValueAtTime(0, t + i * 0.1);
-      g.gain.linearRampToValueAtTime(0.045, t + i * 0.1 + 0.015);
+      g.gain.linearRampToValueAtTime(
+        0.045 * this.environmentVolume,
+        t + i * 0.1 + 0.015,
+      );
       g.gain.exponentialRampToValueAtTime(0.001, t + i * 0.1 + 0.38);
       o.connect(g).connect(ctx.destination);
       o.start(t + i * 0.1);

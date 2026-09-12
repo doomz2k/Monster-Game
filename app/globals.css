@@ -6,6 +6,7 @@
 @import './adventure.css';
 @import './activities.css';
 @import './learning-polish.css';
+@import './comfort.css';
 @custom-variant dark (&:is(.dark *));
 @theme inline {
   --color-background: var(--background);

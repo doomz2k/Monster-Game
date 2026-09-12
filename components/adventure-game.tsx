@@ -23,13 +23,16 @@ import {
 } from '@/components/ui/dialog';
 import { ControllerTutorial } from './controller-tutorial';
 import { tutorialAction, TUTORIAL_STEPS } from '@/lib/tutorial';
+import { PreferencesContext, useMotionPreference } from './game-preferences';
+import { SaveAndComfort } from './save-and-comfort';
+import { loadRecoverableProgress, saveRecoverably } from '@/lib/save-recovery';
 import { ParentPanel } from '@/components/parent-panel';
 import { AppearancePanel } from '@/components/appearance-panel';
 import { MissionPanel } from '@/components/mission-panel';
 import { HomePanel, ShopPanel } from '@/components/home-panel';
 import { AudioDirector, loadReviews, type SoundReviews } from '@/lib/audio';
 import { GameInput, type Action } from '@/lib/input';
-import { freshProgress, readProgress, type ProgressData } from '@/lib/learning';
+import { freshProgress, type ProgressData } from '@/lib/learning';
 import {
   OUTFIT_SLOTS,
   SLOT_LABELS,
@@ -70,7 +73,6 @@ type Mode =
   | 'home'
   | 'shop'
   | 'flight';
-const SAVE = 'monster-game-progress-v1';
 const CHOICE = { 'data-game-choice': true };
 export default function AdventureGame() {
   const host = useRef<HTMLDivElement>(null),
@@ -86,6 +88,7 @@ export default function AdventureGame() {
     [error, setError] = useState(''),
     [failed, setFailed] = useState(false),
     [connected, setConnected] = useState(false);
+  const reducedMotion = useMotionPreference(p.preferences);
   const [mode, setMode] = useState<Mode>('welcome'),
     [place, setPlace] = useState<PlaceId>('home'),
     [position, setPosition] = useState<WorldUpdate>({
@@ -187,7 +190,10 @@ export default function AdventureGame() {
   useEffect(() => {
     /* oxlint-disable react/react-compiler -- Hydrate and subscribe to browser storage, input and rendering APIs. */
     try {
-      setP(readProgress(localStorage.getItem(SAVE)));
+      const saved = loadRecoverableProgress(localStorage);
+      setP(saved.progress);
+      if (saved.recovered)
+        setError('Your adventure was recovered from a safe copy.');
       const silent = localStorage.getItem('monster-game-muted') === 'true';
       setMuted(silent);
       audio.setMuted(silent);
@@ -247,7 +253,7 @@ export default function AdventureGame() {
   useEffect(() => {
     if (!loaded) return;
     try {
-      localStorage.setItem(SAVE, JSON.stringify(p));
+      saveRecoverably(localStorage, p);
     } catch {
       /* oxlint-disable-next-line react/react-compiler -- Report a browser storage failure. */ setError(
         'This browser could not save your adventure.',
@@ -335,6 +341,13 @@ export default function AdventureGame() {
       moving: Math.hypot(runtime.current.moveX, runtime.current.moveY) > 0.1,
     });
   }, [audio, mode, tutorialStep, position, p.adventure.region]);
+
+  useEffect(() => {
+    audio.setLevels(
+      p.preferences.speechVolume,
+      p.preferences.environmentVolume * (p.preferences.calm ? 0.4 : 1),
+    );
+  }, [audio, p.preferences]);
 
   const openCreator = () => {
     returnMode.current = mode === 'welcome' ? 'welcome' : 'explore';
@@ -565,6 +578,9 @@ export default function AdventureGame() {
     Object.assign(runtime.current, {
       active: mode === 'explore' || (mode === 'tutorial' && tutorialStep === 1),
       welcome: mode === 'welcome',
+      preferences: p.preferences,
+      reducedMotion,
+      visible: mode !== 'mission' && mode !== 'parents',
       completed: p.completed,
       appearance: p.appearance,
       outfit: p.outfit,
@@ -600,572 +616,595 @@ export default function AdventureGame() {
     if (input.current) input.current.touch = { x, y };
   };
   return (
-    <main
-      className={
-        'game-shell adventure-shell ' +
-        (connected ? 'controller-active ' : '') +
-        (mode === 'explore' ? 'playing ' : '') +
-        (mode === 'creator'
-          ? 'showcase-mode wardrobe-mode '
-          : mode === 'welcome'
-            ? 'showcase-mode launch-mode '
-            : '') +
-        (p.adventure.region === 'moon' ? 'on-moon' : '')
-      }
+    <PreferencesContext.Provider
+      value={{ preferences: p.preferences, reducedMotion }}
     >
-      <div ref={host} className="world-canvas" />
-      <div className="world-vignette" />
-      <div ref={surface}>
-        {mode === 'tutorial' && (
-          <ControllerTutorial
-            step={tutorialStep}
-            selected={tutorialChoice}
-            audio={audio}
-            onAction={teach}
-            onFinish={finishTutorial}
-            onMove={touching}
-          />
-        )}
-        {mode === 'welcome' && (
-          <section className="adventure-launch">
-            <div className="launch-title-block">
-              <span className="game-eyebrow">CLOVER’S LITTLE WORLD</span>
-              <h1>
-                Monster
-                <br />
-                <em>& friends</em>
-              </h1>
-              <p>Your monster. Your adventure.</p>
-            </div>
-            <div className="launch-picture-actions">
-              <button
-                {...CHOICE}
-                className="launch-adventure"
-                disabled={!ready || !loaded || failed}
-                onClick={start}
-              >
-                <span className="choice-picture">🌳</span>
-                <strong>{ready ? 'Let’s play' : 'Growing your world…'}</strong>
-                <b className="pad-key a-key">A</b>
-              </button>
-              <button
-                {...CHOICE}
-                onClick={openCreator}
-                disabled={!ready || !loaded || failed}
-              >
-                <span className="choice-picture">🎨</span>
-                <strong>Make my monster</strong>
-              </button>
-            </div>
-            <span className="launch-buddy-note">Hello, little friend.</span>
-          </section>
-        )}
-        {(mode === 'explore' ||
-          (mode === 'tutorial' && tutorialStep === 1)) && (
-          <>
-            <div className="adventure-hud">
-              <span className="wallet">⭐ {p.adventure.wallet}</span>
-              <button
-                {...CHOICE}
-                className="map-control"
-                aria-label="Picture map"
-                onClick={() => go('map', 'map')}
-              >
-                <b className="pad-key x-key">X</b>
-                <Map />
-              </button>
-            </div>
-            {nearby && (
-              <button
-                className="talk-cue"
-                onClick={() => talk(nearby.id)}
-                aria-label={'Visit ' + nearby.friend}
-              >
-                <span>{nearby.icon}</span>
-                <b className="pad-key a-key">A</b>
-              </button>
-            )}
-            {p.adventure.region === 'moon' && (
-              <button
-                className="return-rocket"
-                onClick={() => launch('island')}
-                aria-label="Fly home"
-              >
-                🚀 🏡
-              </button>
-            )}
-            <div className="touch-controls" aria-label="Touch movement">
-              {[
-                { x: 0, y: -1, Icon: ChevronUp },
-                { x: -1, y: 0, Icon: ChevronLeft },
-                { x: 0, y: 1, Icon: ChevronDown },
-                { x: 1, y: 0, Icon: ChevronRight },
-              ].map(({ x, y, Icon }, i) => (
+      <main
+        data-reduced-motion={reducedMotion}
+        data-contrast={p.preferences.contrast}
+        data-text-size={p.preferences.textSize}
+        data-calm={p.preferences.calm}
+        className={
+          'game-shell adventure-shell ' +
+          (connected ? 'controller-active ' : '') +
+          (mode === 'explore' ? 'playing ' : '') +
+          (mode === 'creator'
+            ? 'showcase-mode wardrobe-mode '
+            : mode === 'welcome'
+              ? 'showcase-mode launch-mode '
+              : '') +
+          (p.adventure.region === 'moon' ? 'on-moon' : '')
+        }
+      >
+        <div ref={host} className="world-canvas" />
+        <div className="world-vignette" />
+        <div ref={surface}>
+          {mode === 'tutorial' && (
+            <ControllerTutorial
+              step={tutorialStep}
+              selected={tutorialChoice}
+              audio={audio}
+              onAction={teach}
+              onFinish={finishTutorial}
+              onMove={touching}
+            />
+          )}
+          {mode === 'welcome' && (
+            <section className="adventure-launch">
+              <div className="launch-title-block">
+                <span className="game-eyebrow">CLOVER’S LITTLE WORLD</span>
+                <h1>
+                  Monster
+                  <br />
+                  <em>& friends</em>
+                </h1>
+                <p>Your monster. Your adventure.</p>
+              </div>
+              <div className="launch-picture-actions">
                 <button
-                  key={i}
-                  aria-label={['Forward', 'Left', 'Back', 'Right'][i]}
-                  className={'touch-direction direction-' + i}
-                  onPointerDown={(e) => {
-                    e.currentTarget.setPointerCapture(e.pointerId);
-                    touching(x, y);
+                  {...CHOICE}
+                  className="launch-adventure"
+                  disabled={!ready || !loaded || failed}
+                  onClick={start}
+                >
+                  <span className="choice-picture">🌳</span>
+                  <strong>
+                    {ready ? 'Let’s play' : 'Growing your world…'}
+                  </strong>
+                  <b className="pad-key a-key">A</b>
+                </button>
+                <button
+                  {...CHOICE}
+                  onClick={openCreator}
+                  disabled={!ready || !loaded || failed}
+                >
+                  <span className="choice-picture">🎨</span>
+                  <strong>Make my monster</strong>
+                </button>
+              </div>
+              <span className="launch-buddy-note">Hello, little friend.</span>
+            </section>
+          )}
+          {(mode === 'explore' ||
+            (mode === 'tutorial' && tutorialStep === 1)) && (
+            <>
+              <div className="adventure-hud">
+                <span className="wallet">⭐ {p.adventure.wallet}</span>
+                <button
+                  {...CHOICE}
+                  className="map-control"
+                  aria-label="Picture map"
+                  onClick={() => go('map', 'map')}
+                >
+                  <b className="pad-key x-key">X</b>
+                  <Map />
+                </button>
+              </div>
+              {nearby && (
+                <button
+                  className="talk-cue"
+                  onClick={() => talk(nearby.id)}
+                  aria-label={'Visit ' + nearby.friend}
+                >
+                  <span>{nearby.icon}</span>
+                  <b className="pad-key a-key">A</b>
+                </button>
+              )}
+              {p.adventure.region === 'moon' && (
+                <button
+                  className="return-rocket"
+                  onClick={() => launch('island')}
+                  aria-label="Fly home"
+                >
+                  🚀 🏡
+                </button>
+              )}
+              <div className="touch-controls" aria-label="Touch movement">
+                {[
+                  { x: 0, y: -1, Icon: ChevronUp },
+                  { x: -1, y: 0, Icon: ChevronLeft },
+                  { x: 0, y: 1, Icon: ChevronDown },
+                  { x: 1, y: 0, Icon: ChevronRight },
+                ].map(({ x, y, Icon }, i) => (
+                  <button
+                    key={i}
+                    aria-label={['Forward', 'Left', 'Back', 'Right'][i]}
+                    className={'touch-direction direction-' + i}
+                    onPointerDown={(e) => {
+                      e.currentTarget.setPointerCapture(e.pointerId);
+                      touching(x, y);
+                    }}
+                    onPointerUp={() => touching(0, 0)}
+                    onLostPointerCapture={() => touching(0, 0)}
+                    onPointerCancel={() => touching(0, 0)}
+                  >
+                    <Icon />
+                  </button>
+                ))}
+              </div>
+              {!nearby && (
+                <button
+                  className="touch-hop"
+                  aria-label="Hop"
+                  onClick={() => world.current?.jump()}
+                >
+                  <Footprints />
+                </button>
+              )}
+            </>
+          )}
+          {mode === 'creator' && (
+            <section className="monster-studio">
+              <div className="studio-preview-actions">
+                <button
+                  onClick={() => world.current?.turnShowcase()}
+                  aria-label="Turn Monster"
+                >
+                  <b className="pad-key x-key">X</b>
+                  <RotateCw />
+                </button>
+                <button
+                  {...CHOICE}
+                  className="adventure-primary"
+                  onClick={() => {
+                    go(returnMode.current, 'ready');
                   }}
-                  onPointerUp={() => touching(0, 0)}
-                  onLostPointerCapture={() => touching(0, 0)}
-                  onPointerCancel={() => touching(0, 0)}
                 >
-                  <Icon />
+                  <b className="pad-key a-key">A</b>
+                  <Check /> That’s me!
                 </button>
-              ))}
-            </div>
-            {!nearby && (
-              <button
-                className="touch-hop"
-                aria-label="Hop"
-                onClick={() => world.current?.jump()}
-              >
-                <Footprints />
+              </div>
+              <div className="studio-panel">
+                <div className="studio-heading">
+                  <h2>Make my monster</h2>
+                  <span>⭐ {stars}</span>
+                </div>
+                <div className="picture-tabs">
+                  <button
+                    {...CHOICE}
+                    aria-pressed={creatorTab === 'look'}
+                    onClick={() => setCreatorTab('look')}
+                  >
+                    <span>🎨</span> My monster
+                  </button>
+                  <button
+                    {...CHOICE}
+                    aria-pressed={creatorTab === 'clothes'}
+                    onClick={() => setCreatorTab('clothes')}
+                  >
+                    <Shirt /> Dress up
+                  </button>
+                </div>
+                {creatorTab === 'look' ? (
+                  <AppearancePanel
+                    value={p.appearance}
+                    onChange={setAppearance}
+                  />
+                ) : (
+                  <>
+                    <div className="outfit-shelves">
+                      {OUTFIT_SLOTS.map((s) => (
+                        <button
+                          {...CHOICE}
+                          key={s}
+                          aria-pressed={slot === s}
+                          onClick={() => setSlot(s)}
+                        >
+                          {SLOT_LABELS[s]}
+                        </button>
+                      ))}
+                    </div>
+                    <div className="new-outfit-grid">
+                      {itemsFor(slot).map((item) => {
+                        const wearing = p.outfit[slot] === item.id,
+                          unlocked = isUnlocked(item, stars);
+                        return (
+                          <button
+                            {...CHOICE}
+                            key={item.id}
+                            aria-pressed={wearing}
+                            className={!unlocked ? 'locked-outfit' : ''}
+                            onClick={() => {
+                              if (unlocked) {
+                                setP((old) => ({
+                                  ...old,
+                                  outfit: equipItem(
+                                    old.outfit,
+                                    item.id,
+                                    lifetimeStars(old),
+                                  ),
+                                }));
+                                setCreatorMessage(
+                                  item.id.startsWith('no-')
+                                    ? 'All comfy!'
+                                    : item.name,
+                                );
+                                audio.chime();
+                              } else
+                                setCreatorMessage(
+                                  'Find ' +
+                                    (item.stars - stars) +
+                                    ' more stars for ' +
+                                    item.name,
+                                );
+                            }}
+                          >
+                            <span style={{ background: item.colour }}>
+                              {item.icon}
+                              {wearing && <Check />}
+                            </span>
+                            <strong>{item.name}</strong>
+                            {!unlocked && <small>⭐ {item.stars}</small>}
+                          </button>
+                        );
+                      })}
+                    </div>
+                    <p className="outfit-layer-note">
+                      One from every shelf. Mix them all together!
+                    </p>
+                  </>
+                )}
+                <output aria-live="polite">{creatorMessage}</output>
+              </div>
+            </section>
+          )}
+          {mode === 'flight' && (
+            <section className="rocket-flight">
+              <div className="flight-stars">✦ · ✧ · ✦</div>
+              <div className="flying-rocket">🚀</div>
+              <h2>{flightTo === 'moon' ? 'To the moon!' : 'Home we go!'}</h2>
+              <button {...CHOICE} onClick={back}>
+                <b className="pad-key b-key">B</b> Back
               </button>
-            )}
-          </>
+            </section>
+          )}
+        </div>
+        {failed && (
+          <div className="error-card" role="alert">
+            <strong>The 3D world couldn’t open.</strong>
+            <p>Try Chrome or Edge with graphics acceleration enabled.</p>
+            <button onClick={() => location.reload()}>Try again</button>
+          </div>
         )}
-        {mode === 'creator' && (
-          <section className="monster-studio">
-            <div className="studio-preview-actions">
-              <button
-                onClick={() => world.current?.turnShowcase()}
-                aria-label="Turn Monster"
-              >
-                <b className="pad-key x-key">X</b>
-                <RotateCw />
-              </button>
-              <button
-                {...CHOICE}
-                className="adventure-primary"
-                onClick={() => {
-                  go(returnMode.current, 'ready');
+        {mission &&
+          (mode === 'mission' || mode === 'pause' || mode === 'parents') && (
+            <section
+              ref={missionSurface}
+              className={'activity-screen activity-' + mission.npc}
+              hidden={mode !== 'mission'}
+              aria-label={mission.title}
+            >
+              <div className="activity-topbar">
+                <button className="back-control" onClick={back}>
+                  <b className="pad-key b-key">B</b> Back
+                </button>
+                <span>MONSTER & FRIENDS</span>
+                <span className="activity-wallet">⭐ {p.adventure.wallet}</span>
+              </div>
+              <MissionPanel
+                key={mission.npc + '-' + mission.round}
+                mission={mission}
+                active={mode === 'mission'}
+                audio={audio}
+                reviews={reviews}
+                onComplete={complete}
+                onAgain={beginMission}
+                onBack={() => {
+                  if (mission.npc === 'rocket' && rocketParts(p) === 3)
+                    go('dialogue', 'pip-repaired');
+                  else go('explore');
                 }}
-              >
-                <b className="pad-key a-key">A</b>
-                <Check /> That’s me!
-              </button>
-            </div>
-            <div className="studio-panel">
-              <div className="studio-heading">
-                <h2>Make my monster</h2>
-                <span>⭐ {stars}</span>
+              />
+              <div className="activity-controls">
+                <span>✚ Choose</span>
+                <span>
+                  <b className="pad-key a-key">A</b> Yes
+                </span>
+                <button onClick={repeat}>
+                  <b className="pad-key y-key">Y</b> Listen
+                </button>
+                {mission.kind === 'spell' && (
+                  <span>
+                    <b className="pad-key x-key">X</b> Undo
+                  </span>
+                )}
               </div>
-              <div className="picture-tabs">
-                <button
-                  {...CHOICE}
-                  aria-pressed={creatorTab === 'look'}
-                  onClick={() => setCreatorTab('look')}
-                >
-                  <span>🎨</span> My monster
+            </section>
+          )}
+
+        <Dialog
+          open={modal}
+          onOpenChange={(open) => {
+            if (!open) back();
+          }}
+        >
+          <DialogContent
+            data-reduced-motion={reducedMotion}
+            showCloseButton={false}
+            className={
+              'adventure-dialog ' + (mode === 'parents' ? 'adult-dialog' : '')
+            }
+            finalFocus={() =>
+              (mode === 'mission'
+                ? missionSurface.current
+                : surface.current
+              )?.querySelector<HTMLElement>(
+                '[data-game-choice]:not(:disabled)',
+              ) ?? false
+            }
+            initialFocus={() =>
+              modalSurface.current?.querySelector<HTMLElement>(
+                '[data-game-choice]:not(:disabled)',
+              ) ?? false
+            }
+          >
+            <div ref={modalSurface}>
+              <div className="adventure-dialog-top">
+                <DialogTitle className="sr-only">{modalTitle}</DialogTitle>
+                <DialogDescription className="sr-only">
+                  Use the control pad to choose. Green A confirms. Red B goes
+                  back.
+                </DialogDescription>
+                <button className="back-control" onClick={back}>
+                  <b className="pad-key b-key">B</b>
+                  <ArrowLeft /> Back
                 </button>
                 <button
-                  {...CHOICE}
-                  aria-pressed={creatorTab === 'clothes'}
-                  onClick={() => setCreatorTab('clothes')}
+                  className="round-control"
+                  onClick={repeat}
+                  aria-label="Listen again"
                 >
-                  <Shirt /> Dress up
+                  <b className="pad-key y-key">Y</b>
+                  <Volume2 />
                 </button>
               </div>
-              {creatorTab === 'look' ? (
-                <AppearancePanel
-                  value={p.appearance}
-                  onChange={setAppearance}
-                />
-              ) : (
+              {mode === 'map' && (
                 <>
-                  <div className="outfit-shelves">
-                    {OUTFIT_SLOTS.map((s) => (
+                  <h2>Where shall we go?</h2>
+                  <div className="village-map">
+                    {PLACES.map((dest) => (
                       <button
                         {...CHOICE}
-                        key={s}
-                        aria-pressed={slot === s}
-                        onClick={() => setSlot(s)}
+                        key={dest.id}
+                        className={
+                          'destination-card ' +
+                          (dest.id === 'moon' && rocketParts(p) < 3
+                            ? 'undiscovered'
+                            : '')
+                        }
+                        style={
+                          {
+                            '--place-colour': dest.colour,
+                          } as React.CSSProperties
+                        }
+                        onClick={() => visit(dest.id)}
                       >
-                        {SLOT_LABELS[s]}
+                        <span>{dest.icon}</span>
+                        <strong>
+                          {dest.friend === 'Monster' ? 'My home' : dest.friend}
+                        </strong>
+                        <small>
+                          {dest.id === 'moon' && rocketParts(p) < 3
+                            ? 'Mend Pip’s rocket'
+                            : dest.name}
+                        </small>
+                        {!['home', 'shop'].includes(dest.id) && (
+                          <span className="friend-stamps">
+                            {'★'.repeat(
+                              Math.min(
+                                3,
+                                p.adventure.rounds[dest.id as QuestId],
+                              ),
+                            )}
+                          </span>
+                        )}
                       </button>
                     ))}
                   </div>
-                  <div className="new-outfit-grid">
-                    {itemsFor(slot).map((item) => {
-                      const wearing = p.outfit[slot] === item.id,
-                        unlocked = isUnlocked(item, stars);
-                      return (
-                        <button
-                          {...CHOICE}
-                          key={item.id}
-                          aria-pressed={wearing}
-                          className={!unlocked ? 'locked-outfit' : ''}
-                          onClick={() => {
-                            if (unlocked) {
-                              setP((old) => ({
-                                ...old,
-                                outfit: equipItem(
-                                  old.outfit,
-                                  item.id,
-                                  lifetimeStars(old),
-                                ),
-                              }));
-                              setCreatorMessage(
-                                item.id.startsWith('no-')
-                                  ? 'All comfy!'
-                                  : item.name,
-                              );
-                              audio.chime();
-                            } else
-                              setCreatorMessage(
-                                'Find ' +
-                                  (item.stars - stars) +
-                                  ' more stars for ' +
-                                  item.name,
-                              );
-                          }}
-                        >
-                          <span style={{ background: item.colour }}>
-                            {item.icon}
-                            {wearing && <Check />}
-                          </span>
-                          <strong>{item.name}</strong>
-                          {!unlocked && <small>⭐ {item.stars}</small>}
-                        </button>
-                      );
-                    })}
-                  </div>
-                  <p className="outfit-layer-note">
-                    One from every shelf. Mix them all together!
-                  </p>
                 </>
               )}
-              <output aria-live="polite">{creatorMessage}</output>
-            </div>
-          </section>
-        )}
-        {mode === 'flight' && (
-          <section className="rocket-flight">
-            <div className="flight-stars">✦ · ✧ · ✦</div>
-            <div className="flying-rocket">🚀</div>
-            <h2>{flightTo === 'moon' ? 'To the moon!' : 'Home we go!'}</h2>
-            <button {...CHOICE} onClick={back}>
-              <b className="pad-key b-key">B</b> Back
-            </button>
-          </section>
-        )}
-      </div>
-      {failed && (
-        <div className="error-card" role="alert">
-          <strong>The 3D world couldn’t open.</strong>
-          <p>Try Chrome or Edge with graphics acceleration enabled.</p>
-          <button onClick={() => location.reload()}>Try again</button>
-        </div>
-      )}
-      {mission &&
-        (mode === 'mission' || mode === 'pause' || mode === 'parents') && (
-          <section
-            ref={missionSurface}
-            className={'activity-screen activity-' + mission.npc}
-            hidden={mode !== 'mission'}
-            aria-label={mission.title}
-          >
-            <div className="activity-topbar">
-              <button className="back-control" onClick={back}>
-                <b className="pad-key b-key">B</b> Back
-              </button>
-              <span>MONSTER & FRIENDS</span>
-              <span className="activity-wallet">⭐ {p.adventure.wallet}</span>
-            </div>
-            <MissionPanel
-              key={mission.npc + '-' + mission.round}
-              mission={mission}
-              active={mode === 'mission'}
-              audio={audio}
-              reviews={reviews}
-              onComplete={complete}
-              onAgain={beginMission}
-              onBack={() => {
-                if (mission.npc === 'rocket' && rocketParts(p) === 3)
-                  go('dialogue', 'pip-repaired');
-                else go('explore');
-              }}
-            />
-            <div className="activity-controls">
-              <span>✚ Choose</span>
-              <span>
-                <b className="pad-key a-key">A</b> Yes
-              </span>
-              <button onClick={repeat}>
-                <b className="pad-key y-key">Y</b> Listen
-              </button>
-              {mission.kind === 'spell' && (
-                <span>
-                  <b className="pad-key x-key">X</b> Undo
-                </span>
-              )}
-            </div>
-          </section>
-        )}
-
-      <Dialog
-        open={modal}
-        onOpenChange={(open) => {
-          if (!open) back();
-        }}
-      >
-        <DialogContent
-          showCloseButton={false}
-          className={
-            'adventure-dialog ' + (mode === 'parents' ? 'adult-dialog' : '')
-          }
-          finalFocus={() =>
-            (mode === 'mission'
-              ? missionSurface.current
-              : surface.current
-            )?.querySelector<HTMLElement>(
-              '[data-game-choice]:not(:disabled)',
-            ) ?? false
-          }
-          initialFocus={() =>
-            modalSurface.current?.querySelector<HTMLElement>(
-              '[data-game-choice]:not(:disabled)',
-            ) ?? false
-          }
-        >
-          <div ref={modalSurface}>
-            <div className="adventure-dialog-top">
-              <DialogTitle className="sr-only">{modalTitle}</DialogTitle>
-              <DialogDescription className="sr-only">
-                Use the control pad to choose. Green A confirms. Red B goes
-                back.
-              </DialogDescription>
-              <button className="back-control" onClick={back}>
-                <b className="pad-key b-key">B</b>
-                <ArrowLeft /> Back
-              </button>
-              <button
-                className="round-control"
-                onClick={repeat}
-                aria-label="Listen again"
-              >
-                <b className="pad-key y-key">Y</b>
-                <Volume2 />
-              </button>
-            </div>
-            {mode === 'map' && (
-              <>
-                <h2>Where shall we go?</h2>
-                <div className="village-map">
-                  {PLACES.map((dest) => (
+              {mode === 'pause' && (
+                <>
+                  <h2>A little rest</h2>
+                  <div className="big-actions pause-pictures">
+                    <button {...CHOICE} onClick={() => go(resumeMode.current)}>
+                      <Play />
+                      <span>Play</span>
+                    </button>
+                    <button {...CHOICE} onClick={openCreator}>
+                      <span>🎨</span>
+                      <span>My monster</span>
+                    </button>
+                    <button {...CHOICE} onClick={() => go('map', 'map')}>
+                      <Map />
+                      <span>Our island</span>
+                    </button>
                     <button
                       {...CHOICE}
-                      key={dest.id}
-                      className={
-                        'destination-card ' +
-                        (dest.id === 'moon' && rocketParts(p) < 3
-                          ? 'undiscovered'
-                          : '')
-                      }
-                      style={
-                        { '--place-colour': dest.colour } as React.CSSProperties
-                      }
-                      onClick={() => visit(dest.id)}
+                      onClick={() => go('welcome', 'welcome')}
                     >
-                      <span>{dest.icon}</span>
-                      <strong>
-                        {dest.friend === 'Monster' ? 'My home' : dest.friend}
-                      </strong>
-                      <small>
-                        {dest.id === 'moon' && rocketParts(p) < 3
-                          ? 'Mend Pip’s rocket'
-                          : dest.name}
-                      </small>
-                      {!['home', 'shop'].includes(dest.id) && (
-                        <span className="friend-stamps">
-                          {'★'.repeat(
-                            Math.min(3, p.adventure.rounds[dest.id as QuestId]),
-                          )}
-                        </span>
-                      )}
+                      <span>🏡</span>
+                      <span>Main menu</span>
                     </button>
-                  ))}
-                </div>
-              </>
-            )}
-            {mode === 'pause' && (
-              <>
-                <h2>A little rest</h2>
-                <div className="big-actions pause-pictures">
-                  <button {...CHOICE} onClick={() => go(resumeMode.current)}>
-                    <Play />
-                    <span>Play</span>
-                  </button>
-                  <button {...CHOICE} onClick={openCreator}>
-                    <span>🎨</span>
-                    <span>My monster</span>
-                  </button>
-                  <button {...CHOICE} onClick={() => go('map', 'map')}>
-                    <Map />
-                    <span>Our island</span>
-                  </button>
-                  <button {...CHOICE} onClick={() => go('welcome', 'welcome')}>
-                    <span>🏡</span>
-                    <span>Main menu</span>
-                  </button>
-                </div>
-              </>
-            )}
-            {mode === 'parents' && (
-              <>
-                <h2>For grown-ups</h2>
-                <p className="parent-controls-note">
-                  Start opens this menu. On a keyboard, press P. Green A
-                  confirms; red B goes back. X opens the picture map; Y repeats
-                  guidance. Shoulder and trigger buttons are unused.
-                </p>
-                <button
-                  className="adult-sound-button"
-                  onClick={() => {
-                    const next = !muted;
-                    setMuted(next);
-                    audio.setMuted(next);
-                    try {
-                      localStorage.setItem('monster-game-muted', String(next));
-                    } catch {
-                      setError('Sound preference could not be saved.');
-                    }
-                  }}
-                >
-                  {muted ? 'Turn sound on' : 'Mute sound'}
-                </button>
-                <p>
-                  Character narration is generated in advance with free Kokoro
-                  voices and played from recorded files. No voice service runs
-                  during play.
-                </p>
-                <button
-                  className="secondary-button"
-                  onClick={() => {
-                    setTutorialStep(0);
-                    setTutorialChoice(0);
-                    go('tutorial');
-                  }}
-                >
-                  Replay controller lesson
-                </button>
-                <ParentPanel
-                  progress={p}
-                  onProgress={change}
-                  reviews={reviews}
-                  onReviews={setReviews}
-                  audio={audio}
-                />
-              </>
-            )}
-            {mode === 'dialogue' && (
-              <div className="friend-dialogue">
-                <span
-                  className="dialogue-portrait"
-                  style={{ background: placeFor(place).colour }}
-                >
-                  {placeFor(place).icon}
-                </span>
-                <p className="game-eyebrow">A LITTLE HELP FOR A FRIEND</p>
-                <h2>{placeFor(place).friend}</h2>
-                <p>
-                  {
-                    (script as Record<string, { text: string }>)[
-                      place === 'rocket' && rocketParts(p) === 3
-                        ? 'pip-repaired'
-                        : placeFor(place).intro
-                    ]?.text
-                  }
-                </p>
-                {place === 'rocket' && (
-                  <div className="rocket-parts">
-                    {['🧩', '💎', '⚡'].map((icon, i) => (
-                      <span
-                        key={icon}
-                        className={i < rocketParts(p) ? 'fixed' : ''}
-                      >
-                        {icon}
-                        {i < rocketParts(p) && <Check />}
-                      </span>
-                    ))}
                   </div>
-                )}
-                <div className="big-actions">
+                </>
+              )}
+              {mode === 'parents' && (
+                <>
+                  <h2>For grown-ups</h2>
+                  <p className="parent-controls-note">
+                    Start opens this menu. On a keyboard, press P. Green A
+                    confirms; red B goes back. X opens the picture map; Y
+                    repeats guidance. Shoulder and trigger buttons are unused.
+                  </p>
                   <button
-                    {...CHOICE}
-                    className="adventure-primary"
-                    onClick={
-                      place === 'rocket' && rocketParts(p) === 3
-                        ? () => launch('moon')
-                        : beginMission
+                    className="adult-sound-button"
+                    onClick={() => {
+                      const next = !muted;
+                      setMuted(next);
+                      audio.setMuted(next);
+                      try {
+                        localStorage.setItem(
+                          'monster-game-muted',
+                          String(next),
+                        );
+                      } catch {
+                        setError('Sound preference could not be saved.');
+                      }
+                    }}
+                  >
+                    {muted ? 'Turn sound on' : 'Mute sound'}
+                  </button>
+                  <p>
+                    Character narration is generated in advance with free Kokoro
+                    voices and played from recorded files. No voice service runs
+                    during play.
+                  </p>
+                  <button
+                    className="secondary-button"
+                    onClick={() => {
+                      setTutorialStep(0);
+                      setTutorialChoice(0);
+                      go('tutorial');
+                    }}
+                  >
+                    Replay controller lesson
+                  </button>
+                  <SaveAndComfort progress={p} onProgress={change} />
+                  <ParentPanel
+                    progress={p}
+                    onProgress={change}
+                    reviews={reviews}
+                    onReviews={setReviews}
+                    audio={audio}
+                  />
+                </>
+              )}
+              {mode === 'dialogue' && (
+                <div className="friend-dialogue">
+                  <span
+                    className="dialogue-portrait"
+                    style={{ background: placeFor(place).colour }}
+                  >
+                    {placeFor(place).icon}
+                  </span>
+                  <p className="game-eyebrow">A LITTLE HELP FOR A FRIEND</p>
+                  <h2>{placeFor(place).friend}</h2>
+                  <p>
+                    {
+                      (script as Record<string, { text: string }>)[
+                        place === 'rocket' && rocketParts(p) === 3
+                          ? 'pip-repaired'
+                          : placeFor(place).intro
+                      ]?.text
                     }
-                  >
-                    <b className="pad-key a-key">A</b>
-                    <span>
-                      {place === 'rocket' && rocketParts(p) === 3
-                        ? '🚀 Let’s fly!'
-                        : 'Yes, let’s help!'}
-                    </span>
-                  </button>
-                  <button className="adventure-secondary" onClick={back}>
-                    <b className="pad-key b-key">B</b> Not now
-                  </button>
+                  </p>
+                  {place === 'rocket' && (
+                    <div className="rocket-parts">
+                      {['🧩', '💎', '⚡'].map((icon, i) => (
+                        <span
+                          key={icon}
+                          className={i < rocketParts(p) ? 'fixed' : ''}
+                        >
+                          {icon}
+                          {i < rocketParts(p) && <Check />}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                  <div className="big-actions">
+                    <button
+                      {...CHOICE}
+                      className="adventure-primary"
+                      onClick={
+                        place === 'rocket' && rocketParts(p) === 3
+                          ? () => launch('moon')
+                          : beginMission
+                      }
+                    >
+                      <b className="pad-key a-key">A</b>
+                      <span>
+                        {place === 'rocket' && rocketParts(p) === 3
+                          ? '🚀 Let’s fly!'
+                          : 'Yes, let’s help!'}
+                      </span>
+                    </button>
+                    <button className="adventure-secondary" onClick={back}>
+                      <b className="pad-key b-key">B</b> Not now
+                    </button>
+                  </div>
+                  {place === 'moon' && (
+                    <button
+                      {...CHOICE}
+                      className="home-flight-button"
+                      onClick={() => launch('island')}
+                    >
+                      🚀 Fly home
+                    </button>
+                  )}
                 </div>
-                {place === 'moon' && (
-                  <button
-                    {...CHOICE}
-                    className="home-flight-button"
-                    onClick={() => launch('island')}
-                  >
-                    🚀 Fly home
-                  </button>
-                )}
-              </div>
-            )}
-            {mode === 'home' && (
-              <HomePanel
-                progress={p}
-                onChange={change}
-                audio={audio}
-                onShop={() => {
-                  setPlace('shop');
-                  go('shop', 'poppy-hello');
-                }}
-              />
-            )}
-            {mode === 'shop' && (
-              <ShopPanel progress={p} onChange={change} audio={audio} />
-            )}
-            {error && <output className="adventure-notice">{error}</output>}
-          </div>
-        </DialogContent>
-      </Dialog>
-      {!modal && error && (
-        <output className="adventure-toast">
-          {error}
-          <button aria-label="Dismiss" onClick={() => setError('')}>
-            <X />
-          </button>
-        </output>
-      )}
-      {mode !== 'parents' && mode !== 'flight' && mode !== 'mission' && (
-        <footer className="controller-legend">
-          <span>
-            <b className="pad-key a-key">A</b> Yes
-          </span>
-          <button onClick={back}>
-            <b className="pad-key b-key">B</b> No / back
-          </button>
-          <button onClick={repeat}>
-            <b className="pad-key y-key">Y</b>
-            <Volume2 size={18} />
-          </button>
-        </footer>
-      )}
-    </main>
+              )}
+              {mode === 'home' && (
+                <HomePanel
+                  progress={p}
+                  onChange={change}
+                  audio={audio}
+                  onShop={() => {
+                    setPlace('shop');
+                    go('shop', 'poppy-hello');
+                  }}
+                />
+              )}
+              {mode === 'shop' && (
+                <ShopPanel progress={p} onChange={change} audio={audio} />
+              )}
+              {error && <output className="adventure-notice">{error}</output>}
+            </div>
+          </DialogContent>
+        </Dialog>
+        {!modal && error && (
+          <output className="adventure-toast">
+            {error}
+            <button aria-label="Dismiss" onClick={() => setError('')}>
+              <X />
+            </button>
+          </output>
+        )}
+        {mode !== 'parents' && mode !== 'flight' && mode !== 'mission' && (
+          <footer className="controller-legend">
+            <span>
+              <b className="pad-key a-key">A</b> Yes
+            </span>
+            <button onClick={back}>
+              <b className="pad-key b-key">B</b> No / back
+            </button>
+            <button onClick={repeat}>
+              <b className="pad-key y-key">Y</b>
+              <Volume2 size={18} />
+            </button>
+          </footer>
+        )}
+      </main>
+    </PreferencesContext.Provider>
   );
 }

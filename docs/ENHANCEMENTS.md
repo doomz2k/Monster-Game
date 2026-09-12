@@ -58,3 +58,5 @@ These are proposals beyond this release, not claims that the features already ex
 The recommended slice (1, 2, 4, 6, 7, 9, 11 and 16) now has its implementation and technical checks recorded in [LEARNING-POLISH.md](LEARNING-POLISH.md). Items 1 and 2 still require actual listening reviews; item 11 still needs physical controller/TV acceptance. These are explicit outstanding checks, not completed certifications.
 
 Recommended next work: obtain the phonics/listening sign-off, observe Clover using the new tutorial and hints (50), then tackle character art (3), camera behaviour (8) and sensory controls (10).
+
+Continuous improvement checkpoint: [COMFORT-AND-RECOVERY.md](COMFORT-AND-RECOVERY.md) now records implemented camera guidance (8), sensory settings (10), automatic backups and adult export/import (13), plus suspension of invisible world rendering. Remaining hardware, family and listening acceptance is explicitly tracked.

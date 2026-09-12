@@ -1,4 +1,5 @@
 'use client';
+import { useGamePreferences } from './game-preferences';
 import { GamePicture } from './game-picture';
 import { QuantityHint } from './quantity-hint';
 import { useEffect, useRef, useState } from 'react';
@@ -21,6 +22,7 @@ function Pizza({
   counts: Partial<Record<ToppingId, number>>;
   baking: boolean;
 }) {
+  const { reducedMotion: reduced } = useGamePreferences();
   const host = useRef<HTMLDivElement>(null);
   const latest = useRef({ counts, baking });
   const repaint = useRef<() => void>(() => {});
@@ -171,7 +173,6 @@ function Pizza({
     light.position.set(-3, 7, 4);
     scene.add(light);
     let frame = 0;
-    const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
     const draw = (t: number) => {
       pizza.children.forEach((o) => {
         const tag = o.userData.topping;
@@ -215,7 +216,7 @@ function Pizza({
       renderer.dispose();
       renderer.domElement.remove();
     };
-  }, []);
+  }, [reduced]);
   return (
     <figure
       ref={host}

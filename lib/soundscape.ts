@@ -30,6 +30,11 @@ export function environmentalMix(scene: SoundScene) {
 }
 /** Quiet original procedural foley. Shares the narration context, mute and lifecycle. */
 export class Soundscape {
+  private volume = 0.65;
+  setVolume(value: number) {
+    this.volume = value;
+    this.tick();
+  }
   private scene: SoundScene = {
     active: false,
     region: 'island',
@@ -103,7 +108,7 @@ export class Soundscape {
       t = ctx.currentTime;
     // Complete silence during speech keeps phonemes and words easy to hear.
     const active = scene.active && !this.quiet() && !document.hidden;
-    if (active) this.master.gain.setTargetAtTime(1, t, 0.08);
+    if (active) this.master.gain.setTargetAtTime(this.volume, t, 0.08);
     else {
       this.master.gain.cancelScheduledValues(t);
       this.master.gain.setValueAtTime(0, t);

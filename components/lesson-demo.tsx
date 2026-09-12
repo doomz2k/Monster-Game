@@ -102,7 +102,10 @@ export function LessonDemo({
           </div>
         ) : (
           <div className="demo-pattern">
-            <GamePicture symbol="🚀" />
+            <GamePicture
+              symbol="🚀"
+              className={phase >= 2 ? 'demo-selected-picture' : ''}
+            />
             <GamePicture symbol="⛵" />
             <GamePicture symbol="🚲" />
             <b className={'pad-key a-key ' + (phase >= 2 ? 'demo-press' : '')}>

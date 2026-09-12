@@ -1,4 +1,6 @@
 import * as THREE from 'three';
+import { chooseCameraYaw, cameraObstructed } from './camera-guidance';
+import type { GamePreferences } from './preferences';
 import {
   groundHeight as height,
   WORLD_SCALE,
@@ -36,6 +38,9 @@ export type WorldState = {
   adventure?: AdventureProgress;
   destination?: PlaceId;
   talking?: PlaceId | null;
+  preferences?: GamePreferences;
+  reducedMotion?: boolean;
+  visible?: boolean;
 };
 export type WorldUpdate = {
   x: number;
@@ -78,6 +83,12 @@ export class MonsterWorld {
     kind: 'cloud' | 'butterfly' | 'marker' | 'tree';
   }[] = [];
   private colliders: { x: number; z: number; r: number }[] = [];
+  private cameraBuildings = [
+    { x: 11 * WORLD_SCALE, z: 8.5 * WORLD_SCALE, r: 3.6 },
+    { x: 0, z: -18 * WORLD_SCALE, r: 3.6 },
+    { x: -15 * WORLD_SCALE, z: 13 * WORLD_SCALE, r: 2 },
+    { x: -9 * WORLD_SCALE, z: 13 * WORLD_SCALE, r: 2 },
+  ];
   private particles: {
     mesh: THREE.Mesh;
     velocity: THREE.Vector3;
@@ -93,6 +104,10 @@ export class MonsterWorld {
   private jumpY = 0;
   private jumpVelocity = 0;
   private angle = 0;
+  private movementAngle = 0;
+  private wasMoving = false;
+  private cameraGoal = 0;
+  private nextCameraCheck = 0;
   private celebration = 0;
   private disposed = false;
   private reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)')
@@ -199,7 +214,7 @@ export class MonsterWorld {
       this.frame = requestAnimationFrame(animate);
       const dt = Math.min((now - last) / 1000, 0.05);
       last = now;
-      if (document.hidden) return;
+      if (document.hidden || this.state().visible === false) return;
       elapsed += dt;
       report += dt;
       this.tick(dt, elapsed);
@@ -864,10 +879,13 @@ export class MonsterWorld {
     this.showroomStage.add(contact);
   }
   private tick(dt: number, time: number) {
+    const s = this.state();
+    this.reducedMotion = s.reducedMotion ?? this.reducedMotion;
     this.windTime.value = this.reducedMotion ? 0 : time;
     this.atmosphere.update(this.windTime.value);
-    const s = this.state(),
-      moving = s.active ? Math.min(1, Math.hypot(s.moveX, s.moveY)) : 0;
+    const moving = s.active ? Math.min(1, Math.hypot(s.moveX, s.moveY)) : 0;
+    if (moving > 0.03 && !this.wasMoving) this.movementAngle = this.angle;
+    this.wasMoving = moving > 0.03;
     const region = s.adventure?.region ?? 'island';
     if (region !== this.region) {
       this.region = region;
@@ -888,6 +906,9 @@ export class MonsterWorld {
       this.jumpY = 0;
       this.jumpVelocity = 0;
       this.angle = 0;
+      this.movementAngle = 0;
+      this.cameraGoal = 0;
+      this.wasMoving = false;
     }
     if (s.adventure)
       this.village.update(
@@ -981,15 +1002,16 @@ export class MonsterWorld {
       );
     }
     if (s.active) {
-      this.angle += s.turn * dt * 1.65;
       const length = Math.max(1, Math.hypot(s.moveX, s.moveY)),
         dx =
-          ((s.moveX * Math.cos(this.angle) + s.moveY * Math.sin(this.angle)) *
+          ((s.moveX * Math.cos(this.movementAngle) +
+            s.moveY * Math.sin(this.movementAngle)) *
             dt *
             6.7) /
           length,
         dz =
-          ((-s.moveX * Math.sin(this.angle) + s.moveY * Math.cos(this.angle)) *
+          ((-s.moveX * Math.sin(this.movementAngle) +
+            s.moveY * Math.cos(this.movementAngle)) *
             dt *
             6.7) /
           length;
@@ -1131,6 +1153,40 @@ export class MonsterWorld {
       this.sun.target.position.copy(this.player.position);
       this.sun.target.updateMatrixWorld();
     }
+    const obstacles =
+      this.region === 'island'
+        ? [...this.colliders, ...this.cameraBuildings]
+        : this.atmosphere.moonColliders;
+    const gentleCamera =
+      s.preferences?.camera !== 'fixed' && !this.reducedMotion;
+    if (!show && time >= this.nextCameraCheck) {
+      this.nextCameraCheck = time + 0.8;
+      this.cameraGoal = gentleCamera
+        ? chooseCameraYaw(
+            this.player.position.x,
+            this.player.position.z,
+            this.angle,
+            obstacles,
+          )
+        : 0;
+    }
+    if (!show)
+      this.angle = THREE.MathUtils.lerp(
+        this.angle,
+        this.cameraGoal,
+        1 - Math.exp(-1.4 * dt),
+      );
+    const lift =
+      !show &&
+      gentleCamera &&
+      cameraObstructed(
+        this.player.position.x,
+        this.player.position.z,
+        this.angle,
+        obstacles,
+      )
+        ? 2.5
+        : 0;
     const follow = show
       ? new THREE.Vector3(
           this.player.position.x + 0.15,
@@ -1139,15 +1195,17 @@ export class MonsterWorld {
         )
       : new THREE.Vector3(
           Math.sin(this.angle) * 12,
-          7.8,
+          7.8 + lift,
           Math.cos(this.angle) * 12,
         ).add(
           new THREE.Vector3(
             this.player.position.x,
-            this.atmosphere.surfaceHeight(
-              this.player.position.x,
-              this.player.position.z,
-            ),
+            this.region === 'moon'
+              ? 0
+              : this.atmosphere.surfaceHeight(
+                  this.player.position.x,
+                  this.player.position.z,
+                ),
             this.player.position.z,
           ),
         );
@@ -1183,11 +1241,17 @@ export class MonsterWorld {
     this.jumpY = 0;
     this.jumpVelocity = 0;
     this.angle = 0;
+    this.cameraGoal = 0;
+    this.wasMoving = false;
     this.player.rotation.y = Math.PI;
   }
   celebrate() {
     this.celebration = 3.5;
-    for (let i = 0; i < 28; i++) {
+    for (
+      let i = 0;
+      i < (this.state().preferences?.calm || this.reducedMotion ? 5 : 28);
+      i++
+    ) {
       const mesh = new THREE.Mesh(
         new THREE.OctahedronGeometry(0.09 + Math.random() * 0.07),
         this.mat(['#ffd24b', '#ed9fbb', '#9adfe5', '#fff8d3'][i % 4]),

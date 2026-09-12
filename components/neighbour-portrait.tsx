@@ -1,4 +1,5 @@
 'use client';
+import { useGamePreferences } from './game-preferences';
 import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import { createNeighbour } from '@/lib/neighbours';
@@ -10,6 +11,7 @@ export function NeighbourPortrait({
   id: PlaceId;
   talking?: boolean;
 }) {
+  const { reducedMotion: reduced } = useGamePreferences();
   const host = useRef<HTMLDivElement>(null),
     speech = useRef(talking);
   useEffect(() => {
@@ -36,7 +38,6 @@ export function NeighbourPortrait({
     const light = new THREE.DirectionalLight('#fff4dc', 2.5);
     light.position.set(-3, 4, 5);
     scene.add(light);
-    const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
     let frame = 0;
     const draw = (t: number) => {
       rig.animate(t / 1000, true, speech.current, reduced);
@@ -68,7 +69,7 @@ export function NeighbourPortrait({
       renderer.forceContextLoss();
       renderer.domElement.remove();
     };
-  }, [id]);
+  }, [id, reduced]);
   return (
     <figure
       ref={host}
