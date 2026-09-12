@@ -1233,7 +1233,7 @@ export default function AdventureGame() {
               )}
               {mode === 'dialogue' && (
                 <div className="friend-dialogue">
-                  <NeighbourPortrait id={place} />
+                  <NeighbourPortrait id={place} isTalking={() => audio.busy} />
                   <div className="friend-chat-copy">
                     <p className="game-eyebrow">A LITTLE HELP FOR A FRIEND</p>
                     <h2>{placeFor(place).friend}</h2>

@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { PLACES } from './adventure';
 import { PLAY_RADIUS, SHORE_RADIUS, LANDMARKS } from './world-layout';
 import { createNeighbour } from './neighbours';
+import { villageStroll } from './neighbour-routines';
 import type { WorldTextures } from './world-materials';
 
 /** Shared meshes, instanced meadow and restrained movement keep the bigger world affordable. */
@@ -462,8 +463,9 @@ export function createAtmosphere(
     mesh(picnic, sphere, '#c97455', -1.45 + i * 0.95, 1.45, 0, 0.17);
   }
   const visitors = [
-    { npc: createNeighbour('shop'), x: 25, z: 45 },
-    { npc: createNeighbour('garden'), x: -49, z: 28 },
+    { npc: createNeighbour('shop', { visitor: true }), x: 25, z: 45 },
+    { npc: createNeighbour('garden', { visitor: true }), x: -49, z: 28 },
+    { npc: createNeighbour('meadow', { visitor: true }), x: -7.5, z: -29 },
   ];
   visitors.forEach(({ npc, x, z }) => {
     npc.root.position.set(x, height(x, z), z);
@@ -682,9 +684,22 @@ export function createAtmosphere(
       });
       pollen.position.y = Math.sin(time * 0.2) * 0.4;
       pollen.rotation.y = Math.sin(time * 0.05) * 0.03;
-      visitors.forEach(({ npc }, i) =>
-        npc.animate(time + i * 2, true, false, time === 0),
-      );
+      visitors.forEach(({ npc, x, z }, i) => {
+        const pose = villageStroll(time, time === 0 ? 0 : i * 9);
+        npc.root.position.set(
+          x + pose.x,
+          height(x + pose.x, z + pose.z),
+          z + pose.z,
+        );
+        npc.root.rotation.y = pose.yaw;
+        npc.animate(
+          time + i * 2,
+          pose.walking === 0,
+          false,
+          time === 0,
+          pose.walking,
+        );
+      });
       dish.rotation.y = Math.sin(time * 0.12) * 0.35;
     },
   };

@@ -7,16 +7,20 @@ import { placeFor, type PlaceId } from '@/lib/adventure';
 export function NeighbourPortrait({
   id,
   talking = false,
+  isTalking,
 }: {
   id: PlaceId;
   talking?: boolean;
+  isTalking?: () => boolean;
 }) {
   const { reducedMotion: reduced } = useGamePreferences();
   const host = useRef<HTMLDivElement>(null),
-    speech = useRef(talking);
+    speech = useRef(talking),
+    speechState = useRef(isTalking);
   useEffect(() => {
     speech.current = talking;
-  }, [talking]);
+    speechState.current = isTalking;
+  }, [talking, isTalking]);
   useEffect(() => {
     if (!host.current) return;
     const scene = new THREE.Scene(),
@@ -40,7 +44,12 @@ export function NeighbourPortrait({
     scene.add(light);
     let frame = 0;
     const draw = (t: number) => {
-      rig.animate(t / 1000, true, speech.current, reduced);
+      rig.animate(
+        t / 1000,
+        true,
+        speechState.current?.() ?? speech.current,
+        reduced,
+      );
       renderer.render(scene, camera);
       if (!reduced) frame = requestAnimationFrame(draw);
     };
