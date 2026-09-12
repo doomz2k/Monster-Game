@@ -1,10 +1,12 @@
 import { SOUNDS } from './phonics';
 import builtIn from './audio-data/phonemes.json';
-import narration from './audio-data/narration.json';
+import voiceClips from './audio-data/voice-clips.json';
+import adventureScript from './audio-data/adventure-script.json';
 export type SoundReview = {
   approved: boolean;
   data?: string;
   checkedAt?: string;
+  standard?: 'british-pure-v1';
 };
 export type SoundReviews = Record<string, SoundReview>;
 const STORAGE = 'monster-game-sounds-v1';
@@ -16,7 +18,8 @@ export function loadReviews(): SoundReviews {
       const v = raw[s.grapheme];
       if (v && typeof v.approved === 'boolean')
         out[s.grapheme] = {
-          approved: v.approved,
+          approved: v.approved && v.standard === 'british-pure-v1',
+          standard: v.standard === 'british-pure-v1' ? v.standard : undefined,
           data:
             typeof v.data === 'string' &&
             v.data.startsWith('data:audio/') &&
@@ -42,7 +45,9 @@ export function candidatePath(g: string, reviews: SoundReviews): string | null {
   );
 }
 export function approvedPath(g: string, reviews: SoundReviews): string | null {
-  return reviews[g]?.approved ? candidatePath(g, reviews) : null;
+  return reviews[g]?.approved && reviews[g]?.standard === 'british-pure-v1'
+    ? candidatePath(g, reviews)
+    : null;
 }
 export async function importRecording(file: File): Promise<string> {
   if (file.size > 2_000_000)
@@ -140,11 +145,11 @@ export class AudioDirector {
           } else if (step.type === 'clip') {
             await this.clip(step.url, generation);
           } else {
-            const path = (narration as Record<string, string>)[
-              step.text.toLowerCase()
-            ];
+            const path = Object.values(voiceClips).find(
+              (line) => line.text.toLowerCase() === step.text.toLowerCase(),
+            )?.path;
             if (path) await this.clip(path, generation);
-            else await this.speak(step.text, generation);
+            else this.error(step.text);
           }
         } catch (e) {
           if (generation === this.generation)
@@ -162,6 +167,36 @@ export class AudioDirector {
   }
   say(text: string) {
     return this.run([{ type: 'narration', text }]);
+  }
+  line(id: string) {
+    const clip = (voiceClips as Record<string, { path: string }>)[id];
+    if (clip) return this.run([{ type: 'clip', url: clip.path }]);
+    // Missing recordings stay visible; never replace the natural voice bank with a robotic voice.
+    this.stop();
+    const line = (adventureScript as Record<string, { text: string }>)[id];
+    if (line && !this.muted) this.error(line.text);
+    return Promise.resolve();
+  }
+  lines(ids: string[], phonemes: string[] = []) {
+    const steps: AudioStep[] = [];
+    for (const id of ids) {
+      const clip = (voiceClips as Record<string, { path: string }>)[id];
+      if (!clip) {
+        this.stop();
+        this.error(
+          'This instruction recording is unavailable. Please try again.',
+        );
+        return Promise.resolve();
+      }
+      steps.push({ type: 'clip', url: clip.path });
+    }
+    steps.push(
+      ...phonemes.map((grapheme): AudioStep => ({ type: 'phoneme', grapheme })),
+    );
+    return this.run(steps);
+  }
+  get busy() {
+    return this.playingGeneration !== null;
   }
   /** Optional world guidance must never interrupt a lesson or another prompt. */
   trySay(text: string) {
@@ -210,51 +245,6 @@ export class AudioDirector {
         .catch(() =>
           end(new Error('Tap Listen once to enable sound in this browser.')),
         );
-    });
-  }
-  private speak(text: string, generation: number) {
-    return new Promise<void>((resolve) => {
-      if (generation !== this.generation) {
-        resolve();
-        return;
-      }
-      if (!('speechSynthesis' in window)) {
-        this.error(
-          'Spoken instructions are unavailable in this browser. A grown-up can read the prompt.',
-        );
-        resolve();
-        return;
-      }
-      const voices = speechSynthesis.getVoices(),
-        gb = voices.filter((v) => /^en[-_]GB$/i.test(v.lang)),
-        voice =
-          gb.find((v) => /Sonia|Libby|Hazel|Kate|Serena/i.test(v.name)) ??
-          gb[0];
-      if (voices.length && !voice) {
-        this.error(
-          'A British English voice is not installed. Written prompts and checked recordings are available.',
-        );
-        resolve();
-        return;
-      }
-      const u = new SpeechSynthesisUtterance(text);
-      u.lang = 'en-GB';
-      if (voice) u.voice = voice;
-      u.rate = 0.84;
-      u.pitch = 1.06;
-      let finished = false;
-      const done = () => {
-        if (finished) return;
-        finished = true;
-        clearTimeout(timer);
-        this.settle = null;
-        resolve();
-      };
-      const timer = setTimeout(done, 20000);
-      this.settle = done;
-      u.onend = done;
-      u.onerror = done;
-      speechSynthesis.speak(u);
     });
   }
   chime() {

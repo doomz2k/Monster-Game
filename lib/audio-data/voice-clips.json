@@ -1,0 +1,872 @@
+{
+  "welcome": {
+    "path": "/audio/voices/welcome-c0e170fd312bfccf.ogg",
+    "voice": "bf_emma",
+    "text": "Hello Clover. Welcome to your little world. Shall we visit our friends, or make your very own monster?"
+  },
+  "explore": {
+    "path": "/audio/voices/explore-568a212b47692245.ogg",
+    "voice": "bf_emma",
+    "text": "Move with the stick, or the arrow keys. Follow the pictures to meet your friends. Press the green A button when you get close."
+  },
+  "home": {
+    "path": "/audio/voices/home-28d6994bef815e3f.ogg",
+    "voice": "bf_emma",
+    "text": "Welcome home! Let's make this place your own. You can move your furniture, plant a seed, and give your flowers a little water."
+  },
+  "map": {
+    "path": "/audio/voices/map-c4778ed911017481.ogg",
+    "voice": "bf_emma",
+    "text": "Where shall we go? Choose a picture to visit a friend."
+  },
+  "pause": {
+    "path": "/audio/voices/pause-0b986e340a63bd32.ogg",
+    "voice": "bf_emma",
+    "text": "Time for a little rest. Your adventure will be right here."
+  },
+  "creator": {
+    "path": "/audio/voices/creator-6837b81f9d55f630.ogg",
+    "voice": "bf_emma",
+    "text": "Let's make your monster. Choose any colours, change your shape, and try some lovely things to wear."
+  },
+  "garden": {
+    "path": "/audio/voices/garden-5a5c131b87ffcea2.ogg",
+    "voice": "bf_emma",
+    "text": "Choose a seed, then an empty patch of soil. Give it three little drinks to help it grow."
+  },
+  "furniture": {
+    "path": "/audio/voices/furniture-a46fa02e5e5d05f0.ogg",
+    "voice": "bf_emma",
+    "text": "Choose something you own, then choose a space to put it. You can move it again whenever you like."
+  },
+  "bought": {
+    "path": "/audio/voices/bought-5b9508ae533199e5.ogg",
+    "voice": "bf_alice",
+    "text": "That's yours now! Thank you, little friend. Take it home and find a lovely place for it."
+  },
+  "expensive": {
+    "path": "/audio/voices/expensive-7ef5a5f1e7f6acf7.ogg",
+    "voice": "bf_alice",
+    "text": "A few more stars will buy that. Our friends have lots of little jobs you can help with."
+  },
+  "owned": {
+    "path": "/audio/voices/owned-cdf10396df43b9f9.ogg",
+    "voice": "bf_alice",
+    "text": "You already have that! You can find it at home."
+  },
+  "planted": {
+    "path": "/audio/voices/planted-6feaa409d78a911d.ogg",
+    "voice": "bf_lily",
+    "text": "A tiny seed, tucked into the soil. Now let's give it some water."
+  },
+  "watered": {
+    "path": "/audio/voices/watered-5f3356db1ced8536.ogg",
+    "voice": "bf_lily",
+    "text": "A lovely little drink. Look how your plant is growing!"
+  },
+  "grown": {
+    "path": "/audio/voices/grown-525d1ba1b06097d5.ogg",
+    "voice": "bf_lily",
+    "text": "You grew it all by yourself. What a beautiful garden!"
+  },
+  "bramble-hello": {
+    "path": "/audio/voices/bramble-hello-3bb02459a000622b.ogg",
+    "voice": "bm_george",
+    "text": "Hello there! I'm Bramble. Welcome to my pizza shop! Our friends have brought some lovely recipes. Will you help me count the toppings and make their pizzas?"
+  },
+  "olive-hello": {
+    "path": "/audio/voices/olive-hello-770681225094156f.ogg",
+    "voice": "bf_isabella",
+    "text": "Hello, little monster. I'm Olive. The wind has scattered the sounds from my storybook. Let's listen, and put the words together again."
+  },
+  "marina-hello": {
+    "path": "/audio/voices/marina-hello-d72ff32e75f21e48.ogg",
+    "voice": "bf_emma",
+    "text": "Ahoy, little friend! I'm Marina. My little boats are ready to deliver fish around the island. Can you help me send them on their way?"
+  },
+  "tilly-hello": {
+    "path": "/audio/voices/tilly-hello-1e19c93a6925272d.ogg",
+    "voice": "bf_lily",
+    "text": "Hello! I'm Tilly. I love growing things. Let's put our flowers together, and make a beautiful path through the garden."
+  },
+  "poppy-hello": {
+    "path": "/audio/voices/poppy-hello-01f937812ed70af3.ogg",
+    "voice": "bf_alice",
+    "text": "Welcome to my little shops! I'm Poppy. Spend your stars on something cosy for your house, or a little treasure for your garden."
+  },
+  "pip-hello": {
+    "path": "/audio/voices/pip-hello-041d5f0061301676.ogg",
+    "voice": "bm_fable",
+    "text": "Oh, hello! I'm Pip. My rocket had a rather bumpy landing. Could you help me mend three broken parts? Then we can fly to the moon together!"
+  },
+  "nova-hello": {
+    "path": "/audio/voices/nova-hello-0a0acf2e33561e32.ogg",
+    "voice": "bf_isabella",
+    "text": "You made it to the moon! I'm Nova. Look at all those stars. Let's discover a few things about our solar system."
+  },
+  "pip-repaired": {
+    "path": "/audio/voices/pip-repaired-cedd448db7b706b5.ogg",
+    "voice": "bm_fable",
+    "text": "You did it! The control panel, fuel tank, and star battery are all ready. Hop aboard when you're ready. We're going to the moon!"
+  },
+  "launch": {
+    "path": "/audio/voices/launch-96950f0724edd50d.ogg",
+    "voice": "bm_fable",
+    "text": "Ready, little explorer? Three, two, one, blast off! Next stop, the moon!"
+  },
+  "return": {
+    "path": "/audio/voices/return-57b09b09fadaa106.ogg",
+    "voice": "bm_fable",
+    "text": "Let's head home. Our friends and your garden will be waiting for us."
+  },
+  "part": {
+    "path": "/audio/voices/part-8d47be58d0eee284.ogg",
+    "voice": "bm_fable",
+    "text": "Wonderful! That's another part of the rocket mended. We're one step closer to the moon."
+  },
+  "complete": {
+    "path": "/audio/voices/complete-280308591849f21e.ogg",
+    "voice": "bf_emma",
+    "text": "You did it! Two lovely stars for helping your friend. Shall we play again, or explore?"
+  },
+  "again": {
+    "path": "/audio/voices/again-6d6647fcbab838ba.ogg",
+    "voice": "bf_emma",
+    "text": "Let's have another go. Take your time. We can work it out together."
+  },
+  "learn-sound": {
+    "path": "/audio/voices/learn-sound-c73c8cd897f75960.ogg",
+    "voice": "bf_isabella",
+    "text": "Let's learn a new sound. Listen carefully, then say it with me. Now find the letters that match."
+  },
+  "find-sound": {
+    "path": "/audio/voices/find-sound-18ba627a1a78ac3f.ogg",
+    "voice": "bf_isabella",
+    "text": "Listen to the sound. Which letters make that sound?"
+  },
+  "grown-up": {
+    "path": "/audio/voices/grown-up-e58a7b2d9882c440.ogg",
+    "voice": "bf_isabella",
+    "text": "Let's ask a grown-up to say this sound with us. Then you can find the matching letters."
+  },
+  "add": {
+    "path": "/audio/voices/add-8367ea84d87c3bb7.ogg",
+    "voice": "bf_lily",
+    "text": "Here are two little groups of flowers. Put them together in the flower bed. How many flowers are there altogether?"
+  },
+  "pattern": {
+    "path": "/audio/voices/pattern-f06f6d67971051d9.ogg",
+    "voice": "bm_fable",
+    "text": "The control panel has a pattern. Look along the coloured shapes. Which shape comes next?"
+  },
+  "battery": {
+    "path": "/audio/voices/battery-f8233a8d2f63456e.ogg",
+    "voice": "bm_fable",
+    "text": "We need to join these two groups of power cells. Move them into the battery. How many power cells are there altogether?"
+  },
+  "earth": {
+    "path": "/audio/voices/earth-b4bc63cca7176823.ogg",
+    "voice": "bf_isabella",
+    "text": "Our home planet is called Earth. It has blue oceans and green land. Can you find Earth?"
+  },
+  "sun": {
+    "path": "/audio/voices/sun-b05070dc0f71df78.ogg",
+    "voice": "bf_isabella",
+    "text": "The Sun is a star. It gives us light and warmth. Can you find the Sun?"
+  },
+  "saturn": {
+    "path": "/audio/voices/saturn-aee77d4a0b6079aa.ogg",
+    "voice": "bf_isabella",
+    "text": "Saturn has beautiful rings made of ice and rock. Can you find the planet with rings?"
+  },
+  "moon": {
+    "path": "/audio/voices/moon-bbd604400e839b09.ogg",
+    "voice": "bf_isabella",
+    "text": "The Moon travels around Earth. It shines by reflecting sunlight. Can you find the Moon?"
+  },
+  "put-away": {
+    "path": "/audio/voices/put-away-d9a98ba1cb7f7a07.ogg",
+    "voice": "bf_emma",
+    "text": "All put away. There's room for something new."
+  },
+  "ready": {
+    "path": "/audio/voices/ready-3c5d2e07d08ab97f.ogg",
+    "voice": "bf_emma",
+    "text": "Looking lovely! Your monster is ready for an adventure."
+  },
+  "sound-settings": {
+    "path": "/audio/voices/sound-settings-cb7eadebc8d9ae5e.ogg",
+    "voice": "bf_emma",
+    "text": "These are the grown-up settings. You can change the learning range, and check the letter sounds."
+  },
+  "numbers-help": {
+    "path": "/audio/voices/numbers-help-fae39291980f88ff.ogg",
+    "voice": "bf_emma",
+    "text": "You can touch each object and count along. There is no hurry."
+  },
+  "pack-check": {
+    "path": "/audio/voices/pack-check-b54a9aa63d5dbe33.ogg",
+    "voice": "bm_george",
+    "text": "That basket is just right. Thank you for helping with our picnic!"
+  },
+  "help": {
+    "path": "/audio/voices/help-0df8a482c64fb5d5.ogg",
+    "voice": "bf_emma",
+    "text": "Choose an object to move it. You can put it back if you change your mind. Press the tick when you are ready."
+  },
+  "number-0": {
+    "path": "/audio/voices/number-0-92ecd9128fae55c1.ogg",
+    "voice": "bf_emma",
+    "text": "0."
+  },
+  "number-1": {
+    "path": "/audio/voices/number-1-5d4690add9324993.ogg",
+    "voice": "bf_emma",
+    "text": "1."
+  },
+  "pack-1": {
+    "path": "/audio/voices/pack-1-e700a50133b372c4.ogg",
+    "voice": "bm_george",
+    "text": "Please put 1 apple in the picnic basket. Touch an apple to pack it. Touch it again to put it back."
+  },
+  "fuel-1": {
+    "path": "/audio/voices/fuel-1-c640cf8fd0cdfefa.ogg",
+    "voice": "bm_fable",
+    "text": "The rocket needs 1 crystal. Put them in the fuel tank, then press the tick."
+  },
+  "stars-1": {
+    "path": "/audio/voices/stars-1-f1142697b11eedde.ogg",
+    "voice": "bf_isabella",
+    "text": "Let's collect 1 star for our moon map. Choose them, then press the tick."
+  },
+  "take-1": {
+    "path": "/audio/voices/take-1-3d6473fc8a1e7cf4.ogg",
+    "voice": "bf_emma",
+    "text": "Let's send 1 fish away on the boat. Touch the fish to send them. How many fish are left?"
+  },
+  "number-2": {
+    "path": "/audio/voices/number-2-90957944291d6ea8.ogg",
+    "voice": "bf_emma",
+    "text": "2."
+  },
+  "pack-2": {
+    "path": "/audio/voices/pack-2-976c96e46538350b.ogg",
+    "voice": "bm_george",
+    "text": "Please put 2 apples in the picnic basket. Touch an apple to pack it. Touch it again to put it back."
+  },
+  "fuel-2": {
+    "path": "/audio/voices/fuel-2-7c73b769d7fb7be8.ogg",
+    "voice": "bm_fable",
+    "text": "The rocket needs 2 crystals. Put them in the fuel tank, then press the tick."
+  },
+  "stars-2": {
+    "path": "/audio/voices/stars-2-5f2e5c9f3da9ce10.ogg",
+    "voice": "bf_isabella",
+    "text": "Let's collect 2 stars for our moon map. Choose them, then press the tick."
+  },
+  "take-2": {
+    "path": "/audio/voices/take-2-61d2aaeef3654852.ogg",
+    "voice": "bf_emma",
+    "text": "Let's send 2 fish away on the boat. Touch the fish to send them. How many fish are left?"
+  },
+  "number-3": {
+    "path": "/audio/voices/number-3-ef753d1b6a7d085e.ogg",
+    "voice": "bf_emma",
+    "text": "3."
+  },
+  "pack-3": {
+    "path": "/audio/voices/pack-3-a6eb758cecd25260.ogg",
+    "voice": "bm_george",
+    "text": "Please put 3 apples in the picnic basket. Touch an apple to pack it. Touch it again to put it back."
+  },
+  "fuel-3": {
+    "path": "/audio/voices/fuel-3-0e8629af34f8ea1f.ogg",
+    "voice": "bm_fable",
+    "text": "The rocket needs 3 crystals. Put them in the fuel tank, then press the tick."
+  },
+  "stars-3": {
+    "path": "/audio/voices/stars-3-d0bb0cad995faef6.ogg",
+    "voice": "bf_isabella",
+    "text": "Let's collect 3 stars for our moon map. Choose them, then press the tick."
+  },
+  "take-3": {
+    "path": "/audio/voices/take-3-47bc71e65ad61a60.ogg",
+    "voice": "bf_emma",
+    "text": "Let's send 3 fish away on the boat. Touch the fish to send them. How many fish are left?"
+  },
+  "number-4": {
+    "path": "/audio/voices/number-4-ab221bdf9d6ad7ae.ogg",
+    "voice": "bf_emma",
+    "text": "4."
+  },
+  "pack-4": {
+    "path": "/audio/voices/pack-4-afa79c10debd87b3.ogg",
+    "voice": "bm_george",
+    "text": "Please put 4 apples in the picnic basket. Touch an apple to pack it. Touch it again to put it back."
+  },
+  "fuel-4": {
+    "path": "/audio/voices/fuel-4-b1bc245394d56182.ogg",
+    "voice": "bm_fable",
+    "text": "The rocket needs 4 crystals. Put them in the fuel tank, then press the tick."
+  },
+  "stars-4": {
+    "path": "/audio/voices/stars-4-6726da91fb2e3d74.ogg",
+    "voice": "bf_isabella",
+    "text": "Let's collect 4 stars for our moon map. Choose them, then press the tick."
+  },
+  "take-4": {
+    "path": "/audio/voices/take-4-123964085dfdc2be.ogg",
+    "voice": "bf_emma",
+    "text": "Let's send 4 fish away on the boat. Touch the fish to send them. How many fish are left?"
+  },
+  "number-5": {
+    "path": "/audio/voices/number-5-63ce3af7ecf2cc8a.ogg",
+    "voice": "bf_emma",
+    "text": "5."
+  },
+  "pack-5": {
+    "path": "/audio/voices/pack-5-5210d46199272564.ogg",
+    "voice": "bm_george",
+    "text": "Please put 5 apples in the picnic basket. Touch an apple to pack it. Touch it again to put it back."
+  },
+  "fuel-5": {
+    "path": "/audio/voices/fuel-5-c855778fbf28e8eb.ogg",
+    "voice": "bm_fable",
+    "text": "The rocket needs 5 crystals. Put them in the fuel tank, then press the tick."
+  },
+  "stars-5": {
+    "path": "/audio/voices/stars-5-5896d334c53b0ef2.ogg",
+    "voice": "bf_isabella",
+    "text": "Let's collect 5 stars for our moon map. Choose them, then press the tick."
+  },
+  "take-5": {
+    "path": "/audio/voices/take-5-b916794218b108e3.ogg",
+    "voice": "bf_emma",
+    "text": "Let's send 5 fish away on the boat. Touch the fish to send them. How many fish are left?"
+  },
+  "number-6": {
+    "path": "/audio/voices/number-6-3c158ec2cb17293e.ogg",
+    "voice": "bf_emma",
+    "text": "6."
+  },
+  "pack-6": {
+    "path": "/audio/voices/pack-6-f4ec3021bbee39b8.ogg",
+    "voice": "bm_george",
+    "text": "Please put 6 apples in the picnic basket. Touch an apple to pack it. Touch it again to put it back."
+  },
+  "fuel-6": {
+    "path": "/audio/voices/fuel-6-874f97526c5a80dc.ogg",
+    "voice": "bm_fable",
+    "text": "The rocket needs 6 crystals. Put them in the fuel tank, then press the tick."
+  },
+  "stars-6": {
+    "path": "/audio/voices/stars-6-48296bcc950f3446.ogg",
+    "voice": "bf_isabella",
+    "text": "Let's collect 6 stars for our moon map. Choose them, then press the tick."
+  },
+  "take-6": {
+    "path": "/audio/voices/take-6-5173094b9923bad0.ogg",
+    "voice": "bf_emma",
+    "text": "Let's send 6 fish away on the boat. Touch the fish to send them. How many fish are left?"
+  },
+  "number-7": {
+    "path": "/audio/voices/number-7-587a7691b2c36bb1.ogg",
+    "voice": "bf_emma",
+    "text": "7."
+  },
+  "pack-7": {
+    "path": "/audio/voices/pack-7-7d0ddd80e87208fb.ogg",
+    "voice": "bm_george",
+    "text": "Please put 7 apples in the picnic basket. Touch an apple to pack it. Touch it again to put it back."
+  },
+  "fuel-7": {
+    "path": "/audio/voices/fuel-7-7719337bb243e11f.ogg",
+    "voice": "bm_fable",
+    "text": "The rocket needs 7 crystals. Put them in the fuel tank, then press the tick."
+  },
+  "stars-7": {
+    "path": "/audio/voices/stars-7-17b8a376b6a9ff3e.ogg",
+    "voice": "bf_isabella",
+    "text": "Let's collect 7 stars for our moon map. Choose them, then press the tick."
+  },
+  "take-7": {
+    "path": "/audio/voices/take-7-539017f6b8f1c604.ogg",
+    "voice": "bf_emma",
+    "text": "Let's send 7 fish away on the boat. Touch the fish to send them. How many fish are left?"
+  },
+  "number-8": {
+    "path": "/audio/voices/number-8-dcbf1b5e8cca7d1c.ogg",
+    "voice": "bf_emma",
+    "text": "8."
+  },
+  "pack-8": {
+    "path": "/audio/voices/pack-8-13db1c4a3b18c7a4.ogg",
+    "voice": "bm_george",
+    "text": "Please put 8 apples in the picnic basket. Touch an apple to pack it. Touch it again to put it back."
+  },
+  "fuel-8": {
+    "path": "/audio/voices/fuel-8-dcb3df868e5d6319.ogg",
+    "voice": "bm_fable",
+    "text": "The rocket needs 8 crystals. Put them in the fuel tank, then press the tick."
+  },
+  "stars-8": {
+    "path": "/audio/voices/stars-8-9a6d436dffdbf346.ogg",
+    "voice": "bf_isabella",
+    "text": "Let's collect 8 stars for our moon map. Choose them, then press the tick."
+  },
+  "take-8": {
+    "path": "/audio/voices/take-8-07de3a37e2c0ec5b.ogg",
+    "voice": "bf_emma",
+    "text": "Let's send 8 fish away on the boat. Touch the fish to send them. How many fish are left?"
+  },
+  "number-9": {
+    "path": "/audio/voices/number-9-6d3de6a4e5f6a9ed.ogg",
+    "voice": "bf_emma",
+    "text": "9."
+  },
+  "pack-9": {
+    "path": "/audio/voices/pack-9-5fefac6041dc26c4.ogg",
+    "voice": "bm_george",
+    "text": "Please put 9 apples in the picnic basket. Touch an apple to pack it. Touch it again to put it back."
+  },
+  "fuel-9": {
+    "path": "/audio/voices/fuel-9-e6e79645f25b8a2c.ogg",
+    "voice": "bm_fable",
+    "text": "The rocket needs 9 crystals. Put them in the fuel tank, then press the tick."
+  },
+  "stars-9": {
+    "path": "/audio/voices/stars-9-91f6049e9ce58607.ogg",
+    "voice": "bf_isabella",
+    "text": "Let's collect 9 stars for our moon map. Choose them, then press the tick."
+  },
+  "take-9": {
+    "path": "/audio/voices/take-9-b558b29addc830cb.ogg",
+    "voice": "bf_emma",
+    "text": "Let's send 9 fish away on the boat. Touch the fish to send them. How many fish are left?"
+  },
+  "number-10": {
+    "path": "/audio/voices/number-10-9a8fbea1c6f20df0.ogg",
+    "voice": "bf_emma",
+    "text": "10."
+  },
+  "pack-10": {
+    "path": "/audio/voices/pack-10-2e18cc81da71f417.ogg",
+    "voice": "bm_george",
+    "text": "Please put 10 apples in the picnic basket. Touch an apple to pack it. Touch it again to put it back."
+  },
+  "fuel-10": {
+    "path": "/audio/voices/fuel-10-4109c937c63c575d.ogg",
+    "voice": "bm_fable",
+    "text": "The rocket needs 10 crystals. Put them in the fuel tank, then press the tick."
+  },
+  "stars-10": {
+    "path": "/audio/voices/stars-10-d9913094a6438daf.ogg",
+    "voice": "bf_isabella",
+    "text": "Let's collect 10 stars for our moon map. Choose them, then press the tick."
+  },
+  "take-10": {
+    "path": "/audio/voices/take-10-8e2abb3526858e7b.ogg",
+    "voice": "bf_emma",
+    "text": "Let's send 10 fish away on the boat. Touch the fish to send them. How many fish are left?"
+  },
+  "spell-mat": {
+    "path": "/audio/voices/spell-mat-f3905bd361b66399.ogg",
+    "voice": "bf_isabella",
+    "text": "Let's build the word mat. Listen to the sounds, then put the letters in order. mat."
+  },
+  "spell-sat": {
+    "path": "/audio/voices/spell-sat-b1d628a96ff550fe.ogg",
+    "voice": "bf_isabella",
+    "text": "Let's build the word sat. Listen to the sounds, then put the letters in order. sat."
+  },
+  "spell-sad": {
+    "path": "/audio/voices/spell-sad-12e6b64450415f4b.ogg",
+    "voice": "bf_isabella",
+    "text": "Let's build the word sad. Listen to the sounds, then put the letters in order. sad."
+  },
+  "spell-dad": {
+    "path": "/audio/voices/spell-dad-66d232487c9fc332.ogg",
+    "voice": "bf_isabella",
+    "text": "Let's build the word dad. Listen to the sounds, then put the letters in order. dad."
+  },
+  "spell-mad": {
+    "path": "/audio/voices/spell-mad-3231011c0f7fc143.ogg",
+    "voice": "bf_isabella",
+    "text": "Let's build the word mad. Listen to the sounds, then put the letters in order. mad."
+  },
+  "spell-sit": {
+    "path": "/audio/voices/spell-sit-c2d318ffef482012.ogg",
+    "voice": "bf_isabella",
+    "text": "Let's build the word sit. Listen to the sounds, then put the letters in order. sit."
+  },
+  "spell-pin": {
+    "path": "/audio/voices/spell-pin-1e54b78b2a7acf2b.ogg",
+    "voice": "bf_isabella",
+    "text": "Let's build the word pin. Listen to the sounds, then put the letters in order. pin."
+  },
+  "spell-pan": {
+    "path": "/audio/voices/spell-pan-d6e298ff5e84c00d.ogg",
+    "voice": "bf_isabella",
+    "text": "Let's build the word pan. Listen to the sounds, then put the letters in order. pan."
+  },
+  "spell-tap": {
+    "path": "/audio/voices/spell-tap-8b49f60a27d178d8.ogg",
+    "voice": "bf_isabella",
+    "text": "Let's build the word tap. Listen to the sounds, then put the letters in order. tap."
+  },
+  "spell-map": {
+    "path": "/audio/voices/spell-map-5895d8b92040db85.ogg",
+    "voice": "bf_isabella",
+    "text": "Let's build the word map. Listen to the sounds, then put the letters in order. map."
+  },
+  "spell-dog": {
+    "path": "/audio/voices/spell-dog-4326cf30377c1e1c.ogg",
+    "voice": "bf_isabella",
+    "text": "Let's build the word dog. Listen to the sounds, then put the letters in order. dog."
+  },
+  "spell-cat": {
+    "path": "/audio/voices/spell-cat-bbe691196aa71a92.ogg",
+    "voice": "bf_isabella",
+    "text": "Let's build the word cat. Listen to the sounds, then put the letters in order. cat."
+  },
+  "spell-cup": {
+    "path": "/audio/voices/spell-cup-e7d363c67deb4e92.ogg",
+    "voice": "bf_isabella",
+    "text": "Let's build the word cup. Listen to the sounds, then put the letters in order. cup."
+  },
+  "spell-hat": {
+    "path": "/audio/voices/spell-hat-47aaf51c134f4320.ogg",
+    "voice": "bf_isabella",
+    "text": "Let's build the word hat. Listen to the sounds, then put the letters in order. hat."
+  },
+  "spell-ship": {
+    "path": "/audio/voices/spell-ship-05e5276a04c57c49.ogg",
+    "voice": "bf_isabella",
+    "text": "Let's build the word ship. Listen to the sounds, then put the letters in order. ship."
+  },
+  "spell-chin": {
+    "path": "/audio/voices/spell-chin-6d64a4637c642571.ogg",
+    "voice": "bf_isabella",
+    "text": "Let's build the word chin. Listen to the sounds, then put the letters in order. chin."
+  },
+  "spell-ring": {
+    "path": "/audio/voices/spell-ring-3169f7879dd5cf81.ogg",
+    "voice": "bf_isabella",
+    "text": "Let's build the word ring. Listen to the sounds, then put the letters in order. ring."
+  },
+  "spell-pink": {
+    "path": "/audio/voices/spell-pink-c1029237e2063b43.ogg",
+    "voice": "bf_isabella",
+    "text": "Let's build the word pink. Listen to the sounds, then put the letters in order. pink."
+  },
+  "visit-meadow": {
+    "path": "/audio/voices/visit-meadow-053645a3d0aa5926.ogg",
+    "voice": "bf_emma",
+    "text": "Bramble is waving from his pizza shop. Press the green A button to help him make a pizza."
+  },
+  "visit-woods": {
+    "path": "/audio/voices/visit-woods-4c8e750ff650772f.ogg",
+    "voice": "bf_emma",
+    "text": "Let's visit Olive's story tree."
+  },
+  "visit-cove": {
+    "path": "/audio/voices/visit-cove-87297b70c7217c81.ogg",
+    "voice": "bf_emma",
+    "text": "Let's visit Marina's harbour."
+  },
+  "visit-garden": {
+    "path": "/audio/voices/visit-garden-27c6520aa1a60141.ogg",
+    "voice": "bf_emma",
+    "text": "Let's visit Tilly's growing patch."
+  },
+  "visit-home": {
+    "path": "/audio/voices/visit-home-74d2257de7f47b1d.ogg",
+    "voice": "bf_emma",
+    "text": "Let's visit your home and garden."
+  },
+  "visit-shop": {
+    "path": "/audio/voices/visit-shop-d410ae566f7b4c0a.ogg",
+    "voice": "bf_emma",
+    "text": "Let's visit Poppy's little shops."
+  },
+  "visit-rocket": {
+    "path": "/audio/voices/visit-rocket-8cbcab49d3ff3ef3.ogg",
+    "voice": "bf_emma",
+    "text": "Let's visit Pip's rocket."
+  },
+  "visit-moon": {
+    "path": "/audio/voices/visit-moon-b1d97cfe1f2ecf98.ogg",
+    "voice": "bf_emma",
+    "text": "Let's visit the moon."
+  },
+  "bramble-success": {
+    "path": "/audio/voices/bramble-success-7ab3a39f3642f173.ogg",
+    "voice": "bm_george",
+    "text": "Lovely work! You helped me. Here are two stars for your collection."
+  },
+  "bramble-retry": {
+    "path": "/audio/voices/bramble-retry-e399f82f1aa5e3c5.ogg",
+    "voice": "bm_george",
+    "text": "Let's try again, little friend. Take your time, and have another look."
+  },
+  "olive-success": {
+    "path": "/audio/voices/olive-success-3a813c4089e50870.ogg",
+    "voice": "bf_isabella",
+    "text": "Lovely work! You helped me. Here are two stars for your collection."
+  },
+  "olive-retry": {
+    "path": "/audio/voices/olive-retry-e414ec4e972f25bb.ogg",
+    "voice": "bf_isabella",
+    "text": "Let's try again, little friend. Take your time, and have another look."
+  },
+  "marina-success": {
+    "path": "/audio/voices/marina-success-f3ea0c15554db51d.ogg",
+    "voice": "bf_emma",
+    "text": "Lovely work! You helped me. Here are two stars for your collection."
+  },
+  "marina-retry": {
+    "path": "/audio/voices/marina-retry-d77c210588adfeea.ogg",
+    "voice": "bf_emma",
+    "text": "Let's try again, little friend. Take your time, and have another look."
+  },
+  "tilly-success": {
+    "path": "/audio/voices/tilly-success-faf08622e5231c81.ogg",
+    "voice": "bf_lily",
+    "text": "Lovely work! You helped me. Here are two stars for your collection."
+  },
+  "tilly-retry": {
+    "path": "/audio/voices/tilly-retry-f3bd47e9a47c9909.ogg",
+    "voice": "bf_lily",
+    "text": "Let's try again, little friend. Take your time, and have another look."
+  },
+  "pip-success": {
+    "path": "/audio/voices/pip-success-9a0bb692b8584b4e.ogg",
+    "voice": "bm_fable",
+    "text": "Lovely work! You helped me. Here are two stars for your collection."
+  },
+  "pip-retry": {
+    "path": "/audio/voices/pip-retry-18a35001ab594b74.ogg",
+    "voice": "bm_fable",
+    "text": "Let's try again, little friend. Take your time, and have another look."
+  },
+  "nova-success": {
+    "path": "/audio/voices/nova-success-0d372d9328bd9a50.ogg",
+    "voice": "bf_isabella",
+    "text": "Lovely work! You helped me. Here are two stars for your collection."
+  },
+  "nova-retry": {
+    "path": "/audio/voices/nova-retry-c76b44bfbc674aa7.ogg",
+    "voice": "bf_isabella",
+    "text": "Let's try again, little friend. Take your time, and have another look."
+  },
+  "pizza-order-woods": {
+    "path": "/audio/voices/pizza-order-woods-16fa2ea2e1b7f84c.ogg",
+    "voice": "bf_isabella",
+    "text": "Hello! Could I have a woodland pizza, please? Here is my recipe. Work out each little puzzle to find how many toppings I would like. Thank you!"
+  },
+  "pizza-order-garden": {
+    "path": "/audio/voices/pizza-order-garden-cda802bb7db5ab64.ogg",
+    "voice": "bf_lily",
+    "text": "Hello! Could I have a garden pizza, please? Here is my recipe. Work out each little puzzle to find how many toppings I would like. Thank you!"
+  },
+  "pizza-order-cove": {
+    "path": "/audio/voices/pizza-order-cove-6b44d3c74c642573.ogg",
+    "voice": "bf_emma",
+    "text": "Hello! Could I have a harbour pizza, please? Here is my recipe. Work out each little puzzle to find how many toppings I would like. Thank you!"
+  },
+  "pizza-order-rocket": {
+    "path": "/audio/voices/pizza-order-rocket-933a7a8bac970677.ogg",
+    "voice": "bm_fable",
+    "text": "Hello! Could I have a space pizza, please? Here is my recipe. Work out each little puzzle to find how many toppings I would like. Thank you!"
+  },
+  "topping-tomato": {
+    "path": "/audio/voices/topping-tomato-8d5bbe2bde115e0b.ogg",
+    "voice": "bm_george",
+    "text": "Let's count the tomatoes. Work out the recipe, then add them to the pizza, one at a time."
+  },
+  "topping-mushroom": {
+    "path": "/audio/voices/topping-mushroom-96858120f20ca31d.ogg",
+    "voice": "bm_george",
+    "text": "Let's count the mushrooms. Work out the recipe, then add them to the pizza, one at a time."
+  },
+  "topping-pepper": {
+    "path": "/audio/voices/topping-pepper-8b417963ff7e3158.ogg",
+    "voice": "bm_george",
+    "text": "Let's count the peppers. Work out the recipe, then add them to the pizza, one at a time."
+  },
+  "topping-olive": {
+    "path": "/audio/voices/topping-olive-43bc1523c4c941fd.ogg",
+    "voice": "bm_george",
+    "text": "Let's count the olives. Work out the recipe, then add them to the pizza, one at a time."
+  },
+  "topping-sweetcorn": {
+    "path": "/audio/voices/topping-sweetcorn-58f36206a94de67b.ogg",
+    "voice": "bm_george",
+    "text": "Let's count the pieces of sweetcorn. Work out the recipe, then add them to the pizza, one at a time."
+  },
+  "pizza-plus-0-1": {
+    "path": "/audio/voices/pizza-plus-0-1-9f5ca54cbed72410.ogg",
+    "voice": "bm_george",
+    "text": "0 plus 1. How many is that altogether?"
+  },
+  "pizza-minus-1-0": {
+    "path": "/audio/voices/pizza-minus-1-0-31ccb9bf642a1f09.ogg",
+    "voice": "bm_george",
+    "text": "1 take away 0. How many are left?"
+  },
+  "pizza-minus-1-1": {
+    "path": "/audio/voices/pizza-minus-1-1-7f8f6e7398ee088c.ogg",
+    "voice": "bm_george",
+    "text": "1 take away 1. How many are left?"
+  },
+  "pizza-plus-1-1": {
+    "path": "/audio/voices/pizza-plus-1-1-32dc6cdac5131c2b.ogg",
+    "voice": "bm_george",
+    "text": "1 plus 1. How many is that altogether?"
+  },
+  "pizza-minus-2-0": {
+    "path": "/audio/voices/pizza-minus-2-0-d6df5148add7a61e.ogg",
+    "voice": "bm_george",
+    "text": "2 take away 0. How many are left?"
+  },
+  "pizza-minus-2-1": {
+    "path": "/audio/voices/pizza-minus-2-1-8e1d8b58b5819b49.ogg",
+    "voice": "bm_george",
+    "text": "2 take away 1. How many are left?"
+  },
+  "pizza-plus-1-2": {
+    "path": "/audio/voices/pizza-plus-1-2-f66cdf10761f0ea2.ogg",
+    "voice": "bm_george",
+    "text": "1 plus 2. How many is that altogether?"
+  },
+  "pizza-minus-3-0": {
+    "path": "/audio/voices/pizza-minus-3-0-2fbb4f4ee3e7f7d1.ogg",
+    "voice": "bm_george",
+    "text": "3 take away 0. How many are left?"
+  },
+  "pizza-minus-3-1": {
+    "path": "/audio/voices/pizza-minus-3-1-ead515efb06c228e.ogg",
+    "voice": "bm_george",
+    "text": "3 take away 1. How many are left?"
+  },
+  "pizza-plus-2-2": {
+    "path": "/audio/voices/pizza-plus-2-2-6f3aff5c2543b86b.ogg",
+    "voice": "bm_george",
+    "text": "2 plus 2. How many is that altogether?"
+  },
+  "pizza-minus-4-0": {
+    "path": "/audio/voices/pizza-minus-4-0-463eaf1a28d7e2eb.ogg",
+    "voice": "bm_george",
+    "text": "4 take away 0. How many are left?"
+  },
+  "pizza-minus-4-1": {
+    "path": "/audio/voices/pizza-minus-4-1-9fa01dfcb3c3db34.ogg",
+    "voice": "bm_george",
+    "text": "4 take away 1. How many are left?"
+  },
+  "pizza-plus-2-3": {
+    "path": "/audio/voices/pizza-plus-2-3-198d1f87caa5f034.ogg",
+    "voice": "bm_george",
+    "text": "2 plus 3. How many is that altogether?"
+  },
+  "pizza-minus-5-0": {
+    "path": "/audio/voices/pizza-minus-5-0-2bc2e281cdf008a4.ogg",
+    "voice": "bm_george",
+    "text": "5 take away 0. How many are left?"
+  },
+  "pizza-minus-5-1": {
+    "path": "/audio/voices/pizza-minus-5-1-f20c24d46a09f54e.ogg",
+    "voice": "bm_george",
+    "text": "5 take away 1. How many are left?"
+  },
+  "pizza-plus-3-3": {
+    "path": "/audio/voices/pizza-plus-3-3-f778817336d259c7.ogg",
+    "voice": "bm_george",
+    "text": "3 plus 3. How many is that altogether?"
+  },
+  "pizza-minus-6-0": {
+    "path": "/audio/voices/pizza-minus-6-0-a064ada3e17cace6.ogg",
+    "voice": "bm_george",
+    "text": "6 take away 0. How many are left?"
+  },
+  "pizza-minus-6-1": {
+    "path": "/audio/voices/pizza-minus-6-1-cad2099803ad28a3.ogg",
+    "voice": "bm_george",
+    "text": "6 take away 1. How many are left?"
+  },
+  "pizza-plus-3-4": {
+    "path": "/audio/voices/pizza-plus-3-4-37343a393cbd1c83.ogg",
+    "voice": "bm_george",
+    "text": "3 plus 4. How many is that altogether?"
+  },
+  "pizza-minus-7-0": {
+    "path": "/audio/voices/pizza-minus-7-0-7f43aa507514688c.ogg",
+    "voice": "bm_george",
+    "text": "7 take away 0. How many are left?"
+  },
+  "pizza-minus-7-1": {
+    "path": "/audio/voices/pizza-minus-7-1-b5e08f0593ecbc8e.ogg",
+    "voice": "bm_george",
+    "text": "7 take away 1. How many are left?"
+  },
+  "pizza-plus-4-4": {
+    "path": "/audio/voices/pizza-plus-4-4-1ccad2de1551d3e8.ogg",
+    "voice": "bm_george",
+    "text": "4 plus 4. How many is that altogether?"
+  },
+  "pizza-minus-8-0": {
+    "path": "/audio/voices/pizza-minus-8-0-c39feebc03721c0b.ogg",
+    "voice": "bm_george",
+    "text": "8 take away 0. How many are left?"
+  },
+  "pizza-minus-8-1": {
+    "path": "/audio/voices/pizza-minus-8-1-b7b975c9a45cbb5a.ogg",
+    "voice": "bm_george",
+    "text": "8 take away 1. How many are left?"
+  },
+  "pizza-plus-4-5": {
+    "path": "/audio/voices/pizza-plus-4-5-d2024e514cd59e8b.ogg",
+    "voice": "bm_george",
+    "text": "4 plus 5. How many is that altogether?"
+  },
+  "pizza-minus-9-0": {
+    "path": "/audio/voices/pizza-minus-9-0-21b3f6994c7ca50d.ogg",
+    "voice": "bm_george",
+    "text": "9 take away 0. How many are left?"
+  },
+  "pizza-minus-9-1": {
+    "path": "/audio/voices/pizza-minus-9-1-80e7124531c2c03b.ogg",
+    "voice": "bm_george",
+    "text": "9 take away 1. How many are left?"
+  },
+  "pizza-plus-5-5": {
+    "path": "/audio/voices/pizza-plus-5-5-9ad03f2c10387be9.ogg",
+    "voice": "bm_george",
+    "text": "5 plus 5. How many is that altogether?"
+  },
+  "pizza-minus-10-0": {
+    "path": "/audio/voices/pizza-minus-10-0-3d0a2ebb5b367ecf.ogg",
+    "voice": "bm_george",
+    "text": "10 take away 0. How many are left?"
+  },
+  "pizza-minus-10-1": {
+    "path": "/audio/voices/pizza-minus-10-1-09c67370fd33d3bd.ogg",
+    "voice": "bm_george",
+    "text": "10 take away 1. How many are left?"
+  },
+  "pizza-bake": {
+    "path": "/audio/voices/pizza-bake-0f3d4e92b1b9878c.ogg",
+    "voice": "bm_george",
+    "text": "All the toppings match the recipe! Into the oven it goes. What a wonderful pizza!"
+  },
+  "pizza-retry": {
+    "path": "/audio/voices/pizza-retry-006d34319d839dce.ogg",
+    "voice": "bm_george",
+    "text": "Let's check this topping together. Count the little pictures in the recipe. You can add one, or take one off."
+  },
+  "pizza-next": {
+    "path": "/audio/voices/pizza-next-9c1cd030caf9e489.ogg",
+    "voice": "bm_george",
+    "text": "That's just right! Let's look at the next topping in our recipe."
+  }
+}

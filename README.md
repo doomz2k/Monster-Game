@@ -1,81 +1,49 @@
-# Monster-Game
+# Monster & friends
 
-Clover's **Monster Game**, a browser adventure for a four-year-old, starring an animated, friendly yellow character named **Monster**.
+Clover’s browser adventure: make a monster, visit animated neighbours, earn stars, decorate a home and garden, and repair a rocket to reach the moon. Progress is saved in this browser.
 
-Explore a connected 3D island with soft boundaries, a follow camera, walking, hopping, blinking, waving and celebrations. There are no lives, timers or penalties. Progress stays in this browser.
+## Play
 
-Monster has a continuous sculpted body, a soft tummy that follows its surface, fine plush texture and short fur tufts, curved horns, detailed hazel eyes with independent eyelids, rounded fingers and toes, and a curled tail. The character rig smooths walking, breathing, waving, jumping and landing. Clothes follow the same rig; the explorer hat includes horn openings. The dressing room uses softer key/fill/rim lighting, environment reflections, contact shading and a smooth display stand. The character and its materials are generated locally in `lib/monster-model.ts`; no external model downloads are needed.
+- **A (green):** choose, confirm, talk or hop. **B (red):** reject or go back.
+- **Stick / D-pad:** move or choose a picture. **X:** map (turn Monster in dress-up). **Y:** repeat instructions.
+- **Start:** hidden grown-up settings. No parental entry appears in the welcome screen, picture map or child pause menu. Shoulder and trigger buttons are unused.
+- Keyboard: arrows / WASD, Enter / Space, Escape, M, Y; P opens grown-up settings. Touch movement is available on touch devices.
 
-The launch screen lets the child start or continue an adventure, dress up Monster, or open grown-up settings. Dress-up is also available from Pause and immediately after earning a new outfit reward. The live 3D preview can be turned around; equipped pieces follow Monster throughout the island.
+Monster has five body shapes, configurable eyes, horns, ears, tail, face, patterns, surface textures and colours. Seven clothing shelves can be worn together: hats, neckwear, facewear, backs, clothes, footwear and badges. Earned wardrobe rewards remain unlocked when stars are spent. Idle gestures include breathing, blinking, double blinks, glances, scratching, stretching and weight shifts; walking adds wobble, sway and foot motion. Reduced-motion settings suppress extra gestures.
 
-Exploration keeps the screen clear: one pause button, with a picture and green A cue only beside an activity. The island's floating pictures match the picture map. A short spoken invitation plays after arriving, waits for existing audio to finish, and does not repeat while the child stays at the same spot. Y repeats guidance on demand. Touch movement and hopping controls appear only on touch devices without an active controller.
+## Our neighbourhood
 
-The map, star total, sound switch and grown-up settings live in Pause. Picture menus speak their selected action; stick/D-pad navigation follows their two-column layout. Activities use spoken instructions, objects and symbols, retaining letters, words and numbers as learning targets. Written control help is tucked into Pause → Grown-up help. When narration is muted or unavailable, activities also expose a grown-up prompt; unverified phonemes still require an adult to model them.
+| Place                 | Activity                                                                                                                                                  |
+| --------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Bramble’s pizza shop  | Four customers order recipes with three toppings. Solve each addition or subtraction puzzle, add or remove toppings from a 3D pizza, then bake and serve. |
+| Olive’s story tree    | Introduce pure sounds, recognise graphemes and build decodable words from known sounds. Unverified audio needs a grown-up to model the sound.             |
+| Marina’s harbour      | Move fish to a boat and work out how many remain.                                                                                                         |
+| Tilly’s growing patch | Combine two concrete groups of flowers and find the total.                                                                                                |
+| Poppy’s shops         | Buy seeds, furniture and garden decorations using earned stars.                                                                                           |
+| My home               | Plant and water six garden plots, and arrange owned furniture and garden items.                                                                           |
+| Pip’s crashed rocket  | Repair a pattern panel, fill the fuel tank and connect the battery. Three repairs unlock moon travel.                                                     |
+| Nova’s moon meadow    | Discover Earth, the Sun, Saturn and the Moon, and collect stars in lower gravity.                                                                         |
 
-## Dress-up and rewards
+Each completed order or mission earns two spendable stars. Replaying the same completion event cannot duplicate its reward; a new round is a new job. There are no timers, lives or penalties. Maths is adjustable between a 1–5 and 1–10 range; phonics stays within the grown-up’s selected sound set.
 
-Choose one hat and one accessory. The bobble beanie, party hat, berry bow tie and cosy scarf are available from the start, along with options to remove either item. More pieces unlock with stars earned for distinct challenges; replaying an already completed challenge does not create another star.
+## Voices and phonics
 
-| Stars | New item        |
-| ----- | --------------- |
-| 3     | Explorer hat    |
-| 5     | Round glasses   |
-| 8     | Flower crown    |
-| 12    | Little backpack |
-| 16    | Rainbow crown   |
-| 24    | Superstar medal |
+**Narration:** 174 bundled Ogg recordings generated locally using free Kokoro and British voice profiles only. Nothing is generated during play and no paid voice service is called. Browser speech synthesis is disabled; missing narration remains visual. See [voice generation](docs/VOICES.md).
 
-Outfits save automatically in the existing browser save. Earlier saves keep their stars, sounds and settings and receive the starter outfit. Unlocking an item does not change the child's outfit automatically. Rewards are permanent while that browser save is retained; there are no purchases or random rewards.
+**Phonics is not yet auditorily verified.** The actual 26 inherited files have been decoded, measured and hashed in [the audit](docs/phonics-audit.json). Six correspondences (j, v, y, w, z, x) have no supplied clip. Their source history cannot establish a British speaker or a pure sound. This session cannot receive audio input and therefore cannot certify pronunciation. No unchecked clip plays in a learning activity. Older approvals no longer count: the sound studio requires an explicit British pure-sound listening check. Imports begin unchecked.
 
-In the dressing room, use the stick/D-pad or arrows to choose an item and **A / Enter / Space** to wear it. **LB / RB** or **Q / E** switches between hats and accessories. **X / M** turns Monster by a quarter turn; the right stick also rotates the preview. **B / Escape** or **All dressed!** returns to the previous screen. Locked items remain selectable so their spoken unlock requirement can be heard with **Y**.
+Open **Start / P → Sound studio** to compare each recording with the linked UK pronunciation guide and add or approve a correct recording. No letter name, added “uh”, word fragment or synthetic phoneme fallback is permitted. This is an independent practice game, not an endorsed or certified Read Write Inc. product. See [phonics design and remaining review](docs/PHONICS.md) and [audio provenance](public/audio/CREDITS.md).
 
-| Area             | Activities                                                                                                                          |
-| ---------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
-| Counting Meadow  | Count objects, touch each object to count aloud, recognise circles, squares and triangles                                           |
-| Whispering Woods | Learn and recognise Set 1 sounds, then blend words made only from introduced sounds; a rocket and friendly alien echo Space Phonics |
-| Bubble Bay       | Count sea creatures, compare quantities, and take shells away; inspired by Deep Sea Numbers                                         |
-| Together Garden  | Add concrete dice quantities and grow flowers; inspired by Garden Maths                                                             |
+## Development
 
-The default maths range is 1–5, with an optional 1–10 range. The default phonics group is the first five sounds, m a s d t; a grown-up can expand the selection through Set 1. Replaying is always allowed. Three activities in each area complete the island's introductory adventure; additional questions remain available.
-
-## Run
-
-Requires Node.js 24 and npm.
+Node.js 24 and npm:
 
 ```sh
 npm ci
 npm run dev
 ```
 
-Open the Local URL printed by the server. Click **Let's play** once to enable browser audio, then use the controller. WebGL2 and graphics acceleration are required. Connect an Xbox controller over USB or Bluetooth; the browser must expose it with the standard Gamepad mapping.
-
-| Action                        | Xbox controller     | Keyboard                |
-| ----------------------------- | ------------------- | ----------------------- |
-| Move                          | Left stick or D-pad | WASD or arrows          |
-| Look around                   | Right stick         | Automatic follow camera |
-| Hop / enter activity / choose | A                   | Space or Enter          |
-| Repeat prompt                 | Y                   | Y                       |
-| World map                     | X                   | M                       |
-| Back / leave activity         | B                   | Escape                  |
-| Pause                         | Menu                | P                       |
-
-On the map and activity screens, use the stick/D-pad to choose and A to confirm. The game pauses if a connected controller disconnects or the window loses focus. Touch movement controls appear on touch devices. Grown-up settings and sound imports use the ordinary browser controls.
-
-## Phonics and audio: current status
-
-**This is an independent practice companion, not an endorsed or certified Read Write Inc. product. The phoneme recordings are not yet teacher-verified.** The data follows the published Oxford Owl Set 1 order, including its listed ck correspondence, and blending uses only sounds introduced to the child.
-
-- Every new sound is modelled before recognition.
-- Same-sound spellings such as c, k and ck never compete in an auditory matching question.
-- Unchecked or missing sounds use a grown-up-led activity. They are never generated by browser text-to-speech.
-- **Pause → Grown-ups → Sound studio** lets an adult compare clips against the linked Ruth Miskin films, import a recording, and explicitly enable each checked sound.
-- 26 unverified candidates are included from `doomz2k/clover-games`' sound-lab snapshots. Six correspondences (j, v, y, w, z, x) have no bundled recording.
-- Checking a clip is a local parental check, not independent teacher certification. Replacing a clip removes its approval.
-- Instructions and whole words use selected existing narration or a British English browser voice. Device voice availability varies.
-
-See [the phonics implementation and verification record](docs/PHONICS.md) and [audio provenance](public/audio/CREDITS.md). A competent UK phonics practitioner should complete auditory verification before independent child use of recorded phonemes.
-
-## Validation
+Open the Local URL printed by the server. WebGL2 is required. Xbox controllers need the browser’s standard Gamepad mapping.
 
 ```sh
 npm run typecheck
@@ -84,16 +52,6 @@ npm test
 npm run build
 ```
 
-Tests exercise progression and decodability, 2,400 generated maths questions, repeat scoring, corrupted saves, island bounds, controller button edges/disconnection, audio approval and no-TTS-fallback rules, binary audio assets, and optional agent-tool contracts.
+Tests cover recipes, selected-range maths, phonics decodability, gated recordings, British voice profiles and assets, quest rewards, moon unlocking, purchases, saving, clothing independence, finite animation geometry, controller buttons and optional agent tools. Browser playtesting supplements these checks; physical Xbox hardware and auditory phonics approval are separate outstanding checks.
 
-Lint covers the game's source. Generated shadcn primitives and their mobile hook retain the starter's implementation and are excluded from lint; the entire project is still typechecked.
-
-Physical Xbox testing, auditory review by a phonics practitioner, and full browser interaction/visual testing have not been performed in this development session. The preview route was checked over HTTP and the production build is validated separately.
-
-## Source
-
-Development and commits use `main` in [doomz2k/Monster-Game](https://github.com/doomz2k/Monster-Game). Inspiration and selected audio are from [doomz2k/clover-games](https://github.com/doomz2k/clover-games), reference commit `51869d01a4e0efc12bc1982b63064bd6caddff3b`. The reference checkout under `work/` is ignored and is not part of this project.
-
-The game uses React, TypeScript, Three.js and the Sites/Vinext starter. Learning logic is in `lib/learning.ts`, phonics data in `lib/phonics.ts`, the 3D island in `lib/world.ts`, controller support in `lib/input.ts`, and audio policy in `lib/audio.ts`. No account, microphone recording, chat, analytics or personal profile is built into the game. Sites may require owner sign-in for a private hosted deployment.
-
-Optional WebMCP tools read state and visit an area. They cannot answer a question, approve audio or award a star. A supported live WebMCP host was unavailable for integration validation; their contracts are tested with an in-memory registry.
+Source is kept on `main` in [doomz2k/Monster-Game](https://github.com/doomz2k/Monster-Game). The project uses React, TypeScript, Three.js and Sites/Vinext. Learning and economy logic is in `lib/adventure.ts`; `lib/world.ts`, `lib/village.ts` and `lib/neighbours.ts` build the island. Optional WebMCP tools read state and visit learning areas, without answering questions, approving sounds or awarding stars. Existing browser saves migrate automatically.

@@ -25,7 +25,7 @@ export class GameInput {
     private movement: (x: number, y: number, turn: number) => void,
     private connection: (connected: boolean, name: string) => void,
   ) {
-    window.addEventListener('keydown', this.down);
+    window.addEventListener('keydown', this.down, true);
     window.addEventListener('keyup', this.up);
     window.addEventListener('blur', this.clear);
     document.addEventListener('visibilitychange', this.visibility);
@@ -46,8 +46,6 @@ export class GameInput {
       KeyM: 'map',
       KeyY: 'listen',
       KeyP: 'pause',
-      KeyQ: 'previousTab',
-      KeyE: 'nextTab',
       ArrowLeft: 'left',
       ArrowRight: 'right',
       ArrowUp: 'up',
@@ -108,8 +106,6 @@ export class GameInput {
           1: 'back',
           2: 'map',
           3: 'listen',
-          4: 'previousTab',
-          5: 'nextTab',
           9: 'pause',
           12: 'up',
           13: 'down',
@@ -153,7 +149,7 @@ export class GameInput {
   };
   dispose() {
     cancelAnimationFrame(this.frame);
-    window.removeEventListener('keydown', this.down);
+    window.removeEventListener('keydown', this.down, true);
     window.removeEventListener('keyup', this.up);
     window.removeEventListener('blur', this.clear);
     document.removeEventListener('visibilitychange', this.visibility);

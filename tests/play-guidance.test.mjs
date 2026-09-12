@@ -91,12 +91,12 @@ test('optional narration cannot interrupt a lesson, superseding prompt, or muted
     );
     players.at(-1).onended();
     await replacement;
-    assert.equal(director.trySay('1'), true);
-    assert.equal(director.trySay('2'), false);
+    assert.equal(director.trySay('1.'), true);
+    assert.equal(director.trySay('2.'), false);
     director.setMuted(true);
     assert.equal(director.trySay('1'), false);
     director.muted = false;
-    assert.equal(director.trySay('1'), true);
+    assert.equal(director.trySay('1.'), true);
   } finally {
     director.dispose();
     globalThis.window = previousWindow;

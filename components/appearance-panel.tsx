@@ -33,6 +33,7 @@ export function AppearancePanel({
           <div className="colour-choices">
             {PALETTE.map((colour, i) => (
               <button
+                data-game-choice
                 key={colour}
                 type="button"
                 style={{ backgroundColor: colour }}
@@ -62,6 +63,7 @@ export function AppearancePanel({
             <div className="look-choices">
               {LOOK_OPTIONS[key].map((option) => (
                 <button
+                  data-game-choice
                   key={option}
                   type="button"
                   aria-pressed={value[key] === option}

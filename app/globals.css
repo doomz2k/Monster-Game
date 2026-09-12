@@ -3,6 +3,7 @@
 @import 'shadcn/tailwind.css';
 @import './wardrobe.css';
 @import './play.css';
+@import './adventure.css';
 @custom-variant dark (&:is(.dark *));
 @theme inline {
   --color-background: var(--background);

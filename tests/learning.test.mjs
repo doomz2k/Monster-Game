@@ -154,13 +154,25 @@ test('candidates cannot become teaching audio without explicit review', () => {
   assert.equal(approvedPath('m', {}), null);
   assert.equal(approvedPath('m', { m: { approved: false } }), null);
   assert.equal(
-    approvedPath('m', { m: { approved: true } }),
+    approvedPath('m', { m: { approved: true, standard: 'british-pure-v1' } }),
     '/audio/phonemes/m.ogg',
   );
-  assert.equal(approvedPath('j', { j: { approved: true } }), null);
+  assert.equal(
+    approvedPath('m', { m: { approved: true } }),
+    null,
+    'Old approvals do not certify British pure sounds',
+  );
+  assert.equal(
+    approvedPath('j', { j: { approved: true, standard: 'british-pure-v1' } }),
+    null,
+  );
   assert.equal(
     approvedPath('j', {
-      j: { approved: true, data: 'data:audio/wav;base64,AAA' },
+      j: {
+        approved: true,
+        standard: 'british-pure-v1',
+        data: 'data:audio/wav;base64,AAA',
+      },
     }),
     'data:audio/wav;base64,AAA',
   );

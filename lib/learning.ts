@@ -1,6 +1,11 @@
 import { SOUNDS, decodableWords, soundChoices } from './phonics';
 import { readOutfit, starterOutfit, type Outfit } from './wardrobe';
 import {
+  freshAdventure,
+  readAdventure,
+  type AdventureProgress,
+} from './adventure';
+import {
   defaultAppearance,
   readAppearance,
   type Appearance,
@@ -81,6 +86,7 @@ export type ProgressData = {
   mathsMax: 5 | 10;
   outfit: Outfit;
   appearance: Appearance;
+  adventure: AdventureProgress;
 };
 export const freshProgress = (): ProgressData => ({
   version: 1,
@@ -91,6 +97,7 @@ export const freshProgress = (): ProgressData => ({
   mathsMax: 5,
   outfit: starterOutfit(),
   appearance: defaultAppearance(),
+  adventure: freshAdventure(),
 });
 export function readProgress(raw: string | null): ProgressData {
   try {
@@ -126,6 +133,11 @@ export function readProgress(raw: string | null): ProgressData {
     clean.mathsMax = p.mathsMax === 10 ? 10 : 5;
     clean.outfit = readOutfit(p.outfit, clean.completed.length);
     clean.appearance = readAppearance(p.appearance);
+    clean.adventure = readAdventure(p.adventure, clean.completed.length);
+    clean.outfit = readOutfit(
+      p.outfit,
+      clean.completed.length + clean.adventure.earned,
+    );
     return clean;
   } catch {
     return freshProgress();

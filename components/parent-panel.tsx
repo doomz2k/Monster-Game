@@ -206,12 +206,16 @@ export function ParentPanel({
                 [selected]: {
                   ...reviews[selected],
                   approved,
+                  standard: approved ? 'british-pure-v1' : undefined,
                   checkedAt: approved ? new Date().toISOString() : undefined,
                 },
               })
             }
           />
-          <span>I checked this clip against the guide. Use it in play.</span>
+          <span>
+            I listened and checked this is the correct British pure sound, with
+            no letter name, added “uh”, or extra syllable. Use it in play.
+          </span>
         </label>
       </div>
       {error && (
@@ -230,9 +234,10 @@ export function ParentPanel({
         <p>
           Read Write Inc. is a programme from Ruth Miskin and Oxford University
           Press. This independent game is not endorsed or certified by them. The
-          supplied candidate recordings have not been teacher-verified. Ordinary
-          text-to-speech is used only for instructions and whole words, never as
-          a fallback for isolated sounds.
+          supplied candidate recordings have not been teacher-verified.
+          Instructions use recorded British Kokoro voices. Browser
+          text-to-speech is disabled, and no synthetic fallback is allowed for
+          isolated sounds.
         </p>
       </div>
     </div>

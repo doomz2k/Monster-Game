@@ -1,6 +1,6 @@
 # Phonics design and verification record
 
-Research checked 9 September 2026. This document describes implemented behaviour and unresolved verification, not an accreditation claim.
+Research checked 12 September 2026. This document describes implemented behaviour and unresolved verification, not an accreditation claim.
 
 ## Primary references
 
@@ -30,7 +30,7 @@ The 26 inherited `__live.ogg` files are therefore **candidates only**, all disab
 
 ## Runtime audio guarantee
 
-A phoneme is played in an activity only if the local review record explicitly approves that grapheme and a clip is available. Otherwise a grown-up is asked to model it. There is no letter-name, word-fragment, synthetic phoneme, or silent-success fallback. Playback errors produce a visible message. Imported audio is decoded, constrained to 0.05–5 seconds and 2 MB, and starts unchecked. Saving an approval can fail visibly if browser storage is full.
+A phoneme is played in an activity only if the local review record explicitly approves that grapheme under the British pure-sound review standard and a clip is available. Otherwise a grown-up is asked to model it. There is no letter-name, word-fragment, synthetic phoneme, or silent-success fallback. Playback errors produce a visible message. Imported audio is decoded, constrained to 0.05–5 seconds and 2 MB, and starts unchecked. Saving an approval can fail visibly if browser storage is full.
 
 The runtime gate is tested; it **does not certify the linguistic quality of an approved file**. Local checking is a parent-controlled preference, not a substitute for a practitioner review.
 
@@ -46,8 +46,14 @@ For every clip, compare it with the official pronunciation film and check:
 6. Clear beginning/end, comfortable volume, no clipping, background noise or truncation.
 7. The same recording remains clear in sequential word blending.
 
-Record the reviewer, date, final file hash and rationale before describing the sound bank as verified. No entries have yet completed this independent review. Browser-based TTS is used for ordinary narration and whole words only and is not evidence of phoneme accuracy.
+Record the reviewer, date, final file hash and rationale before describing the sound bank as verified. No entries have yet completed this independent review. Instructions and whole words now use the bundled British Kokoro bank. Browser TTS is disabled entirely.
 
 ## Tests and limitations
 
 Automated tests confirm order, grapheme integrity, decodability, non-ambiguous options and sound-gate behaviour. They do not listen to audio and cannot assess schwa, articulation or accents. Visual inspection and controller hardware acceptance remain separate from programmatic tests.
+
+## 12 September file audit
+
+[`phonics-audit.json`](phonics-audit.json) records the SHA-256, decoded duration, sample rate, channels, peak and quiet boundaries of every actual inherited file. All 26 decode; six entries are missing. None has passed auditory verification. The current audio tool explicitly reports that audio input is unsupported, so a pronunciation or British-accent assessment could not be performed. Code, waveform and file-header checks do not close that gap.
+
+The historic sound-lab provenance permits generated replacements, so a Wikimedia label is insufficient evidence of the delivered phoneme. These clips stay disabled. Previous approvals predate the British-only requirement and are invalidated; the current review explicitly checks British pronunciation, no letter name, no appended schwa, and no extra syllables. A practitioner or competent British adult must listen against the linked official pure-sounds film and replace inaccurate or missing clips before recorded phonics can be described as ready. No publisher film audio has been copied into the game.

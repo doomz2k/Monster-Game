@@ -51,8 +51,8 @@ test('Xbox controls use rising button edges, stick deadzone and disconnect pause
   pad.buttons[5].pressed = true;
   poll(1350);
   poll(1360);
-  assert.equal(actions.filter((a) => a === 'previousTab').length, 1);
-  assert.equal(actions.filter((a) => a === 'nextTab').length, 1);
+  assert.equal(actions.filter((a) => a === 'previousTab').length, 0);
+  assert.equal(actions.filter((a) => a === 'nextTab').length, 0);
   const keyboardEvent = (code) => ({
     code,
     repeat: false,
@@ -60,8 +60,16 @@ test('Xbox controls use rising button edges, stick deadzone and disconnect pause
   });
   events.get('keydown')(keyboardEvent('KeyQ'));
   events.get('keydown')(keyboardEvent('KeyE'));
-  assert.equal(actions.filter((a) => a === 'previousTab').length, 2);
-  assert.equal(actions.filter((a) => a === 'nextTab').length, 2);
+  assert.equal(actions.filter((a) => a === 'previousTab').length, 0);
+  assert.equal(actions.filter((a) => a === 'nextTab').length, 0);
+  const beforeTriggers = actions.length;
+  pad.buttons[6].pressed = pad.buttons[7].pressed = true;
+  poll(1370);
+  assert.equal(actions.length, beforeTriggers);
+  pad.buttons[1].pressed = pad.buttons[9].pressed = true;
+  poll(1380);
+  assert.ok(actions.includes('back'));
+  assert.ok(actions.includes('pause'));
   pad.axes[0] = 1;
   poll(1400);
   assert.equal(moves.at(-1)[0], 1);

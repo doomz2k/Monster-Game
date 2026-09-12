@@ -4,6 +4,14 @@ import { createMonster } from './monster-model';
 import { ZONES, clampToIsland, nearestZone, type ZoneId } from './learning';
 import { COSMETICS, type Outfit } from './wardrobe';
 import { createCostume } from './monster-outfit';
+import {
+  PLACES,
+  placeFor,
+  type AdventureProgress,
+  type PlaceId,
+  type Region,
+} from './adventure';
+import { createVillage } from './village';
 import { defaultAppearance, type Appearance } from './appearance';
 export type WorldState = {
   active: boolean;
@@ -16,12 +24,16 @@ export type WorldState = {
   showcase: 'launch' | 'wardrobe' | null;
   outfit: Outfit;
   appearance?: Appearance;
+  adventure?: AdventureProgress;
+  destination?: PlaceId;
+  talking?: PlaceId | null;
 };
 export type WorldUpdate = {
   x: number;
   z: number;
   zone: ZoneId;
   near: ZoneId | null;
+  place?: PlaceId | null;
 };
 const height = (x: number, z: number) =>
   0.32 +
@@ -45,6 +57,9 @@ export class MonsterWorld {
   private character = createMonster();
   private rig = this.character.root;
   private appearanceKey = JSON.stringify(defaultAppearance());
+  private village: ReturnType<typeof createVillage>;
+  private islandObjects: THREE.Object3D[] = [];
+  private region: Region = 'island';
   private shadow: THREE.Mesh;
   private guide: THREE.Mesh;
   private ornaments: {
@@ -86,7 +101,7 @@ export class MonsterWorld {
     });
     this.renderer.setPixelRatio(Math.min(devicePixelRatio, 1.5));
     this.renderer.shadowMap.enabled = true;
-    this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    this.renderer.shadowMap.type = THREE.PCFShadowMap;
     this.renderer.setClearColor('#b6e6ed');
     this.renderer.outputColorSpace = THREE.SRGBColorSpace;
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -126,6 +141,17 @@ export class MonsterWorld {
     light.shadow.normalBias = 0.04;
     this.scene.add(light);
     this.buildIsland();
+    this.village = createVillage(height);
+    this.scene.add(this.village.root);
+    this.islandObjects = this.scene.children.filter(
+      (o) => !(o instanceof THREE.Light),
+    );
+    this.scene.add(this.village.moon);
+    this.colliders = this.colliders.filter(
+      (c) =>
+        !PLACES.some((p) => Math.hypot(c.x - p.x, c.z - p.z) < 6) &&
+        Math.hypot(c.x - 11, c.z - 9) > 8,
+    );
     this.buildMonster();
     this.buildShowroom();
     this.scene.add(this.player);
@@ -167,11 +193,23 @@ export class MonsterWorld {
         report = 0;
         const { x, z } = this.player.position;
         const zone = nearestZone(x, z);
+        const places = PLACES.filter((p) =>
+          this.region === 'moon' ? p.id === 'moon' : p.id !== 'moon',
+        );
+        const closest = [...places].sort(
+          (a, b) => Math.hypot(x - a.x, z - a.z) - Math.hypot(x - b.x, z - b.z),
+        )[0];
         this.update({
           x,
           z,
           zone: zone.id,
           near: Math.hypot(x - zone.x, z - zone.z) < 3.8 ? zone.id : null,
+          place:
+            closest &&
+            Math.hypot(x - closest.x, z - closest.z) <
+              (closest.id === 'home' ? 5.5 : 4.2)
+              ? closest.id
+              : null,
         });
       }
       this.renderer.render(
@@ -257,7 +295,7 @@ export class MonsterWorld {
       const x = pos.getX(i),
         z = pos.getZ(i),
         r = Math.hypot(x, z);
-      pos.setY(i, height(x, z) - Math.max(0, r - 39) * 0.42);
+      pos.setY(i, height(x, z) - Math.max(0, r - 51) * 0.42);
       c.set('#91c65c');
       if (x < -8)
         c.lerp(new THREE.Color('#80ad8c'), Math.min(1, (-x - 8) / 10));
@@ -733,6 +771,48 @@ export class MonsterWorld {
   private tick(dt: number, time: number) {
     const s = this.state(),
       moving = s.active ? Math.min(1, Math.hypot(s.moveX, s.moveY)) : 0;
+    const region = s.adventure?.region ?? 'island';
+    if (region !== this.region) {
+      this.region = region;
+      this.islandObjects.forEach((o) => {
+        o.visible = region === 'island';
+      });
+      this.village.moon.visible = region === 'moon';
+      this.scene.fog = new THREE.Fog(
+        region === 'moon' ? '#252344' : '#b6e6ed',
+        58,
+        125,
+      );
+      this.renderer.setClearColor(region === 'moon' ? '#252344' : '#b6e6ed');
+      this.player.position.set(0, 0, region === 'moon' ? 6 : 5);
+      this.jumpY = 0;
+      this.jumpVelocity = 0;
+      this.angle = 0;
+    }
+    if (s.adventure)
+      this.village.update(
+        s.adventure,
+        this.player.position.x,
+        this.player.position.z,
+      );
+    for (const npc of this.village.neighbours) {
+      const near =
+        Math.hypot(
+          npc.root.position.x - this.player.position.x,
+          npc.root.position.z - this.player.position.z,
+        ) < 7;
+      if (near)
+        npc.root.rotation.y = Math.atan2(
+          this.player.position.x - npc.root.position.x,
+          this.player.position.z - npc.root.position.z,
+        );
+      npc.animate(
+        time + PLACES.findIndex((p) => p.id === npc.id) * 0.7,
+        near,
+        s.talking === npc.id,
+        this.reducedMotion,
+      );
+    }
     const lookKey = JSON.stringify(s.appearance ?? defaultAppearance());
     if (lookKey !== this.appearanceKey) {
       this.appearanceKey = lookKey;
@@ -776,7 +856,10 @@ export class MonsterWorld {
     if (show !== this.inShowcase) {
       this.inShowcase = show;
       this.renderer.setPixelRatio(Math.min(devicePixelRatio, show ? 2 : 1.5));
-      this.renderer.setClearColor('#b6e6ed', show ? 0 : 1);
+      this.renderer.setClearColor(
+        this.region === 'moon' ? '#252344' : '#b6e6ed',
+        show ? 0 : 1,
+      );
       if (show) {
         this.savedFacing = this.player.rotation.y;
         this.showcaseAngle = 0;
@@ -811,11 +894,18 @@ export class MonsterWorld {
             5.3) /
           length;
       if (moving > 0.03) {
-        const next = clampToIsland(
-          this.player.position.x + dx,
-          this.player.position.z + dz,
-        );
-        for (const o of this.colliders) {
+        const next = s.adventure
+          ? { x: this.player.position.x + dx, z: this.player.position.z + dz }
+          : clampToIsland(
+              this.player.position.x + dx,
+              this.player.position.z + dz,
+            );
+        const radius = Math.hypot(next.x, next.z);
+        if (radius > 49) {
+          next.x *= 49 / radius;
+          next.z *= 49 / radius;
+        }
+        for (const o of this.region === 'island' ? this.colliders : []) {
           const x = next.x - o.x,
             z = next.z - o.z,
             d = Math.hypot(x, z),
@@ -836,7 +926,7 @@ export class MonsterWorld {
           (1 - Math.exp(-12 * dt));
       }
       if (this.jumpY > 0 || this.jumpVelocity > 0) {
-        this.jumpVelocity -= 13 * dt;
+        this.jumpVelocity -= (this.region === 'moon' ? 6 : 13) * dt;
         this.jumpY = Math.max(0, this.jumpY + this.jumpVelocity * dt);
         if (this.jumpY === 0) this.jumpVelocity = 0;
       }
@@ -847,11 +937,15 @@ export class MonsterWorld {
     );
     this.celebration = Math.max(0, this.celebration - dt);
     this.player.position.y =
-      height(this.player.position.x, this.player.position.z) +
+      (this.region === 'moon'
+        ? 0
+        : height(this.player.position.x, this.player.position.z)) +
       (show ? 0 : this.jumpY);
     this.showroomStage.position.set(
       this.player.position.x,
-      height(this.player.position.x, this.player.position.z) - 0.02,
+      (this.region === 'moon'
+        ? 0
+        : height(this.player.position.x, this.player.position.z)) - 0.02,
       this.player.position.z,
     );
     this.character.animate({
@@ -865,7 +959,9 @@ export class MonsterWorld {
     });
     this.shadow.position.set(
       this.player.position.x,
-      height(this.player.position.x, this.player.position.z) + 0.025,
+      (this.region === 'moon'
+        ? 0
+        : height(this.player.position.x, this.player.position.z)) + 0.025,
       this.player.position.z,
     );
     this.shadow.scale.setScalar(1 - this.jumpY * 0.14);
@@ -887,7 +983,9 @@ export class MonsterWorld {
         });
       }
     }
-    const target = ZONES.find((z) => z.id === s.target)!,
+    const target = s.destination
+        ? placeFor(s.destination)
+        : ZONES.find((z) => z.id === s.target)!,
       d = Math.hypot(
         target.x - this.player.position.x,
         target.z - this.player.position.z,
@@ -955,9 +1053,13 @@ export class MonsterWorld {
   jump() {
     if (this.jumpY === 0 && this.state().active) this.jumpVelocity = 5.8;
   }
-  travel(id: ZoneId) {
-    const z = ZONES.find((z) => z.id === id)!;
-    this.player.position.set(z.x, height(z.x, z.z + 3), z.z + 3);
+  travel(id: PlaceId) {
+    const z = placeFor(id);
+    this.player.position.set(
+      z.x - 1.6,
+      this.region === 'moon' ? 0 : height(z.x, z.z + 3),
+      z.z + 3,
+    );
     this.jumpY = 0;
     this.jumpVelocity = 0;
     this.angle = 0;
