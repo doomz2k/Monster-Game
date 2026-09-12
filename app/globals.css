@@ -4,6 +4,7 @@
 @import './wardrobe.css';
 @import './play.css';
 @import './adventure.css';
+@import './activities.css';
 @custom-variant dark (&:is(.dark *));
 @theme inline {
   --color-background: var(--background);

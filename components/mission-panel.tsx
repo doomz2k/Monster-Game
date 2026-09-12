@@ -1,9 +1,10 @@
 'use client';
 import { useEffect, useRef, useState } from 'react';
-import { Check, RotateCcw, Undo2, Volume2 } from 'lucide-react';
+import { RotateCcw, Undo2, Volume2 } from 'lucide-react';
 import { type Mission, placeFor } from '@/lib/adventure';
 import { AudioDirector, approvedPath, type SoundReviews } from '@/lib/audio';
 import { soundFor } from '@/lib/phonics';
+import { QuantityDial } from './quantity-dial';
 import { PizzaKitchen } from './pizza-kitchen';
 import script from '@/lib/audio-data/adventure-script.json';
 export function MissionPanel({
@@ -21,7 +22,7 @@ export function MissionPanel({
   onAgain: () => void;
   onBack: () => void;
 }) {
-  const [selected, setSelected] = useState<number[]>([]),
+  const [quantity, setQuantity] = useState(0),
     [letters, setLetters] = useState<string[]>([]),
     [answer, setAnswer] = useState(''),
     [done, setDone] = useState(false),
@@ -54,25 +55,11 @@ export function MissionPanel({
       m.npc === 'rocket' && m.round < 3 ? 'part' : m.voice + '-success',
     );
   };
-  const toggle = (i: number) => {
-    if (done) return;
+  const numberChanged = (n: number) => {
+    setQuantity(n);
     setFeedback('');
-    setSelected((old) =>
-      old.includes(i) ? old.filter((n) => n !== i) : [...old, i],
-    );
+    void audio.line('number-' + n);
   };
-  const check = () =>
-    finish(
-      m.kind === 'pack'
-        ? selected.length === m.target
-        : m.kind === 'spell'
-          ? letters.join('') === m.answer
-          : m.kind === 'add' || m.kind === 'take'
-            ? answer === m.answer &&
-              selected.length ===
-                (m.kind === 'add' ? m.total + m.second : m.second)
-            : answer === m.answer,
-    );
   if (done)
     return (
       <div className="mission-celebration">
@@ -166,143 +153,79 @@ export function MissionPanel({
             </div>
           ) : (
             <>
-              {m.kind === 'pack' && (
-                <>
-                  <div className="request-picture">
-                    <span>
-                      {m.npc === 'rocket'
-                        ? '🚀'
-                        : m.npc === 'moon'
-                          ? '🌙'
-                          : '🧺'}
-                    </span>
-                    <strong>{m.target}</strong>
-                    <div className="target-dots">
-                      {Array.from({ length: m.target }, (_, i) => (
-                        <span
-                          key={i}
-                          className={i < selected.length ? 'filled' : ''}
+              {(m.kind === 'pack' || m.kind === 'add' || m.kind === 'take') && (
+                <div className="counting-workbench">
+                  <div className="counting-picture">
+                    {m.kind === 'pack' ? (
+                      <>
+                        <div className="request-picture">
+                          <span>{m.npc === 'rocket' ? '🚀' : '🌙'}</span>
+                          <strong>{m.target}</strong>
+                          <span>{m.icon}</span>
+                        </div>
+                        <div
+                          className="counting-collection"
+                          aria-label={`${quantity} collected`}
                         >
-                          ●
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                  <div className="object-tray">
-                    {Array.from({ length: m.total }, (_, i) => (
-                      <button
-                        data-game-choice
-                        key={i}
-                        className={
-                          'count-object ' +
-                          (selected.includes(i) ? 'packed' : '')
-                        }
-                        aria-label={
-                          (selected.includes(i) ? 'Unpack' : 'Pack') +
-                          ' object ' +
-                          (i + 1)
-                        }
-                        aria-pressed={selected.includes(i)}
-                        onClick={() => toggle(i)}
-                      >
-                        {m.icon}
-                        {selected.includes(i) && <Check />}
-                      </button>
-                    ))}
-                  </div>
-                  <div className="basket-count">
-                    {selected.length}{' '}
-                    <span>
-                      {m.npc === 'rocket' ? 'in the fuel tank' : 'collected'}
-                    </span>
-                  </div>
-                </>
-              )}
-              {(m.kind === 'add' || m.kind === 'take') && (
-                <>
-                  <div className="maths-scene">
-                    <div className="quantity-group">
-                      {Array.from({ length: m.total }, (_, i) => (
-                        <button
-                          data-game-choice
-                          key={i}
-                          aria-label={
-                            (m.kind === 'take'
-                              ? 'Send fish '
-                              : 'Move object ') +
-                            (i + 1)
-                          }
-                          className={
-                            'count-object ' +
-                            (selected.includes(i) ? 'moved' : '')
-                          }
-                          onClick={() => toggle(i)}
-                        >
-                          {m.icon}
-                        </button>
-                      ))}
-                    </div>
-                    <span className="math-symbol">
-                      {m.kind === 'add' ? '+' : '→'}
-                    </span>
-                    {m.kind === 'add' ? (
-                      <div className="quantity-group">
-                        {Array.from({ length: m.second }, (_, i) => (
-                          <button
-                            data-game-choice
-                            key={i}
-                            className={
-                              'count-object ' +
-                              (selected.includes(i + m.total) ? 'moved' : '')
-                            }
-                            aria-label={'Move object ' + (i + m.total + 1)}
-                            onClick={() => toggle(i + m.total)}
+                          {Array.from({ length: quantity }, (_, i) => (
+                            <span key={i}>{m.icon}</span>
+                          ))}
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <div className="number-equation">
+                          <b>{m.total}</b>
+                          <span>{m.kind === 'add' ? '+' : '−'}</span>
+                          <b>{m.second}</b>
+                          <span>=</span>
+                          <b>?</b>
+                        </div>
+                        <div className="maths-scene">
+                          <div
+                            className="quantity-group"
+                            aria-label={`${m.total} ${m.kind === 'take' ? 'with ' + m.second + ' taken away' : 'objects'}`}
                           >
-                            {m.icon}
-                          </button>
-                        ))}
-                      </div>
-                    ) : (
-                      <div className="boat-picture">
-                        ⛵<span>{m.second}</span>
-                      </div>
+                            {Array.from({ length: m.total }, (_, i) => (
+                              <span
+                                key={i}
+                                className={
+                                  'visual-counter ' +
+                                  (m.kind === 'take' && i >= m.target
+                                    ? 'crossed-out'
+                                    : '')
+                                }
+                              >
+                                {m.icon}
+                              </span>
+                            ))}
+                          </div>
+                          {m.kind === 'add' && (
+                            <>
+                              <span className="math-symbol">+</span>
+                              <div
+                                className="quantity-group"
+                                aria-label={`${m.second} more`}
+                              >
+                                {Array.from({ length: m.second }, (_, i) => (
+                                  <span className="visual-counter" key={i}>
+                                    {m.icon}
+                                  </span>
+                                ))}
+                              </div>
+                            </>
+                          )}
+                        </div>
+                      </>
                     )}
                   </div>
-                  <div className="collection-bed">
-                    {selected.length ? (
-                      selected.map((i) => (
-                        <button
-                          data-game-choice
-                          key={i}
-                          aria-label={'Put object ' + (i + 1) + ' back'}
-                          onClick={() => toggle(i)}
-                        >
-                          {m.icon}
-                        </button>
-                      ))
-                    ) : (
-                      <span>
-                        {m.kind === 'take' ? '⛵' : '🌱'} Move them here
-                      </span>
-                    )}
-                  </div>
-                  <div className="answer-row">
-                    {m.choices.map((n) => (
-                      <button
-                        data-game-choice
-                        key={n}
-                        className={answer === n ? 'chosen' : ''}
-                        aria-pressed={answer === n}
-                        onClick={() => {
-                          setAnswer(n);
-                          void audio.line('number-' + n);
-                        }}
-                      >
-                        {n}
-                      </button>
-                    ))}
-                  </div>
-                </>
+                  <QuantityDial
+                    value={quantity}
+                    max={Math.max(m.total, ...m.choices.map(Number))}
+                    onChange={numberChanged}
+                    onConfirm={() => finish(quantity === m.target)}
+                  />
+                </div>
               )}
               {m.kind === 'pattern' && (
                 <>
@@ -318,7 +241,10 @@ export function MissionPanel({
                         data-game-choice
                         key={shape}
                         aria-pressed={shape === answer}
-                        onClick={() => setAnswer(shape)}
+                        onClick={() => {
+                          setAnswer(shape);
+                          finish(shape === m.answer);
+                        }}
                       >
                         {shape}
                       </button>
@@ -334,7 +260,10 @@ export function MissionPanel({
                       key={g}
                       aria-pressed={answer === g}
                       className={answer === g ? 'chosen' : ''}
-                      onClick={() => setAnswer(g)}
+                      onClick={() => {
+                        setAnswer(g);
+                        finish(g === m.answer);
+                      }}
                     >
                       {g}
                     </button>
@@ -355,8 +284,12 @@ export function MissionPanel({
                         data-game-choice
                         key={g}
                         onClick={() => {
-                          if (letters.length < m.parts.length)
-                            setLetters([...letters, g]);
+                          const next = [...letters, g];
+                          if (letters.length < m.parts.length) {
+                            setLetters(next);
+                            if (next.length === m.parts.length)
+                              finish(next.join('') === m.answer);
+                          }
                         }}
                       >
                         {g}
@@ -364,6 +297,7 @@ export function MissionPanel({
                     ))}
                     <button
                       data-game-choice
+                      data-game-undo
                       onClick={() => setLetters(letters.slice(0, -1))}
                       aria-label="Take the last letter back"
                     >
@@ -387,7 +321,10 @@ export function MissionPanel({
                         }[symbol]
                       }
                       aria-pressed={answer === symbol}
-                      onClick={() => setAnswer(symbol)}
+                      onClick={() => {
+                        setAnswer(symbol);
+                        finish(symbol === m.answer);
+                      }}
                     >
                       {symbol}
                     </button>
@@ -396,14 +333,6 @@ export function MissionPanel({
               )}
               <div className="mission-footer">
                 <output aria-live="polite">{feedback}</output>
-                <button
-                  data-game-choice
-                  className="adventure-primary check-answer"
-                  onClick={check}
-                >
-                  <b className="pad-key a-key">A</b>
-                  <Check /> Check
-                </button>
               </div>
             </>
           )}

@@ -1,7 +1,7 @@
 'use client';
 import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
-import { Check, Minus, Plus, Volume2 } from 'lucide-react';
+import { Check, Volume2 } from 'lucide-react';
 import {
   TOPPINGS,
   pizzaMatches,
@@ -9,6 +9,7 @@ import {
   type PizzaRecipe,
   type ToppingId,
 } from '@/lib/adventure';
+import { QuantityDial } from './quantity-dial';
 import type { AudioDirector } from '@/lib/audio';
 
 function Pizza({
@@ -19,6 +20,12 @@ function Pizza({
   baking: boolean;
 }) {
   const host = useRef<HTMLDivElement>(null);
+  const latest = useRef({ counts, baking });
+  const repaint = useRef<() => void>(() => {});
+  useEffect(() => {
+    latest.current = { counts, baking };
+    repaint.current();
+  }, [counts, baking]);
   useEffect(() => {
     if (!host.current) return;
     const scene = new THREE.Scene(),
@@ -37,6 +44,7 @@ function Pizza({
     host.current.appendChild(renderer.domElement);
     const pizza = new THREE.Group();
     scene.add(pizza);
+    let toppingTag: { id: ToppingId; index: number } | null = null;
     const add = (
       geometry: THREE.BufferGeometry,
       colour: string,
@@ -51,6 +59,7 @@ function Pizza({
       );
       mesh.position.set(x, y, z);
       mesh.scale.setScalar(scale);
+      if (toppingTag) mesh.userData.topping = { ...toppingTag };
       pizza.add(mesh);
       return mesh;
     };
@@ -61,13 +70,7 @@ function Pizza({
       -0.16,
       0,
     );
-    add(
-      new THREE.CylinderGeometry(1.8, 1.75, 0.22, 64),
-      baking ? '#d59343' : '#eabe77',
-      0,
-      0,
-      0,
-    );
+    add(new THREE.CylinderGeometry(1.8, 1.75, 0.22, 64), '#eabe77', 0, 0, 0);
     add(
       new THREE.CylinderGeometry(1.62, 1.62, 0.04, 64),
       '#c84833',
@@ -77,7 +80,7 @@ function Pizza({
     );
     add(
       new THREE.CylinderGeometry(1.49, 1.54, 0.045, 64),
-      baking ? '#edbd4b' : '#f6d986',
+      '#f6d986',
       0,
       0.16,
       0,
@@ -95,7 +98,8 @@ function Pizza({
       spot.scale.y = 0.14;
     }
     TOPPINGS.forEach((t, layer) => {
-      for (let i = 0; i < (counts[t.id] ?? 0); i++) {
+      for (let i = 0; i < 12; i++) {
+        toppingTag = { id: t.id, index: i };
         const a = i * 2.39996 + layer * 1.2,
           r = 0.28 + Math.sqrt(((i * 7 + layer * 3) % 19) / 19) * 1.06;
         const x = Math.cos(a) * r,
@@ -158,16 +162,26 @@ function Pizza({
         }
       }
     });
-    scene.add(new THREE.HemisphereLight('#fff8e7', '#916347', 2.6));
-    const light = new THREE.DirectionalLight('#fff4dc', 3);
+    scene.add(new THREE.HemisphereLight('#fff8e7', '#916347', 1.2));
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 0.95;
+    const light = new THREE.DirectionalLight('#fff4dc', 2.4);
     light.position.set(-3, 7, 4);
     scene.add(light);
     let frame = 0;
     const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
     const draw = (t: number) => {
-      pizza.rotation.y = baking && !reduced ? Math.sin(t / 700) * 0.12 : 0;
+      pizza.children.forEach((o) => {
+        const tag = o.userData.topping;
+        if (tag)
+          o.visible =
+            tag.index < (latest.current.counts[tag.id as ToppingId] ?? 0);
+      });
+      pizza.rotation.y =
+        latest.current.baking && !reduced ? Math.sin(t / 700) * 0.12 : 0;
       renderer.render(scene, camera);
-      if (baking && !reduced) frame = requestAnimationFrame(draw);
+      if (latest.current.baking && !reduced)
+        frame = requestAnimationFrame(draw);
     };
     const resize = new ResizeObserver(([entry]) => {
       const width = entry.contentRect.width,
@@ -179,6 +193,10 @@ function Pizza({
       renderer.render(scene, camera);
     });
     resize.observe(host.current);
+    repaint.current = () => {
+      cancelAnimationFrame(frame);
+      draw(performance.now());
+    };
     draw(0);
     return () => {
       resize.disconnect();
@@ -195,7 +213,7 @@ function Pizza({
       renderer.dispose();
       renderer.domElement.remove();
     };
-  }, [counts, baking]);
+  }, []);
   return (
     <figure
       ref={host}
@@ -225,9 +243,7 @@ export function PizzaKitchen({
     [step, setStep] = useState(0),
     [baking, setBaking] = useState(false),
     [feedback, setFeedback] = useState('');
-  const finished = useRef(false),
-    bakeButton = useRef<HTMLButtonElement>(null),
-    addButton = useRef<HTMLButtonElement>(null);
+  const finished = useRef(false);
   const current = recipe.steps[step],
     topping = TOPPINGS.find((t) => t.id === current.topping)!,
     customer = placeFor(recipe.customer);
@@ -247,15 +263,10 @@ export function PizzaKitchen({
     const timer = setTimeout(onComplete, 2200);
     return () => clearTimeout(timer);
   }, [baking]); // eslint-disable-line react-hooks/exhaustive-deps
-  const add = (delta: number) => {
+  const choose = (value: number) => {
     setFeedback('');
-    setCounts((old) => ({
-      ...old,
-      [topping.id]: Math.max(
-        0,
-        Math.min(max + 2, (old[topping.id] ?? 0) + delta),
-      ),
-    }));
+    setCounts((old) => ({ ...old, [topping.id]: value }));
+    void audio.line('number-' + value);
   };
   const next = () => {
     if ((counts[topping.id] ?? 0) !== current.quantity) {
@@ -272,10 +283,11 @@ export function PizzaKitchen({
         'topping-' + recipe.steps[index].topping,
         recipe.steps[index].prompt,
       ]);
-      addButton.current?.focus();
     } else if (allReady) {
-      setFeedback('Ready for the oven!');
-      bakeButton.current?.focus();
+      if (finished.current) return;
+      finished.current = true;
+      setBaking(true);
+      void audio.line('pizza-bake');
     }
   };
   return (
@@ -305,23 +317,14 @@ export function PizzaKitchen({
             {recipe.steps.map((s, i) => {
               const t = TOPPINGS.find((t) => t.id === s.topping)!;
               return (
-                <button
-                  data-game-choice
+                <span
                   key={s.topping}
-                  disabled={baking}
-                  aria-label={
-                    t.name + ', ' + s.left + ' ' + s.operation + ' ' + s.right
-                  }
-                  aria-pressed={step === i}
-                  onClick={() => {
-                    setStep(i);
-                    setFeedback('');
-                    void audio.lines(['topping-' + t.id, s.prompt]);
-                  }}
+                  className={'recipe-step ' + (i === step ? 'current' : '')}
+                  aria-label={t.name + (i < step ? ', finished' : '')}
                 >
                   <span>{t.icon}</span>
-                  {counts[s.topping] === s.quantity && <Check size={18} />}
-                </button>
+                  {i < step && <Check size={18} />}
+                </span>
               );
             })}
           </div>
@@ -364,54 +367,23 @@ export function PizzaKitchen({
               </span>
             )}
           </div>
-          <div className="topping-controls">
-            <button
-              data-game-choice
-              disabled={baking || !(counts[topping.id] ?? 0)}
-              onClick={() => add(-1)}
-              aria-label={'Take one ' + topping.name.toLowerCase() + ' off'}
-            >
-              <Minus />
-            </button>
-            <output aria-live="polite">{counts[topping.id] ?? 0}</output>
-            <button
-              ref={addButton}
-              data-game-choice
-              disabled={baking || (counts[topping.id] ?? 0) >= max + 2}
-              onClick={() => add(1)}
-              aria-label={'Add one ' + topping.name.toLowerCase()}
-            >
-              <Plus />
-              <span>{topping.icon}</span>
-            </button>
-          </div>
-          <button
-            data-game-choice
-            className="adventure-primary"
+          <QuantityDial
+            value={counts[topping.id] ?? 0}
+            max={max}
+            onChange={choose}
+            onConfirm={next}
             disabled={baking}
-            onClick={next}
-          >
-            <b className="pad-key a-key">A</b>
-            <Check /> Check topping
-          </button>
+            label={topping.name}
+            confirmLabel={
+              step === recipe.steps.length - 1
+                ? 'Bake my pizza'
+                : 'Next topping'
+            }
+          />
         </div>
       </div>
       <div className="pizza-oven">
         <output aria-live="polite">{feedback}</output>
-        <button
-          ref={bakeButton}
-          data-game-choice
-          className="adventure-primary"
-          disabled={!allReady || baking}
-          onClick={() => {
-            if (finished.current || !pizzaMatches(recipe, counts)) return;
-            finished.current = true;
-            setBaking(true);
-            void audio.line('pizza-bake');
-          }}
-        >
-          <b className="pad-key a-key">A</b>🔥 Bake & serve
-        </button>
       </div>
     </div>
   );

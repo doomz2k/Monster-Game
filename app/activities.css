@@ -1,0 +1,513 @@
+.game-shell.adventure-shell:has(.activity-screen:not([hidden])) {
+  height: 100dvh;
+  min-height: 0;
+  overflow: hidden;
+}
+.activity-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 35;
+  height: 100dvh;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  padding: clamp(12px, 2.5vmin, 30px) clamp(18px, 5vw, 90px);
+  gap: 12px;
+  background: #faf4e5;
+  color: #3c4d46;
+}
+.activity-screen[hidden] {
+  display: none;
+}
+.activity-meadow {
+  background:
+    radial-gradient(ellipse at 20% 50%, #efd6af, transparent 65%), #fcf5e6;
+}
+.activity-garden {
+  background:
+    radial-gradient(ellipse at 20% 50%, #d5e8b8, transparent 65%), #f6f5e6;
+}
+.activity-cove {
+  background:
+    radial-gradient(ellipse at 20% 60%, #b5e3e7, transparent 65%), #f0f9f1;
+}
+.activity-moon,
+.activity-rocket {
+  background:
+    radial-gradient(ellipse at 20% 40%, #dfdaf2, transparent 65%), #f4f1fc;
+}
+.activity-topbar,
+.activity-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+.activity-topbar > span:nth-child(2) {
+  letter-spacing: 0.2em;
+  font-size: 12px;
+  font-weight: 800;
+  opacity: 0.5;
+}
+.activity-wallet {
+  font-size: 22px;
+  font-weight: 800;
+}
+.activity-controls {
+  justify-content: center;
+  padding-top: 10px;
+  border-top: 1px solid #62735322;
+  font-size: 17px;
+}
+.activity-controls > span,
+.activity-controls button {
+  display: flex;
+  gap: 9px;
+  align-items: center;
+}
+.activity-controls button {
+  border: 0;
+  background: none;
+  color: inherit;
+}
+.activity-screen .mission-panel {
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  max-width: 1360px;
+  margin: auto;
+  height: 100%;
+  gap: clamp(6px, 1.5vh, 18px);
+}
+.activity-screen .mission-heading {
+  margin: 0;
+  flex: 0 0 auto;
+}
+.activity-screen .mission-heading h2 {
+  font-size: clamp(23px, 3vw, 39px);
+  line-height: 1.1;
+  margin: 0;
+}
+.activity-screen .mission-prompt {
+  margin: 0 auto;
+  font-size: clamp(16px, 1.6vw, 22px);
+  max-width: 850px;
+}
+.activity-screen .mission-footer {
+  justify-content: center;
+  margin: 0;
+  min-height: 26px;
+}
+.activity-screen .mission-heading .friend-avatar {
+  width: 58px;
+  height: 58px;
+  font-size: 36px;
+}
+.activity-screen .mission-heading p {
+  display: none;
+}
+.counting-workbench {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  align-items: center;
+  gap: clamp(25px, 5vw, 90px);
+  flex: 1;
+  min-height: 0;
+}
+.counting-picture {
+  background: #ffffff66;
+  border: 2px solid #fff9;
+  border-radius: 40px;
+  padding: clamp(15px, 3vmin, 40px);
+  box-shadow: 0 18px 45px #626f3820;
+}
+.number-equation {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: clamp(12px, 2vw, 30px);
+  font-size: clamp(42px, 6vw, 80px);
+  margin: 0 0 20px;
+}
+.number-equation > span {
+  color: #7b8990;
+  font-size: 0.7em;
+}
+.activity-screen .quantity-group {
+  padding: 15px;
+  gap: 7px;
+  background: #fff8;
+}
+.visual-counter {
+  font-size: clamp(25px, 3.4vw, 48px);
+  position: relative;
+}
+.visual-counter.crossed-out {
+  opacity: 0.35;
+}
+.visual-counter.crossed-out::after {
+  content: '×';
+  position: absolute;
+  inset: 0;
+  text-align: center;
+  color: #9d342c;
+  font-weight: 900;
+}
+.counting-collection {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  min-height: 130px;
+  padding: 20px;
+}
+.counting-collection span {
+  font-size: clamp(28px, 4vw, 56px);
+  animation: counter-appear 0.18s ease-out;
+}
+.quantity-answer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(15px, 3vh, 32px);
+}
+.quantity-dial {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(16px, 3vw, 38px);
+}
+.quantity-dial > div {
+  text-align: center;
+  min-width: 95px;
+}
+.quantity-dial small {
+  display: block;
+  font-size: 16px;
+  color: #6b7064;
+}
+.quantity-dial output {
+  display: block;
+  font-size: clamp(64px, 9vw, 115px);
+  line-height: 1.15;
+  font-weight: 850;
+  font-variant-numeric: tabular-nums;
+}
+.quantity-dial button {
+  width: clamp(54px, 6vw, 80px);
+  height: clamp(62px, 7vw, 88px);
+  border: 3px solid #fff;
+  border-radius: 24px;
+  display: grid;
+  place-items: center;
+  background: #ffffffb3;
+  box-shadow: 0 5px 0 #7e82672a;
+}
+.quantity-dial svg {
+  width: 38px;
+  height: 38px;
+}
+.quantity-dial button:disabled {
+  opacity: 0.3;
+  box-shadow: none;
+}
+.activity-screen .adventure-primary {
+  min-height: 64px;
+  min-width: 220px;
+  font-size: 21px;
+}
+.activity-screen .mission-celebration {
+  align-self: center;
+}
+.activity-screen .mission-celebration h2 {
+  font-size: clamp(28px, 4vw, 54px);
+}
+.activity-screen .picture-answers button,
+.activity-screen .space-answers button {
+  border-width: 3px;
+  background: #fff9;
+  transition:
+    transform 0.15s,
+    background 0.15s;
+}
+.activity-screen .answer-row button:focus {
+  transform: translateY(-5px);
+  background: #e8f2d9;
+}
+.activity-screen .pizza-kitchen {
+  min-height: 0;
+  flex: 1;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  gap: 10px;
+}
+.activity-screen .pizza-customer {
+  background: #ffffff80;
+  padding: 8px 14px;
+}
+.activity-screen .pizza-customer > span {
+  width: 44px;
+  height: 44px;
+  font-size: 30px;
+}
+.activity-screen .pizza-customer h3 {
+  font-size: 22px;
+}
+.activity-screen .pizza-workbench {
+  min-height: 0;
+  height: 100%;
+  margin: 0;
+  grid-template-columns: 1.15fr 1fr;
+  gap: clamp(20px, 5vw, 80px);
+}
+.activity-screen .pizza-board {
+  height: 100%;
+  max-height: 580px;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  background:
+    linear-gradient(#f1dab7bb, #d5ad7699),
+    url('/textures/timber.png') center/cover;
+  box-shadow:
+    inset 0 0 0 7px #fff5,
+    0 20px 40px #7050241a;
+  border-radius: 42px;
+  padding: 12px;
+}
+.activity-screen .pizza-preview {
+  flex: 1;
+  height: 0;
+  min-height: 0;
+}
+.activity-screen .pizza-board > span {
+  padding: 0 0 8px;
+}
+.activity-screen .pizza-recipe {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(5px, 1.3vh, 14px);
+  min-height: 0;
+}
+.activity-screen .pizza-recipe h4 {
+  margin: 0;
+  font-size: clamp(20px, 2vw, 27px);
+}
+.recipe-step {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 60px;
+  height: 48px;
+  border-radius: 16px;
+  background: #ffffff66;
+  border: 2px solid transparent;
+  font-size: 28px;
+  opacity: 0.55;
+}
+.recipe-step.current {
+  opacity: 1;
+  background: #fff9;
+  border-color: #699453;
+}
+.recipe-step > svg {
+  position: absolute;
+  right: -5px;
+  bottom: -4px;
+  background: #579868;
+  color: white;
+  border-radius: 50%;
+}
+.activity-screen .recipe-sum {
+  font-size: clamp(30px, 3.8vw, 51px);
+}
+.activity-screen .recipe-counters {
+  min-height: 30px;
+}
+.activity-screen .pizza-recipe .quantity-answer {
+  gap: 12px;
+}
+.activity-screen .pizza-recipe .quantity-dial output {
+  font-size: clamp(50px, 7vh, 85px);
+}
+.activity-screen .pizza-oven {
+  justify-content: center;
+  min-height: 22px;
+}
+.activity-screen .sound-teaching {
+  max-width: 750px;
+  margin: auto;
+}
+.activity-screen .sound-tip {
+  margin: 5px 0;
+}
+@keyframes counter-appear {
+  from {
+    opacity: 0;
+    transform: scale(0.6) translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@media (max-height: 650px) {
+  .activity-screen {
+    padding: 10px 24px;
+    gap: 6px;
+  }
+  .activity-screen .mission-panel {
+    gap: 5px;
+  }
+  .activity-screen .mission-heading .friend-avatar {
+    width: 40px;
+    height: 40px;
+    font-size: 28px;
+    border-radius: 14px;
+  }
+  .activity-screen .mission-heading h2 {
+    font-size: 24px;
+  }
+  .activity-screen .pizza-customer {
+    padding: 5px 12px;
+  }
+  .activity-screen .pizza-customer small {
+    display: none;
+  }
+  .activity-screen .pizza-customer > span {
+    width: 30px;
+    height: 30px;
+    font-size: 22px;
+  }
+  .activity-screen .pizza-customer h3 {
+    font-size: 18px;
+  }
+  .activity-screen .quantity-answer {
+    gap: 8px;
+  }
+  .activity-screen .adventure-primary {
+    min-height: 48px;
+    padding: 8px 16px;
+    font-size: 18px;
+  }
+  .activity-screen .quantity-dial output {
+    font-size: 55px;
+  }
+  .quantity-dial button {
+    width: 52px;
+    height: 52px;
+  }
+  .activity-screen .recipe-step {
+    height: 32px;
+    font-size: 22px;
+    min-width: 50px;
+  }
+  .activity-screen .recipe-sum {
+    font-size: 30px;
+  }
+  .activity-screen .recipe-counters i {
+    font-size: 18px;
+  }
+  .activity-screen .pizza-recipe .quantity-dial small {
+    display: none;
+  }
+  .activity-screen .pizza-recipe .quantity-dial output {
+    font-size: 44px;
+  }
+  .activity-screen .pattern-sequence,
+  .activity-screen .answer-row,
+  .activity-screen .word-spaces {
+    margin: 7px 0;
+  }
+  .activity-screen .word-picture {
+    font-size: 42px;
+  }
+  .activity-screen .word-spaces > span {
+    height: 48px;
+    line-height: 48px;
+    font-size: 35px;
+  }
+  .activity-screen .letter-answers button {
+    min-height: 56px;
+    font-size: 36px;
+  }
+  .activity-controls {
+    padding-top: 5px;
+  }
+}
+@media (max-width: 600px) and (min-height: 651px) {
+  .activity-screen {
+    padding: 12px 16px;
+  }
+  .activity-topbar > span:nth-child(2) {
+    display: none;
+  }
+  .counting-workbench {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+  .counting-picture {
+    padding: 15px;
+  }
+  .counting-collection {
+    min-height: 80px;
+    padding: 10px;
+  }
+  .activity-screen .pizza-workbench {
+    grid-template-columns: 1fr;
+    grid-template-rows: minmax(100px, 1fr) auto;
+    gap: 12px;
+  }
+  .activity-screen .pizza-board {
+    border-radius: 24px;
+    padding: 4px;
+  }
+  .activity-screen .pizza-board > span {
+    display: none;
+  }
+  .activity-screen .pizza-recipe {
+    gap: 6px;
+  }
+  .activity-screen .pizza-recipe .quantity-answer {
+    gap: 8px;
+  }
+  .activity-screen .recipe-sum {
+    font-size: 30px;
+  }
+  .activity-screen .recipe-step {
+    height: 34px;
+    font-size: 23px;
+  }
+  .activity-screen .pizza-recipe .quantity-dial output {
+    font-size: 48px;
+  }
+  .quantity-dial button {
+    width: 54px;
+    height: 54px;
+  }
+  .activity-screen .adventure-primary {
+    min-height: 48px;
+    padding: 9px 16px;
+    font-size: 18px;
+  }
+  .activity-controls {
+    gap: 16px;
+    font-size: 14px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .activity-screen * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+.quantity-dial {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+}

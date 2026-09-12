@@ -73,6 +73,7 @@ export default function AdventureGame() {
   const host = useRef<HTMLDivElement>(null),
     surface = useRef<HTMLDivElement>(null),
     modalSurface = useRef<HTMLDivElement>(null),
+    missionSurface = useRef<HTMLDivElement>(null),
     world = useRef<MonsterWorld | null>(null),
     input = useRef<GameInput | null>(null),
     actionRef = useRef<(action: Action) => void>(() => {});
@@ -127,7 +128,13 @@ export default function AdventureGame() {
   });
   const stars = lifetimeStars(p),
     nearby = position.place ? placeFor(position.place) : null;
-  const modal = !['welcome', 'explore', 'creator', 'flight'].includes(mode);
+  const modal = ![
+    'welcome',
+    'explore',
+    'creator',
+    'flight',
+    'mission',
+  ].includes(mode);
   const change = (next: ProgressData) => setP(next);
   const stop = () => {
     audio.stop();
@@ -240,7 +247,12 @@ export default function AdventureGame() {
   useEffect(() => {
     if (mode === 'explore' || mode === 'parents' || mode === 'flight') return;
     const frame = requestAnimationFrame(() => {
-      const root = modal ? modalSurface.current : surface.current;
+      const root =
+        mode === 'mission'
+          ? missionSurface.current
+          : modal
+            ? modalSurface.current
+            : surface.current;
       root
         ?.querySelector<HTMLElement>('[data-game-choice]:not(:disabled)')
         ?.focus({ preventScroll: true });
@@ -321,7 +333,7 @@ export default function AdventureGame() {
   };
   const repeat = () => {
     if (mode === 'mission' && mission) {
-      modalSurface.current
+      missionSurface.current
         ?.querySelector<HTMLButtonElement>('[data-repeat-prompt]')
         ?.click();
       return;
@@ -391,6 +403,10 @@ export default function AdventureGame() {
       return;
     }
     if (action === 'map') {
+      if (mode === 'mission')
+        missionSurface.current
+          ?.querySelector<HTMLButtonElement>('[data-game-undo]')
+          ?.click();
       if (mode === 'creator') world.current?.turnShowcase();
       else if (mode === 'explore' || mode === 'pause') go('map', 'map');
       return;
@@ -403,10 +419,32 @@ export default function AdventureGame() {
       }
       return;
     }
-    const base = modal ? modalSurface.current : surface.current;
+    const base =
+      mode === 'mission'
+        ? missionSurface.current
+        : modal
+          ? modalSurface.current
+          : surface.current;
     const root =
       base?.querySelector<HTMLElement>('[data-choice-scope]') ?? base;
     if (!root) return;
+    if (mode === 'mission' && root.querySelector('[data-quantity-dial]')) {
+      const selector =
+        action === 'left' || action === 'down'
+          ? '[data-quantity-less]'
+          : action === 'right' || action === 'up'
+            ? '[data-quantity-more]'
+            : action === 'confirm'
+              ? '[data-game-confirm]'
+              : null;
+      if (selector) {
+        audio.unlock();
+        root
+          .querySelector<HTMLButtonElement>(selector + ':not(:disabled)')
+          ?.click();
+        return;
+      }
+    }
     if (
       action === 'left' ||
       action === 'right' ||
@@ -736,6 +774,51 @@ export default function AdventureGame() {
           <button onClick={() => location.reload()}>Try again</button>
         </div>
       )}
+      {mission &&
+        (mode === 'mission' || mode === 'pause' || mode === 'parents') && (
+          <section
+            ref={missionSurface}
+            className={'activity-screen activity-' + mission.npc}
+            hidden={mode !== 'mission'}
+            aria-label={mission.title}
+          >
+            <div className="activity-topbar">
+              <button className="back-control" onClick={back}>
+                <b className="pad-key b-key">B</b> Back
+              </button>
+              <span>MONSTER & FRIENDS</span>
+              <span className="activity-wallet">⭐ {p.adventure.wallet}</span>
+            </div>
+            <MissionPanel
+              key={mission.npc + '-' + mission.round}
+              mission={mission}
+              audio={audio}
+              reviews={reviews}
+              onComplete={complete}
+              onAgain={beginMission}
+              onBack={() => {
+                if (mission.npc === 'rocket' && rocketParts(p) === 3)
+                  go('dialogue', 'pip-repaired');
+                else go('explore');
+              }}
+            />
+            <div className="activity-controls">
+              <span>✚ Choose</span>
+              <span>
+                <b className="pad-key a-key">A</b> Yes
+              </span>
+              <button onClick={repeat}>
+                <b className="pad-key y-key">Y</b> Listen
+              </button>
+              {mission.kind === 'spell' && (
+                <span>
+                  <b className="pad-key x-key">X</b> Undo
+                </span>
+              )}
+            </div>
+          </section>
+        )}
+
       <Dialog
         open={modal}
         onOpenChange={(open) => {
@@ -937,21 +1020,6 @@ export default function AdventureGame() {
                 )}
               </div>
             )}
-            {mode === 'mission' && mission && (
-              <MissionPanel
-                key={mission.npc + '-' + mission.round}
-                mission={mission}
-                audio={audio}
-                reviews={reviews}
-                onComplete={complete}
-                onAgain={beginMission}
-                onBack={() => {
-                  if (mission.npc === 'rocket' && rocketParts(p) === 3)
-                    go('dialogue', 'pip-repaired');
-                  else go('explore');
-                }}
-              />
-            )}
             {mode === 'home' && (
               <HomePanel
                 progress={p}
@@ -978,7 +1046,7 @@ export default function AdventureGame() {
           </button>
         </output>
       )}
-      {mode !== 'parents' && mode !== 'flight' && (
+      {mode !== 'parents' && mode !== 'flight' && mode !== 'mission' && (
         <footer className="controller-legend">
           <span>
             <b className="pad-key a-key">A</b> Yes

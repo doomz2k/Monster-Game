@@ -512,7 +512,7 @@ export function missionFor(npc: QuestId, p: ProgressData): Mission {
     answer: String(target),
     parts: [],
     sequence: [],
-    total: p.mathsMax + 2,
+    total: p.mathsMax,
     second: 0,
   };
   if (npc === 'meadow') {
