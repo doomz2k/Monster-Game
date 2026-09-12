@@ -12,6 +12,7 @@ import { firstMismatch } from '@/lib/learning-hints';
 import { SpaceObject } from './space-object';
 import { QuantityDial } from './quantity-dial';
 import { PizzaKitchen } from './pizza-kitchen';
+import type { PizzaParcel } from '@/lib/delivery-state';
 import script from '@/lib/audio-data/adventure-script.json';
 export function MissionPanel({
   mission: m,
@@ -21,6 +22,8 @@ export function MissionPanel({
   onComplete,
   onAgain,
   onBack,
+  delivery,
+  onDeliver,
 }: {
   mission: Mission;
   active?: boolean;
@@ -29,6 +32,8 @@ export function MissionPanel({
   onComplete: () => number;
   onAgain: () => void;
   onBack: () => void;
+  delivery?: PizzaParcel | null;
+  onDeliver?: () => void;
 }) {
   const [quantity, setQuantity] = useState(0),
     [letters, setLetters] = useState<string[]>([]),
@@ -115,6 +120,20 @@ export function MissionPanel({
   if (done)
     return (
       <div className="mission-celebration" ref={celebration}>
+        <button
+          data-repeat-prompt
+          className="round-control celebration-listen"
+          aria-label="Hear what to do next"
+          onClick={() =>
+            void audio.line(
+              delivery
+                ? 'delivery-route-' + delivery.recipient
+                : m.voice + '-success',
+            )
+          }
+        >
+          <Volume2 />
+        </button>
         <div className="reward-stars">{'⭐ '.repeat(earnedStars)}</div>
         <h2>You helped {friend.friend}!</h2>
         {earnedStars > 2 && m.kind === 'pizza' && (
@@ -135,10 +154,31 @@ export function MissionPanel({
           </p>
         )}
         <div className="big-actions">
+          {m.kind === 'pizza' && delivery && onDeliver && (
+            <button
+              data-game-choice
+              className="picture-choice delivery-choice"
+              onClick={onDeliver}
+            >
+              <span className="delivery-pictures">
+                <GamePicture symbol="🍕" />
+                <span>→</span>
+                <GamePicture
+                  symbol={
+                    delivery.recipient === 'rocket'
+                      ? '🧑‍🚀'
+                      : placeFor(delivery.recipient).icon
+                  }
+                />
+              </span>
+              <span>Deliver to {placeFor(delivery.recipient).friend}</span>
+              <b className="pad-key a-key">A</b>
+            </button>
+          )}
           <button data-game-choice className="picture-choice" onClick={onAgain}>
             <RotateCcw />
             <span>Play again</span>
-            <b className="pad-key a-key">A</b>
+            {!delivery && <b className="pad-key a-key">A</b>}
           </button>
           <button data-game-choice className="picture-choice" onClick={onBack}>
             <span className="choice-picture">🌳</span>

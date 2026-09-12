@@ -349,9 +349,9 @@
   .discovery-story small {
     display: none;
   }
-  .friend-dialogue .neighbour-portrait {
-    height: 105px;
-    width: 105px;
+  .conversation-dialog .friend-dialogue .neighbour-portrait {
+    height: 66vh;
+    width: 100%;
   }
 }
 @media (max-width: 700px) {

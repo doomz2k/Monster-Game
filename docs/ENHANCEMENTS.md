@@ -66,3 +66,5 @@ The next checkpoint, [DISCOVERIES-AND-FRIENDS.md](DISCOVERIES-AND-FRIENDS.md), a
 [GARDEN-LIFE.md](GARDEN-LIFE.md) adds distinct growing plants and visitors (28), tomatoes and peppers that supply pizza recipe bonuses (25), a close-up home/garden view and paged furniture choices (30). Gardening remains child-driven, without timers or penalties for absence.
 
 [CHARACTERS-AND-VILLAGE.md](CHARACTERS-AND-VILLAGE.md) adds distinctive neighbour clothes, props, eyelids and expressions (3), plus short walking and resting routines for village guests (24). Quest givers stay in familiar, accessible places.
+
+[PIZZA-DELIVERIES.md](PIZZA-DELIVERIES.md) adds optional, saved pizza deliveries to the actual customer (27), a carrying pose, British thank-you recordings and a full-screen illustrated map. The delivery reward is protected against duplicate claims.

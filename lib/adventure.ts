@@ -1,4 +1,10 @@
 import { WORLD_SCALE } from './world-layout';
+import {
+  PIZZA_CUSTOMERS,
+  freshDeliveries,
+  readDeliveries,
+  type DeliveryProgress,
+} from './delivery-state';
 import { discoveryFor } from './discovery-catalogue';
 import { freshPantry, readPantry, type Pantry, type ProduceId } from './garden';
 import { spaceCard } from './space-learning';
@@ -120,6 +126,7 @@ export type AdventureProgress = {
   discoveries: string[];
   friendshipGifts: QuestId[];
   pantry: Pantry;
+  deliveries: DeliveryProgress;
 };
 export const SHOP_ITEMS = [
   {
@@ -290,6 +297,7 @@ export const freshAdventure = (legacyStars = 0): AdventureProgress => ({
   discoveries: [],
   friendshipGifts: [],
   pantry: freshPantry(),
+  deliveries: freshDeliveries(),
 });
 const integer = (v: unknown, max = 100000) =>
   typeof v === 'number' && Number.isSafeInteger(v) && v >= 0
@@ -353,6 +361,7 @@ export function readAdventure(
   p.region = v.region === 'moon' && p.rounds.rocket >= 3 ? 'moon' : 'island';
   p.moonVisits = integer(v.moonVisits);
   p.pantry = readPantry(v.pantry);
+  p.deliveries = readDeliveries(v.deliveries, p.rounds.meadow);
   p.discoveries = [
     ...new Set(
       Array.isArray(v.discoveries)
@@ -491,7 +500,7 @@ export type PizzaRecipe = {
   steps: RecipeStep[];
 };
 export function pizzaRecipe(round: number, max: number): PizzaRecipe {
-  const customer = (['woods', 'garden', 'cove', 'rocket'] as const)[round % 4];
+  const customer = PIZZA_CUSTOMERS[round % PIZZA_CUSTOMERS.length];
   return {
     customer,
     name: ['Woodland pizza', 'Garden pizza', 'Harbour pizza', 'Space pizza'][

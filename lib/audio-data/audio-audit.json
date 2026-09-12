@@ -3102,6 +3102,105 @@
       "leadingSilenceMs": 34,
       "trailingSilenceMs": 88,
       "warnings": []
+    },
+    "delivery-route-woods": {
+      "sha256": "98fc9c5ab01d95cee60f5154099918026fb8a836cf6ad7f5efe0d1f61588fda0",
+      "seconds": 8.192,
+      "sampleRate": 24000,
+      "channels": 1,
+      "peakDbfs": -3.4,
+      "activeRmsDbfs": -18.2,
+      "leadingSilenceMs": 31,
+      "trailingSilenceMs": 91,
+      "warnings": []
+    },
+    "delivery-route-garden": {
+      "sha256": "0e645dcad6042042b3036fcb6906645d52ed5b8335c876651b197bc77c4766c6",
+      "seconds": 8.064,
+      "sampleRate": 24000,
+      "channels": 1,
+      "peakDbfs": -3.5,
+      "activeRmsDbfs": -18.8,
+      "leadingSilenceMs": 26,
+      "trailingSilenceMs": 88,
+      "warnings": []
+    },
+    "delivery-route-cove": {
+      "sha256": "7529d753f46bee87cd026948bcc0af2635639a38ff8570f0f1206959495c9e67",
+      "seconds": 7.893,
+      "sampleRate": 24000,
+      "channels": 1,
+      "peakDbfs": -3.7,
+      "activeRmsDbfs": -18.7,
+      "leadingSilenceMs": 28,
+      "trailingSilenceMs": 92,
+      "warnings": []
+    },
+    "delivery-route-rocket": {
+      "sha256": "d172dcedb430d9bf15ce5c9c3811892fce2ce4b3b67a380456e756847e5ec2af",
+      "seconds": 7.723,
+      "sampleRate": 24000,
+      "channels": 1,
+      "peakDbfs": -3.6,
+      "activeRmsDbfs": -18.4,
+      "leadingSilenceMs": 23,
+      "trailingSilenceMs": 97,
+      "warnings": []
+    },
+    "delivery-thanks-woods": {
+      "sha256": "8d941a60cab90162a2d1cd4115be6d74e8b014f16f72f36fcf20e127b979d0be",
+      "seconds": 6.123,
+      "sampleRate": 24000,
+      "channels": 1,
+      "peakDbfs": -3.8,
+      "activeRmsDbfs": -18.8,
+      "leadingSilenceMs": 31,
+      "trailingSilenceMs": 84,
+      "warnings": []
+    },
+    "delivery-thanks-garden": {
+      "sha256": "cb0090d2faef6faa6c6d5f3b8f08f8576ae420dd7faebe7599848d0abd5b1014",
+      "seconds": 6.059,
+      "sampleRate": 24000,
+      "channels": 1,
+      "peakDbfs": -3.6,
+      "activeRmsDbfs": -22.3,
+      "leadingSilenceMs": 42,
+      "trailingSilenceMs": 115,
+      "warnings": []
+    },
+    "delivery-thanks-cove": {
+      "sha256": "e3966280e7ae8bd227dd51342c61ab57cad95842c988c606676a960442d48d38",
+      "seconds": 5.525,
+      "sampleRate": 24000,
+      "channels": 1,
+      "peakDbfs": -3.7,
+      "activeRmsDbfs": -18.9,
+      "leadingSilenceMs": 44,
+      "trailingSilenceMs": 75,
+      "warnings": []
+    },
+    "delivery-thanks-rocket": {
+      "sha256": "e7135f66a79302d09898c0df9969309bc3d25975aaf41c3864bc5b38a2d1efe5",
+      "seconds": 6.464,
+      "sampleRate": 24000,
+      "channels": 1,
+      "peakDbfs": -3.0,
+      "activeRmsDbfs": -22.8,
+      "leadingSilenceMs": 60,
+      "trailingSilenceMs": 138,
+      "warnings": []
+    },
+    "delivery-home": {
+      "sha256": "4159d4414b0da534a34e6e8a3cb023e4f625f6be80cd15d6def1d053b855ec56",
+      "seconds": 8.981,
+      "sampleRate": 24000,
+      "channels": 1,
+      "peakDbfs": -3.8,
+      "activeRmsDbfs": -18.3,
+      "leadingSilenceMs": 39,
+      "trailingSilenceMs": 80,
+      "warnings": []
     }
   },
   "phonemes": {

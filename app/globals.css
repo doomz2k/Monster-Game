@@ -9,6 +9,7 @@
 @import './comfort.css';
 @import './discoveries.css';
 @import './garden.css';
+@import './deliveries.css';
 @custom-variant dark (&:is(.dark *));
 @theme inline {
   --color-background: var(--background);

@@ -31,6 +31,11 @@ import { DiscoveryBook } from './discovery-book';
 import { GamePicture } from './game-picture';
 import { NeighbourPortrait } from './neighbour-portrait';
 import { collectDiscovery } from '@/lib/discoveries';
+import {
+  acceptDelivery,
+  deliveryOffer,
+  finishDelivery,
+} from '@/lib/deliveries';
 import { discoveryFor, nearbyDiscovery } from '@/lib/discovery-catalogue';
 import {
   canClaimFriendGift,
@@ -153,6 +158,8 @@ export default function AdventureGame() {
     [discoveryTarget, setDiscoveryTarget] = useState<string | null>(null);
   const bookReturnMode = useRef<Mode>('explore');
   const [flightTo, setFlightTo] = useState<Region>('moon');
+  const [deliveryThanks, setDeliveryThanks] = useState<PlaceId | null>(null);
+  const [deliveryGuiding, setDeliveryGuiding] = useState(true);
   const [parentReturnMode, setParentReturnMode] = useState<Mode>('explore');
   const returnMode = useRef<Mode>('welcome'),
     resumeMode = useRef<Mode>('explore'),
@@ -181,6 +188,8 @@ export default function AdventureGame() {
     visit: async () => ({}),
   });
   const stars = lifetimeStars(p),
+    offeredDelivery = deliveryOffer(p),
+    parcel = p.adventure.deliveries.parcel,
     nearby = position.place ? placeFor(position.place) : null,
     find = nearbyDiscovery(
       p.adventure.region,
@@ -411,6 +420,17 @@ export default function AdventureGame() {
   };
   const talk = (id: PlaceId) => {
     setPlace(id);
+    const delivered = finishDelivery(p, id, position.x, position.z);
+    if (delivered !== p) {
+      setP(delivered);
+      setDeliveryThanks(id);
+      setDeliveryGuiding(false);
+      world.current?.celebrate();
+      go('dialogue', 'delivery-thanks-' + id);
+      audio.chime();
+      return;
+    }
+    setDeliveryThanks(null);
     if (id === 'home') go('home', 'home');
     else if (id === 'shop') go('shop', 'poppy-hello');
     else
@@ -422,6 +442,7 @@ export default function AdventureGame() {
       );
   };
   const visit = (id: PlaceId) => {
+    setDeliveryGuiding(false);
     if (id === 'moon' && p.adventure.region !== 'moon') {
       setPlace('rocket');
       if (rocketParts(p) < 3) {
@@ -458,7 +479,40 @@ export default function AdventureGame() {
     world.current?.celebrate();
     return next.adventure.wallet - p.adventure.wallet;
   };
+  const takeDelivery = () => {
+    if (!offeredDelivery) return;
+    const next = acceptDelivery(p, offeredDelivery.ticket);
+    if (next === p) return;
+    setP(next);
+    setDeliveryGuiding(true);
+    setDiscoveryTarget(null);
+    setPlace(offeredDelivery.recipient);
+    go('explore', 'delivery-route-' + offeredDelivery.recipient);
+  };
+  const followDelivery = () => {
+    if (!parcel) return;
+    setDeliveryGuiding(true);
+    setDiscoveryTarget(null);
+    go(
+      'explore',
+      p.adventure.region === 'moon'
+        ? 'delivery-home'
+        : 'delivery-route-' + parcel.recipient,
+    );
+  };
   const repeat = () => {
+    if (mode === 'explore' && parcel) {
+      say(
+        p.adventure.region === 'moon'
+          ? 'delivery-home'
+          : 'delivery-route-' + parcel.recipient,
+      );
+      return;
+    }
+    if (mode === 'dialogue' && deliveryThanks === place) {
+      say('delivery-thanks-' + place);
+      return;
+    }
     if (mode === 'scrapbook') {
       bookSurface.current
         ?.querySelector<HTMLButtonElement>('[data-repeat-prompt]')
@@ -653,6 +707,7 @@ export default function AdventureGame() {
         mode !== 'dialogue' &&
         mode !== 'home',
       discoveryTarget,
+      deliveryTarget: deliveryGuiding,
       completed: p.completed,
       appearance: p.appearance,
       outfit: p.outfit,
@@ -796,10 +851,39 @@ export default function AdventureGame() {
                 <button
                   className="talk-cue"
                   onClick={() => talk(nearby.id)}
-                  aria-label={'Visit ' + nearby.friend}
+                  aria-label={
+                    (parcel?.recipient === nearby.id
+                      ? 'Give pizza to '
+                      : 'Visit ') + nearby.friend
+                  }
                 >
+                  {parcel?.recipient === nearby.id && (
+                    <GamePicture symbol="🍕" />
+                  )}
                   <span>{nearby.icon}</span>
                   <b className="pad-key a-key">A</b>
+                </button>
+              )}
+              {parcel && (
+                <button
+                  className="delivery-trail"
+                  onClick={followDelivery}
+                  aria-label={
+                    'Pizza for ' +
+                    placeFor(parcel.recipient).friend +
+                    '. Show the trail'
+                  }
+                >
+                  <GamePicture symbol="🍕" />
+                  <span>→</span>
+                  <GamePicture
+                    symbol={
+                      parcel.recipient === 'rocket'
+                        ? '🧑‍🚀'
+                        : placeFor(parcel.recipient).icon
+                    }
+                  />
+                  <strong>For {placeFor(parcel.recipient).friend}</strong>
                 </button>
               )}
               {p.adventure.region === 'moon' && (
@@ -1018,6 +1102,8 @@ export default function AdventureGame() {
                 audio={audio}
                 reviews={reviews}
                 onComplete={complete}
+                delivery={mission.kind === 'pizza' ? offeredDelivery : null}
+                onDeliver={takeDelivery}
                 onAgain={beginMission}
                 onBack={() => {
                   if (mission.npc === 'rocket' && rocketParts(p) === 3)
@@ -1058,11 +1144,13 @@ export default function AdventureGame() {
               'adventure-dialog ' +
               (mode === 'parents'
                 ? 'adult-dialog'
-                : mode === 'dialogue'
-                  ? 'conversation-dialog'
-                  : mode === 'home'
-                    ? 'home-dialog'
-                    : '')
+                : mode === 'map'
+                  ? 'map-dialog'
+                  : mode === 'dialogue'
+                    ? 'conversation-dialog'
+                    : mode === 'home'
+                      ? 'home-dialog'
+                      : '')
             }
             finalFocus={() =>
               (mode === 'mission'
@@ -1100,7 +1188,23 @@ export default function AdventureGame() {
               </div>
               {mode === 'map' && (
                 <>
-                  <h2>Where shall we go?</h2>
+                  <div className="map-title-line">
+                    <h2>Where shall we go?</h2>
+                    {parcel && (
+                      <button
+                        {...CHOICE}
+                        className="delivery-map-link"
+                        onClick={followDelivery}
+                      >
+                        <GamePicture symbol="🍕" />
+                        <span>
+                          Follow the pizza trail to{' '}
+                          {placeFor(parcel.recipient).friend}
+                        </span>
+                        <b className="pad-key a-key">A</b>
+                      </button>
+                    )}
+                  </div>
                   <div className="village-map">
                     {PLACES.map((dest) => (
                       <button
@@ -1119,7 +1223,9 @@ export default function AdventureGame() {
                         }
                         onClick={() => visit(dest.id)}
                       >
-                        <span>{dest.icon}</span>
+                        <GamePicture
+                          symbol={dest.id === 'rocket' ? '🧑‍🚀' : dest.icon}
+                        />
                         <strong>
                           {dest.friend === 'Monster' ? 'My home' : dest.friend}
                         </strong>
@@ -1235,7 +1341,11 @@ export default function AdventureGame() {
                 <div className="friend-dialogue">
                   <NeighbourPortrait id={place} isTalking={() => audio.busy} />
                   <div className="friend-chat-copy">
-                    <p className="game-eyebrow">A LITTLE HELP FOR A FRIEND</p>
+                    <p className="game-eyebrow">
+                      {deliveryThanks === place
+                        ? 'A PIZZA FOR A FRIEND'
+                        : 'A LITTLE HELP FOR A FRIEND'}
+                    </p>
                     <h2>{placeFor(place).friend}</h2>
                     <div
                       className="friendship-row"
@@ -1269,13 +1379,23 @@ export default function AdventureGame() {
                     <p>
                       {
                         (script as Record<string, { text: string }>)[
-                          place === 'rocket' && rocketParts(p) === 3
-                            ? 'pip-repaired'
-                            : placeFor(place).intro
+                          deliveryThanks === place
+                            ? 'delivery-thanks-' + place
+                            : place === 'rocket' && rocketParts(p) === 3
+                              ? 'pip-repaired'
+                              : placeFor(place).intro
                         ]?.text
                       }
                     </p>
-                    {place === 'rocket' && (
+                    {deliveryThanks === place && (
+                      <div className="delivery-reward">
+                        <GamePicture symbol="🍕" />
+                        <span>✓</span>
+                        <GamePicture symbol="⭐" />
+                        <strong>+1</strong>
+                      </div>
+                    )}
+                    {place === 'rocket' && deliveryThanks !== place && (
                       <div className="rocket-parts">
                         {['🧩', '💎', '⚡'].map((icon, i) => (
                           <span
@@ -1293,22 +1413,36 @@ export default function AdventureGame() {
                         {...CHOICE}
                         className="adventure-primary"
                         onClick={
-                          place === 'rocket' && rocketParts(p) === 3
-                            ? () => launch('moon')
-                            : beginMission
+                          deliveryThanks === place
+                            ? () => go('explore')
+                            : place === 'rocket' && rocketParts(p) === 3
+                              ? () => launch('moon')
+                              : beginMission
                         }
                       >
                         <b className="pad-key a-key">A</b>
                         <span>
-                          {place === 'rocket' && rocketParts(p) === 3
-                            ? '🚀 Let’s fly!'
-                            : 'Yes, let’s help!'}
+                          {deliveryThanks === place
+                            ? 'Keep exploring'
+                            : place === 'rocket' && rocketParts(p) === 3
+                              ? '🚀 Let’s fly!'
+                              : 'Yes, let’s help!'}
                         </span>
                       </button>
                       <button className="adventure-secondary" onClick={back}>
                         <b className="pad-key b-key">B</b> Not now
                       </button>
                     </div>
+                    {place === 'meadow' && offeredDelivery && (
+                      <button
+                        {...CHOICE}
+                        className="delivery-map-link"
+                        onClick={takeDelivery}
+                      >
+                        <GamePicture symbol="🍕" /> Deliver to{' '}
+                        {placeFor(offeredDelivery.recipient).friend}
+                      </button>
+                    )}
                     {canClaimFriendGift(p, place as QuestId) && (
                       <button
                         {...CHOICE}

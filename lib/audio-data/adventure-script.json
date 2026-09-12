@@ -1126,5 +1126,41 @@
   "garden-pizza-success": {
     "voice": "bramble",
     "text": "You grew these in your own garden! What a lovely pizza. Here are some extra stars to say thank you."
+  },
+  "delivery-route-woods": {
+    "voice": "bramble",
+    "text": "Olive is waiting by her story tree. Follow the golden star and press the green button to give her the pizza. Take your time."
+  },
+  "delivery-route-garden": {
+    "voice": "bramble",
+    "text": "Tilly is waiting at her growing patch. Follow the golden star and press the green button to give her the pizza. Take your time."
+  },
+  "delivery-route-cove": {
+    "voice": "bramble",
+    "text": "Marina is waiting by the harbour. Follow the golden star and press the green button to give her the pizza. Take your time."
+  },
+  "delivery-route-rocket": {
+    "voice": "bramble",
+    "text": "Pip is waiting by his rocket. Follow the golden star and press the green button to give him the pizza. Take your time."
+  },
+  "delivery-thanks-woods": {
+    "voice": "olive",
+    "text": "A woodland pizza! What a lovely picnic for story time. Thank you for bringing it. Here is a star for you."
+  },
+  "delivery-thanks-garden": {
+    "voice": "tilly",
+    "text": "My garden pizza is here! Just right for a little rest beside the flowers. Thank you. Here is a star for you."
+  },
+  "delivery-thanks-cove": {
+    "voice": "marina",
+    "text": "A harbour pizza! We can have a picnic and watch the boats. Thank you for bringing it. Here is a star for you."
+  },
+  "delivery-thanks-rocket": {
+    "voice": "pip",
+    "text": "My space pizza! Perfect for a picnic beside the rocket. Thank you, little explorer. Here is a star for you."
+  },
+  "delivery-home": {
+    "voice": "bramble",
+    "text": "Your pizza is safe. Follow the golden star to the little rocket, and press the green button to fly home. Your friend is waiting on the island."
   }
 }

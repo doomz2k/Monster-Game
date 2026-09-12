@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { createPizzaParcel } from './pizza-parcel';
 import { chooseCameraYaw, cameraObstructed } from './camera-guidance';
 import type { GamePreferences } from './preferences';
 import {
@@ -44,6 +45,7 @@ export type WorldState = {
   reducedMotion?: boolean;
   visible?: boolean;
   discoveryTarget?: string | null;
+  deliveryTarget?: boolean;
 };
 export type WorldUpdate = {
   x: number;
@@ -73,6 +75,7 @@ export class MonsterWorld {
   private player = new THREE.Group();
   private character = createMonster();
   private rig = this.character.root;
+  private pizzaParcel = createPizzaParcel();
   private appearanceKey = JSON.stringify(defaultAppearance());
   private village: ReturnType<typeof createVillage>;
   private discoveryMarkers: ReturnType<typeof createDiscoveryMarkers>;
@@ -951,6 +954,7 @@ export class MonsterWorld {
     if (lookKey !== this.appearanceKey) {
       this.appearanceKey = lookKey;
       this.player.remove(this.rig);
+      this.pizzaParcel.removeFromParent();
       const geometries = new Set<THREE.BufferGeometry>(),
         materials = new Set<THREE.Material>(),
         textures = new Set<THREE.Texture>();
@@ -1094,7 +1098,10 @@ export class MonsterWorld {
       celebrating: this.celebration > 0,
       greeting: s.welcome,
       reducedMotion: this.reducedMotion,
+      carrying: !!s.adventure?.deliveries.parcel && !show,
     });
+    if (this.pizzaParcel.parent !== this.rig) this.rig.add(this.pizzaParcel);
+    this.pizzaParcel.visible = !!s.adventure?.deliveries.parcel && !show;
     this.shadow.position.set(
       this.player.position.x,
       (this.region === 'moon'
@@ -1132,13 +1139,17 @@ export class MonsterWorld {
       ? discoveryFor(s.discoveryTarget)
       : undefined;
     const target =
-        discovery &&
-        discovery.region === this.region &&
-        !s.adventure?.discoveries.includes(discovery.id)
-          ? discovery
-          : s.destination
-            ? placeFor(s.destination)
-            : ZONES.find((z) => z.id === s.target)!,
+        s.deliveryTarget && s.adventure?.deliveries.parcel
+          ? this.region === 'moon'
+            ? { x: 0, z: 6 }
+            : placeFor(s.adventure.deliveries.parcel.recipient)
+          : discovery &&
+              discovery.region === this.region &&
+              !s.adventure?.discoveries.includes(discovery.id)
+            ? discovery
+            : s.destination
+              ? placeFor(s.destination)
+              : ZONES.find((z) => z.id === s.target)!,
       d = Math.hypot(
         target.x - this.player.position.x,
         target.z - this.player.position.z,

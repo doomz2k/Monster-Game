@@ -1,0 +1,206 @@
+.delivery-pictures,
+.delivery-reward {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.delivery-pictures .game-picture {
+  width: 60px;
+  height: 60px;
+}
+.delivery-pictures > span:not(.game-picture) {
+  font-size: 25px;
+  color: #89734f;
+}
+.delivery-choice {
+  background: #fff0ce !important;
+  border-color: #d9ad66 !important;
+}
+.celebration-listen {
+  position: absolute;
+  right: 28px;
+  top: 65px;
+}
+.delivery-trail {
+  position: absolute;
+  left: 24px;
+  top: 90px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  border: 2px solid #fff4d9;
+  background: #fff8e8eb;
+  padding: 5px 12px;
+  border-radius: 20px;
+  color: #58422e;
+  box-shadow: 0 4px 14px #3541261f;
+  z-index: 3;
+}
+.delivery-trail .game-picture {
+  width: 38px;
+  height: 38px;
+}
+.delivery-trail strong {
+  font-size: 14px;
+}
+.delivery-map-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 5px 16px;
+  border-radius: 17px;
+  background: #fff0ce;
+  border: 2px solid #d9ad66;
+  margin: 10px auto;
+  font-weight: 750;
+}
+.delivery-map-link .game-picture {
+  width: 40px;
+  height: 40px;
+}
+.delivery-reward {
+  justify-content: flex-start;
+  color: #426344;
+  font-size: 30px;
+}
+.delivery-reward .game-picture {
+  width: 68px;
+  height: 68px;
+}
+.adventure-dialog.map-dialog {
+  width: 100vw;
+  max-width: none;
+  height: 100dvh;
+  max-height: 100dvh;
+  border: 0;
+  border-radius: 0;
+  padding: clamp(14px, 2.5vw, 30px) clamp(20px, 5vw, 80px);
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at 40% 10%, #edf0d8, transparent 65%), #fff8e9;
+}
+.map-dialog > div {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  height: 100%;
+  gap: 10px;
+}
+.map-title-line {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-shrink: 0;
+}
+.map-title-line h2 {
+  margin: 0;
+  font-size: clamp(21px, 2.7vw, 38px);
+}
+.map-title-line .delivery-map-link {
+  margin: 0;
+}
+.map-dialog .village-map {
+  flex: 1;
+  min-height: 0;
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+  gap: clamp(9px, 1.6vw, 20px);
+  padding: 4px;
+}
+.map-dialog .destination-card {
+  min-height: 0;
+  justify-content: center;
+  padding: 8px;
+  gap: 3px;
+}
+.map-dialog .destination-card .game-picture {
+  width: clamp(55px, 12vh, 115px);
+  height: clamp(55px, 12vh, 115px);
+  flex-shrink: 0;
+}
+.map-dialog .destination-card small {
+  max-width: 100%;
+}
+.map-dialog .scrapbook-open {
+  margin: 0 auto;
+  padding: 8px 18px;
+  flex-shrink: 0;
+}
+@media (max-height: 600px) {
+  .map-dialog > div {
+    gap: 5px;
+  }
+  .map-dialog .destination-card .game-picture {
+    width: 60px;
+    height: 60px;
+  }
+  .map-dialog .destination-card small {
+    font-size: 11px;
+  }
+  .map-dialog .friend-stamps {
+    height: 12px;
+    font-size: 12px;
+  }
+}
+@media (max-width: 500px) {
+  .map-dialog .village-map {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(4, minmax(0, 1fr));
+  }
+  .map-dialog .destination-card .game-picture {
+    width: 40px;
+    height: 40px;
+  }
+  .map-dialog .destination-card strong {
+    font-size: 14px;
+  }
+  .map-dialog .destination-card small {
+    display: none;
+  }
+  .map-title-line {
+    flex-direction: column;
+    gap: 5px;
+  }
+  .map-dialog .friend-stamps {
+    position: absolute;
+    bottom: 3px;
+    right: 3px;
+    height: 10px;
+    font-size: 10px;
+    letter-spacing: 1px;
+  }
+}
+@media (max-height: 600px) {
+  .delivery-trail {
+    top: 65px;
+    left: 15px;
+  }
+  .delivery-map-link {
+    margin: 5px auto;
+    padding: 2px 12px;
+    font-size: 14px;
+  }
+  .delivery-map-link .game-picture {
+    width: 30px;
+    height: 30px;
+  }
+  .delivery-pictures .game-picture {
+    width: 42px;
+    height: 42px;
+  }
+  .delivery-reward .game-picture {
+    width: 46px;
+    height: 46px;
+  }
+}
+@media (max-width: 700px) {
+  .delivery-trail strong {
+    display: none;
+  }
+  .delivery-pictures .game-picture {
+    width: 42px;
+    height: 42px;
+  }
+}

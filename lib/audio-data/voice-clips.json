@@ -1408,5 +1408,50 @@
     "path": "/audio/voices/garden-pizza-success-0e5c7b5c7b9389be.ogg",
     "voice": "bm_george",
     "text": "You grew these in your own garden! What a lovely pizza. Here are some extra stars to say thank you."
+  },
+  "delivery-route-woods": {
+    "path": "/audio/voices/delivery-route-woods-05ee49d87e5c224f.ogg",
+    "voice": "bm_george",
+    "text": "Olive is waiting by her story tree. Follow the golden star and press the green button to give her the pizza. Take your time."
+  },
+  "delivery-route-garden": {
+    "path": "/audio/voices/delivery-route-garden-f90e2d5f5aacfc31.ogg",
+    "voice": "bm_george",
+    "text": "Tilly is waiting at her growing patch. Follow the golden star and press the green button to give her the pizza. Take your time."
+  },
+  "delivery-route-cove": {
+    "path": "/audio/voices/delivery-route-cove-c5c1539efb980035.ogg",
+    "voice": "bm_george",
+    "text": "Marina is waiting by the harbour. Follow the golden star and press the green button to give her the pizza. Take your time."
+  },
+  "delivery-route-rocket": {
+    "path": "/audio/voices/delivery-route-rocket-eaa5a43c4f4f90c6.ogg",
+    "voice": "bm_george",
+    "text": "Pip is waiting by his rocket. Follow the golden star and press the green button to give him the pizza. Take your time."
+  },
+  "delivery-thanks-woods": {
+    "path": "/audio/voices/delivery-thanks-woods-8d30dd15c65e1c6b.ogg",
+    "voice": "bf_isabella",
+    "text": "A woodland pizza! What a lovely picnic for story time. Thank you for bringing it. Here is a star for you."
+  },
+  "delivery-thanks-garden": {
+    "path": "/audio/voices/delivery-thanks-garden-9b5eec8371e995df.ogg",
+    "voice": "bf_lily",
+    "text": "My garden pizza is here! Just right for a little rest beside the flowers. Thank you. Here is a star for you."
+  },
+  "delivery-thanks-cove": {
+    "path": "/audio/voices/delivery-thanks-cove-c012c8f53edab73f.ogg",
+    "voice": "bf_emma",
+    "text": "A harbour pizza! We can have a picnic and watch the boats. Thank you for bringing it. Here is a star for you."
+  },
+  "delivery-thanks-rocket": {
+    "path": "/audio/voices/delivery-thanks-rocket-78766535b1f6ba03.ogg",
+    "voice": "bm_fable",
+    "text": "My space pizza! Perfect for a picnic beside the rocket. Thank you, little explorer. Here is a star for you."
+  },
+  "delivery-home": {
+    "path": "/audio/voices/delivery-home-22e660405976caeb.ogg",
+    "voice": "bm_george",
+    "text": "Your pizza is safe. Follow the golden star to the little rocket, and press the green button to fly home. Your friend is waiting on the island."
   }
 }

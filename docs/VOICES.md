@@ -1,6 +1,6 @@
 # Recorded British voices
 
-The adventure uses 282 pre-generated Ogg Vorbis recordings. Narration is generated locally on CPU with [kokoro-onnx](https://github.com/thewh1teagle/kokoro-onnx) and [Kokoro-82M](https://huggingface.co/hexgrad/Kokoro-82M). No model or voice service is used by the deployed game. The model is Apache-2.0; the ONNX wrapper is MIT. Model downloads are development dependencies and are not distributed with the game.
+The adventure uses 291 pre-generated Ogg Vorbis recordings. Narration is generated locally on CPU with [kokoro-onnx](https://github.com/thewh1teagle/kokoro-onnx) and [Kokoro-82M](https://huggingface.co/hexgrad/Kokoro-82M). No model or voice service is used by the deployed game. The model is Apache-2.0; the ONNX wrapper is MIT. Model downloads are development dependencies and are not distributed with the game.
 
 Every configured voice is from the model’s [British English voice group](https://huggingface.co/hexgrad/Kokoro-82M/blob/main/VOICES.md); the generator also forces `en-gb` pronunciation. American profiles are rejected. Profiles: narrator bf_emma; Bramble bm_george; Olive bf_isabella; Marina bf_emma at a quicker pace; Tilly bf_lily; Poppy bf_alice; Pip bm_fable; Nova bf_isabella at a quicker pace. No voice is presented as an imitation of a named person. Profiles and pace distinguish characters; the bank has six distinct voice profiles.
 
@@ -19,6 +19,6 @@ Never run isolated teaching phonemes through this narrator generator. Whole word
 
 ## Listening desk and technical report
 
-The hidden Start/P menu now includes a named listening desk for every line, with pass/replacement status, notes, date and SHA-256. Reviews are local and a changed recording returns to pending. `lib/audio-data/audio-audit.json` records decoded duration, peak, active RMS and silence boundaries for all 282 narration files and 26 phonics candidates. Active RMS is explicitly not LUFS. All narration passed these technical checks; all still need a human listening review. The 29 new lines cover the first-play tutorial, activity examples and specific hints.
+The hidden Start/P menu now includes a named listening desk for every line, with pass/replacement status, notes, date and SHA-256. Reviews are local and a changed recording returns to pending. `lib/audio-data/audio-audit.json` records decoded duration, peak, active RMS and silence boundaries for all 291 narration files and 26 phonics candidates. Active RMS is explicitly not LUFS. All narration passed these technical checks; all still need a human listening review. The 29 new lines cover the first-play tutorial, activity examples and specific hints.
 
 Environmental foley is original Web Audio synthesis in `lib/soundscape.ts`. It is spatially attenuated, entirely muted while speech plays, and stops with the game audio lifecycle. No narration model is used for phonemes.
