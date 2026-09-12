@@ -154,3 +154,21 @@ test('explorer hat openings leave space for both horns while keeping a solid bri
     dispose(hat);
   }
 });
+
+test('idle gestures include scratching and stretching and respect reduced motion', () => {
+  const monster = createMonster();
+  try {
+    monster.animate(pose(8.55));
+    assert.ok(monster.arms[0].rotation.z > 1.8, 'A paw reaches up to scratch');
+    monster.animate(pose(17.7));
+    assert.ok(monster.arms[0].rotation.z > 2 && monster.arms[1].rotation.z < -2, 'Both arms stretch');
+    monster.animate(pose(8.55, { reducedMotion: true }));
+    assert.equal(monster.arms[0].rotation.z, 0.09);
+    assert.equal(monster.root.rotation.z, 0);
+    for (let frame = 0; frame < 1500; frame++) {
+      monster.animate(pose(frame / 60));
+      monster.root.updateMatrixWorld(true);
+      monster.root.traverse((o) => assert.ok(o.matrixWorld.elements.every(Number.isFinite)));
+    }
+  } finally { dispose(monster.root); }
+});

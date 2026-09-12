@@ -807,7 +807,15 @@ export function createMonster(look: Appearance = defaultAppearance()) {
     lastAirborne = pose.airborne;
     landing *= Math.exp(-10 * delta);
     const gentle = pose.reducedMotion ? 0 : 1;
-    const stretch = (pose.airborne > 0 ? 0.035 : 0) - landing;
+    const idle = (1 - Math.min(1, speed * 3)) * gentle * Number(!pose.celebrating && pose.airborne === 0);
+    // Smooth envelopes keep little gestures from snapping on or off.
+    const gesture = (start: number, duration: number) => {
+      const phase = (time % 23 - start) / duration;
+      return phase > 0 && phase < 1 ? Math.sin(phase * Math.PI) ** 2 * idle : 0;
+    };
+    const scratch = gesture(7, 3.1), stretchArms = gesture(16, 3.4), curious = gesture(11, 3);
+    const wobble = Math.sin(stride * 2) * speed * 0.018 * gentle;
+    const stretch = (pose.airborne > 0 ? 0.035 : 0) - landing + wobble + stretchArms * 0.035;
     root.scale.set(
       bodyScale[0] * (1 - stretch * 0.45),
       bodyScale[1] * (1 + stretch + Math.sin(time * 2) * 0.004 * gentle),
@@ -815,36 +823,41 @@ export function createMonster(look: Appearance = defaultAppearance()) {
     );
     root.position.y =
       Math.sin(time * 2) * 0.018 * gentle +
-      Math.abs(Math.sin(stride)) * speed * 0.065 +
+      Math.abs(Math.sin(stride)) * speed * 0.085 * gentle +
+      stretchArms * 0.035 +
       (pose.celebrating ? Math.abs(Math.sin(time * 7)) * 0.12 * gentle : 0);
     root.rotation.z =
-      Math.sin(stride) * speed * 0.035 + Math.sin(time * 1.4) * 0.008 * gentle;
-    root.rotation.x = speed * 0.035;
+      Math.sin(stride) * speed * 0.075 * gentle + Math.sin(time * 1.4) * 0.018 * idle + scratch * 0.075 - curious * 0.08;
+    root.rotation.x = speed * 0.045 * gentle - stretchArms * 0.035;
+    root.rotation.y = Math.sin(time * 0.7) * 0.045 * idle + Math.sin(stride) * speed * 0.028 * gentle;
     feet.forEach((foot, i) => {
       const phase = stride + i * Math.PI;
-      foot.position.y = 0.27 + Math.max(0, Math.sin(phase)) * speed * 0.105;
+      foot.position.y = 0.27 + Math.max(0, Math.sin(phase)) * speed * 0.13 * gentle;
       foot.position.z = 0.04 + Math.cos(phase) * speed * 0.1;
       foot.rotation.x = Math.sin(phase) * speed * 0.35;
     });
-    arms[0].rotation.x = -Math.sin(stride) * speed * 0.48;
-    arms[1].rotation.x = Math.sin(stride) * speed * 0.48;
-    const wave = pose.greeting && time % 7 < 2.7;
-    arms[0].rotation.z = pose.celebrating ? 1.85 : 0.09;
+    arms[0].rotation.x = -Math.sin(stride) * speed * 0.55 * gentle - scratch * (0.85 + Math.sin(time * 19) * 0.14) - stretchArms * 0.2;
+    arms[1].rotation.x = Math.sin(stride) * speed * 0.55 * gentle - stretchArms * 0.2;
+    const wave = pose.greeting && time % 23 < 2.7;
+    arms[0].rotation.z = pose.celebrating ? 1.85 : 0.09 + scratch * 2.05 + stretchArms * 2.35;
     arms[1].rotation.z =
       pose.celebrating || wave
         ? -1.95 + Math.sin(time * 7) * 0.14 * gentle
-        : -0.09;
+        : -0.09 - stretchArms * 2.35;
     const phase = time % 5.7,
       blink =
         !pose.reducedMotion && phase > 4.9 && phase < 5.14
           ? Math.sin(((phase - 4.9) / 0.24) * Math.PI) ** 2
           : 0;
+    const doublePhase = time % 13.7;
+    const doubleBlink = !pose.reducedMotion && doublePhase > 12.7 && doublePhase < 13.15 ? Math.sin((doublePhase - 12.7) / 0.45 * Math.PI * 2) ** 2 : 0;
+    const eyelid = Math.max(blink, doubleBlink, stretchArms * 0.7);
     eyes.forEach(({ upper, lower, gaze }) => {
-      upper.rotation.x = -1.24 * (1 - blink);
-      lower.rotation.x = 1.42 * (1 - blink);
+      upper.rotation.x = -1.24 * (1 - eyelid);
+      lower.rotation.x = 1.42 * (1 - eyelid);
       gaze.position.set(
-        Math.sin(time * 0.47) * 0.019 * gentle,
-        Math.sin(time * 0.31) * 0.009 * gentle,
+        Math.sin(time * 0.47) * 0.023 * gentle + curious * 0.026,
+        Math.sin(time * 0.31) * 0.012 * gentle + scratch * 0.015,
         0,
       );
     });
@@ -854,9 +867,9 @@ export function createMonster(look: Appearance = defaultAppearance()) {
         Math.sin(stride + i) * speed * 0.035;
     });
     brows.forEach((brow, i) => {
-      brow.rotation.z = (i ? -1 : 1) * (pose.celebrating ? 0.09 : 0.02);
+      brow.rotation.z = (i ? -1 : 1) * (pose.celebrating ? 0.09 : 0.02 + curious * (i ? 0.04 : 0.14));
     });
-    tail.rotation.y = Math.sin(time * 2.5) * (0.06 + speed * 0.13) * gentle;
+    tail.rotation.y = Math.sin(time * 2.5) * (0.09 + speed * 0.23 + scratch * 0.16) * gentle;
   }
   animate({
     delta: 0,
