@@ -58,6 +58,7 @@ export class GameInput {
     const a = mappings[e.code];
     if (a) {
       e.preventDefault();
+      e.stopPropagation?.();
       this.keys.add(e.code);
       if (!e.repeat) this.action(a);
     }

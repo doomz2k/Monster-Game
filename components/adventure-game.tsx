@@ -403,7 +403,9 @@ export default function AdventureGame() {
       }
       return;
     }
-    const root = modal ? modalSurface.current : surface.current;
+    const base = modal ? modalSurface.current : surface.current;
+    const root =
+      base?.querySelector<HTMLElement>('[data-choice-scope]') ?? base;
     if (!root) return;
     if (
       action === 'left' ||

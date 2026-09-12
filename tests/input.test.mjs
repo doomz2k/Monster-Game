@@ -53,15 +53,27 @@ test('Xbox controls use rising button edges, stick deadzone and disconnect pause
   poll(1360);
   assert.equal(actions.filter((a) => a === 'previousTab').length, 0);
   assert.equal(actions.filter((a) => a === 'nextTab').length, 0);
+  let consumed = 0;
   const keyboardEvent = (code) => ({
     code,
     repeat: false,
     preventDefault() {},
+    stopPropagation() {
+      consumed++;
+    },
   });
   events.get('keydown')(keyboardEvent('KeyQ'));
   events.get('keydown')(keyboardEvent('KeyE'));
   assert.equal(actions.filter((a) => a === 'previousTab').length, 0);
   assert.equal(actions.filter((a) => a === 'nextTab').length, 0);
+  const backsBefore = actions.filter((a) => a === 'back').length;
+  events.get('keydown')(keyboardEvent('Escape'));
+  assert.equal(actions.filter((a) => a === 'back').length, backsBefore + 1);
+  assert.equal(
+    consumed,
+    1,
+    'Handled Escape cannot also dismiss the underlying dialog',
+  );
   const beforeTriggers = actions.length;
   pad.buttons[6].pressed = pad.buttons[7].pressed = true;
   poll(1370);

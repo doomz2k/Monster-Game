@@ -272,7 +272,7 @@ export function HomePanel({
             })}
           </div>
           {pendingClear !== null && (
-            <div className="clear-confirm">
+            <div className="clear-confirm" data-choice-scope>
               <p>Make this patch empty?</p>
               <button
                 data-game-choice
