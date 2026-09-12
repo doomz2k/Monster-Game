@@ -1,5 +1,10 @@
 import { SOUNDS, decodableWords, soundChoices } from './phonics';
 import { readOutfit, starterOutfit, type Outfit } from './wardrobe';
+import {
+  defaultAppearance,
+  readAppearance,
+  type Appearance,
+} from './appearance';
 export const ZONES = [
   {
     id: 'meadow',
@@ -75,6 +80,7 @@ export type ProgressData = {
   soundLimit: number;
   mathsMax: 5 | 10;
   outfit: Outfit;
+  appearance: Appearance;
 };
 export const freshProgress = (): ProgressData => ({
   version: 1,
@@ -84,6 +90,7 @@ export const freshProgress = (): ProgressData => ({
   soundLimit: 5,
   mathsMax: 5,
   outfit: starterOutfit(),
+  appearance: defaultAppearance(),
 });
 export function readProgress(raw: string | null): ProgressData {
   try {
@@ -118,6 +125,7 @@ export function readProgress(raw: string | null): ProgressData {
       : 5;
     clean.mathsMax = p.mathsMax === 10 ? 10 : 5;
     clean.outfit = readOutfit(p.outfit, clean.completed.length);
+    clean.appearance = readAppearance(p.appearance);
     return clean;
   } catch {
     return freshProgress();

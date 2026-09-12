@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import * as THREE from 'three';
 import {
   COSMETICS,
+  OUTFIT_SLOTS,
   equipItem,
   isUnlocked,
   itemsFor,
@@ -19,18 +20,17 @@ import {
 } from '../lib/learning.ts';
 import { createCostume } from '../lib/monster-outfit.ts';
 
-test('four wearable starter items and six milestone rewards are available', () => {
-  assert.equal(
+test('expanded wardrobe offers starter choices and rewards in independent slots', () => {
+  assert.ok(
     COSMETICS.filter((item) => item.stars === 0 && !item.id.startsWith('no-'))
-      .length,
-    4,
+      .length >= 35,
   );
-  assert.equal(COSMETICS.filter((item) => item.stars > 0).length, 6);
+  assert.ok(COSMETICS.filter((item) => item.stars > 0).length >= 10);
   assert.equal(
     new Set(COSMETICS.map((item) => item.id)).size,
     COSMETICS.length,
   );
-  for (const slot of ['hat', 'accessory'])
+  for (const slot of OUTFIT_SLOTS)
     assert.ok(
       itemsFor(slot).some(
         (item) => item.id === starterOutfit()[slot] && isUnlocked(item, 0),
@@ -58,14 +58,17 @@ test('equipping preserves the other slot and cannot equip locked or unknown item
   assert.equal(equipItem(initial, 'crown', 15), initial);
   assert.equal(equipItem(initial, 'missing', 99), initial);
   assert.deepEqual(equipItem(initial, 'crown', 16), {
+    ...initial,
     hat: 'crown',
     accessory: initial.accessory,
   });
   assert.deepEqual(equipItem(initial, 'scarf', 0), {
+    ...initial,
     hat: initial.hat,
     accessory: 'scarf',
   });
   assert.deepEqual(equipItem(initial, 'no-hat', 0), {
+    ...initial,
     hat: 'no-hat',
     accessory: initial.accessory,
   });
@@ -86,7 +89,11 @@ test('old saves migrate and outfits survive a round trip without unlocking unear
     completed: Array.from({ length: 24 }, (_, i) => 'challenge-' + i),
     outfit: { hat: 'crown', accessory: 'medal' },
   };
-  assert.deepEqual(readProgress(JSON.stringify(p)).outfit, p.outfit);
+  assert.deepEqual(readProgress(JSON.stringify(p)).outfit, {
+    ...starterOutfit(),
+    hat: 'crown',
+    badge: 'medal',
+  });
   assert.deepEqual(
     readOutfit({ hat: 'crown', accessory: 'medal' }, 0),
     starterOutfit(),

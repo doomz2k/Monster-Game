@@ -10,8 +10,12 @@ import {
   Star,
 } from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
+import { AppearancePanel } from '@/components/appearance-panel';
+import type { Appearance } from '@/lib/appearance';
 import {
   COSMETICS,
+  OUTFIT_SLOTS,
+  SLOT_LABELS,
   isUnlocked,
   itemsFor,
   type Cosmetic,
@@ -29,6 +33,8 @@ export function WardrobePanel({
   onEquip,
   onClose,
   onTurn,
+  appearance,
+  onAppearance,
 }: {
   stars: number;
   outfit: Outfit;
@@ -40,6 +46,8 @@ export function WardrobePanel({
   onEquip: (item: Cosmetic) => void;
   onClose: () => void;
   onTurn: () => void;
+  appearance: Appearance;
+  onAppearance: (look: Appearance) => void;
 }) {
   const list = useRef<HTMLDivElement>(null);
   const items = itemsFor(slot);
@@ -72,18 +80,18 @@ export function WardrobePanel({
         </div>
         <h2 id="wardrobe-title">What shall we wear?</h2>
         <p className="wardrobe-intro">
-          Choose a hat and a little something extra.
+          Mix colours, shapes and a whole outfit. Wear one from every shelf!
         </p>
+        <details className="monster-creator" data-parent-controls>
+          <summary>🎨 Make your Monster</summary>
+          <AppearancePanel value={appearance} onChange={onAppearance} />
+        </details>
         <div className="wardrobe-tabs">
-          <button aria-pressed={slot === 'hat'} onClick={() => onSlot('hat')}>
-            <span aria-hidden="true">🎩</span> Hats
-          </button>
-          <button
-            aria-pressed={slot === 'accessory'}
-            onClick={() => onSlot('accessory')}
-          >
-            <span aria-hidden="true">🎀</span> Accessories
-          </button>
+          {OUTFIT_SLOTS.map((s) => (
+            <button key={s} aria-pressed={slot === s} onClick={() => onSlot(s)}>
+              {SLOT_LABELS[s]}
+            </button>
+          ))}
           <span>LB / RB · Q / E</span>
         </div>
         <div className="wardrobe-choices" ref={list}>

@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
+import { BODY_SCALE, defaultAppearance, type Appearance } from './appearance';
 
 export type MonsterPose = {
   delta: number;
@@ -106,12 +107,12 @@ function taperedCurve(
   return geometry;
 }
 
-export function createMonster() {
+export function createMonster(look: Appearance = defaultAppearance()) {
   const root = new THREE.Group();
   root.name = 'Monster';
   const bumpMap = plushBump();
   const skin = new THREE.MeshPhysicalMaterial({
-    color: '#f8c83e',
+    color: look.colour,
     roughness: 0.83,
     sheen: 1,
     sheenColor: '#ffe9ab',
@@ -120,7 +121,7 @@ export function createMonster() {
     bumpScale: 0.012,
   });
   const cream = new THREE.MeshPhysicalMaterial({
-    color: '#fff0bf',
+    color: look.accent,
     roughness: 0.87,
     sheen: 0.8,
     sheenColor: '#fff7d9',
@@ -128,7 +129,7 @@ export function createMonster() {
     bumpScale: 0.008,
   });
   const amber = new THREE.MeshPhysicalMaterial({
-    color: '#e9ae32',
+    color: new THREE.Color(look.colour).multiplyScalar(0.82),
     roughness: 0.72,
     sheen: 0.5,
     bumpMap,
@@ -202,8 +203,8 @@ export function createMonster() {
     patchColours: number[] = [],
     patchUV: number[] = [],
     patchIndices: number[] = [];
-  const centreColour = new THREE.Color('#fff0b8'),
-    edgeColour = new THREE.Color('#f8c83e');
+  const centreColour = new THREE.Color(look.accent),
+    edgeColour = new THREE.Color(look.colour);
   for (let r = 0; r <= 24; r++)
     for (let a = 0; a <= 64; a++) {
       const d = r / 24,
@@ -364,8 +365,8 @@ export function createMonster() {
         angle = Math.atan2(y, x);
       const filament =
         (Math.sin(angle * 37 + distance * 13) + Math.sin(angle * 71)) * 0.06;
-      const colour = new THREE.Color('#976631').lerp(
-        new THREE.Color('#d2aa52'),
+      const colour = new THREE.Color(look.iris).lerp(
+        new THREE.Color(look.iris).lerp(new THREE.Color('#ffffff'), 0.35),
         THREE.MathUtils.clamp((1 - distance) * 0.7 + filament, 0, 1),
       );
       if (distance > 0.84)
@@ -696,6 +697,104 @@ export function createMonster() {
       0.045,
     );
 
+  // Apply choices to the whole rig, so layered clothing shares its proportions.
+  const bodyScale = BODY_SCALE[look.shape];
+  tufts.visible = look.texture === 'plush';
+  for (const material of [skin, cream, amber, tummyMaterial]) {
+    material.roughness =
+      look.texture === 'shiny' ? 0.2 : look.texture === 'smooth' ? 0.62 : 0.83;
+    material.sheen = look.texture === 'plush' ? 1 : 0;
+    material.clearcoat = look.texture === 'shiny' ? 0.8 : 0;
+    material.bumpScale =
+      look.texture === 'smooth' || look.texture === 'shiny'
+        ? 0
+        : look.texture === 'scales'
+          ? 0.04
+          : 0.012;
+  }
+  if (look.pattern !== 'plain') {
+    const size = 128,
+      pixels = new Uint8Array(size * size * 4);
+    const primary = new THREE.Color(look.colour),
+      accent = new THREE.Color(look.accent);
+    for (let y = 0; y < size; y++)
+      for (let x = 0; x < size; x++) {
+        const u = (x % 32) - 16,
+          v = (y % 32) - 16;
+        const marked =
+          look.pattern === 'spots'
+            ? u * u + v * v < 55
+            : look.pattern === 'stripes'
+              ? (y + x * 0.25) % 28 < 8
+              : look.pattern === 'diamonds'
+                ? Math.abs(u) + Math.abs(v) < 10
+                : (Math.floor(x / 8) * 17 + Math.floor(y / 8) * 31) % 11 < 3;
+        const c = marked ? accent : primary,
+          i = (y * size + x) * 4;
+        pixels[i] = Math.round(c.r * 255);
+        pixels[i + 1] = Math.round(c.g * 255);
+        pixels[i + 2] = Math.round(c.b * 255);
+        pixels[i + 3] = 255;
+      }
+    const texture = new THREE.DataTexture(pixels, size, size);
+    texture.needsUpdate = true;
+    texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+    texture.repeat.set(2, 2);
+    skin.map = texture;
+    skin.color.set('#ffffff');
+  }
+  for (const side of ['left', 'right']) {
+    const horn = root.getObjectByName('Curved horn ' + side)!;
+    horn.visible = look.horns === 'curved';
+    if (look.horns === 'spikes' || look.horns === 'antennae') {
+      const sign = side === 'left' ? -1 : 1;
+      mesh(
+        root,
+        new THREE.ConeGeometry(
+          look.horns === 'spikes' ? 0.18 : 0.055,
+          0.55,
+          16,
+        ),
+        hornMaterial,
+        'Chosen horn ' + side,
+        sign * 0.55,
+        2.54,
+        0,
+      );
+      if (look.horns === 'antennae')
+        ball(root, cream, 'Antenna tip ' + side, sign * 0.55, 2.83, 0, 0.13);
+    }
+    const ear = root.getObjectByName('Ear ' + side)!;
+    ear.visible = look.ears !== 'none';
+    if (look.ears === 'long') ear.scale.y = 1.8;
+    const eye = root.getObjectByName('Eye ' + side)!;
+    eye.scale.setScalar(
+      look.eyeSize === 'big' ? 1.17 : look.eyeSize === 'little' ? 0.8 : 1,
+    );
+    root.getObjectByName('Warm cheek ' + side)!.visible = look.face !== 'plain';
+    for (let i = 0; i < 3; i++)
+      root.getObjectByName('Freckle ' + side + i)!.visible =
+        look.face === 'freckles';
+  }
+  if (look.eyes === 'one') {
+    root.getObjectByName('Eye left')!.visible = false;
+    root.getObjectByName('Brow left')!.visible = false;
+    root.getObjectByName('Eye right')!.position.x = 0;
+    root.getObjectByName('Brow right')!.position.x = 0;
+  } else if (look.eyes === 'three') {
+    const third = root.getObjectByName('Eye right')!.clone();
+    third.name = 'Eye middle';
+    third.position.set(0, 2.07, 0.57);
+    third.scale.multiplyScalar(0.72);
+    root.add(third);
+    root.getObjectByName('Eye left')!.position.x = -0.4;
+    root.getObjectByName('Eye right')!.position.x = 0.4;
+    const upper = third.getObjectByName('Upper eyelid right') as THREE.Mesh,
+      lower = third.getObjectByName('Lower eyelid right') as THREE.Mesh;
+    eyes.push({ upper, lower, gaze: third.children[1] as THREE.Group });
+  }
+  tail.visible = look.tail !== 'none';
+  if (look.tail === 'long') tail.scale.set(1.3, 1, 1.8);
   let speed = 0,
     stride = 0,
     lastAirborne = 0,
@@ -710,9 +809,9 @@ export function createMonster() {
     const gentle = pose.reducedMotion ? 0 : 1;
     const stretch = (pose.airborne > 0 ? 0.035 : 0) - landing;
     root.scale.set(
-      1 - stretch * 0.45,
-      1 + stretch + Math.sin(time * 2) * 0.004 * gentle,
-      1 - stretch * 0.45,
+      bodyScale[0] * (1 - stretch * 0.45),
+      bodyScale[1] * (1 + stretch + Math.sin(time * 2) * 0.004 * gentle),
+      bodyScale[2] * (1 - stretch * 0.45),
     );
     root.position.y =
       Math.sin(time * 2) * 0.018 * gentle +

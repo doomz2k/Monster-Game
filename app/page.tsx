@@ -31,6 +31,7 @@ import { LaunchScreen } from '@/components/launch-screen';
 import { WardrobePanel } from '@/components/wardrobe-panel';
 import {
   equipItem,
+  OUTFIT_SLOTS,
   isUnlocked,
   itemsFor,
   moveWardrobeSelection,
@@ -580,7 +581,13 @@ export default function Game() {
     if (mode === 'parents' && action !== 'back') return;
     if (mode === 'wardrobe') {
       if (action === 'previousTab' || action === 'nextTab') {
-        switchWardrobe(wardrobeSlot === 'hat' ? 'accessory' : 'hat');
+        switchWardrobe(
+          OUTFIT_SLOTS[
+            (OUTFIT_SLOTS.indexOf(wardrobeSlot) +
+              (action === 'nextTab' ? 1 : OUTFIT_SLOTS.length - 1)) %
+              OUTFIT_SLOTS.length
+          ],
+        );
         return;
       }
       if (action === 'map') {
@@ -706,6 +713,7 @@ export default function Game() {
       showcase:
         mode === 'welcome' ? 'launch' : mode === 'wardrobe' ? 'wardrobe' : null,
       outfit: progress.outfit,
+      appearance: progress.appearance,
     });
     visitAction.current = travel;
     handlers.current = handleAction;
@@ -780,6 +788,10 @@ export default function Game() {
       )}
       {mode === 'wardrobe' && (
         <WardrobePanel
+          appearance={progress.appearance}
+          onAppearance={(appearance) =>
+            setProgress((p) => ({ ...p, appearance }))
+          }
           stars={progress.completed.length}
           outfit={progress.outfit}
           slot={wardrobeSlot}

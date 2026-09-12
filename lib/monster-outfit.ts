@@ -1,8 +1,48 @@
 import * as THREE from 'three';
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
+import { COSMETICS } from './wardrobe';
 
 // Each piece uses Monster's rig coordinates, so it follows every hop and sway.
 export function createCostume(id: string): THREE.Group {
+  const item = COSMETICS.find((c) => c.id === id);
+  const variants: Record<string, string> = {
+    'flower-beanie': 'beanie',
+    'rainbow-party': 'party',
+    'gold-crown': 'crown',
+    'red-scarf': 'scarf',
+    'rainbow-scarf': 'scarf',
+    'blue-bow': 'bow',
+    'yellow-bow': 'bow',
+    'sun-glasses': 'glasses',
+    'heart-glasses': 'glasses',
+    'blue-glasses': 'glasses',
+    goggles: 'glasses',
+    'star-glasses': 'glasses',
+    'pink-backpack': 'backpack',
+    'blue-cape': 'cape',
+    'butterfly-wings': 'fairy-wings',
+    'pink-shirt': 'shirt',
+    'green-shirt': 'shirt',
+    'pink-boots': 'boots',
+    'red-trainers': 'trainers',
+    'space-boots': 'boots',
+    'flower-pin': 'medal',
+    'heart-pin': 'medal',
+    'moon-pin': 'medal',
+    'rainbow-pin': 'medal',
+  };
+  if (variants[id]) {
+    const result = createCostume(variants[id]);
+    result.name = id;
+    result.traverse((o) => {
+      if (
+        o instanceof THREE.Mesh &&
+        o.material instanceof THREE.MeshPhysicalMaterial
+      )
+        o.material.color.set(item?.colour ?? '#ffffff');
+    });
+    return result;
+  }
   const group = new THREE.Group();
   group.name = id;
   const materials = new Map<string, THREE.MeshPhysicalMaterial>();
@@ -215,6 +255,138 @@ export function createCostume(id: string): THREE.Group {
       0.79,
       0.77,
     );
+  } else if (id === 'wizard') {
+    add(new THREE.ConeGeometry(0.6, 1.04, 32), '#665bcd', 0, 2.8, 0);
+    ring('#baa2ff', 0.66, 0.1, 0, 2.29, 0).rotation.x = Math.PI / 2;
+    ball('#ffdf71', 0, 3.32, 0, 0.08);
+  } else if (id === 'pirate') {
+    ball('#39435a', 0, 2.48, 0, 0.93, 0.3, 0.48);
+    ball('#fff7da', 0, 2.48, 0.45, 0.14, 0.14, 0.035);
+  } else if (id === 'sunhat' || id === 'top-hat') {
+    cylinder(
+      item?.colour ?? '#f6ca5b',
+      0.58,
+      id === 'top-hat' ? 0.75 : 0.3,
+      id === 'top-hat' ? 2.68 : 2.45,
+    );
+    const brim = cylinder(item?.colour ?? '#f6ca5b', 0.94, 0.07, 2.3);
+    brim.scale.z = 0.85;
+    ring('#ed9bbb', 0.585, 0.055, 0, 2.36, 0).rotation.x = Math.PI / 2;
+  } else if (id === 'chef') {
+    cylinder('#fff4df', 0.55, 0.25, 2.44);
+    for (const x of [-0.32, 0, 0.32])
+      ball('#fff9ed', x, 2.77, 0, 0.36, 0.33, 0.45);
+  } else if (id === 'beret') {
+    ball('#ed735d', 0.08, 2.48, 0, 0.73, 0.18, 0.62);
+    ball('#983c44', 0.1, 2.69, 0, 0.06, 0.09, 0.06);
+  } else if (id === 'astronaut') {
+    const helmet = ball('#c3e5f2', 0, 1.84, 0.02, 1.02, 0.92, 0.9);
+    const glass = helmet.material as THREE.MeshPhysicalMaterial;
+    glass.transparent = true;
+    glass.opacity = 0.2;
+    glass.depthWrite = false;
+    ring('#e6eff5', 0.79, 0.08, 0, 1.3, 0).rotation.x = Math.PI / 2;
+  } else if (id === 'bandana' || id === 'beads') {
+    if (id === 'beads')
+      for (let i = 0; i < 14; i++) {
+        const a = (i / 14) * Math.PI * 2;
+        ball(
+          ['#eb8397', '#f2cc65', '#7ec6b8'][i % 3],
+          Math.sin(a) * 0.81,
+          1.04,
+          Math.cos(a) * 0.69,
+          0.09,
+        );
+      }
+    else
+      add(
+        new THREE.ConeGeometry(0.33, 0.45, 3),
+        '#ee8550',
+        0,
+        0.93,
+        0.73,
+      ).rotation.z = Math.PI;
+  } else if (id === 'fairy-wings' || id === 'dragon-wings') {
+    for (const side of [-1, 1]) {
+      const wing = ball(
+        item?.colour ?? '#c095ed',
+        side * 0.88,
+        1.4,
+        -0.55,
+        0.57,
+        0.81,
+        0.09,
+      );
+      wing.rotation.z = -side * 0.45;
+      const lower = ball('#ecbde6', side * 0.73, 0.84, -0.63, 0.4, 0.37, 0.08);
+      lower.rotation.z = side * 0.4;
+    }
+  } else if (id === 'cape') {
+    const cape = add(
+      new THREE.CylinderGeometry(
+        0.64,
+        0.99,
+        1.35,
+        24,
+        1,
+        true,
+        Math.PI / 2,
+        Math.PI,
+      ),
+      '#e96f71',
+      0,
+      1.05,
+      -0.12,
+    );
+    cape.rotation.y = Math.PI;
+    (cape.material as THREE.MeshPhysicalMaterial).side = THREE.DoubleSide;
+  } else if (id === 'jetpack') {
+    for (const side of [-1, 1]) {
+      add(
+        new THREE.CylinderGeometry(0.21, 0.21, 0.85, 20),
+        '#a7b8cd',
+        side * 0.35,
+        1.05,
+        -0.81,
+      );
+      ball('#ef9955', side * 0.35, 0.53, -0.81, 0.13, 0.22, 0.13);
+    }
+  } else if (
+    ['shirt', 'dress', 'raincoat', 'spacesuit', 'dungarees'].includes(id)
+  ) {
+    add(
+      new THREE.CylinderGeometry(
+        0.86,
+        id === 'dress' ? 1.03 : 0.78,
+        0.78,
+        48,
+        1,
+        true,
+      ),
+      item?.colour ?? '#67b1e0',
+      0,
+      0.93,
+      0,
+      1,
+      1,
+      0.84,
+    );
+    for (const side of [-1, 1])
+      ball(item?.colour ?? '#67b1e0', side * 0.83, 1.35, 0, 0.23, 0.22, 0.22);
+    for (const y of [0.75, 0.94, 1.13]) ball('#fff4d6', 0.03, y, 0.735, 0.035);
+  } else if (id === 'boots' || id === 'trainers' || id === 'slippers') {
+    for (const side of [-1, 1]) {
+      ball(
+        item?.colour ?? '#f3c847',
+        side * 0.39,
+        0.29,
+        0.17,
+        0.32,
+        id === 'boots' ? 0.28 : 0.18,
+        0.42,
+      );
+      ball('#fff1dc', side * 0.39, 0.08, 0.19, 0.33, 0.075, 0.43);
+    }
   }
   return group;
 }

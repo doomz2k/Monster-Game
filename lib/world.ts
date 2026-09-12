@@ -4,6 +4,7 @@ import { createMonster } from './monster-model';
 import { ZONES, clampToIsland, nearestZone, type ZoneId } from './learning';
 import { COSMETICS, type Outfit } from './wardrobe';
 import { createCostume } from './monster-outfit';
+import { defaultAppearance, type Appearance } from './appearance';
 export type WorldState = {
   active: boolean;
   welcome: boolean;
@@ -14,6 +15,7 @@ export type WorldState = {
   target: ZoneId;
   showcase: 'launch' | 'wardrobe' | null;
   outfit: Outfit;
+  appearance?: Appearance;
 };
 export type WorldUpdate = {
   x: number;
@@ -42,6 +44,7 @@ export class MonsterWorld {
   private player = new THREE.Group();
   private character = createMonster();
   private rig = this.character.root;
+  private appearanceKey = JSON.stringify(defaultAppearance());
   private shadow: THREE.Mesh;
   private guide: THREE.Mesh;
   private ornaments: {
@@ -649,12 +652,6 @@ export class MonsterWorld {
   }
   private buildMonster() {
     this.player.add(this.rig);
-    for (const item of COSMETICS) {
-      const piece = createCostume(item.id);
-      piece.visible = false;
-      this.rig.add(piece);
-      this.costumePieces.set(item.id, piece);
-    }
   }
   private buildShowroom() {
     this.showroom.add(
@@ -736,6 +733,45 @@ export class MonsterWorld {
   private tick(dt: number, time: number) {
     const s = this.state(),
       moving = s.active ? Math.min(1, Math.hypot(s.moveX, s.moveY)) : 0;
+    const lookKey = JSON.stringify(s.appearance ?? defaultAppearance());
+    if (lookKey !== this.appearanceKey) {
+      this.appearanceKey = lookKey;
+      this.player.remove(this.rig);
+      const geometries = new Set<THREE.BufferGeometry>(),
+        materials = new Set<THREE.Material>(),
+        textures = new Set<THREE.Texture>();
+      this.rig.traverse((o) => {
+        if (o instanceof THREE.Mesh) {
+          geometries.add(o.geometry);
+          for (const material of Array.isArray(o.material)
+            ? o.material
+            : [o.material]) {
+            materials.add(material);
+            if (material instanceof THREE.MeshStandardMaterial) {
+              if (material.map) textures.add(material.map);
+              if (material.bumpMap) textures.add(material.bumpMap);
+            }
+          }
+        }
+      });
+      geometries.forEach((g) => g.dispose());
+      materials.forEach((m) => m.dispose());
+      textures.forEach((t) => t.dispose());
+      this.character = createMonster(s.appearance);
+      this.rig = this.character.root;
+      this.costumePieces.clear();
+      this.buildMonster();
+    }
+    for (const id of Object.values(s.outfit))
+      if (
+        !id.startsWith('no-') &&
+        !this.costumePieces.has(id) &&
+        COSMETICS.some((item) => item.id === id)
+      ) {
+        const piece = createCostume(id);
+        this.rig.add(piece);
+        this.costumePieces.set(id, piece);
+      }
     const show = Boolean(s.showcase);
     if (show !== this.inShowcase) {
       this.inShowcase = show;
@@ -752,7 +788,7 @@ export class MonsterWorld {
       }
     }
     for (const [id, piece] of this.costumePieces)
-      piece.visible = id === s.outfit.hat || id === s.outfit.accessory;
+      piece.visible = Object.values(s.outfit).includes(id);
     if (show) {
       if (s.showcase === 'wardrobe') this.showcaseAngle += s.turn * dt * 2;
       this.player.rotation.y = THREE.MathUtils.lerp(
