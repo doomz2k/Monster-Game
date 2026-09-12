@@ -452,9 +452,11 @@ export default function AdventureGame() {
     go('mission');
   };
   const complete = () => {
-    if (!mission) return;
-    setP((old) => finishMission(old, mission));
+    if (!mission) return 0;
+    const next = finishMission(p, mission);
+    setP(next);
     world.current?.celebrate();
+    return next.adventure.wallet - p.adventure.wallet;
   };
   const repeat = () => {
     if (mode === 'scrapbook') {
@@ -648,7 +650,8 @@ export default function AdventureGame() {
         mode !== 'mission' &&
         mode !== 'parents' &&
         mode !== 'scrapbook' &&
-        mode !== 'dialogue',
+        mode !== 'dialogue' &&
+        mode !== 'home',
       discoveryTarget,
       completed: p.completed,
       appearance: p.appearance,
@@ -1057,7 +1060,9 @@ export default function AdventureGame() {
                 ? 'adult-dialog'
                 : mode === 'dialogue'
                   ? 'conversation-dialog'
-                  : '')
+                  : mode === 'home'
+                    ? 'home-dialog'
+                    : '')
             }
             finalFocus={() =>
               (mode === 'mission'

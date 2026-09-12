@@ -1388,5 +1388,25 @@
     "path": "/audio/voices/discovery-clue-moon-telescope-7aac4ad1536669ef.ogg",
     "voice": "bf_emma",
     "text": "On the Moon, explore just beyond Nova\u2019s camp. Look for a golden star, then press the green A button."
+  },
+  "garden-harvest": {
+    "path": "/audio/voices/garden-harvest-ef4af5590266ed6f.ogg",
+    "voice": "bf_emma",
+    "text": "A basket for Bramble! Your plant can grow more. When a pizza needs your tomatoes or peppers, you will earn an extra star for each home-grown basket."
+  },
+  "garden-full": {
+    "path": "/audio/voices/garden-full-be0478bb4ea3a3f5.ogg",
+    "voice": "bf_emma",
+    "text": "Your baskets are full. Shall we visit Bramble and make a lovely pizza?"
+  },
+  "garden-visitors": {
+    "path": "/audio/voices/garden-visitors-fa528a9b0351867b.ogg",
+    "voice": "bf_emma",
+    "text": "Lovely flowers for our little visitors. Can you spot a bee, a bird, or a butterfly in your garden?"
+  },
+  "garden-pizza-success": {
+    "path": "/audio/voices/garden-pizza-success-0e5c7b5c7b9389be.ogg",
+    "voice": "bm_george",
+    "text": "You grew these in your own garden! What a lovely pizza. Here are some extra stars to say thank you."
   }
 }

@@ -3,6 +3,7 @@ import { WORLD_SCALE, SHORE_RADIUS } from './world-layout';
 import { surfaceMaterial, type WorldTextures } from './world-materials';
 import { PLACES, SHOP_ITEMS, type AdventureProgress } from './adventure';
 import { createNeighbour } from './neighbours';
+import { createGardenPlant, createGardenWildlife } from './garden-models';
 
 export function createVillage(
   height: (x: number, z: number) => number,
@@ -387,6 +388,8 @@ export function createVillage(
   home.position.y = height(home.position.x, home.position.z);
   beds.position.y = height(beds.position.x, beds.position.z);
   let contentsKey = '';
+  let plantModels: ReturnType<typeof createGardenPlant>[] = [];
+  let wildlife: ReturnType<typeof createGardenWildlife> | null = null;
   function clear(group: THREE.Group) {
     group.traverse((o) => {
       if (o instanceof THREE.Mesh) {
@@ -410,38 +413,15 @@ export function createVillage(
     contentsKey = key;
     clear(furnishings);
     clear(crops);
+    plantModels = [];
+    wildlife = createGardenWildlife(a.plots);
+    crops.add(wildlife.root);
     a.plots.forEach((plant, i) => {
       if (!plant) return;
-      const colour =
-        SHOP_ITEMS.find((item) => item.id === plant.seed)?.colour ?? '#efb465';
-      const x = (i % 3) * 2.1,
-        z = Math.floor(i / 3) * 1.7,
-        h = 0.25 + plant.water * 0.22;
-      mesh(
-        crops,
-        new THREE.CylinderGeometry(0.035, 0.045, h, 8),
-        '#6d9f55',
-        x,
-        0.2 + h / 2,
-        z,
-      );
-      ball(crops, '#79b566', x - 0.15, 0.2 + h / 2, z, 0.22, 0.08, 0.14);
-      if (plant.water === 3) {
-        for (let p = 0; p < 5; p++) {
-          const t = (p / 5) * Math.PI * 2;
-          ball(
-            crops,
-            colour,
-            x + Math.cos(t) * 0.19,
-            0.2 + h + Math.sin(t) * 0.19,
-            z,
-            0.17,
-            0.17,
-            0.06,
-          );
-        }
-        ball(crops, '#ffe498', x, 0.2 + h, z + 0.06, 0.12);
-      } else ball(crops, '#9bc46d', x, 0.2 + h, z, 0.09 + plant.water * 0.04);
+      const model = createGardenPlant(plant.seed, plant.water);
+      model.root.position.set((i % 3) * 2.1, 0.22, Math.floor(i / 3) * 1.7);
+      crops.add(model.root);
+      plantModels.push(model);
     });
     a.furniture.forEach((id, i) => {
       if (!id) return;
@@ -521,5 +501,14 @@ export function createVillage(
         );
     });
   }
-  return { root, moon, neighbours, update };
+  return {
+    root,
+    moon,
+    neighbours,
+    update,
+    animateGarden(time: number, reduced: boolean) {
+      plantModels.forEach((m, i) => m.animate(time + i, reduced));
+      wildlife?.animate(time, reduced);
+    },
+  };
 }

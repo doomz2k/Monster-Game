@@ -8,6 +8,7 @@
 @import './learning-polish.css';
 @import './comfort.css';
 @import './discoveries.css';
+@import './garden.css';
 @custom-variant dark (&:is(.dark *));
 @theme inline {
   --color-background: var(--background);

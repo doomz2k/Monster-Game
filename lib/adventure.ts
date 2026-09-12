@@ -1,5 +1,6 @@
 import { WORLD_SCALE } from './world-layout';
 import { discoveryFor } from './discovery-catalogue';
+import { freshPantry, readPantry, type Pantry, type ProduceId } from './garden';
 import { spaceCard } from './space-learning';
 import type { ProgressData } from './learning';
 import { decodableWords, SOUNDS, soundChoices } from './phonics';
@@ -118,8 +119,25 @@ export type AdventureProgress = {
   moonVisits: number;
   discoveries: string[];
   friendshipGifts: QuestId[];
+  pantry: Pantry;
 };
 export const SHOP_ITEMS = [
+  {
+    id: 'tomato',
+    name: 'Tomato seeds',
+    icon: '🍅',
+    kind: 'seed',
+    price: 2,
+    colour: '#df795f',
+  },
+  {
+    id: 'pepper',
+    name: 'Pepper seeds',
+    icon: '🫑',
+    kind: 'seed',
+    price: 2,
+    colour: '#92b361',
+  },
   {
     id: 'daisy',
     name: 'Daisy seeds',
@@ -256,6 +274,8 @@ export const freshAdventure = (legacyStars = 0): AdventureProgress => ({
   rounds: { meadow: 0, woods: 0, cove: 0, garden: 0, rocket: 0, moon: 0 },
   inventory: ['table'],
   seeds: {
+    tomato: 1,
+    pepper: 0,
     daisy: 2,
     sunflower: 0,
     tulip: 0,
@@ -269,6 +289,7 @@ export const freshAdventure = (legacyStars = 0): AdventureProgress => ({
   moonVisits: 0,
   discoveries: [],
   friendshipGifts: [],
+  pantry: freshPantry(),
 });
 const integer = (v: unknown, max = 100000) =>
   typeof v === 'number' && Number.isSafeInteger(v) && v >= 0
@@ -331,6 +352,7 @@ export function readAdventure(
   });
   p.region = v.region === 'moon' && p.rounds.rocket >= 3 ? 'moon' : 'island';
   p.moonVisits = integer(v.moonVisits);
+  p.pantry = readPantry(v.pantry);
   p.discoveries = [
     ...new Set(
       Array.isArray(v.discoveries)
@@ -530,6 +552,7 @@ export type Mission = {
   total: number;
   second: number;
   recipe?: PizzaRecipe;
+  gardenIngredients?: ProduceId[];
 };
 const numbers = (n: number) =>
   Array.from({ length: n }, (_, i) => String(i + 1));
@@ -556,6 +579,11 @@ export function missionFor(npc: QuestId, p: ProgressData): Mission {
     m.kind = 'pizza';
     m.title = 'Bramble’s pizza kitchen';
     m.recipe = pizzaRecipe(round, p.mathsMax);
+    m.gardenIngredients = (['tomato', 'pepper'] as ProduceId[]).filter(
+      (id) =>
+        p.adventure.pantry[id] > 0 &&
+        m.recipe!.steps.some((s) => s.topping === id),
+    );
     m.prompt = m.recipe.intro;
     m.total = p.mathsMax;
   }
@@ -660,6 +688,17 @@ export function finishMission(p: ProgressData, mission: Mission): ProgressData {
   )
     return p;
   const a = p.adventure;
+  const pantry = { ...a.pantry };
+  const gardenIngredients =
+    mission.kind === 'pizza'
+      ? [...new Set(mission.gardenIngredients ?? [])].filter(
+          (id) =>
+            pantry[id] > 0 &&
+            mission.recipe?.steps.some((s) => s.topping === id),
+        )
+      : [];
+  for (const id of gardenIngredients) pantry[id] -= 1;
+  const reward = 2 + gardenIngredients.length;
   return {
     ...p,
     knownSounds: mission.introduce
@@ -667,8 +706,9 @@ export function finishMission(p: ProgressData, mission: Mission): ProgressData {
       : p.knownSounds,
     adventure: {
       ...a,
-      earned: a.earned + 2,
-      wallet: a.wallet + 2,
+      earned: a.earned + reward,
+      wallet: a.wallet + reward,
+      pantry,
       rounds: { ...a.rounds, [mission.npc]: mission.round + 1 },
     },
   };

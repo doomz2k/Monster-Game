@@ -928,6 +928,7 @@ export class MonsterWorld {
         this.player.position.x,
         this.player.position.z,
       );
+    this.village.animateGarden(time, this.reducedMotion);
     for (const npc of this.village.neighbours) {
       const near =
         Math.hypot(

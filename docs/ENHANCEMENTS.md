@@ -62,3 +62,5 @@ Recommended next work: obtain the phonics/listening sign-off, observe Clover usi
 Continuous improvement checkpoint: [COMFORT-AND-RECOVERY.md](COMFORT-AND-RECOVERY.md) now records implemented camera guidance (8), sensory settings (10), automatic backups and adult export/import (13), plus suspension of invisible world rendering. Remaining hardware, family and listening acceptance is explicitly tracked.
 
 The next checkpoint, [DISCOVERIES-AND-FRIENDS.md](DISCOVERIES-AND-FRIENDS.md), adds a twelve-entry illustrated discovery book (21), persistent friendship hearts and presents (23), optional exploration rewards (39/45), full-screen animated neighbour portraits and a controller-operable Moon return craft. The broader proposals in those rows still have room to expand.
+
+[GARDEN-LIFE.md](GARDEN-LIFE.md) adds distinct growing plants and visitors (28), tomatoes and peppers that supply pizza recipe bonuses (25), a close-up home/garden view and paged furniture choices (30). Gardening remains child-driven, without timers or penalties for absence.

@@ -3058,6 +3058,50 @@
       "leadingSilenceMs": 26,
       "trailingSilenceMs": 58,
       "warnings": []
+    },
+    "garden-harvest": {
+      "sha256": "2bcc9f726b2e999172f677aaacb1b6c12873bd0c73a09e540c59b7dd789491c7",
+      "seconds": 8.533,
+      "sampleRate": 24000,
+      "channels": 1,
+      "peakDbfs": -3.8,
+      "activeRmsDbfs": -20.1,
+      "leadingSilenceMs": 24,
+      "trailingSilenceMs": 70,
+      "warnings": []
+    },
+    "garden-full": {
+      "sha256": "7aacb58faffff96e5373b2125765a6bbb2fadb36b9cbb8b69c04ca57c9725e28",
+      "seconds": 3.904,
+      "sampleRate": 24000,
+      "channels": 1,
+      "peakDbfs": -3.8,
+      "activeRmsDbfs": -19.9,
+      "leadingSilenceMs": 26,
+      "trailingSilenceMs": 78,
+      "warnings": []
+    },
+    "garden-visitors": {
+      "sha256": "eb6602455ddf65a7b10db3db320f87470727fae06d39bbc76a3507ac695d82db",
+      "seconds": 5.504,
+      "sampleRate": 24000,
+      "channels": 1,
+      "peakDbfs": -3.5,
+      "activeRmsDbfs": -19.3,
+      "leadingSilenceMs": 31,
+      "trailingSilenceMs": 69,
+      "warnings": []
+    },
+    "garden-pizza-success": {
+      "sha256": "d53f7a25e100285ecc0f50cdddc57134b18742987d852b45007307cce7c94873",
+      "seconds": 6.464,
+      "sampleRate": 24000,
+      "channels": 1,
+      "peakDbfs": -3.6,
+      "activeRmsDbfs": -17.9,
+      "leadingSilenceMs": 34,
+      "trailingSilenceMs": 88,
+      "warnings": []
     }
   },
   "phonemes": {

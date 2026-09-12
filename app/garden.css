@@ -1,0 +1,268 @@
+.game-shell.adventure-shell {
+  min-height: min(480px, 100dvh);
+}
+.adventure-dialog.home-dialog {
+  width: 100vw;
+  max-width: none;
+  height: 100dvh;
+  max-height: 100dvh;
+  padding: clamp(12px, 2vw, 28px);
+  border: 0;
+  border-radius: 0;
+  overflow: hidden;
+  background: #f9f5e8;
+}
+.home-dialog > div {
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+.home-dialog .home-panel {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.home-dialog .shop-heading {
+  margin: 0;
+}
+.home-dialog .shop-heading h2 {
+  font-size: clamp(22px, 2.5vw, 34px);
+  margin: 0;
+}
+.home-dialog .shop-heading p {
+  margin: 0;
+}
+.home-dialog .friend-avatar {
+  width: 48px;
+  height: 48px;
+  font-size: 30px;
+}
+.home-dialog .picture-tabs {
+  margin: 0;
+  gap: 10px;
+}
+.home-dialog .picture-tabs button {
+  padding: 9px 16px;
+  font-size: 16px;
+}
+.garden-workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+  gap: clamp(14px, 3vw, 40px);
+  flex: 1;
+  min-height: 0;
+}
+.garden-view {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  border-radius: 24px;
+  background: radial-gradient(ellipse at center, #d4e5b8, #eeeccf);
+  overflow: hidden;
+}
+.garden-preview {
+  flex: 1;
+  min-height: 0;
+  margin: 0;
+}
+.home-dialog .furniture-shelf {
+  margin: 0;
+  flex-wrap: nowrap;
+  padding: 3px;
+}
+.home-dialog .furniture-shelf button {
+  width: auto;
+  flex: 1;
+  padding: 10px;
+  min-width: 0;
+}
+.home-dialog .furniture-shelf button > span {
+  font-size: 35px;
+  line-height: 1;
+}
+.home-dialog .furniture-shelf small {
+  font-size: 13px;
+}
+.home-dialog .room-plan {
+  flex: 1;
+  min-height: 0;
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+  padding: 12px;
+  gap: 10px;
+}
+.home-dialog .room-plan button {
+  min-height: 0;
+  padding: 5px;
+  gap: 3px;
+  align-items: center;
+  justify-content: center;
+}
+.home-dialog .room-plan button > span {
+  font-size: 32px;
+  line-height: 1;
+}
+.home-dialog .room-plan button > small {
+  font-size: 12px;
+  line-height: 1.1;
+}
+.furniture-pages {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+.furniture-pages button {
+  background: #e2ead5;
+  padding: 6px 22px;
+  border-radius: 10px;
+}
+.furniture-pages button:disabled {
+  opacity: 0.25;
+}
+.garden-preview canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.garden-visitors {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  min-height: 32px;
+  font-size: 28px;
+}
+.garden-pantry {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px;
+  padding: 12px;
+  font-size: 14px;
+  background: #fff8dc90;
+}
+.garden-pantry span {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.garden-pantry .game-picture {
+  width: 35px;
+  height: 35px;
+}
+.garden-controls {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  gap: 10px;
+  position: relative;
+}
+.home-dialog .garden-tools,
+.home-dialog .seed-box {
+  margin: 0;
+  gap: 8px;
+  padding: 3px;
+}
+.home-dialog .garden-tools button {
+  padding: 8px 13px;
+  font-size: 14px;
+}
+.home-dialog .seed-box {
+  flex-wrap: nowrap;
+}
+.home-dialog .seed-box button {
+  padding: 6px 10px;
+  min-width: 0;
+  flex: 1;
+}
+.home-dialog .seed-box button > span {
+  font-size: 25px;
+}
+.home-dialog .garden-plots {
+  flex: 1;
+  min-height: 0;
+  gap: 12px;
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+  padding: 12px;
+}
+.home-dialog .garden-plot {
+  min-height: 0;
+  padding: 6px;
+  gap: 4px;
+}
+.home-dialog .garden-plot > span {
+  font-size: clamp(35px, 5vw, 65px);
+  line-height: 1;
+}
+.home-dialog .garden-plot > small {
+  font-size: clamp(12px, 1.3vw, 17px);
+}
+.home-dialog .home-feedback {
+  min-height: 23px;
+  margin: 0;
+  font-size: 16px;
+}
+.home-dialog .clear-confirm {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: center;
+  justify-content: center;
+  background: #fff8e9f5;
+  border: 4px solid #fff;
+  border-radius: 20px;
+}
+.home-dialog .clear-confirm p {
+  width: 100%;
+  text-align: center;
+}
+@media (max-height: 600px) {
+  .home-dialog .adventure-dialog-top {
+    margin-bottom: 5px;
+  }
+  .home-dialog .home-panel {
+    gap: 6px;
+  }
+  .home-dialog .shop-heading .friend-avatar {
+    display: none;
+  }
+  .home-dialog .shop-heading p {
+    display: none;
+  }
+  .home-dialog .garden-controls {
+    gap: 6px;
+  }
+  .home-dialog .garden-plot > span {
+    font-size: 35px;
+  }
+  .garden-pantry {
+    padding: 5px;
+  }
+  .garden-visitors {
+    display: none;
+  }
+}
+@media (max-width: 750px) {
+  .garden-workspace {
+    grid-template-columns: 0.7fr 1.3fr;
+    gap: 10px;
+  }
+  .home-dialog .garden-tools {
+    gap: 4px;
+  }
+  .home-dialog .garden-tools button {
+    padding: 6px;
+    font-size: 12px;
+  }
+  .garden-pantry strong {
+    width: 100%;
+    text-align: center;
+  }
+  .garden-pantry {
+    gap: 4px;
+  }
+}

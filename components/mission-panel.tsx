@@ -26,7 +26,7 @@ export function MissionPanel({
   active?: boolean;
   audio: AudioDirector;
   reviews: SoundReviews;
-  onComplete: () => void;
+  onComplete: () => number;
   onAgain: () => void;
   onBack: () => void;
 }) {
@@ -36,6 +36,7 @@ export function MissionPanel({
     [done, setDone] = useState(false),
     [feedback, setFeedback] = useState('');
   const [demo, setDemo] = useState(true);
+  const [earnedStars, setEarnedStars] = useState(2);
   const adultNeeded = m.parts.some((g) => !approvedPath(g, reviews));
   const [modelled, setModelled] = useState(!m.introduce && !adultNeeded);
   const completed = useRef(false);
@@ -95,10 +96,15 @@ export function MissionPanel({
     }
     completed.current = true;
     setDone(true);
-    onComplete();
+    const earned = onComplete();
+    setEarnedStars(earned);
     audio.chime();
     void audio.line(
-      m.npc === 'rocket' && m.round < 3 ? 'part' : m.voice + '-success',
+      earned > 2 && m.kind === 'pizza'
+        ? 'garden-pizza-success'
+        : m.npc === 'rocket' && m.round < 3
+          ? 'part'
+          : m.voice + '-success',
     );
   };
   const numberChanged = (n: number) => {
@@ -109,8 +115,14 @@ export function MissionPanel({
   if (done)
     return (
       <div className="mission-celebration" ref={celebration}>
-        <div className="reward-stars">⭐ ⭐</div>
+        <div className="reward-stars">{'⭐ '.repeat(earnedStars)}</div>
         <h2>You helped {friend.friend}!</h2>
+        {earnedStars > 2 && m.kind === 'pizza' && (
+          <p>
+            Your garden helped too! +{earnedStars - 2} garden{' '}
+            {earnedStars === 3 ? 'star' : 'stars'}
+          </p>
+        )}
         {m.npc === 'rocket' && m.round < 3 && (
           <p>
             {
