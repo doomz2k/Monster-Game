@@ -110,3 +110,5 @@ The next checkpoint, [DISCOVERIES-AND-FRIENDS.md](DISCOVERIES-AND-FRIENDS.md), a
 [CHILD-PROFILES.md](CHILD-PROFILES.md) adds four parent-managed adventures (14), independent preferences/progress/recovery copies, preserved legacy save keys, generic British welcomes and protection against quota or metadata failures (13). A browser switch between an isolated new adventure and the original confirmed the original rewards and practice remained intact.
 
 [MONSTER-REACTIONS.md](MONSTER-REACTIONS.md) adds contextual greetings, flower sniffing and butterfly watching (36), with responding neighbour waves (3). Short blended gestures, target cooldowns, movement priority and calm/reduced-motion support make these reactions optional details of exploration.
+
+[FOCUS-AND-RESUME.md](FOCUS-AND-RESUME.md) closes controller input while another window has focus (11), brings home visits into automatic pause, handles document hiding consistently and fixes the current-profile activation result (13/14).

@@ -156,7 +156,10 @@ export function activateProfile(
   const index = readProfiles(storage);
   if (!index.profiles.some((p) => p.id === targetId))
     throw new Error('Choose an existing adventure.');
-  const saved = loadProfile(storage, targetId);
+  const saved =
+    current && currentId === targetId
+      ? { progress: current, recovered: false }
+      : loadProfile(storage, targetId);
   if (current) saveRecoverably(profileStorage(storage, currentId), current);
   index.activeId = targetId;
   storage.setItem(PROFILES_KEY, JSON.stringify(index));

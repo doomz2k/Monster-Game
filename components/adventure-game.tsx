@@ -396,19 +396,25 @@ export default function AdventureGame() {
         currentMode.current === 'tutorial' ||
         currentMode.current === 'flight' ||
         currentMode.current === 'rover' ||
+        currentMode.current === 'visiting' ||
         currentMode.current === 'workshop'
       ) {
         resumeMode.current = currentMode.current;
         setMode('pause');
       }
     };
+    const visibility = () => {
+      if (document.hidden) blur();
+    };
     window.addEventListener('blur', blur);
+    document.addEventListener('visibilitychange', visibility);
     return () => {
       alive = false;
       input.current?.dispose();
       world.current?.dispose();
       audio.dispose();
       window.removeEventListener('blur', blur);
+      document.removeEventListener('visibilitychange', visibility);
     };
   }, [audio]);
   useEffect(() => {

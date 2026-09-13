@@ -26,6 +26,17 @@ const memory = () => {
     setItem: (key, value) => data.set(key, value),
   };
 };
+test('reopening the current adventure returns its latest progress after saving', () => {
+  const store = memory(),
+    p = freshProgress();
+  saveRecoverably(store, p);
+  p.adventure.wallet = 8;
+  p.adventure.earned = 8;
+  const reopened = activateProfile(store, 'original', p, 'original');
+  assert.equal(reopened.progress.adventure.wallet, 8);
+  assert.deepEqual(reopened.progress, loadProfile(store, 'original').progress);
+  assert.equal(reopened.recovered, false);
+});
 test('the original adventure and recovery bytes retain their existing keys without migration writes', () => {
   const store = memory(),
     p = freshProgress();

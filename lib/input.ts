@@ -21,6 +21,7 @@ export class GameInput {
   private connected = false;
   private padIdentity = '';
   private armed = false;
+  private focused = true;
   private lastFace = -Infinity;
   public touch = { x: 0, y: 0 };
   constructor(
@@ -28,13 +29,16 @@ export class GameInput {
     private movement: (x: number, y: number, turn: number) => void,
     private connection: (connected: boolean, name: string) => void,
   ) {
+    this.focused = document.hasFocus();
     window.addEventListener('keydown', this.down, true);
     window.addEventListener('keyup', this.up);
-    window.addEventListener('blur', this.clear);
+    window.addEventListener('blur', this.blur);
+    window.addEventListener('focus', this.focus);
     document.addEventListener('visibilitychange', this.visibility);
     this.frame = requestAnimationFrame(this.poll);
   }
   private down = (e: KeyboardEvent) => {
+    if (!this.focused || document.hidden) return;
     const target = e.target as HTMLElement;
     if (
       target?.closest(
@@ -80,6 +84,14 @@ export class GameInput {
   private visibility = () => {
     if (document.hidden) this.clear();
   };
+  private blur = () => {
+    this.focused = false;
+    this.clear();
+  };
+  private focus = () => {
+    this.focused = true;
+    this.clear();
+  };
   private poll = (now: number) => {
     this.frame = requestAnimationFrame(this.poll);
     let pad: Gamepad | undefined;
@@ -110,7 +122,7 @@ export class GameInput {
       Number(this.keys.has('KeyW') || this.keys.has('ArrowUp')) +
       this.touch.y;
     const turn = 0;
-    if (pad && !document.hidden) {
+    if (pad && !document.hidden && this.focused) {
       const pressed = pad.buttons.map((b) => b.pressed);
       const px = deadzone(pad.axes[0] ?? 0),
         py = deadzone(pad.axes[1] ?? 0);
@@ -170,7 +182,7 @@ export class GameInput {
       }
       this.axisDirection = direction;
     }
-    if (document.hidden) {
+    if (document.hidden || !this.focused) {
       this.movement(0, 0, 0);
       return;
     }
@@ -184,7 +196,8 @@ export class GameInput {
     cancelAnimationFrame(this.frame);
     window.removeEventListener('keydown', this.down, true);
     window.removeEventListener('keyup', this.up);
-    window.removeEventListener('blur', this.clear);
+    window.removeEventListener('blur', this.blur);
+    window.removeEventListener('focus', this.focus);
     document.removeEventListener('visibilitychange', this.visibility);
     this.clear();
   }

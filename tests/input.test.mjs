@@ -27,6 +27,7 @@ for (const name of [
       };
       globalThis.document = {
         hidden: false,
+        hasFocus: () => false,
         addEventListener: (n, f) => events.set(n, f),
         removeEventListener() {},
       };
@@ -60,6 +61,16 @@ for (const name of [
           [],
           'Held A during initial connection is ignored until released',
         );
+        set();
+        poll(1110);
+        set(0);
+        poll(1150);
+        assert.deepEqual(
+          actions,
+          [],
+          'Opening in the background never arms the controller',
+        );
+        events.get('focus')();
         set();
         poll(1200);
         set(0);
@@ -128,11 +139,40 @@ for (const name of [
         events.get('blur')();
         poll(3100);
         assert.equal(actions.length, before + 1);
+        set();
+        poll(3120);
+        set(0, 15);
+        pad.axes[0] = 1;
+        poll(3150);
+        assert.equal(
+          actions.length,
+          before + 1,
+          'A fresh press while another window has focus is ignored',
+        );
+        assert.deepEqual(moves.at(-1), [0, 0, 0]);
+        events.get('keydown')({
+          code: 'Enter',
+          repeat: false,
+          preventDefault() {
+            throw new Error('Unfocused key consumed');
+          },
+        });
+        assert.equal(actions.length, before + 1);
+        events.get('focus')();
+        poll(3160);
+        assert.equal(
+          actions.length,
+          before + 1,
+          'Held buttons cannot resume the game on focus',
+        );
+        assert.deepEqual(moves.at(-1), [0, 0, 0]);
+        pad.axes[0] = 0;
         document.hidden = true;
         events.get('visibilitychange')();
         poll(3200);
         assert.deepEqual(moves.at(-1), [0, 0, 0]);
         document.hidden = false;
+        events.get('focus')();
         poll(3300);
         assert.equal(actions.length, before + 1);
         set();
