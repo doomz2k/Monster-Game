@@ -1,5 +1,6 @@
 import { SOUNDS } from './phonics';
 import { Soundscape, type SoundScene } from './soundscape';
+import { ResponseRotation } from './response-rotation';
 import builtIn from './audio-data/phonemes.json';
 import voiceClips from './audio-data/voice-clips.json';
 import adventureScript from './audio-data/adventure-script.json';
@@ -159,6 +160,14 @@ export class AudioDirector {
     this.soundscape?.update(scene);
   }
   public muted = false;
+  private responses = new ResponseRotation();
+  responseId(id: string, replay = false) {
+    return this.responses.choose(id, replay);
+  }
+  response(id: string, replay = false) {
+    if (this.muted) return Promise.resolve();
+    return this.line(this.responseId(id, replay));
+  }
   setMuted(value: boolean) {
     this.muted = value;
     this.stop();

@@ -2,7 +2,8 @@
 import { useGamePreferences } from './game-preferences';
 import { GamePicture } from './game-picture';
 import { QuantityHint } from './quantity-hint';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { ActiveCountdown } from '@/lib/active-countdown';
 import * as THREE from 'three';
 import { Check, Volume2 } from 'lucide-react';
 import {
@@ -249,21 +250,41 @@ export function PizzaKitchen({
     [baking, setBaking] = useState(false),
     [feedback, setFeedback] = useState('');
   const finished = useRef(false);
+  const cooking = useRef(new ActiveCountdown(2200));
+  const completion = useRef(onComplete);
+  useLayoutEffect(() => {
+    completion.current = onComplete;
+  }, [onComplete]);
   const current = recipe.steps[step],
     topping = TOPPINGS.find((t) => t.id === current.topping)!,
     customer = placeFor(recipe.customer);
   const allReady = pizzaMatches(recipe, counts);
   const repeat = () =>
-    void audio.lines([recipe.intro, 'topping-' + topping.id, current.prompt]);
+    baking
+      ? void audio.line('pizza-bake')
+      : void audio.lines([
+          recipe.intro,
+          'topping-' + topping.id,
+          current.prompt,
+        ]);
   useEffect(() => {
     if (active) repeat();
     return () => audio.stop();
-  }, [recipe, audio, active]); // eslint-disable-line react-hooks/exhaustive-deps -- Resume the current topping after a demonstration without interrupting number changes.
+  }, [recipe, audio, active, baking]); // eslint-disable-line react-hooks/exhaustive-deps -- Resume the current topping or cooking stage without interrupting number changes.
   useEffect(() => {
-    if (!baking) return;
-    const timer = setTimeout(onComplete, 2200);
-    return () => clearTimeout(timer);
-  }, [baking]); // eslint-disable-line react-hooks/exhaustive-deps
+    if (!baking || !active) return;
+    let previous = performance.now(),
+      frame = 0;
+    const advance = (now: number) => {
+      const delta = now - previous;
+      previous = now;
+      if (cooking.current.advance(delta, !document.hidden))
+        completion.current();
+      else frame = requestAnimationFrame(advance);
+    };
+    frame = requestAnimationFrame(advance);
+    return () => cancelAnimationFrame(frame);
+  }, [baking, active]);
   const choose = (value: number) => {
     setFeedback('');
     setCounts((old) => ({ ...old, [topping.id]: value }));
@@ -272,7 +293,7 @@ export function PizzaKitchen({
   const next = () => {
     if ((counts[topping.id] ?? 0) !== current.quantity) {
       setFeedback('Let’s match the recipe');
-      void audio.line(
+      void audio.response(
         'hint-bramble-' +
           ((counts[topping.id] ?? 0) < current.quantity ? 'more' : 'fewer'),
       );
@@ -291,7 +312,6 @@ export function PizzaKitchen({
       if (finished.current) return;
       finished.current = true;
       setBaking(true);
-      void audio.line('pizza-bake');
     }
   };
   return (
@@ -314,7 +334,7 @@ export function PizzaKitchen({
       </div>
       <div className="pizza-workbench">
         <div className="pizza-board">
-          <Pizza counts={counts} baking={baking} />
+          <Pizza counts={counts} baking={baking && active} />
           <span>{baking ? '🔥 Baking your pizza…' : 'Made by you'}</span>
         </div>
         <div className="pizza-recipe">

@@ -29,10 +29,11 @@ export function RoverSurvey({
   const [answer, setAnswer] = useState(0),
     [done, setDone] = useState(false),
     [hint, setHint] = useState(false);
+  const [celebrationLine, setCelebrationLine] = useState('rover-success');
   const finished = useRef(false),
     root = useRef<HTMLDivElement>(null);
   const stop = roverStop(survey.stop),
-    line = done ? 'rover-success' : 'rover-count-' + survey.stop;
+    line = done ? celebrationLine : 'rover-count-' + survey.stop;
   useEffect(() => {
     if (active) {
       void audio.line(line);
@@ -46,13 +47,14 @@ export function RoverSurvey({
     if (finished.current) return;
     if (answer !== survey.target) {
       setHint(true);
-      void audio.line(
-        answer < survey.target ? 'hint-nova-more' : 'hint-nova-fewer',
+      void audio.response(
+        answer < survey.target ? 'rover-more' : 'rover-fewer',
       );
       return;
     }
     if (!onComplete(answer)) return;
     finished.current = true;
+    setCelebrationLine(audio.responseId('rover-success'));
     setDone(true);
     audio.chime();
   };

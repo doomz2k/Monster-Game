@@ -1234,5 +1234,257 @@
   "rover-follow": {
     "voice": "nova",
     "text": "Off we go! Your rover is following the star. Move the control pad whenever you want to take over. The green button can stop the ride."
+  },
+  "bramble-success-take-1": {
+    "voice": "bramble",
+    "text": "A pizza made by you! Thank you for helping in my kitchen."
+  },
+  "bramble-success-take-2": {
+    "voice": "bramble",
+    "text": "Our customer has a lovely pizza. Here are your stars."
+  },
+  "bramble-success-take-3": {
+    "voice": "bramble",
+    "text": "Ready to serve! You worked out the recipe. Thank you."
+  },
+  "olive-success-take-1": {
+    "voice": "olive",
+    "text": "You found it! Another little discovery for our story tree."
+  },
+  "olive-success-take-2": {
+    "voice": "olive",
+    "text": "That is it. Thank you for learning with me."
+  },
+  "olive-success-take-3": {
+    "voice": "olive",
+    "text": "A little bit of learning, and two stars to take home."
+  },
+  "marina-success-take-1": {
+    "voice": "marina",
+    "text": "All aboard! Thank you for helping at the harbour."
+  },
+  "marina-success-take-2": {
+    "voice": "marina",
+    "text": "That is just right for our little boat. Here are your stars."
+  },
+  "marina-success-take-3": {
+    "voice": "marina",
+    "text": "Our harbour job is done. Shall we see what comes next?"
+  },
+  "tilly-success-take-1": {
+    "voice": "tilly",
+    "text": "That is it! Thank you for helping in the growing patch."
+  },
+  "tilly-success-take-2": {
+    "voice": "tilly",
+    "text": "Another little garden job finished. Here are your stars."
+  },
+  "tilly-success-take-3": {
+    "voice": "tilly",
+    "text": "You worked it out. The garden is a lovely place to learn together."
+  },
+  "pip-success-take-1": {
+    "voice": "pip",
+    "text": "That is just what we needed. Thank you, little explorer."
+  },
+  "pip-success-take-2": {
+    "voice": "pip",
+    "text": "Our space team did it! Here are your stars."
+  },
+  "pip-success-take-3": {
+    "voice": "pip",
+    "text": "You worked it out. I wonder what we will discover next."
+  },
+  "nova-success-take-1": {
+    "voice": "nova",
+    "text": "A new discovery! Thank you for exploring with me."
+  },
+  "nova-success-take-2": {
+    "voice": "nova",
+    "text": "You found the answer. Here are two stars for your collection."
+  },
+  "nova-success-take-3": {
+    "voice": "nova",
+    "text": "That is it, little explorer. There is so much to find together."
+  },
+  "bramble-retry-take-1": {
+    "voice": "bramble",
+    "text": "Have another look at the recipe. We can take our time."
+  },
+  "bramble-retry-take-2": {
+    "voice": "bramble",
+    "text": "Let us check the pictures together, then try again."
+  },
+  "olive-retry-take-1": {
+    "voice": "olive",
+    "text": "Listen once more, and have another look at the letters."
+  },
+  "olive-retry-take-2": {
+    "voice": "olive",
+    "text": "We can try it together. Take your time and listen again."
+  },
+  "marina-retry-take-1": {
+    "voice": "marina",
+    "text": "Let us look at our harbour pictures again. There is no hurry."
+  },
+  "marina-retry-take-2": {
+    "voice": "marina",
+    "text": "Have another little look. We can work it out together."
+  },
+  "tilly-retry-take-1": {
+    "voice": "tilly",
+    "text": "Let us look closely at the pictures. Take your time."
+  },
+  "tilly-retry-take-2": {
+    "voice": "tilly",
+    "text": "We can have another go. What do you notice in the pictures?"
+  },
+  "pip-retry-take-1": {
+    "voice": "pip",
+    "text": "Let us check those pictures again. Our rocket can wait."
+  },
+  "pip-retry-take-2": {
+    "voice": "pip",
+    "text": "Have another look, little explorer. There is no hurry."
+  },
+  "nova-retry-take-1": {
+    "voice": "nova",
+    "text": "Look at each picture, then listen to the question again."
+  },
+  "nova-retry-take-2": {
+    "voice": "nova",
+    "text": "There is time for another look. Which picture matches the question?"
+  },
+  "hint-bramble-more-take-1": {
+    "voice": "bramble",
+    "text": "Your number is a little low. Try moving right, then count again."
+  },
+  "hint-bramble-more-take-2": {
+    "voice": "bramble",
+    "text": "Let us add a few more. The pictures will help us check."
+  },
+  "hint-bramble-fewer-take-1": {
+    "voice": "bramble",
+    "text": "Your number is a little high. Move left, and check the pictures."
+  },
+  "hint-bramble-fewer-take-2": {
+    "voice": "bramble",
+    "text": "Let us take the extras away. Move left, then have another look."
+  },
+  "hint-tilly-more-take-1": {
+    "voice": "tilly",
+    "text": "Your number is a little low. Try moving right, then count again."
+  },
+  "hint-tilly-more-take-2": {
+    "voice": "tilly",
+    "text": "Let us add a few more. The pictures will help us check."
+  },
+  "hint-tilly-fewer-take-1": {
+    "voice": "tilly",
+    "text": "Your number is a little high. Move left, and check the pictures."
+  },
+  "hint-tilly-fewer-take-2": {
+    "voice": "tilly",
+    "text": "Let us take the extras away. Move left, then have another look."
+  },
+  "hint-marina-more-take-1": {
+    "voice": "marina",
+    "text": "Your number is a little low. Try moving right, then count again."
+  },
+  "hint-marina-more-take-2": {
+    "voice": "marina",
+    "text": "Let us add a few more. The pictures will help us check."
+  },
+  "hint-marina-fewer-take-1": {
+    "voice": "marina",
+    "text": "Your number is a little high. Move left, and check the pictures."
+  },
+  "hint-marina-fewer-take-2": {
+    "voice": "marina",
+    "text": "Let us take the extras away. Move left, then have another look."
+  },
+  "hint-pip-more-take-1": {
+    "voice": "pip",
+    "text": "Your number is a little low. Try moving right, then count again."
+  },
+  "hint-pip-more-take-2": {
+    "voice": "pip",
+    "text": "Let us add a few more. The pictures will help us check."
+  },
+  "hint-pip-fewer-take-1": {
+    "voice": "pip",
+    "text": "Your number is a little high. Move left, and check the pictures."
+  },
+  "hint-pip-fewer-take-2": {
+    "voice": "pip",
+    "text": "Let us take the extras away. Move left, then have another look."
+  },
+  "hint-nova-more-take-1": {
+    "voice": "nova",
+    "text": "Your number is a little low. Try moving right, then count again."
+  },
+  "hint-nova-more-take-2": {
+    "voice": "nova",
+    "text": "Let us add a few more. The pictures will help us check."
+  },
+  "hint-nova-fewer-take-1": {
+    "voice": "nova",
+    "text": "Your number is a little high. Move left, and check the pictures."
+  },
+  "hint-nova-fewer-take-2": {
+    "voice": "nova",
+    "text": "Let us take the extras away. Move left, then have another look."
+  },
+  "hint-spell-take-1": {
+    "voice": "olive",
+    "text": "Try the glowing sound space again. Blue X takes the last sound back."
+  },
+  "hint-spell-take-2": {
+    "voice": "olive",
+    "text": "Listen to the sounds together. We can change the last one with the blue button."
+  },
+  "hint-pattern-take-1": {
+    "voice": "pip",
+    "text": "Look for the little group that repeats. What comes after it?"
+  },
+  "hint-pattern-take-2": {
+    "voice": "pip",
+    "text": "Say the pattern slowly together. Which picture should come next?"
+  },
+  "rover-success-take-1": {
+    "voice": "nova",
+    "text": "A stamp for your expedition book, and one star. Thank you for exploring."
+  },
+  "rover-success-take-2": {
+    "voice": "nova",
+    "text": "You counted the pictures. Here is your stamp and a star to take home."
+  },
+  "rover-success-take-3": {
+    "voice": "nova",
+    "text": "Another stop explored! Your stamp is in the book. Shall we keep going?"
+  },
+  "rover-more-take-1": {
+    "voice": "nova",
+    "text": "Count the pictures in the tray. We need a bigger number."
+  },
+  "rover-more-take-2": {
+    "voice": "nova",
+    "text": "Your number is a little low. Move right, then count each picture once."
+  },
+  "rover-more-take-3": {
+    "voice": "nova",
+    "text": "Let us count them together. Try a bigger number when you are ready."
+  },
+  "rover-fewer-take-1": {
+    "voice": "nova",
+    "text": "Count the pictures in the tray. We need a smaller number."
+  },
+  "rover-fewer-take-2": {
+    "voice": "nova",
+    "text": "Your number is a little high. Move left, then count each picture once."
+  },
+  "rover-fewer-take-3": {
+    "voice": "nova",
+    "text": "Let us count them together. Try a smaller number when you are ready."
   }
 }

@@ -1543,5 +1543,320 @@
     "path": "/audio/voices/rover-follow-434a119cf49e8a67.ogg",
     "voice": "bf_isabella",
     "text": "Off we go! Your rover is following the star. Move the control pad whenever you want to take over. The green button can stop the ride."
+  },
+  "bramble-success-take-1": {
+    "path": "/audio/voices/bramble-success-take-1-09219bc43544e690.ogg",
+    "voice": "bm_george",
+    "text": "A pizza made by you! Thank you for helping in my kitchen."
+  },
+  "bramble-success-take-2": {
+    "path": "/audio/voices/bramble-success-take-2-5a5d7ad1c383a37b.ogg",
+    "voice": "bm_george",
+    "text": "Our customer has a lovely pizza. Here are your stars."
+  },
+  "bramble-success-take-3": {
+    "path": "/audio/voices/bramble-success-take-3-ad33b0ed332b06e0.ogg",
+    "voice": "bm_george",
+    "text": "Ready to serve! You worked out the recipe. Thank you."
+  },
+  "olive-success-take-1": {
+    "path": "/audio/voices/olive-success-take-1-35b159fdedb5f3d9.ogg",
+    "voice": "bf_isabella",
+    "text": "You found it! Another little discovery for our story tree."
+  },
+  "olive-success-take-2": {
+    "path": "/audio/voices/olive-success-take-2-a4b6fef719c05ea4.ogg",
+    "voice": "bf_isabella",
+    "text": "That is it. Thank you for learning with me."
+  },
+  "olive-success-take-3": {
+    "path": "/audio/voices/olive-success-take-3-78310a341248c31b.ogg",
+    "voice": "bf_isabella",
+    "text": "A little bit of learning, and two stars to take home."
+  },
+  "marina-success-take-1": {
+    "path": "/audio/voices/marina-success-take-1-2ab5537605846e62.ogg",
+    "voice": "bf_emma",
+    "text": "All aboard! Thank you for helping at the harbour."
+  },
+  "marina-success-take-2": {
+    "path": "/audio/voices/marina-success-take-2-775f14249c425134.ogg",
+    "voice": "bf_emma",
+    "text": "That is just right for our little boat. Here are your stars."
+  },
+  "marina-success-take-3": {
+    "path": "/audio/voices/marina-success-take-3-30c54b57b8de9609.ogg",
+    "voice": "bf_emma",
+    "text": "Our harbour job is done. Shall we see what comes next?"
+  },
+  "tilly-success-take-1": {
+    "path": "/audio/voices/tilly-success-take-1-cb50c864a6dbf707.ogg",
+    "voice": "bf_lily",
+    "text": "That is it! Thank you for helping in the growing patch."
+  },
+  "tilly-success-take-2": {
+    "path": "/audio/voices/tilly-success-take-2-dbf7d0a323b80ef6.ogg",
+    "voice": "bf_lily",
+    "text": "Another little garden job finished. Here are your stars."
+  },
+  "tilly-success-take-3": {
+    "path": "/audio/voices/tilly-success-take-3-854628782939e68b.ogg",
+    "voice": "bf_lily",
+    "text": "You worked it out. The garden is a lovely place to learn together."
+  },
+  "pip-success-take-1": {
+    "path": "/audio/voices/pip-success-take-1-a799f5deb7475ea9.ogg",
+    "voice": "bm_fable",
+    "text": "That is just what we needed. Thank you, little explorer."
+  },
+  "pip-success-take-2": {
+    "path": "/audio/voices/pip-success-take-2-ab02c7a161565f12.ogg",
+    "voice": "bm_fable",
+    "text": "Our space team did it! Here are your stars."
+  },
+  "pip-success-take-3": {
+    "path": "/audio/voices/pip-success-take-3-e1d446eec6c60664.ogg",
+    "voice": "bm_fable",
+    "text": "You worked it out. I wonder what we will discover next."
+  },
+  "nova-success-take-1": {
+    "path": "/audio/voices/nova-success-take-1-7999fef7124f4e55.ogg",
+    "voice": "bf_isabella",
+    "text": "A new discovery! Thank you for exploring with me."
+  },
+  "nova-success-take-2": {
+    "path": "/audio/voices/nova-success-take-2-d8b57afdc93c115b.ogg",
+    "voice": "bf_isabella",
+    "text": "You found the answer. Here are two stars for your collection."
+  },
+  "nova-success-take-3": {
+    "path": "/audio/voices/nova-success-take-3-b4b3fa07a4182a52.ogg",
+    "voice": "bf_isabella",
+    "text": "That is it, little explorer. There is so much to find together."
+  },
+  "bramble-retry-take-1": {
+    "path": "/audio/voices/bramble-retry-take-1-08546935f489a098.ogg",
+    "voice": "bm_george",
+    "text": "Have another look at the recipe. We can take our time."
+  },
+  "bramble-retry-take-2": {
+    "path": "/audio/voices/bramble-retry-take-2-9b00f24d25f3f259.ogg",
+    "voice": "bm_george",
+    "text": "Let us check the pictures together, then try again."
+  },
+  "olive-retry-take-1": {
+    "path": "/audio/voices/olive-retry-take-1-b90f378c33d0a39d.ogg",
+    "voice": "bf_isabella",
+    "text": "Listen once more, and have another look at the letters."
+  },
+  "olive-retry-take-2": {
+    "path": "/audio/voices/olive-retry-take-2-de931c0d09c0e65a.ogg",
+    "voice": "bf_isabella",
+    "text": "We can try it together. Take your time and listen again."
+  },
+  "marina-retry-take-1": {
+    "path": "/audio/voices/marina-retry-take-1-b393f5a5190965af.ogg",
+    "voice": "bf_emma",
+    "text": "Let us look at our harbour pictures again. There is no hurry."
+  },
+  "marina-retry-take-2": {
+    "path": "/audio/voices/marina-retry-take-2-68075017908dfe67.ogg",
+    "voice": "bf_emma",
+    "text": "Have another little look. We can work it out together."
+  },
+  "tilly-retry-take-1": {
+    "path": "/audio/voices/tilly-retry-take-1-0f68e10a4da8f4e9.ogg",
+    "voice": "bf_lily",
+    "text": "Let us look closely at the pictures. Take your time."
+  },
+  "tilly-retry-take-2": {
+    "path": "/audio/voices/tilly-retry-take-2-deb164a65ec5e843.ogg",
+    "voice": "bf_lily",
+    "text": "We can have another go. What do you notice in the pictures?"
+  },
+  "pip-retry-take-1": {
+    "path": "/audio/voices/pip-retry-take-1-731838413f5204ee.ogg",
+    "voice": "bm_fable",
+    "text": "Let us check those pictures again. Our rocket can wait."
+  },
+  "pip-retry-take-2": {
+    "path": "/audio/voices/pip-retry-take-2-98aad4065e7b4971.ogg",
+    "voice": "bm_fable",
+    "text": "Have another look, little explorer. There is no hurry."
+  },
+  "nova-retry-take-1": {
+    "path": "/audio/voices/nova-retry-take-1-24a4633b5e1cbc84.ogg",
+    "voice": "bf_isabella",
+    "text": "Look at each picture, then listen to the question again."
+  },
+  "nova-retry-take-2": {
+    "path": "/audio/voices/nova-retry-take-2-c4bf5d1a247bd649.ogg",
+    "voice": "bf_isabella",
+    "text": "There is time for another look. Which picture matches the question?"
+  },
+  "hint-bramble-more-take-1": {
+    "path": "/audio/voices/hint-bramble-more-take-1-745495bcc5e3af45.ogg",
+    "voice": "bm_george",
+    "text": "Your number is a little low. Try moving right, then count again."
+  },
+  "hint-bramble-more-take-2": {
+    "path": "/audio/voices/hint-bramble-more-take-2-c1166e15a4041f94.ogg",
+    "voice": "bm_george",
+    "text": "Let us add a few more. The pictures will help us check."
+  },
+  "hint-bramble-fewer-take-1": {
+    "path": "/audio/voices/hint-bramble-fewer-take-1-5a2cd78e4f0290cc.ogg",
+    "voice": "bm_george",
+    "text": "Your number is a little high. Move left, and check the pictures."
+  },
+  "hint-bramble-fewer-take-2": {
+    "path": "/audio/voices/hint-bramble-fewer-take-2-2ba5a0d2bed31eff.ogg",
+    "voice": "bm_george",
+    "text": "Let us take the extras away. Move left, then have another look."
+  },
+  "hint-tilly-more-take-1": {
+    "path": "/audio/voices/hint-tilly-more-take-1-400223b85ef98eda.ogg",
+    "voice": "bf_lily",
+    "text": "Your number is a little low. Try moving right, then count again."
+  },
+  "hint-tilly-more-take-2": {
+    "path": "/audio/voices/hint-tilly-more-take-2-1d453a2240989844.ogg",
+    "voice": "bf_lily",
+    "text": "Let us add a few more. The pictures will help us check."
+  },
+  "hint-tilly-fewer-take-1": {
+    "path": "/audio/voices/hint-tilly-fewer-take-1-5f6c80339ddd5078.ogg",
+    "voice": "bf_lily",
+    "text": "Your number is a little high. Move left, and check the pictures."
+  },
+  "hint-tilly-fewer-take-2": {
+    "path": "/audio/voices/hint-tilly-fewer-take-2-afab741f60c8b96a.ogg",
+    "voice": "bf_lily",
+    "text": "Let us take the extras away. Move left, then have another look."
+  },
+  "hint-marina-more-take-1": {
+    "path": "/audio/voices/hint-marina-more-take-1-5728ddc8679f2c6b.ogg",
+    "voice": "bf_emma",
+    "text": "Your number is a little low. Try moving right, then count again."
+  },
+  "hint-marina-more-take-2": {
+    "path": "/audio/voices/hint-marina-more-take-2-6d02de67fc475c66.ogg",
+    "voice": "bf_emma",
+    "text": "Let us add a few more. The pictures will help us check."
+  },
+  "hint-marina-fewer-take-1": {
+    "path": "/audio/voices/hint-marina-fewer-take-1-a72ca85a4d7fe81d.ogg",
+    "voice": "bf_emma",
+    "text": "Your number is a little high. Move left, and check the pictures."
+  },
+  "hint-marina-fewer-take-2": {
+    "path": "/audio/voices/hint-marina-fewer-take-2-d960b2c183ced0ee.ogg",
+    "voice": "bf_emma",
+    "text": "Let us take the extras away. Move left, then have another look."
+  },
+  "hint-pip-more-take-1": {
+    "path": "/audio/voices/hint-pip-more-take-1-fa5f2264093a1ac7.ogg",
+    "voice": "bm_fable",
+    "text": "Your number is a little low. Try moving right, then count again."
+  },
+  "hint-pip-more-take-2": {
+    "path": "/audio/voices/hint-pip-more-take-2-8bbc0e306c746761.ogg",
+    "voice": "bm_fable",
+    "text": "Let us add a few more. The pictures will help us check."
+  },
+  "hint-pip-fewer-take-1": {
+    "path": "/audio/voices/hint-pip-fewer-take-1-f25aaaa5d45febd6.ogg",
+    "voice": "bm_fable",
+    "text": "Your number is a little high. Move left, and check the pictures."
+  },
+  "hint-pip-fewer-take-2": {
+    "path": "/audio/voices/hint-pip-fewer-take-2-8e86c37dad887b6b.ogg",
+    "voice": "bm_fable",
+    "text": "Let us take the extras away. Move left, then have another look."
+  },
+  "hint-nova-more-take-1": {
+    "path": "/audio/voices/hint-nova-more-take-1-6f83bc7c0c34c971.ogg",
+    "voice": "bf_isabella",
+    "text": "Your number is a little low. Try moving right, then count again."
+  },
+  "hint-nova-more-take-2": {
+    "path": "/audio/voices/hint-nova-more-take-2-da76e1222614db3f.ogg",
+    "voice": "bf_isabella",
+    "text": "Let us add a few more. The pictures will help us check."
+  },
+  "hint-nova-fewer-take-1": {
+    "path": "/audio/voices/hint-nova-fewer-take-1-6953be3ce50972ef.ogg",
+    "voice": "bf_isabella",
+    "text": "Your number is a little high. Move left, and check the pictures."
+  },
+  "hint-nova-fewer-take-2": {
+    "path": "/audio/voices/hint-nova-fewer-take-2-58abc377b8c822ed.ogg",
+    "voice": "bf_isabella",
+    "text": "Let us take the extras away. Move left, then have another look."
+  },
+  "hint-spell-take-1": {
+    "path": "/audio/voices/hint-spell-take-1-4d3af008719e0e28.ogg",
+    "voice": "bf_isabella",
+    "text": "Try the glowing sound space again. Blue X takes the last sound back."
+  },
+  "hint-spell-take-2": {
+    "path": "/audio/voices/hint-spell-take-2-8791b6882631114e.ogg",
+    "voice": "bf_isabella",
+    "text": "Listen to the sounds together. We can change the last one with the blue button."
+  },
+  "hint-pattern-take-1": {
+    "path": "/audio/voices/hint-pattern-take-1-4b1a91dc3238141a.ogg",
+    "voice": "bm_fable",
+    "text": "Look for the little group that repeats. What comes after it?"
+  },
+  "hint-pattern-take-2": {
+    "path": "/audio/voices/hint-pattern-take-2-a6f4976b8681b665.ogg",
+    "voice": "bm_fable",
+    "text": "Say the pattern slowly together. Which picture should come next?"
+  },
+  "rover-success-take-1": {
+    "path": "/audio/voices/rover-success-take-1-72fc39169c58647d.ogg",
+    "voice": "bf_isabella",
+    "text": "A stamp for your expedition book, and one star. Thank you for exploring."
+  },
+  "rover-success-take-2": {
+    "path": "/audio/voices/rover-success-take-2-60a1ea37c63a4963.ogg",
+    "voice": "bf_isabella",
+    "text": "You counted the pictures. Here is your stamp and a star to take home."
+  },
+  "rover-success-take-3": {
+    "path": "/audio/voices/rover-success-take-3-42d0475e40ce8e8c.ogg",
+    "voice": "bf_isabella",
+    "text": "Another stop explored! Your stamp is in the book. Shall we keep going?"
+  },
+  "rover-more-take-1": {
+    "path": "/audio/voices/rover-more-take-1-57cbc05772649875.ogg",
+    "voice": "bf_isabella",
+    "text": "Count the pictures in the tray. We need a bigger number."
+  },
+  "rover-more-take-2": {
+    "path": "/audio/voices/rover-more-take-2-9545bb9558b7c5f8.ogg",
+    "voice": "bf_isabella",
+    "text": "Your number is a little low. Move right, then count each picture once."
+  },
+  "rover-more-take-3": {
+    "path": "/audio/voices/rover-more-take-3-bf622a1d4efa7b0b.ogg",
+    "voice": "bf_isabella",
+    "text": "Let us count them together. Try a bigger number when you are ready."
+  },
+  "rover-fewer-take-1": {
+    "path": "/audio/voices/rover-fewer-take-1-8e60b0d13572016f.ogg",
+    "voice": "bf_isabella",
+    "text": "Count the pictures in the tray. We need a smaller number."
+  },
+  "rover-fewer-take-2": {
+    "path": "/audio/voices/rover-fewer-take-2-aab1ca14a2e268fc.ogg",
+    "voice": "bf_isabella",
+    "text": "Your number is a little high. Move left, then count each picture once."
+  },
+  "rover-fewer-take-3": {
+    "path": "/audio/voices/rover-fewer-take-3-fec5f2859d506c80.ogg",
+    "voice": "bf_isabella",
+    "text": "Let us count them together. Try a smaller number when you are ready."
   }
 }

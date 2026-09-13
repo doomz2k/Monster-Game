@@ -42,6 +42,7 @@ export function MissionPanel({
     [feedback, setFeedback] = useState('');
   const [demo, setDemo] = useState(true);
   const [earnedStars, setEarnedStars] = useState(2);
+  const [celebrationLine, setCelebrationLine] = useState(m.voice + '-success');
   const adultNeeded = m.parts.some((g) => !approvedPath(g, reviews));
   const [modelled, setModelled] = useState(!m.introduce && !adultNeeded);
   const completed = useRef(false);
@@ -66,9 +67,10 @@ export function MissionPanel({
       adultNeeded ? [] : m.parts,
     );
   useEffect(() => {
-    if (active && !demo && m.kind !== 'pizza') void speak();
+    if (active && done) void audio.line(celebrationLine);
+    else if (active && !demo && m.kind !== 'pizza') void speak();
     return () => audio.stop();
-  }, [m, audio, reviews, demo, active]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [m, audio, reviews, demo, active, done, celebrationLine]); // eslint-disable-line react-hooks/exhaustive-deps
   const finish = (correct: boolean) => {
     if (completed.current) return;
     if (!correct) {
@@ -85,12 +87,12 @@ export function MissionPanel({
       );
       const count = ['pack', 'add', 'take'].includes(m.kind);
       if (count)
-        void audio.line(
+        void audio.response(
           'hint-' + m.voice + (quantity < m.target ? '-more' : '-fewer'),
         );
       else if (m.kind === 'sound') void speak();
       else
-        void audio.line(
+        void audio.response(
           m.kind === 'spell'
             ? 'hint-spell'
             : m.kind === 'pattern'
@@ -104,12 +106,14 @@ export function MissionPanel({
     const earned = onComplete();
     setEarnedStars(earned);
     audio.chime();
-    void audio.line(
-      earned > 2 && m.kind === 'pizza'
-        ? 'garden-pizza-success'
-        : m.npc === 'rocket' && m.round < 3
-          ? 'pip-repair-' + (m.round + 1)
-          : m.voice + '-success',
+    setCelebrationLine(
+      audio.responseId(
+        earned > 2 && m.kind === 'pizza'
+          ? 'garden-pizza-success'
+          : m.npc === 'rocket' && m.round < 3
+            ? 'pip-repair-' + (m.round + 1)
+            : m.voice + '-success',
+      ),
     );
   };
   const numberChanged = (n: number) => {
@@ -128,7 +132,7 @@ export function MissionPanel({
             void audio.line(
               delivery
                 ? 'delivery-route-' + delivery.recipient
-                : m.voice + '-success',
+                : celebrationLine,
             )
           }
         >

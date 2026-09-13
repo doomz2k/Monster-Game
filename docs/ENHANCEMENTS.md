@@ -74,3 +74,5 @@ The next checkpoint, [DISCOVERIES-AND-FRIENDS.md](DISCOVERIES-AND-FRIENDS.md), a
 [ROCKET-STORY.md](ROCKET-STORY.md) adds narrated repair chapters, visibly repaired rocket systems and a personalised 3D departure/landing journey (22), with pause, cancel, skip and reduced-motion support.
 
 [MOON-ROVER.md](MOON-ROVER.md) adds a drivable Moon expedition (41), optional guided rides, three counting destinations, persistent stamps and repeatable rewards. Route, save, controller-keyboard and responsive-layout checks are recorded there.
+
+[RESPONSES-AND-COOKING.md](RESPONSES-AND-COOKING.md) adds 63 short British response recordings with repetition protection (15), exact result replay, corrected rover hints and cooking that pauses safely with the rest of the game.

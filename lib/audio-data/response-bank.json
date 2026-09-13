@@ -1,0 +1,137 @@
+{
+  "bramble-success": [
+    "bramble-success-take-1",
+    "bramble-success-take-2",
+    "bramble-success-take-3"
+  ],
+  "olive-success": [
+    "olive-success-take-1",
+    "olive-success-take-2",
+    "olive-success-take-3"
+  ],
+  "marina-success": [
+    "marina-success-take-1",
+    "marina-success-take-2",
+    "marina-success-take-3"
+  ],
+  "tilly-success": [
+    "tilly-success-take-1",
+    "tilly-success-take-2",
+    "tilly-success-take-3"
+  ],
+  "pip-success": [
+    "pip-success-take-1",
+    "pip-success-take-2",
+    "pip-success-take-3"
+  ],
+  "nova-success": [
+    "nova-success-take-1",
+    "nova-success-take-2",
+    "nova-success-take-3"
+  ],
+  "bramble-retry": [
+    "bramble-retry",
+    "bramble-retry-take-1",
+    "bramble-retry-take-2"
+  ],
+  "olive-retry": [
+    "olive-retry",
+    "olive-retry-take-1",
+    "olive-retry-take-2"
+  ],
+  "marina-retry": [
+    "marina-retry",
+    "marina-retry-take-1",
+    "marina-retry-take-2"
+  ],
+  "tilly-retry": [
+    "tilly-retry",
+    "tilly-retry-take-1",
+    "tilly-retry-take-2"
+  ],
+  "pip-retry": [
+    "pip-retry",
+    "pip-retry-take-1",
+    "pip-retry-take-2"
+  ],
+  "nova-retry": [
+    "nova-retry",
+    "nova-retry-take-1",
+    "nova-retry-take-2"
+  ],
+  "hint-bramble-more": [
+    "hint-bramble-more",
+    "hint-bramble-more-take-1",
+    "hint-bramble-more-take-2"
+  ],
+  "hint-bramble-fewer": [
+    "hint-bramble-fewer",
+    "hint-bramble-fewer-take-1",
+    "hint-bramble-fewer-take-2"
+  ],
+  "hint-tilly-more": [
+    "hint-tilly-more",
+    "hint-tilly-more-take-1",
+    "hint-tilly-more-take-2"
+  ],
+  "hint-tilly-fewer": [
+    "hint-tilly-fewer",
+    "hint-tilly-fewer-take-1",
+    "hint-tilly-fewer-take-2"
+  ],
+  "hint-marina-more": [
+    "hint-marina-more",
+    "hint-marina-more-take-1",
+    "hint-marina-more-take-2"
+  ],
+  "hint-marina-fewer": [
+    "hint-marina-fewer",
+    "hint-marina-fewer-take-1",
+    "hint-marina-fewer-take-2"
+  ],
+  "hint-pip-more": [
+    "hint-pip-more",
+    "hint-pip-more-take-1",
+    "hint-pip-more-take-2"
+  ],
+  "hint-pip-fewer": [
+    "hint-pip-fewer",
+    "hint-pip-fewer-take-1",
+    "hint-pip-fewer-take-2"
+  ],
+  "hint-nova-more": [
+    "hint-nova-more",
+    "hint-nova-more-take-1",
+    "hint-nova-more-take-2"
+  ],
+  "hint-nova-fewer": [
+    "hint-nova-fewer",
+    "hint-nova-fewer-take-1",
+    "hint-nova-fewer-take-2"
+  ],
+  "hint-spell": [
+    "hint-spell",
+    "hint-spell-take-1",
+    "hint-spell-take-2"
+  ],
+  "hint-pattern": [
+    "hint-pattern",
+    "hint-pattern-take-1",
+    "hint-pattern-take-2"
+  ],
+  "rover-success": [
+    "rover-success-take-1",
+    "rover-success-take-2",
+    "rover-success-take-3"
+  ],
+  "rover-more": [
+    "rover-more-take-1",
+    "rover-more-take-2",
+    "rover-more-take-3"
+  ],
+  "rover-fewer": [
+    "rover-fewer-take-1",
+    "rover-fewer-take-2",
+    "rover-fewer-take-3"
+  ]
+}
