@@ -48,7 +48,7 @@ export function MissionPanel({
     [answer, setAnswer] = useState(''),
     [done, setDone] = useState(false),
     [feedback, setFeedback] = useState('');
-  const [demo, setDemo] = useState(true);
+  const [demo, setDemo] = useState(m.showExample !== false);
   const [earnedStars, setEarnedStars] = useState(2);
   const [celebrationLine, setCelebrationLine] = useState(m.voice + '-success');
   const adultNeeded = m.parts.some((g) => !approvedPath(g, reviews));

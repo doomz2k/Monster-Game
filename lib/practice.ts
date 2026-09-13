@@ -271,7 +271,7 @@ export function missionPractice(m: Mission): PracticeQuestion | null {
   return {
     key: `mission:${m.npc}:${m.round}:${m.prompt}:${m.target}:${m.answer}:${concept}`,
     skill,
-    title: m.title,
+    title: m.title + (m.reviewing ? ' · practice again' : ''),
     concept,
     range: numeric
       ? (m.kind === 'pack' ? m.target : Math.max(m.total, m.second, m.target)) >

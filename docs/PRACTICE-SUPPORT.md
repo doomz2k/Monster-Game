@@ -1,0 +1,15 @@
+# Remembered examples and gentle maths review
+
+Familiar activities can now begin at the question. The game keeps the opening example until two recent questions in that activity matched on the first answer, without an explicit example replay or adult sound prompt. A retry, replay or unfinished answer brings the example back. A new pattern structure or a question involving numbers above five needs its own recent history. Pizza cooking needs two whole, clean three-topping recipes. Yellow Y always opens the example, and phonics keeps its modelling and recording approval gates.
+
+Start contains saved parent choices to show every opening example and to disable maths review. Their defaults remember familiar activities and mix in occasional review. They apply to the next activity; changing them while paused does not replace the current question.
+
+Addition and subtraction can revisit a fact that needed another try or an explicit example replay. Review is considered once in four completed questions of that skill, after at least three other questions. It uses the bounded recent practice record, skips concepts encountered again since that result, stays within the chosen number range, and avoids the preceding and following bank answers and the most recent observed answer. It never changes the selected number range or phonics level. A question with a submitted answer stays stable when the child leaves, plays elsewhere and returns, including after saving.
+
+Review appears in Tilly's flowers, Marina's harbour or Pip's battery activity. Relevant earlier pizza arithmetic can be revisited there; pizza recipes themselves remain stable throughout cooking. Review questions keep an opening example, award the normal reward, and appear as “practice again” only in the private parent record. There are no deadlines, scheduled notifications or absence penalties. These are rules for supportive game presentation, not a measure of reading or mathematical proficiency.
+
+## Verification
+
+153 automated tests pass. Added coverage checks familiar/unfinished/retried questions, explicit replays, parent overrides, larger quantities, repeat structures, complete versus partial pizzas, unchanged phonics modelling, review spacing, repeated concepts, repeated targets, available subtraction audio, range boundaries, saved pending questions and reward deduplication. Lint, type checking and the production build pass.
+
+The local browser adventure completed nine garden questions. After two clean answers it started directly at the next sum; Y reopened the example, a wrong answer restored the following example, and the always-show preference took effect on the next activity. Both parent preferences survived a reload and were restored to their defaults. After five intervening sums, the retried 4 + 1 returned with an example and was recorded as “practice again” with the normal two-star reward. The private summary showed 16 total test questions and browser logs reported no errors. These were automated-agent inputs, not a child assessment. Physical controller and family acceptance remain outstanding.

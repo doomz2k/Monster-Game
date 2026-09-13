@@ -19,6 +19,7 @@ import {
 import { discoveryFor } from './discovery-catalogue';
 import { freshPantry, readPantry, type Pantry, type ProduceId } from './garden';
 import { spaceCard } from './space-learning';
+import { needsExample, reviewFact } from './practice-support';
 import {
   arithmeticFact,
   countQuantity,
@@ -668,6 +669,8 @@ export type Mission = {
   second: number;
   recipe?: PizzaRecipe;
   gardenIngredients?: ProduceId[];
+  showExample?: boolean;
+  reviewing?: boolean;
 };
 const numbers = (n: number) =>
   Array.from({ length: n }, (_, i) => String(i + 1));
@@ -804,8 +807,42 @@ export function missionFor(npc: QuestId, p: ProgressData): Mission {
     m.target = card.target ?? 0;
     m.total = p.mathsMax;
   }
+  if (
+    (m.kind === 'add' || m.kind === 'take') &&
+    ['garden', 'cove', 'rocket'].includes(npc)
+  ) {
+    const operation = m.kind === 'add' ? '+' : '−',
+      index = npc === 'rocket' ? Math.floor(round / 3) : round,
+      flavour = npc === 'rocket' ? 1 : 0,
+      neighbours = [
+        ...(index > 0
+          ? [arithmeticFact(index - 1, p.mathsMax, operation, flavour).target]
+          : []),
+        arithmeticFact(index + 1, p.mathsMax, operation, flavour).target,
+      ];
+    const review = reviewFact(
+      p.practice,
+      npc,
+      round,
+      operation,
+      p.mathsMax,
+      neighbours,
+      p.preferences.reviewMaths,
+    );
+    if (review) {
+      m.total = review.left;
+      m.second = review.right;
+      m.target = review.target;
+      m.answer = String(m.target);
+      m.reviewing = true;
+      if (m.kind === 'take') m.prompt = 'take-' + m.second;
+    }
+  }
   if (m.kind === 'add' || m.kind === 'take')
     m.choices = ['0', ...numbers(p.mathsMax)];
+  m.showExample =
+    m.reviewing ||
+    needsExample(m, p.practice, p.preferences.examples === 'always');
   return m;
 }
 export function finishMission(p: ProgressData, mission: Mission): ProgressData {

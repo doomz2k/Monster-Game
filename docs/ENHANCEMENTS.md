@@ -92,3 +92,5 @@ The next checkpoint, [DISCOVERIES-AND-FRIENDS.md](DISCOVERIES-AND-FRIENDS.md), a
 [ISLAND-WEATHER.md](ISLAND-WEATHER.md) adds gentle active-play showers, a rainbow, terrain-following puddles, walking ripples and green-A splashes (33/36), with saved parent choices, calm/reduced options and explicit rendering budgets.
 
 [PRACTICE-RECORD.md](PRACTICE-RECORD.md) adds a Start-only, device-local practice summary based on actual question answers (47), including per-topping arithmetic, first/retried results, example replays and explicit adult-prompt labels. Bounded, persistent observations provide groundwork for 17/18 without changing learning levels or claiming assessment results.
+
+[PRACTICE-SUPPORT.md](PRACTICE-SUPPORT.md) uses those observations to remember familiar activity examples (9), restore help after retries and revisit occasional addition/subtraction facts after intervening play (18). Saved parent overrides preserve control, and phonics modelling remains explicit.

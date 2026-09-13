@@ -12,6 +12,8 @@ export type GamePreferences = {
   graphics: GraphicsMode;
   daylight: DaylightMode;
   weather: WeatherMode;
+  examples: 'remember' | 'always';
+  reviewMaths: boolean;
 };
 export const defaultPreferences = (): GamePreferences => ({
   motion: 'system',
@@ -24,11 +26,15 @@ export const defaultPreferences = (): GamePreferences => ({
   graphics: 'auto',
   daylight: 'cycle',
   weather: 'cycle',
+  examples: 'remember',
+  reviewMaths: true,
 });
 export function readPreferences(raw: unknown): GamePreferences {
   const p = defaultPreferences();
   if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return p;
   const value = raw as Record<string, unknown>;
+  p.examples = value.examples === 'always' ? 'always' : 'remember';
+  p.reviewMaths = value.reviewMaths !== false;
   if (WEATHER_MODES.includes(value.weather as WeatherMode))
     p.weather = value.weather as WeatherMode;
   if (DAYLIGHT_MODES.includes(value.daylight as DaylightMode))

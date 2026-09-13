@@ -132,7 +132,53 @@ export function ParentPanel({
             </SelectContent>
           </Select>
         </label>
+        <label htmlFor="activity-examples">
+          Activity examples
+          <select
+            id="activity-examples"
+            className="setting-select"
+            value={progress.preferences.examples}
+            onChange={(e) =>
+              onProgress({
+                ...progress,
+                preferences: {
+                  ...progress.preferences,
+                  examples: e.target.value === 'always' ? 'always' : 'remember',
+                },
+              })
+            }
+          >
+            <option value="remember">Remember familiar activities</option>
+            <option value="always">Show before every question</option>
+          </select>
+        </label>
+        <label htmlFor="maths-review">
+          Maths review
+          <select
+            id="maths-review"
+            className="setting-select"
+            value={String(progress.preferences.reviewMaths)}
+            onChange={(e) =>
+              onProgress({
+                ...progress,
+                preferences: {
+                  ...progress.preferences,
+                  reviewMaths: e.target.value === 'true',
+                },
+              })
+            }
+          >
+            <option value="true">Mix in a little review</option>
+            <option value="false">Follow the varied question banks</option>
+          </select>
+        </label>
       </div>
+      <p className="parent-intro">
+        New activities and ones that needed another try keep their examples. Y
+        always shows an example. An addition or subtraction fact can return
+        after other questions, within your chosen number range. Changes apply to
+        the next activity.
+      </p>
       <div className="reviewer-details">
         <label htmlFor="reviewer-name">
           Reviewer name
