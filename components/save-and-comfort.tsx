@@ -9,12 +9,15 @@ import {
   type SaveBackup,
 } from '@/lib/save-recovery';
 import type { GamePreferences } from '@/lib/preferences';
+import { GRAPHICS, type GraphicsSnapshot } from '@/lib/graphics-quality';
 export function SaveAndComfort({
   progress,
   onProgress,
+  graphics,
 }: {
   progress: ProgressData;
   onProgress: (p: ProgressData) => void;
+  graphics?: GraphicsSnapshot;
 }) {
   const [message, setMessage] = useState(''),
     [preview, setPreview] = useState<ProgressData | null>(null),
@@ -118,6 +121,20 @@ export function SaveAndComfort({
           </select>
         </label>
         <label>
+          Graphics
+          <select
+            value={progress.preferences.graphics}
+            onChange={(e) =>
+              set('graphics', e.target.value as GamePreferences['graphics'])
+            }
+          >
+            <option value="auto">Automatic — adapt while playing</option>
+            <option value="rich">More detail</option>
+            <option value="balanced">Balanced</option>
+            <option value="simple">Simpler graphics</option>
+          </select>
+        </label>
+        <label>
           Speech volume · {Math.round(progress.preferences.speechVolume * 100)}%
           <input
             type="range"
@@ -151,6 +168,28 @@ export function SaveAndComfort({
         />{' '}
         Calm play: less motion, quieter surroundings and smaller celebrations
       </label>
+      {graphics && (
+        <details className="graphics-info">
+          <summary>Graphics information</summary>
+          <p>
+            Last world view: {GRAPHICS[graphics.tier].label}.{' '}
+            {graphics.fps === null
+              ? 'Still measuring.'
+              : Math.round(graphics.fps) + ' frames per second.'}
+          </p>
+          <p>
+            {graphics.drawCalls.toLocaleString()} draw calls ·{' '}
+            {graphics.triangles.toLocaleString()} triangles ·{' '}
+            {graphics.geometries} geometries · {graphics.textures} textures ·
+            render scale {graphics.pixelRatio.toFixed(2)}.
+          </p>
+          <p>
+            Automatic mode changes scenery density, shadows and render
+            resolution. Activities, discoveries and rewards are the same in
+            every setting. Measurements stay on this device.
+          </p>
+        </details>
+      )}
       <h3>Save and recovery</h3>
       <p>
         Keep a copy of Monster’s stars, clothes, house, garden and learning

@@ -1,5 +1,12 @@
 import * as THREE from 'three';
 import { createPizzaParcel } from './pizza-parcel';
+import {
+  GRAPHICS,
+  GraphicsGovernor,
+  graphicsPixelRatio,
+  type GraphicsSnapshot,
+  type GraphicsTier,
+} from './graphics-quality';
 import { chooseCameraYaw, cameraObstructed } from './camera-guidance';
 import type { GamePreferences } from './preferences';
 import {
@@ -55,6 +62,9 @@ export type WorldUpdate = {
   place?: PlaceId | null;
 };
 export class MonsterWorld {
+  private graphics = new GraphicsGovernor();
+  private appliedTier: GraphicsTier | null = null;
+  private shadowElapsed = 1;
   private textures = worldTextures();
   private atmosphere: ReturnType<typeof createAtmosphere>;
   private sun = new THREE.DirectionalLight('#ffedc6', 2.35);
@@ -132,6 +142,7 @@ export class MonsterWorld {
     });
     this.renderer.setPixelRatio(Math.min(devicePixelRatio, 1.5));
     this.renderer.shadowMap.enabled = true;
+    this.renderer.shadowMap.autoUpdate = false;
     this.renderer.shadowMap.type = THREE.PCFShadowMap;
     this.renderer.setClearColor('#b9dbdf');
     this.renderer.outputColorSpace = THREE.SRGBColorSpace;
@@ -222,9 +233,18 @@ export class MonsterWorld {
     const animate = (now: number) => {
       if (this.disposed) return;
       this.frame = requestAnimationFrame(animate);
-      const dt = Math.min((now - last) / 1000, 0.05);
+      const frameTime = now - last;
+      const dt = Math.min(frameTime / 1000, 0.05);
       last = now;
-      if (document.hidden || this.state().visible === false) return;
+      const current = this.state();
+      if (document.hidden || current.visible === false) {
+        this.graphics.pause();
+        return;
+      }
+      this.graphics.setMode(current.preferences?.graphics ?? 'auto');
+      if (current.active) this.graphics.sample(frameTime);
+      else this.graphics.pause();
+      this.applyGraphics();
       elapsed += dt;
       report += dt;
       this.tick(dt, elapsed);
@@ -251,6 +271,12 @@ export class MonsterWorld {
               : null,
         });
       }
+      this.shadowElapsed += dt;
+      const shadowHz = GRAPHICS[this.graphics.tier].shadowHz;
+      if (shadowHz && this.shadowElapsed >= 1 / shadowHz) {
+        this.renderer.shadowMap.needsUpdate = true;
+        this.shadowElapsed = 0;
+      }
       this.renderer.render(
         this.inShowcase ? this.showroom : this.scene,
         this.camera,
@@ -262,6 +288,51 @@ export class MonsterWorld {
     e.preventDefault();
     this.onError();
   };
+  graphicsSnapshot(): GraphicsSnapshot {
+    const info = this.renderer.info;
+    return {
+      mode: this.graphics.mode,
+      tier: this.graphics.tier,
+      fps: this.graphics.fps,
+      drawCalls: info.render.calls,
+      triangles: info.render.triangles,
+      geometries: info.memory.geometries,
+      textures: info.memory.textures,
+      pixelRatio: this.renderer.getPixelRatio(),
+    };
+  }
+  private applyGraphics() {
+    const tier = this.graphics.tier;
+    if (tier === this.appliedTier) return;
+    this.appliedTier = tier;
+    const quality = GRAPHICS[tier];
+    const shadowsChanged =
+      this.renderer.shadowMap.enabled !== quality.shadowSize > 0;
+    this.renderer.shadowMap.enabled = quality.shadowSize > 0;
+    if (shadowsChanged) {
+      // Three's compiled material variants must refresh when shadow defines change.
+      const refresh = (object: THREE.Object3D) => {
+        if (object instanceof THREE.Mesh || object instanceof THREE.Points)
+          (Array.isArray(object.material)
+            ? object.material
+            : [object.material]
+          ).forEach((material) => {
+            material.needsUpdate = true;
+          });
+      };
+      this.scene.traverse(refresh);
+      this.showroom.traverse(refresh);
+    }
+    this.sun.shadow.map?.dispose();
+    this.sun.shadow.map = null;
+    this.sun.shadow.mapSize.set(
+      quality.shadowSize || 512,
+      quality.shadowSize || 512,
+    );
+    this.renderer.shadowMap.needsUpdate = true;
+    this.atmosphere.setQuality(tier);
+    this.resize();
+  }
   private mat(c: string) {
     if (!this.materials.has(c))
       this.materials.set(
@@ -1281,7 +1352,10 @@ export class MonsterWorld {
     this.celebration = 3.5;
     for (
       let i = 0;
-      i < (this.state().preferences?.calm || this.reducedMotion ? 5 : 28);
+      i <
+      (this.state().preferences?.calm || this.reducedMotion
+        ? 5
+        : GRAPHICS[this.graphics.tier].particles);
       i++
     ) {
       const mesh = new THREE.Mesh(
@@ -1308,6 +1382,9 @@ export class MonsterWorld {
     if (!w || !h) return;
     this.camera.aspect = w / h;
     this.camera.updateProjectionMatrix();
+    this.renderer.setPixelRatio(
+      graphicsPixelRatio(this.graphics.tier, w, h, devicePixelRatio),
+    );
     this.renderer.setSize(w, h);
   }
   dispose() {

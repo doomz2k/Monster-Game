@@ -4,6 +4,7 @@ import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import { createNeighbour } from '@/lib/neighbours';
 import { placeFor, type PlaceId } from '@/lib/adventure';
+import { graphicsPixelRatio } from '@/lib/graphics-quality';
 export function NeighbourPortrait({
   id,
   talking = false,
@@ -13,7 +14,9 @@ export function NeighbourPortrait({
   talking?: boolean;
   isTalking?: () => boolean;
 }) {
-  const { reducedMotion: reduced } = useGamePreferences();
+  const { reducedMotion: reduced, preferences } = useGamePreferences();
+  const tier =
+    preferences.graphics === 'auto' ? 'balanced' : preferences.graphics;
   const host = useRef<HTMLDivElement>(null),
     speech = useRef(talking),
     speechState = useRef(isTalking);
@@ -42,8 +45,12 @@ export function NeighbourPortrait({
     const light = new THREE.DirectionalLight('#fff4dc', 2.5);
     light.position.set(-3, 4, 5);
     scene.add(light);
-    let frame = 0;
+    let frame = 0,
+      lastFrame = -1000;
     const draw = (t: number) => {
+      if (!reduced) frame = requestAnimationFrame(draw);
+      if (document.hidden || (t !== 0 && t - lastFrame < 1000 / 30)) return;
+      lastFrame = t;
       rig.animate(
         t / 1000,
         true,
@@ -51,11 +58,13 @@ export function NeighbourPortrait({
         reduced,
       );
       renderer.render(scene, camera);
-      if (!reduced) frame = requestAnimationFrame(draw);
     };
     const resize = new ResizeObserver(([e]) => {
       const { width, height } = e.contentRect;
       if (!width || !height) return;
+      renderer.setPixelRatio(
+        graphicsPixelRatio(tier, width, height, devicePixelRatio),
+      );
       renderer.setSize(width, height);
       camera.aspect = width / height;
       camera.updateProjectionMatrix();
@@ -78,7 +87,7 @@ export function NeighbourPortrait({
       renderer.forceContextLoss();
       renderer.domElement.remove();
     };
-  }, [id, reduced]);
+  }, [id, reduced, tier]);
   return (
     <figure
       ref={host}

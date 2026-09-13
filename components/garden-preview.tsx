@@ -4,10 +4,13 @@ import * as THREE from 'three';
 import type { Plant } from '@/lib/adventure';
 import { createGardenPlant, createGardenWildlife } from '@/lib/garden-models';
 import { useGamePreferences } from './game-preferences';
+import { graphicsPixelRatio } from '@/lib/graphics-quality';
 
 export function GardenPreview({ plots }: { plots: Plant[] }) {
   const host = useRef<HTMLDivElement>(null),
-    { reducedMotion } = useGamePreferences();
+    { reducedMotion, preferences } = useGamePreferences();
+  const tier =
+    preferences.graphics === 'auto' ? 'balanced' : preferences.graphics;
   useEffect(() => {
     if (!host.current) return;
     const scene = new THREE.Scene(),
@@ -22,14 +25,17 @@ export function GardenPreview({ plots }: { plots: Plant[] }) {
     }
     renderer.setPixelRatio(Math.min(devicePixelRatio, 1.5));
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.enabled = tier !== 'simple';
     renderer.shadowMap.type = THREE.PCFShadowMap;
     host.current.appendChild(renderer.domElement);
     scene.add(new THREE.HemisphereLight('#fff5d8', '#6b7856', 2));
     const sun = new THREE.DirectionalLight('#fff1d3', 3);
     sun.position.set(-3, 8, 6);
     sun.castShadow = true;
-    sun.shadow.mapSize.set(1024, 1024);
+    sun.shadow.mapSize.set(
+      tier === 'rich' ? 1024 : 512,
+      tier === 'rich' ? 1024 : 512,
+    );
     sun.shadow.normalBias = 0.04;
     scene.add(sun);
     const ground = new THREE.Mesh(
@@ -67,16 +73,22 @@ export function GardenPreview({ plots }: { plots: Plant[] }) {
     }
     const wildlife = createGardenWildlife(plots);
     scene.add(wildlife.root);
-    let frame = 0;
+    let frame = 0,
+      lastFrame = -1000;
     const draw = (t: number) => {
+      if (!reducedMotion) frame = requestAnimationFrame(draw);
+      if (document.hidden || (t !== 0 && t - lastFrame < 1000 / 30)) return;
+      lastFrame = t;
       models.forEach((m, i) => m.animate(t / 1000 + i, reducedMotion));
       wildlife.animate(t / 1000, reducedMotion);
       renderer.render(scene, camera);
-      if (!reducedMotion) frame = requestAnimationFrame(draw);
     };
     const observer = new ResizeObserver(([entry]) => {
       const { width, height } = entry.contentRect;
       if (!width || !height) return;
+      renderer.setPixelRatio(
+        graphicsPixelRatio(tier, width, height, devicePixelRatio),
+      );
       renderer.setSize(width, height);
       camera.aspect = width / height;
       camera.updateProjectionMatrix();
@@ -103,7 +115,7 @@ export function GardenPreview({ plots }: { plots: Plant[] }) {
       renderer.forceContextLoss();
       renderer.domElement.remove();
     };
-  }, [plots, reducedMotion]);
+  }, [plots, reducedMotion, tier]);
   return (
     <figure
       className="garden-preview"

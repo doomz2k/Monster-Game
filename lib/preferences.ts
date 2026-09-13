@@ -1,3 +1,4 @@
+import { GRAPHICS_MODES, type GraphicsMode } from './graphics-quality';
 export type GamePreferences = {
   motion: 'system' | 'reduced';
   contrast: 'standard' | 'high';
@@ -6,6 +7,7 @@ export type GamePreferences = {
   speechVolume: number;
   environmentVolume: number;
   camera: 'gentle' | 'fixed';
+  graphics: GraphicsMode;
 };
 export const defaultPreferences = (): GamePreferences => ({
   motion: 'system',
@@ -15,11 +17,14 @@ export const defaultPreferences = (): GamePreferences => ({
   speechVolume: 1,
   environmentVolume: 0.65,
   camera: 'gentle',
+  graphics: 'auto',
 });
 export function readPreferences(raw: unknown): GamePreferences {
   const p = defaultPreferences();
   if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return p;
   const value = raw as Record<string, unknown>;
+  if (GRAPHICS_MODES.includes(value.graphics as GraphicsMode))
+    p.graphics = value.graphics as GraphicsMode;
   for (const key of ['motion', 'contrast', 'textSize', 'camera'] as const) {
     const options = {
       motion: ['system', 'reduced'],

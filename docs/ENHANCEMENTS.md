@@ -68,3 +68,5 @@ The next checkpoint, [DISCOVERIES-AND-FRIENDS.md](DISCOVERIES-AND-FRIENDS.md), a
 [CHARACTERS-AND-VILLAGE.md](CHARACTERS-AND-VILLAGE.md) adds distinctive neighbour clothes, props, eyelids and expressions (3), plus short walking and resting routines for village guests (24). Quest givers stay in familiar, accessible places.
 
 [PIZZA-DELIVERIES.md](PIZZA-DELIVERIES.md) adds optional, saved pizza deliveries to the actual customer (27), a carrying pose, British thank-you recordings and a full-screen illustrated map. The delivery reward is protected against duplicate claims.
+
+[GRAPHICS-QUALITY.md](GRAPHICS-QUALITY.md) adds adaptive and manual rendering tiers, explicit pixel/shadow/vegetation budgets and hidden local performance information (12). Initial browser measurements and outstanding low-spec hardware acceptance are recorded there.

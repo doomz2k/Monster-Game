@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { GRAPHICS, type GraphicsTier } from './graphics-quality';
 import { PLACES } from './adventure';
 import { PLAY_RADIUS, SHORE_RADIUS, LANDMARKS } from './world-layout';
 import { createNeighbour } from './neighbours';
@@ -638,6 +639,10 @@ export function createAtmosphere(
   return {
     root,
     moon,
+    setQuality(tier: GraphicsTier) {
+      grass.count = Math.floor(count * GRAPHICS[tier].grass);
+      pollen.visible = GRAPHICS[tier].pollen;
+    },
     islandColliders: [
       { x: -43, z: -43, r: 2.25 },
       { x: 58, z: 17, r: 1.8 },

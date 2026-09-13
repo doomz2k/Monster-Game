@@ -77,6 +77,7 @@ import { moveMenuFocus } from '@/lib/menu-navigation';
 import { registerGameTools, type GameToolAPI } from '@/lib/webmcp';
 import type { MonsterWorld, WorldState, WorldUpdate } from '@/lib/world';
 import type { Appearance } from '@/lib/appearance';
+import type { GraphicsSnapshot } from '@/lib/graphics-quality';
 import script from '@/lib/audio-data/adventure-script.json';
 
 type Mode =
@@ -160,6 +161,7 @@ export default function AdventureGame() {
   const [flightTo, setFlightTo] = useState<Region>('moon');
   const [deliveryThanks, setDeliveryThanks] = useState<PlaceId | null>(null);
   const [deliveryGuiding, setDeliveryGuiding] = useState(true);
+  const [graphicsSnapshot, setGraphicsSnapshot] = useState<GraphicsSnapshot>();
   const [parentReturnMode, setParentReturnMode] = useState<Mode>('explore');
   const returnMode = useRef<Mode>('welcome'),
     resumeMode = useRef<Mode>('explore'),
@@ -580,6 +582,7 @@ export default function AdventureGame() {
       return;
     }
     setParentReturnMode(mode);
+    setGraphicsSnapshot(world.current?.graphicsSnapshot());
     go('parents');
   };
   const handleAction = (action: Action) => {
@@ -1327,7 +1330,11 @@ export default function AdventureGame() {
                   >
                     Return to main menu
                   </button>
-                  <SaveAndComfort progress={p} onProgress={change} />
+                  <SaveAndComfort
+                    progress={p}
+                    onProgress={change}
+                    graphics={graphicsSnapshot}
+                  />
                   <ParentPanel
                     progress={p}
                     onProgress={change}
