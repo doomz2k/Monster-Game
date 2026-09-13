@@ -19,6 +19,7 @@ import {
 import type { ProgressData } from '@/lib/learning';
 import type { AudioDirector } from '@/lib/audio';
 import { FurniturePreview } from './furniture-preview';
+import { ShopPicture } from './shop-picture';
 
 export function FurnitureStudio({
   progress: p,
@@ -82,7 +83,7 @@ export function FurnitureStudio({
                 say('room-place');
               }}
             >
-              <span>{thing.icon}</span>
+              <ShopPicture id={id} />
               <small>{thing.name}</small>
             </button>
           );
@@ -190,7 +191,7 @@ export function FurnitureStudio({
                   }}
                 >
                   <b>{i + 1}</b>
-                  <span>{placed?.icon ?? '＋'}</span>
+                  {placed ? <ShopPicture id={placed.id} /> : <span>＋</span>}
                   <small>{placed?.name ?? 'Put it here'}</small>
                 </button>
               );

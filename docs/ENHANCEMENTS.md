@@ -82,3 +82,5 @@ The next checkpoint, [DISCOVERIES-AND-FRIENDS.md](DISCOVERIES-AND-FRIENDS.md), a
 [COMPANIONS.md](COMPANIONS.md) adds three travelling friends with saved choices, permanent quest unlocks, full-screen home previews, idle reactions and a rover perch (37), plus contextual home-screen instruction replay.
 
 [FURNITURE-STUDIO.md](FURNITURE-STUDIO.md) adds a 3D decorating preview, numbered placement, saved rotation, undo and separate indoor/outdoor layouts (30), ten shared furniture models, and a fix for controller focus jumping diagonally off wide shelves.
+
+[POPPYS-SHOP.md](POPPYS-SHOP.md) adds a full-screen illustrated shop, shared 3D item previews, explicit purchase receipts, repeat-press spending protection and a persistent pictured saving goal with a map shortcut (38). Matching item illustrations also improve the furniture studio (4/30).

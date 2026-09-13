@@ -1530,5 +1530,101 @@
   "room-undo": {
     "voice": "narrator",
     "text": "Back just the way it was. You can try a different spot."
+  },
+  "shop-browse": {
+    "voice": "poppy",
+    "text": "Welcome to my little shop! Choose a picture, then press green A for a closer look. Your stars stay safe while you look."
+  },
+  "shop-seed": {
+    "voice": "poppy",
+    "text": "Lovely seeds for your garden. Choose a packet to see what it will grow into."
+  },
+  "shop-furniture": {
+    "voice": "poppy",
+    "text": "Something cosy for your house. Choose a picture for a closer look."
+  },
+  "shop-garden": {
+    "voice": "poppy",
+    "text": "Lovely things for outside. Choose something to make your garden your own."
+  },
+  "shop-wish": {
+    "voice": "poppy",
+    "text": "I will remember this lovely thing for you. Your stars can help you get it when you are ready."
+  },
+  "shop-wish-clear": {
+    "voice": "poppy",
+    "text": "We can choose something else to save for whenever you like."
+  },
+  "shop-item-tomato": {
+    "voice": "poppy",
+    "text": "Tomato seeds cost two stars. Grow tomatoes at home to use in your pizzas."
+  },
+  "shop-item-pepper": {
+    "voice": "poppy",
+    "text": "Pepper seeds cost two stars. Grow peppers at home to use in your pizzas."
+  },
+  "shop-item-daisy": {
+    "voice": "poppy",
+    "text": "Daisy seeds cost one star. Give them water to grow cheerful little flowers."
+  },
+  "shop-item-sunflower": {
+    "voice": "poppy",
+    "text": "Sunflower seeds cost two stars. Grow a lovely tall sunflower in your garden."
+  },
+  "shop-item-tulip": {
+    "voice": "poppy",
+    "text": "Tulip seeds cost two stars. Grow a pink tulip in your garden."
+  },
+  "shop-item-carrot": {
+    "voice": "poppy",
+    "text": "Carrot seeds cost one star. Plant them to grow a leafy carrot patch."
+  },
+  "shop-item-strawberry": {
+    "voice": "poppy",
+    "text": "Strawberry seeds cost three stars. Plant them to grow a little strawberry plant."
+  },
+  "shop-item-moonflower": {
+    "voice": "poppy",
+    "text": "Moonflower seeds cost three stars. Repair Pip's rocket first, then you can grow these special flowers."
+  },
+  "shop-item-sofa": {
+    "voice": "poppy",
+    "text": "The berry sofa costs four stars. It will look lovely in your house."
+  },
+  "shop-item-bed": {
+    "voice": "poppy",
+    "text": "The starry bed costs five stars. A cosy place for your little monster."
+  },
+  "shop-item-table": {
+    "voice": "poppy",
+    "text": "The picnic table costs three stars. A little wooden table for your house."
+  },
+  "shop-item-books": {
+    "voice": "poppy",
+    "text": "The book corner costs four stars. Lots of colourful books for your house."
+  },
+  "shop-item-lamp": {
+    "voice": "poppy",
+    "text": "The sunshine lamp costs three stars. A lovely warm light for your house."
+  },
+  "shop-item-rug": {
+    "voice": "poppy",
+    "text": "The rainbow rug costs three stars. Put its lovely colours on your floor."
+  },
+  "shop-item-birdbath": {
+    "voice": "poppy",
+    "text": "The bird bath costs four stars. A little splash of blue for your garden."
+  },
+  "shop-item-swing": {
+    "voice": "poppy",
+    "text": "The garden swing costs six stars. A lovely wooden swing for outside."
+  },
+  "shop-item-mushroom": {
+    "voice": "poppy",
+    "text": "The toadstool seat costs three stars. A spotty little seat for your garden."
+  },
+  "shop-item-lantern": {
+    "voice": "poppy",
+    "text": "The garden lantern costs two stars. A little golden glow for outside."
   }
 }

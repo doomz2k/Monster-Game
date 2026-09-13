@@ -1,0 +1,451 @@
+.poppy-shop {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex: 1;
+  min-height: 0;
+}
+.poppy-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.poppy-heading > div > span {
+  font-size: 12px;
+  letter-spacing: 2px;
+  color: #7b765e;
+  font-weight: 700;
+}
+.poppy-heading h2 {
+  font-size: clamp(24px, 3vw, 35px);
+  margin: 2px 0;
+  color: #415b49;
+}
+.poppy-tabs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+.poppy-tabs button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 10px;
+  border: 2px solid transparent;
+  border-radius: 17px;
+  background: #ede8d4;
+  color: #52614a;
+  font-size: 17px;
+}
+.poppy-tabs button > span {
+  font-size: 25px;
+}
+.poppy-tabs button[aria-pressed='true'] {
+  background: #e6ddee;
+  border-color: #b5a0c4;
+}
+.poppy-workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: 24px;
+  flex: 1;
+  min-height: 0;
+}
+.poppy-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 0;
+  background: radial-gradient(ellipse at 50% 35%, #f6ead1, #e3dac8);
+  border-radius: 28px;
+  padding: 8px 14px 17px;
+  overflow: hidden;
+}
+.shop-preview {
+  position: relative;
+  min-height: 0;
+  flex: 1;
+  width: 100%;
+  margin: 0;
+}
+.shop-preview canvas {
+  position: absolute;
+  inset: 0;
+  display: block;
+}
+.shop-preview > .shop-picture {
+  position: absolute;
+  inset: 10%;
+  height: 80%;
+  width: 80%;
+  max-width: none;
+}
+.shop-preview:has(canvas) > .shop-picture {
+  visibility: hidden;
+}
+.poppy-display h3 {
+  font-size: clamp(22px, 2.4vw, 30px);
+  margin: 0;
+  color: #495a45;
+}
+.poppy-display > span {
+  font-size: 14px;
+  color: #74664e;
+}
+.poppy-shelves {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  gap: 10px;
+}
+.poppy-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  flex: 1;
+  min-height: 0;
+}
+.poppy-grid button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  min-height: 0;
+  min-width: 0;
+  padding: 7px;
+  border: 3px solid #dfddc8;
+  border-radius: 22px;
+  background: #fffdf3;
+  color: #526349;
+}
+.poppy-grid button[data-current='true'] {
+  border-color: #91b299;
+  background: #ecf2e0;
+}
+.shop-picture {
+  display: block;
+  width: 100%;
+  height: auto;
+  min-height: 0;
+  max-width: 150px;
+}
+.poppy-grid .shop-picture {
+  flex: 1;
+  max-height: 125px;
+  min-height: 35px;
+}
+.poppy-grid strong {
+  font-size: 15px;
+  line-height: 1.1;
+  text-align: center;
+}
+.poppy-grid button > span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  min-height: 23px;
+  color: #997a30;
+  font-size: 16px;
+}
+.poppy-pages {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  font-size: 14px;
+  color: #647058;
+}
+.poppy-pages button {
+  display: grid;
+  place-items: center;
+  min-width: 58px;
+  height: 34px;
+  border-radius: 12px;
+  background: #e8ecd8;
+  color: #5d7155;
+}
+.poppy-pages button:disabled {
+  opacity: 0.25;
+}
+.poppy-inspection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  flex: 1;
+  min-height: 0;
+  background: #fffbee;
+  border: 3px solid #e3dfc7;
+  border-radius: 28px;
+  padding: 24px;
+  text-align: center;
+}
+.poppy-price {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.poppy-inspection h3 {
+  font-size: clamp(24px, 3vw, 35px);
+  line-height: 1.2;
+  color: #435e4a;
+  margin: 0;
+}
+.poppy-inspection p {
+  margin: 0;
+  color: #6b6b53;
+}
+.poppy-buy,
+.poppy-wish,
+.poppy-cancel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-height: 54px;
+  border-radius: 18px;
+  padding: 10px 20px;
+  width: 100%;
+  font-size: 20px;
+}
+.poppy-buy {
+  background: #deedca;
+  border: 3px solid #91b47d;
+  color: #365d3e;
+  font-weight: 700;
+}
+.poppy-buy:disabled {
+  opacity: 0.35;
+}
+.poppy-wish {
+  background: #f6e2e5;
+  border: 2px solid #deb7c6;
+  color: #8e5b72;
+  font-size: 17px;
+}
+.poppy-cancel {
+  background: transparent;
+  border: 0;
+  color: #73664f;
+  font-size: 17px;
+}
+.poppy-gift {
+  display: grid;
+  place-items: center;
+  width: 76px;
+  height: 76px;
+  background: #dcebc9;
+  color: #608447;
+  border-radius: 50%;
+}
+.poppy-gift svg {
+  width: 45px;
+  height: 45px;
+}
+.poppy-saving {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: #eee6d1;
+  border-radius: 14px;
+  padding: 7px;
+  color: #786342;
+  font-size: 14px;
+}
+@media (max-height: 600px) {
+  .poppy-shop {
+    gap: 8px;
+  }
+  .poppy-heading > div > span {
+    display: none;
+  }
+  .poppy-heading h2 {
+    font-size: 24px;
+  }
+  .poppy-tabs button {
+    padding: 6px;
+  }
+  .poppy-workspace {
+    gap: 16px;
+  }
+  .poppy-display {
+    padding-bottom: 9px;
+  }
+  .poppy-display h3 {
+    font-size: 22px;
+  }
+  .poppy-grid {
+    gap: 8px;
+  }
+  .poppy-grid button {
+    padding: 5px;
+    gap: 2px;
+  }
+  .poppy-grid strong {
+    font-size: 13px;
+  }
+  .poppy-grid .shop-picture {
+    max-height: 90px;
+  }
+  .poppy-pages button {
+    height: 27px;
+  }
+  .poppy-inspection {
+    gap: 11px;
+    padding: 15px;
+  }
+  .poppy-inspection h3 {
+    font-size: 25px;
+  }
+  .poppy-buy,
+  .poppy-wish,
+  .poppy-cancel {
+    min-height: 44px;
+    padding: 6px 14px;
+    font-size: 17px;
+  }
+  .poppy-price svg {
+    width: 27px;
+    height: 27px;
+  }
+  .poppy-gift {
+    width: 55px;
+    height: 55px;
+  }
+  .poppy-saving {
+    padding: 4px;
+    font-size: 12px;
+  }
+}
+@media (max-height: 600px) and (min-width: 700px) {
+  .shop-dialog .poppy-heading {
+    position: absolute;
+    top: 21px;
+    left: 135px;
+    right: 125px;
+  }
+  .shop-dialog .poppy-heading h2 {
+    font-size: 22px;
+  }
+}
+@media (max-width: 650px) {
+  .poppy-workspace {
+    grid-template-columns: minmax(0, 0.65fr) minmax(0, 1fr);
+    gap: 10px;
+  }
+  .poppy-display {
+    padding: 6px;
+  }
+  .poppy-display h3 {
+    font-size: 17px;
+    text-align: center;
+  }
+  .poppy-display > span {
+    font-size: 11px;
+    text-align: center;
+  }
+  .poppy-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: repeat(3, minmax(0, 1fr));
+    gap: 6px;
+  }
+  .poppy-grid strong {
+    font-size: 12px;
+  }
+  .poppy-grid button {
+    padding: 4px;
+  }
+  .poppy-heading h2 {
+    font-size: 21px;
+  }
+  .poppy-tabs button {
+    font-size: 14px;
+    padding: 7px;
+    gap: 6px;
+  }
+  .poppy-inspection {
+    padding: 9px;
+    gap: 9px;
+  }
+  .poppy-inspection h3 {
+    font-size: 21px;
+  }
+  .poppy-buy,
+  .poppy-wish,
+  .poppy-cancel {
+    font-size: 14px;
+    gap: 7px;
+    padding: 6px;
+  }
+  .poppy-buy .pad-key,
+  .poppy-cancel .pad-key {
+    width: 28px;
+    height: 28px;
+    font-size: 17px;
+  }
+  .poppy-saving {
+    font-size: 11px;
+    gap: 5px;
+  }
+  .poppy-price {
+    gap: 3px;
+  }
+  .poppy-price svg {
+    width: 22px;
+    height: 22px;
+  }
+}
+.furniture-shelf .shop-picture {
+  width: 46px;
+  height: 37px;
+}
+.furniture-space-grid .shop-picture {
+  width: 64px;
+  height: 53px;
+}
+.map-saving-goal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: #f2e7d8;
+  color: #786044;
+  border: 2px solid #ceb79d;
+  border-radius: 18px;
+  padding: 4px 15px;
+  font-weight: 700;
+}
+.map-saving-goal .shop-picture {
+  width: 45px;
+  height: 41px;
+}
+.map-saving-goal > span {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.map-saving-goal small {
+  font-size: 13px;
+}
+@media (max-height: 600px) {
+  .furniture-shelf .shop-picture {
+    width: 37px;
+    height: 30px;
+  }
+  .furniture-space-grid .shop-picture {
+    width: 43px;
+    height: 34px;
+  }
+  .map-saving-goal {
+    font-size: 13px;
+    gap: 6px;
+  }
+}

@@ -25,6 +25,7 @@ export function claimFriendGift(p: ProgressData, id: QuestId): ProgressData {
     ...p,
     adventure: {
       ...p.adventure,
+      wish: p.adventure.wish === gift ? null : p.adventure.wish,
       friendshipGifts: [...p.adventure.friendshipGifts, id],
       inventory: owned
         ? p.adventure.inventory

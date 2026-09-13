@@ -143,6 +143,7 @@ export type AdventureProgress = {
   deliveries: DeliveryProgress;
   rover: RoverProgress;
   companion: CompanionId | null;
+  wish: string | null;
 };
 export const SHOP_ITEMS = [
   {
@@ -319,6 +320,7 @@ export const freshAdventure = (legacyStars = 0): AdventureProgress => ({
   deliveries: freshDeliveries(),
   rover: freshRoverProgress(),
   companion: 'sprig',
+  wish: null,
 });
 const integer = (v: unknown, max = 100000) =>
   typeof v === 'number' && Number.isSafeInteger(v) && v >= 0
@@ -416,6 +418,15 @@ export function readAdventure(
   p.deliveries = readDeliveries(v.deliveries, p.rounds.meadow);
   p.rover = readRoverProgress(v.rover, p.rounds.rocket >= 3);
   p.companion = readCompanion(v.companion, p);
+  p.wish =
+    typeof v.wish === 'string' &&
+    SHOP_ITEMS.some(
+      (item) =>
+        item.id === v.wish &&
+        (item.kind === 'seed' || !p.inventory.includes(item.id)),
+    )
+      ? v.wish
+      : null;
   p.discoveries = [
     ...new Set(
       Array.isArray(v.discoveries)
@@ -456,6 +467,7 @@ export function buyItem(p: ProgressData, id: string): ProgressData {
   )
     return p;
   const a = { ...p.adventure, wallet: p.adventure.wallet - item.price };
+  if (a.wish === id) a.wish = null;
   if (item.kind === 'seed') {
     if ((a.seeds[id] ?? 0) >= 99) return p;
     a.seeds = { ...a.seeds, [id]: (a.seeds[id] ?? 0) + 1 };

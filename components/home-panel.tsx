@@ -1,130 +1,15 @@
 'use client';
 import { useState } from 'react';
-import {
-  Check,
-  Sprout,
-  Armchair,
-  Droplets,
-  Undo2,
-  PawPrint,
-} from 'lucide-react';
+import { Sprout, Armchair, Droplets, Undo2, PawPrint } from 'lucide-react';
 import type { ProgressData } from '@/lib/learning';
 import { harvestPlant, PRODUCE, gardenVisitors } from '@/lib/garden';
 import { GardenPreview } from './garden-preview';
 import { CompanionPanel } from './companion-panel';
 import { FurnitureStudio } from './furniture-studio';
 import { GamePicture } from './game-picture';
-import {
-  SHOP_ITEMS,
-  buyItem,
-  plantSeed,
-  waterPlant,
-  clearPlot,
-} from '@/lib/adventure';
+import { SHOP_ITEMS, plantSeed, waterPlant, clearPlot } from '@/lib/adventure';
 import type { AudioDirector } from '@/lib/audio';
 
-export function ShopPanel({
-  progress: p,
-  onChange,
-  audio,
-}: {
-  progress: ProgressData;
-  onChange: (p: ProgressData) => void;
-  audio: AudioDirector;
-}) {
-  const [category, setCategory] = useState<'seed' | 'furniture' | 'garden'>(
-    'seed',
-  );
-  const [message, setMessage] = useState('');
-  return (
-    <div className="shop-panel">
-      <div className="shop-heading">
-        <span className="friend-avatar">🐰</span>
-        <div>
-          <p>Poppy’s little shops</p>
-          <h2>A little something for home</h2>
-        </div>
-        <span className="wallet">⭐ {p.adventure.wallet}</span>
-      </div>
-      <div className="picture-tabs">
-        {(['seed', 'furniture', 'garden'] as const).map((c) => (
-          <button
-            data-game-choice
-            key={c}
-            aria-pressed={c === category}
-            onClick={() => setCategory(c)}
-          >
-            <span>{c === 'seed' ? '🌱' : c === 'furniture' ? '🛋️' : '🌳'}</span>
-            {c === 'seed'
-              ? 'Seeds'
-              : c === 'furniture'
-                ? 'My house'
-                : 'My garden'}
-          </button>
-        ))}
-      </div>
-      <div className="shop-grid">
-        {SHOP_ITEMS.filter((i) => i.kind === category).map((item) => {
-          const owned =
-            item.kind !== 'seed' && p.adventure.inventory.includes(item.id);
-          const moonLocked =
-            item.id === 'moonflower' && p.adventure.rounds.rocket < 3;
-          return (
-            <button
-              data-game-choice
-              key={item.id}
-              className={'shop-card ' + (owned ? 'owned' : '')}
-              onClick={() => {
-                const next = buyItem(p, item.id);
-                if (next !== p) {
-                  onChange(next);
-                  setMessage(item.name + ' is yours!');
-                  void audio.line('bought');
-                } else {
-                  setMessage(
-                    owned
-                      ? 'Already at home'
-                      : moonLocked
-                        ? 'Discover the moon first'
-                        : 'Earn a few more stars',
-                  );
-                  void audio.line(owned ? 'owned' : 'expensive');
-                }
-              }}
-            >
-              <span
-                className="shop-item-picture"
-                style={{ background: item.colour + '30' }}
-              >
-                {item.icon}
-              </span>
-              <strong>{item.name}</strong>
-              <span>
-                {owned ? (
-                  <>
-                    <Check size={17} /> Yours
-                  </>
-                ) : moonLocked ? (
-                  '🌙'
-                ) : (
-                  <>⭐ {item.price}</>
-                )}
-              </span>
-              {item.kind === 'seed' && (
-                <small>
-                  {p.adventure.seeds[item.id] ?? 0} in your seed box
-                </small>
-              )}
-            </button>
-          );
-        })}
-      </div>
-      <output aria-live="polite" className="home-feedback">
-        {message}
-      </output>
-    </div>
-  );
-}
 export function HomePanel({
   progress: p,
   onChange,

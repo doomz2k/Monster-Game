@@ -1913,5 +1913,125 @@
     "path": "/audio/voices/room-undo-01398dc136dc3e7b.ogg",
     "voice": "bf_emma",
     "text": "Back just the way it was. You can try a different spot."
+  },
+  "shop-browse": {
+    "path": "/audio/voices/shop-browse-c1d2afee771d7355.ogg",
+    "voice": "bf_alice",
+    "text": "Welcome to my little shop! Choose a picture, then press green A for a closer look. Your stars stay safe while you look."
+  },
+  "shop-seed": {
+    "path": "/audio/voices/shop-seed-08359d3e10afff6a.ogg",
+    "voice": "bf_alice",
+    "text": "Lovely seeds for your garden. Choose a packet to see what it will grow into."
+  },
+  "shop-furniture": {
+    "path": "/audio/voices/shop-furniture-92fd53f6c0a4c7d6.ogg",
+    "voice": "bf_alice",
+    "text": "Something cosy for your house. Choose a picture for a closer look."
+  },
+  "shop-garden": {
+    "path": "/audio/voices/shop-garden-78eb323542d210ca.ogg",
+    "voice": "bf_alice",
+    "text": "Lovely things for outside. Choose something to make your garden your own."
+  },
+  "shop-wish": {
+    "path": "/audio/voices/shop-wish-6da819a3ebb990f1.ogg",
+    "voice": "bf_alice",
+    "text": "I will remember this lovely thing for you. Your stars can help you get it when you are ready."
+  },
+  "shop-wish-clear": {
+    "path": "/audio/voices/shop-wish-clear-dde6fb9c7b6044cb.ogg",
+    "voice": "bf_alice",
+    "text": "We can choose something else to save for whenever you like."
+  },
+  "shop-item-tomato": {
+    "path": "/audio/voices/shop-item-tomato-5cc598de9809d962.ogg",
+    "voice": "bf_alice",
+    "text": "Tomato seeds cost two stars. Grow tomatoes at home to use in your pizzas."
+  },
+  "shop-item-pepper": {
+    "path": "/audio/voices/shop-item-pepper-007311478793b84b.ogg",
+    "voice": "bf_alice",
+    "text": "Pepper seeds cost two stars. Grow peppers at home to use in your pizzas."
+  },
+  "shop-item-daisy": {
+    "path": "/audio/voices/shop-item-daisy-d980e0db2e735a44.ogg",
+    "voice": "bf_alice",
+    "text": "Daisy seeds cost one star. Give them water to grow cheerful little flowers."
+  },
+  "shop-item-sunflower": {
+    "path": "/audio/voices/shop-item-sunflower-c119bda40e6dc4e4.ogg",
+    "voice": "bf_alice",
+    "text": "Sunflower seeds cost two stars. Grow a lovely tall sunflower in your garden."
+  },
+  "shop-item-tulip": {
+    "path": "/audio/voices/shop-item-tulip-d393ff367d841a99.ogg",
+    "voice": "bf_alice",
+    "text": "Tulip seeds cost two stars. Grow a pink tulip in your garden."
+  },
+  "shop-item-carrot": {
+    "path": "/audio/voices/shop-item-carrot-031da366c4b2a49d.ogg",
+    "voice": "bf_alice",
+    "text": "Carrot seeds cost one star. Plant them to grow a leafy carrot patch."
+  },
+  "shop-item-strawberry": {
+    "path": "/audio/voices/shop-item-strawberry-b3fac148d1befc4f.ogg",
+    "voice": "bf_alice",
+    "text": "Strawberry seeds cost three stars. Plant them to grow a little strawberry plant."
+  },
+  "shop-item-moonflower": {
+    "path": "/audio/voices/shop-item-moonflower-fed05a37c3fe3522.ogg",
+    "voice": "bf_alice",
+    "text": "Moonflower seeds cost three stars. Repair Pip's rocket first, then you can grow these special flowers."
+  },
+  "shop-item-sofa": {
+    "path": "/audio/voices/shop-item-sofa-6650e4e3067bc751.ogg",
+    "voice": "bf_alice",
+    "text": "The berry sofa costs four stars. It will look lovely in your house."
+  },
+  "shop-item-bed": {
+    "path": "/audio/voices/shop-item-bed-d592b2be7f9e5830.ogg",
+    "voice": "bf_alice",
+    "text": "The starry bed costs five stars. A cosy place for your little monster."
+  },
+  "shop-item-table": {
+    "path": "/audio/voices/shop-item-table-5816eedb75edeefa.ogg",
+    "voice": "bf_alice",
+    "text": "The picnic table costs three stars. A little wooden table for your house."
+  },
+  "shop-item-books": {
+    "path": "/audio/voices/shop-item-books-a1e9b964c5e07f39.ogg",
+    "voice": "bf_alice",
+    "text": "The book corner costs four stars. Lots of colourful books for your house."
+  },
+  "shop-item-lamp": {
+    "path": "/audio/voices/shop-item-lamp-fd4938ace2afa574.ogg",
+    "voice": "bf_alice",
+    "text": "The sunshine lamp costs three stars. A lovely warm light for your house."
+  },
+  "shop-item-rug": {
+    "path": "/audio/voices/shop-item-rug-9284b0795ed9a7ae.ogg",
+    "voice": "bf_alice",
+    "text": "The rainbow rug costs three stars. Put its lovely colours on your floor."
+  },
+  "shop-item-birdbath": {
+    "path": "/audio/voices/shop-item-birdbath-5cfcc7ebd5c026dc.ogg",
+    "voice": "bf_alice",
+    "text": "The bird bath costs four stars. A little splash of blue for your garden."
+  },
+  "shop-item-swing": {
+    "path": "/audio/voices/shop-item-swing-a55d155c54bf52a9.ogg",
+    "voice": "bf_alice",
+    "text": "The garden swing costs six stars. A lovely wooden swing for outside."
+  },
+  "shop-item-mushroom": {
+    "path": "/audio/voices/shop-item-mushroom-2f1edc6cd0d816b4.ogg",
+    "voice": "bf_alice",
+    "text": "The toadstool seat costs three stars. A spotty little seat for your garden."
+  },
+  "shop-item-lantern": {
+    "path": "/audio/voices/shop-item-lantern-a9223e77c1782169.ogg",
+    "voice": "bf_alice",
+    "text": "The garden lantern costs two stars. A little golden glow for outside."
   }
 }

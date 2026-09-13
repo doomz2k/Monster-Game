@@ -61,7 +61,9 @@ import { loadRecoverableProgress, saveRecoverably } from '@/lib/save-recovery';
 import { ParentPanel } from '@/components/parent-panel';
 import { AppearancePanel } from '@/components/appearance-panel';
 import { MissionPanel } from '@/components/mission-panel';
-import { HomePanel, ShopPanel } from '@/components/home-panel';
+import { HomePanel } from '@/components/home-panel';
+import { ShopPanel } from '@/components/shop-panel';
+import { ShopPicture } from '@/components/shop-picture';
 import { AudioDirector, loadReviews, type SoundReviews } from '@/lib/audio';
 import { GameInput, type Action } from '@/lib/input';
 import { freshProgress, type ProgressData } from '@/lib/learning';
@@ -377,9 +379,12 @@ export default function AdventureGame() {
               : modal
                 ? modalSurface.current
                 : surface.current;
-      root
-        ?.querySelector<HTMLElement>('[data-game-choice]:not(:disabled)')
-        ?.focus({ preventScroll: true });
+      (
+        root?.querySelector<HTMLElement>(
+          '[data-game-autofocus]:not(:disabled)',
+        ) ??
+        root?.querySelector<HTMLElement>('[data-game-choice]:not(:disabled)')
+      )?.focus({ preventScroll: true });
     });
     return () => cancelAnimationFrame(frame);
   }, [mode, modal, mission, creatorTab, slot, ready]);
@@ -464,7 +469,7 @@ export default function AdventureGame() {
     }
     setDeliveryThanks(null);
     if (id === 'home') go('home', 'home');
-    else if (id === 'shop') go('shop', 'poppy-hello');
+    else if (id === 'shop') go('shop', 'shop-browse');
     else
       go(
         'dialogue',
@@ -582,7 +587,7 @@ export default function AdventureGame() {
     return true;
   };
   const repeat = () => {
-    if (mode === 'home') {
+    if (mode === 'home' || mode === 'shop') {
       modalSurface.current
         ?.querySelector<HTMLButtonElement>('[data-repeat-prompt]')
         ?.click();
@@ -639,13 +644,11 @@ export default function AdventureGame() {
             ? place === 'rocket'
               ? rocketChapter(p.adventure.rounds.rocket).line
               : placeFor(place).intro
-            : mode === 'shop'
-              ? 'poppy-hello'
-              : mode === 'map'
-                ? 'map'
-                : mode === 'pause'
-                  ? 'pause'
-                  : 'explore',
+            : mode === 'map'
+              ? 'map'
+              : mode === 'pause'
+                ? 'pause'
+                : 'explore',
     );
   };
   const back = () => {
@@ -1379,7 +1382,9 @@ export default function AdventureGame() {
                     ? 'conversation-dialog'
                     : mode === 'home'
                       ? 'home-dialog'
-                      : '')
+                      : mode === 'shop'
+                        ? 'home-dialog shop-dialog'
+                        : '')
             }
             finalFocus={() =>
               (mode === 'mission'
@@ -1477,6 +1482,37 @@ export default function AdventureGame() {
                     ))}
                   </div>
                   <div className="map-bottom-links">
+                    {p.adventure.wish && p.adventure.region === 'island' && (
+                      <button
+                        {...CHOICE}
+                        className="map-saving-goal"
+                        onClick={() => {
+                          setPlace('shop');
+                          go('shop', 'shop-browse');
+                        }}
+                      >
+                        <ShopPicture id={p.adventure.wish} />
+                        <span>
+                          My saving goal{' '}
+                          <small>
+                            ⭐{' '}
+                            {Math.min(
+                              p.adventure.wallet,
+                              SHOP_ITEMS.find(
+                                (item) => item.id === p.adventure.wish,
+                              )!.price,
+                            )}{' '}
+                            /{' '}
+                            {
+                              SHOP_ITEMS.find(
+                                (item) => item.id === p.adventure.wish,
+                              )!.price
+                            }
+                          </small>
+                        </span>
+                        <Heart />
+                      </button>
+                    )}
                     <button
                       {...CHOICE}
                       className="scrapbook-open"
@@ -1725,7 +1761,7 @@ export default function AdventureGame() {
                   audio={audio}
                   onShop={() => {
                     setPlace('shop');
-                    go('shop', 'poppy-hello');
+                    go('shop', 'shop-browse');
                   }}
                 />
               )}
