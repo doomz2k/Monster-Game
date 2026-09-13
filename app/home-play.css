@@ -1,0 +1,257 @@
+.home-room,
+.home-room-editor {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+  gap: 10px;
+}
+.home-room-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.home-room-toolbar button,
+.room-return {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 2px solid #d7dec8;
+  background: #f1edda;
+  color: #51664b;
+  border-radius: 14px;
+  padding: 8px 16px;
+}
+.home-room-toolbar button[aria-pressed='true'] {
+  background: #e1ecd2;
+  border-color: #91ad80;
+}
+.home-room-toolbar button:last-child {
+  margin-left: auto;
+  background: #eee2ce;
+  border-color: #d1bfa3;
+}
+.room-return {
+  align-self: flex-end;
+  font-size: 14px;
+  padding: 3px 13px;
+}
+.room-return .pad-key {
+  width: 25px;
+  height: 25px;
+  font-size: 16px;
+}
+.home-room-workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+  gap: 18px;
+  flex: 1;
+  min-height: 0;
+}
+.home-play-preview {
+  position: relative;
+  border-radius: 28px;
+  min-height: 0;
+  margin: 0;
+  overflow: hidden;
+  background: radial-gradient(ellipse at 50% 30%, #f4ebd1, #dde2c7);
+}
+.home-play-preview canvas {
+  position: absolute;
+  inset: 0;
+  display: block;
+}
+.home-play-preview > span {
+  display: grid;
+  place-items: center;
+  height: 100%;
+  color: #657954;
+}
+.home-play-preview:has(canvas) > span {
+  display: none;
+}
+.home-room-choices {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 0;
+}
+.home-room-choices h3 {
+  font-size: 23px;
+  color: #4b6249;
+  margin: 0;
+}
+.home-activity-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: repeat(3, minmax(0, 1fr));
+  gap: 9px;
+  flex: 1;
+  min-height: 0;
+}
+.home-activity-grid button {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #fffbee;
+  color: #486043;
+  border: 2px solid #dedfc8;
+  border-radius: 18px;
+  padding: 5px;
+  gap: 3px;
+  min-height: 0;
+}
+.home-activity-grid button[data-current='true']:not(:disabled) {
+  background: #e7edda;
+  border-color: #9eb68e;
+}
+.home-activity-grid button:disabled {
+  background: #ecebdc88;
+  border: 2px dashed #dcdccb;
+  color: #84937c;
+}
+.home-activity-grid .shop-picture {
+  width: 68px;
+  max-height: 65px;
+  min-height: 0;
+  flex: 1;
+}
+.home-activity-grid strong {
+  font-size: 15px;
+  line-height: 1.1;
+}
+.home-activity-grid small {
+  font-size: 11px;
+  color: #79836a;
+}
+.room-empty {
+  font-size: 28px;
+  line-height: 1;
+  opacity: 0.7;
+}
+.room-play-hint,
+.room-stop {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: #697154;
+  font-size: 15px;
+  margin: 0;
+  padding: 5px;
+  min-height: 35px;
+}
+.room-stop {
+  border-radius: 12px;
+  background: #f3e5da;
+}
+.room-play-hint .pad-key,
+.room-stop .pad-key {
+  width: 27px;
+  height: 27px;
+  font-size: 17px;
+}
+.room-light-state {
+  position: absolute;
+  top: 5px;
+  right: 7px;
+  border-radius: 7px;
+  padding: 2px 5px;
+  font-size: 10px;
+  background: #eadcb6;
+}
+@media (max-height: 600px) and (min-width: 700px) {
+  .home-dialog:has(.home-room) .shop-heading {
+    position: absolute;
+    top: 21px;
+    left: 135px;
+    right: 125px;
+  }
+  .home-dialog:has(.home-room) .shop-heading h2 {
+    font-size: 22px;
+  }
+}
+@media (max-height: 600px) {
+  .home-room,
+  .home-room-editor {
+    gap: 7px;
+  }
+  .home-room-toolbar button {
+    padding: 4px 12px;
+    font-size: 14px;
+  }
+  .home-room-toolbar svg {
+    width: 18px;
+    height: 18px;
+  }
+  .home-room-workspace {
+    gap: 12px;
+  }
+  .home-room-choices {
+    gap: 5px;
+  }
+  .home-room-choices h3 {
+    font-size: 18px;
+  }
+  .home-activity-grid {
+    gap: 5px;
+  }
+  .home-activity-grid .shop-picture {
+    width: 46px;
+    max-height: 38px;
+  }
+  .home-activity-grid strong {
+    font-size: 12px;
+  }
+  .home-activity-grid small {
+    font-size: 10px;
+  }
+  .home-activity-grid button {
+    gap: 1px;
+    padding: 3px;
+  }
+  .room-play-hint,
+  .room-stop {
+    font-size: 12px;
+    min-height: 28px;
+    padding: 2px;
+  }
+  .room-play-hint .pad-key,
+  .room-stop .pad-key {
+    width: 22px;
+    height: 22px;
+    font-size: 14px;
+  }
+}
+@media (max-width: 650px) {
+  .home-room-workspace {
+    grid-template-columns: 1fr;
+    grid-template-rows: minmax(140px, 1.15fr) minmax(180px, 1fr);
+    gap: 8px;
+  }
+  .home-activity-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-rows: repeat(2, minmax(0, 1fr));
+  }
+  .home-room-toolbar {
+    gap: 4px;
+  }
+  .home-room-toolbar button {
+    padding: 5px 7px;
+    font-size: 12px;
+    gap: 5px;
+  }
+  .home-room-choices h3 {
+    display: none;
+  }
+  .home-activity-grid strong {
+    font-size: 12px;
+  }
+  .home-activity-grid .shop-picture {
+    width: 40px;
+    max-height: 35px;
+  }
+}

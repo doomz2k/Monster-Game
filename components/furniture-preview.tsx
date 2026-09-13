@@ -2,6 +2,7 @@
 import { useEffect, useLayoutEffect, useRef } from 'react';
 import * as THREE from 'three';
 import { createFurniture } from '@/lib/furniture-model';
+import { createHomeStage } from '@/lib/home-stage';
 import {
   furniturePosition,
   layoutFields,
@@ -60,44 +61,10 @@ export function FurniturePreview(props: Preview) {
       far: 35,
     });
     scene.add(sun, new THREE.HemisphereLight('#e7f2ff', '#8b9674', 1.8));
-    const structure = new THREE.Group(),
+    const stage = createHomeStage(timber),
       objects = new THREE.Group(),
       guides = new THREE.Group();
-    scene.add(structure, objects, guides);
-    const block = (
-      c: string,
-      x: number,
-      y: number,
-      z: number,
-      w: number,
-      h: number,
-      d: number,
-      wood = false,
-    ) => {
-      const m = new THREE.Mesh(
-        new THREE.BoxGeometry(w, h, d),
-        new THREE.MeshStandardMaterial({
-          color: c,
-          roughness: 0.85,
-          map: wood ? timber : null,
-        }),
-      );
-      m.position.set(x, y, z);
-      m.castShadow = m.receiveShadow = true;
-      structure.add(m);
-      return m;
-    };
-    block('#e6cfaa', 0, -0.04, 0, 7.2, 0.18, 5.5, true);
-    block('#f7dec1', 0, 1.35, -2.55, 7.2, 2.7, 0.14);
-    block('#e8ccb0', -3.55, 1.35, 0, 0.14, 2.7, 5.2);
-    block('#fff2d9', 0, 0.14, -2.43, 7, 0.16, 0.08);
-    for (const x of [-2, 2]) {
-      block('#9ac7ca', x, 1.65, -2.44, 1.3, 1.3, 0.05);
-      block('#fff4d9', x, 1.65, -2.38, 0.07, 1.3, 0.04);
-      block('#fff4d9', x, 1.65, -2.38, 1.3, 0.07, 0.04);
-    }
-    const lawn = block('#a8c080', 0, -0.1, 7.4, 7.8, 0.22, 5.8);
-    const porch = block('#d5bc91', 0, -0.03, 3.35, 7.4, 0.15, 1.25, true);
+    scene.add(stage.root, objects, guides);
     const marks: Array<{
       ring: THREE.Mesh<THREE.RingGeometry, THREE.MeshBasicMaterial>;
       label: THREE.Sprite;
@@ -163,7 +130,7 @@ export function FurniturePreview(props: Preview) {
       const held = SHOP_ITEMS.find((c) => c.id === item);
       const garden = area === 'garden',
         [itemsKey, turnsKey] = layoutFields(area);
-      lawn.visible = porch.visible = garden;
+      stage.setArea(area);
       camera.position.set(6.5, 6.6, garden ? 15.4 : 8);
       camera.lookAt(0, 0.35, garden ? 7.1 : 0);
       const nextKey = JSON.stringify([
@@ -171,6 +138,7 @@ export function FurniturePreview(props: Preview) {
         a.furnitureTurns,
         a.gardenFurniture,
         a.gardenTurns,
+        a.unlit,
         item,
         tool,
       ]);
@@ -192,6 +160,9 @@ export function FurniturePreview(props: Preview) {
               definition.colour,
               timber,
             );
+            model.setLit(!a.unlit.includes(definition.id));
+            model.root.userData.area =
+              definition.kind === 'garden' ? 'garden' : 'house';
             const p = furniturePosition(i, definition.kind === 'garden');
             model.root.position.set(p.x, p.y, p.z);
             model.root.rotation.y = ((a[angleKey][i] ?? 0) * Math.PI) / 2;
@@ -229,7 +200,10 @@ export function FurniturePreview(props: Preview) {
       }
       elapsed += Math.min(0.05, Math.max(0, (now - last) / 1000));
       last = now;
-      models.forEach((m) => m.animate(elapsed, reducedMotion));
+      models.forEach((m) => {
+        m.root.visible = m.root.userData.area === area;
+        m.animate(elapsed, reducedMotion);
+      });
       renderer.render(scene, camera);
     };
     const loop = (now: number) => {

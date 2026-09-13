@@ -2033,5 +2033,55 @@
     "path": "/audio/voices/shop-item-lantern-a9223e77c1782169.ogg",
     "voice": "bf_alice",
     "text": "The garden lantern costs two stars. A little golden glow for outside."
+  },
+  "home-play": {
+    "path": "/audio/voices/home-play-9567d38de6c9bed3.ogg",
+    "voice": "bf_emma",
+    "text": "Choose somewhere to play. Green A tries it. Red B finishes when you are ready."
+  },
+  "home-sit": {
+    "path": "/audio/voices/home-sit-4f53fc3f5d20e191.ogg",
+    "voice": "bf_emma",
+    "text": "A lovely place to sit. Your little friend can rest here as long as you like."
+  },
+  "home-sleep": {
+    "path": "/audio/voices/home-sleep-dbff6ba503c89617.ogg",
+    "voice": "bf_emma",
+    "text": "Time for a cosy little rest. All your adventures will be here when you are ready."
+  },
+  "home-picnic": {
+    "path": "/audio/voices/home-picnic-c49cfd4d15fa9b53.ogg",
+    "voice": "bf_emma",
+    "text": "A little picnic at home. Shall we share some fruit with our friend?"
+  },
+  "home-read": {
+    "path": "/audio/voices/home-read-7b4d993866fc0661.ogg",
+    "voice": "bf_emma",
+    "text": "Let's look at the pictures in our book. There is always something lovely to discover."
+  },
+  "home-dance": {
+    "path": "/audio/voices/home-dance-f7b9f9343ba50b0e.ogg",
+    "voice": "bf_emma",
+    "text": "A happy little dance on our rainbow rug. Your monster has some lovely moves!"
+  },
+  "home-splash": {
+    "path": "/audio/voices/home-splash-be21df893d0d7966.ogg",
+    "voice": "bf_emma",
+    "text": "Splish, splash! Little drops sparkle in the garden."
+  },
+  "home-swing": {
+    "path": "/audio/voices/home-swing-b54899f9ef9b7f48.ogg",
+    "voice": "bf_emma",
+    "text": "Back and forth, nice and gently. What a lovely place for a swing."
+  },
+  "home-light-on": {
+    "path": "/audio/voices/home-light-on-f2e584dc7a3e9c96.ogg",
+    "voice": "bf_emma",
+    "text": "Click! A little glow for your home. You can switch it off again whenever you like."
+  },
+  "home-light-off": {
+    "path": "/audio/voices/home-light-off-f7265f2fdf3c3275.ogg",
+    "voice": "bf_emma",
+    "text": "Click! The light is off. Green A switches it on again."
   }
 }

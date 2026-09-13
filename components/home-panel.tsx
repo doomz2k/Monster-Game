@@ -5,7 +5,7 @@ import type { ProgressData } from '@/lib/learning';
 import { harvestPlant, PRODUCE, gardenVisitors } from '@/lib/garden';
 import { GardenPreview } from './garden-preview';
 import { CompanionPanel } from './companion-panel';
-import { FurnitureStudio } from './furniture-studio';
+import { HomeRoom } from './home-room';
 import { GamePicture } from './game-picture';
 import { SHOP_ITEMS, plantSeed, waterPlant, clearPlot } from '@/lib/adventure';
 import type { AudioDirector } from '@/lib/audio';
@@ -78,7 +78,7 @@ export function HomePanel({
           onClick={() => {
             setTab('house');
             setMessage('');
-            void audio.line('room-place');
+            void audio.line('home-play');
           }}
         >
           <Armchair /> My house
@@ -272,7 +272,7 @@ export function HomePanel({
           </div>
         </div>
       ) : (
-        <FurnitureStudio progress={p} onChange={onChange} audio={audio} />
+        <HomeRoom progress={p} onChange={onChange} audio={audio} />
       )}
       <output aria-live="polite" className="home-feedback">
         {message}

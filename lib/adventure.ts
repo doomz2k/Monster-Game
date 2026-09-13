@@ -144,6 +144,7 @@ export type AdventureProgress = {
   rover: RoverProgress;
   companion: CompanionId | null;
   wish: string | null;
+  unlit: string[];
 };
 export const SHOP_ITEMS = [
   {
@@ -321,6 +322,7 @@ export const freshAdventure = (legacyStars = 0): AdventureProgress => ({
   rover: freshRoverProgress(),
   companion: 'sprig',
   wish: null,
+  unlit: [],
 });
 const integer = (v: unknown, max = 100000) =>
   typeof v === 'number' && Number.isSafeInteger(v) && v >= 0
@@ -418,6 +420,10 @@ export function readAdventure(
   p.deliveries = readDeliveries(v.deliveries, p.rounds.meadow);
   p.rover = readRoverProgress(v.rover, p.rounds.rocket >= 3);
   p.companion = readCompanion(v.companion, p);
+  const unlit = v.unlit;
+  p.unlit = Array.isArray(unlit)
+    ? ['lamp', 'lantern'].filter((id) => unlit.includes(id))
+    : [];
   p.wish =
     typeof v.wish === 'string' &&
     SHOP_ITEMS.some(

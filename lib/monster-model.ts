@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
 import { BODY_SCALE, defaultAppearance, type Appearance } from './appearance';
+import type { HomeAction } from './home-play';
 
 export type MonsterPose = {
   delta: number;
@@ -11,6 +12,7 @@ export type MonsterPose = {
   greeting: boolean;
   reducedMotion: boolean;
   carrying?: boolean;
+  homeActivity?: HomeAction;
 };
 
 // A continuous, gently squared silhouette, with a fuller head and a soft tummy.
@@ -811,7 +813,12 @@ export function createMonster(look: Appearance = defaultAppearance()) {
     const idle =
       (1 - Math.min(1, speed * 3)) *
       gentle *
-      Number(!pose.celebrating && pose.airborne === 0 && !pose.carrying);
+      Number(
+        !pose.celebrating &&
+          pose.airborne === 0 &&
+          !pose.carrying &&
+          !pose.homeActivity,
+      );
     // Smooth envelopes keep little gestures from snapping on or off.
     const gesture = (start: number, duration: number) => {
       const phase = ((time % 23) - start) / duration;
@@ -867,6 +874,41 @@ export function createMonster(look: Appearance = defaultAppearance()) {
       arms[0].rotation.set(-1.05, 0, -0.12);
       arms[1].rotation.set(-1.05, 0, 0.12);
     }
+    const atHome = pose.homeActivity;
+    if (atHome) {
+      root.rotation.set(0, 0, 0);
+      root.position.y = Math.sin(time * 1.6) * 0.013 * gentle;
+      if (['sit', 'read', 'swing', 'picnic'].includes(atHome)) {
+        feet.forEach((foot, i) => {
+          foot.position.y = 0.13;
+          foot.position.z = 0.63;
+          foot.rotation.x = -0.32 + Math.sin(time * 2 + i) * 0.06 * gentle;
+        });
+        arms[0].rotation.set(-0.35, 0, -0.1);
+        arms[1].rotation.set(-0.35, 0, 0.1);
+      }
+      if (atHome === 'read' || atHome === 'picnic') {
+        arms[0].rotation.set(-0.86, 0, -0.15);
+        arms[1].rotation.set(-0.86, 0, 0.15);
+      }
+      if (atHome === 'sleep') {
+        root.rotation.x = -Math.PI / 2;
+        arms[0].rotation.set(-0.25, 0, -0.15);
+        arms[1].rotation.set(-0.25, 0, 0.15);
+      }
+      if (atHome === 'dance') {
+        root.rotation.z = Math.sin(time * 2.7) * 0.09 * gentle;
+        root.rotation.y = Math.sin(time * 1.4) * 0.18 * gentle;
+        root.position.y = Math.abs(Math.sin(time * 2.7)) * 0.09 * gentle;
+        arms[0].rotation.z = 1.25 + Math.sin(time * 2.7) * 0.16 * gentle;
+        arms[1].rotation.z = -1.25 + Math.sin(time * 2.7) * 0.16 * gentle;
+      }
+      if (atHome === 'splash' || atHome === 'light') {
+        arms[0].rotation.x = -1 + Math.sin(time * 2.1) * 0.12 * gentle;
+        arms[1].rotation.x = -0.7;
+        root.rotation.x = 0.08;
+      }
+    }
     const phase = time % 5.7,
       blink =
         !pose.reducedMotion && phase > 4.9 && phase < 5.14
@@ -877,7 +919,10 @@ export function createMonster(look: Appearance = defaultAppearance()) {
       !pose.reducedMotion && doublePhase > 12.7 && doublePhase < 13.15
         ? Math.sin(((doublePhase - 12.7) / 0.45) * Math.PI * 2) ** 2
         : 0;
-    const eyelid = Math.max(blink, doubleBlink, stretchArms * 0.7);
+    const eyelid =
+      pose.homeActivity === 'sleep'
+        ? 0.94
+        : Math.max(blink, doubleBlink, stretchArms * 0.7);
     eyes.forEach(({ upper, lower, gaze }) => {
       upper.rotation.x = -1.24 * (1 - eyelid);
       lower.rotation.x = 1.42 * (1 - eyelid);

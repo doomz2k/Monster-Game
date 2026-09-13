@@ -1626,5 +1626,45 @@
   "shop-item-lantern": {
     "voice": "poppy",
     "text": "The garden lantern costs two stars. A little golden glow for outside."
+  },
+  "home-play": {
+    "voice": "narrator",
+    "text": "Choose somewhere to play. Green A tries it. Red B finishes when you are ready."
+  },
+  "home-sit": {
+    "voice": "narrator",
+    "text": "A lovely place to sit. Your little friend can rest here as long as you like."
+  },
+  "home-sleep": {
+    "voice": "narrator",
+    "text": "Time for a cosy little rest. All your adventures will be here when you are ready."
+  },
+  "home-picnic": {
+    "voice": "narrator",
+    "text": "A little picnic at home. Shall we share some fruit with our friend?"
+  },
+  "home-read": {
+    "voice": "narrator",
+    "text": "Let's look at the pictures in our book. There is always something lovely to discover."
+  },
+  "home-dance": {
+    "voice": "narrator",
+    "text": "A happy little dance on our rainbow rug. Your monster has some lovely moves!"
+  },
+  "home-splash": {
+    "voice": "narrator",
+    "text": "Splish, splash! Little drops sparkle in the garden."
+  },
+  "home-swing": {
+    "voice": "narrator",
+    "text": "Back and forth, nice and gently. What a lovely place for a swing."
+  },
+  "home-light-on": {
+    "voice": "narrator",
+    "text": "Click! A little glow for your home. You can switch it off again whenever you like."
+  },
+  "home-light-off": {
+    "voice": "narrator",
+    "text": "Click! The light is off. Green A switches it on again."
   }
 }

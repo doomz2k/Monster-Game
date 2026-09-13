@@ -98,6 +98,7 @@ export function createFurniture(
         box(root, dark, x, h / 2, z, 0.12, h, 0.12, true);
   };
   let swing: THREE.Group | null = null;
+  let glow: THREE.MeshStandardMaterial | null = null;
   if (id === 'sofa') {
     legs(0.66, 0.32, 0.25);
     box(root, colour, 0, 0.36, 0, 1.8, 0.32, 0.94);
@@ -183,6 +184,7 @@ export function createFurniture(
       const bulb = ball(root, cream, 0, 1.4, 0, 0.17, 0.21, 0.17);
       bulb.material.emissive.set('#f6d48b');
       bulb.material.emissiveIntensity = 0.45;
+      glow = bulb.material;
       cylinder(root, colour, 0, 1.72, 0, 0.23, 0.23, 0.03);
       ball(root, dark, 0.3, 1.2, 0, 0.028, 0.035, 0.028);
     } else {
@@ -190,6 +192,7 @@ export function createFurniture(
       const bulb = ball(root, colour, 0, 1.4, 0, 0.17, 0.3, 0.17);
       bulb.material.emissive.set('#f1b769');
       bulb.material.emissiveIntensity = 0.45;
+      glow = bulb.material;
       for (const x of [-0.2, 0.2])
         for (const z of [-0.2, 0.2])
           box(root, dark, x, 1.4, z, 0.035, 0.6, 0.035);
@@ -272,10 +275,56 @@ export function createFurniture(
       );
     }
   }
+  const seat = new THREE.Object3D();
+  seat.name = 'Monster interaction anchor';
+  const anchors: Record<string, [number, number, number, number]> = {
+    sofa: [0.18, 0.5, 0.08, 0],
+    bed: [0, 0.69, 0.62, 0],
+    table: [0, 0.35, -0.72, 0],
+    books: [0, 0.03, 0.76, 0],
+    rug: [0, 0.07, 0, 0],
+    mushroom: [0, 0.69, 0, 0],
+    birdbath: [-0.72, 0.03, 0.12, Math.PI / 2],
+    lamp: [-0.64, 0.03, 0.16, Math.PI / 2],
+    lantern: [-0.64, 0.03, 0.16, Math.PI / 2],
+  };
+  if (swing) {
+    seat.position.set(0, -1.22, 0.06);
+    swing.add(seat);
+  } else {
+    const a = anchors[id] ?? [0, 0, 0, 0];
+    seat.position.set(a[0], a[1], a[2]);
+    seat.rotation.y = a[3];
+    root.add(seat);
+  }
+  const pool = glow
+    ? new THREE.Mesh(
+        new THREE.CircleGeometry(0.78, 32),
+        new THREE.MeshBasicMaterial({
+          color: '#f5c464',
+          transparent: true,
+          opacity: 0.13,
+          depthWrite: false,
+        }),
+      )
+    : null;
+  if (pool) {
+    pool.rotation.x = -Math.PI / 2;
+    pool.position.y = 0.015;
+    root.add(pool);
+  }
   return {
     root,
-    animate(time: number, reduced: boolean) {
-      if (swing) swing.rotation.x = reduced ? 0 : Math.sin(time * 0.9) * 0.045;
+    seat,
+    setLit(on: boolean) {
+      if (glow) glow.emissiveIntensity = on ? 0.65 : 0;
+      if (pool) pool.visible = on;
+    },
+    animate(time: number, reduced: boolean, playing = false) {
+      if (swing)
+        swing.rotation.x = reduced
+          ? 0
+          : Math.sin(time * (playing ? 1.5 : 0.9)) * (playing ? 0.16 : 0.045);
     },
   };
 }

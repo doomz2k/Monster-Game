@@ -4477,6 +4477,116 @@
       "leadingSilenceMs": 82,
       "trailingSilenceMs": 136,
       "warnings": []
+    },
+    "home-play": {
+      "sha256": "94d772ab1db5071afd137f42be8ff4c815ff26dffff79d239069efefa5408d29",
+      "seconds": 4.245,
+      "sampleRate": 24000,
+      "channels": 1,
+      "peakDbfs": -3.8,
+      "activeRmsDbfs": -18.5,
+      "leadingSilenceMs": 40,
+      "trailingSilenceMs": 53,
+      "warnings": []
+    },
+    "home-sit": {
+      "sha256": "252906c68d1c94520a2ff6200617097276b5d02cc57360261a9791264409ad85",
+      "seconds": 4.224,
+      "sampleRate": 24000,
+      "channels": 1,
+      "peakDbfs": -3.7,
+      "activeRmsDbfs": -19.3,
+      "leadingSilenceMs": 29,
+      "trailingSilenceMs": 76,
+      "warnings": []
+    },
+    "home-sleep": {
+      "sha256": "01131cf2c238cce2c408290559d38ba5ac09d43ab50e1572d3c5f33803a59ed7",
+      "seconds": 4.373,
+      "sampleRate": 24000,
+      "channels": 1,
+      "peakDbfs": -3.8,
+      "activeRmsDbfs": -19.2,
+      "leadingSilenceMs": 37,
+      "trailingSilenceMs": 68,
+      "warnings": []
+    },
+    "home-picnic": {
+      "sha256": "d70f50c2f17f4277ac59f03cd5c0d8893302fb8c6d9c74ed3e54cae9eb1ef085",
+      "seconds": 3.52,
+      "sampleRate": 24000,
+      "channels": 1,
+      "peakDbfs": -3.5,
+      "activeRmsDbfs": -18.5,
+      "leadingSilenceMs": 48,
+      "trailingSilenceMs": 84,
+      "warnings": []
+    },
+    "home-read": {
+      "sha256": "bd1b5a95ae4022ab05440f7c3c307773ed5edcc9717ed30296ab9dac87620e2a",
+      "seconds": 4.245,
+      "sampleRate": 24000,
+      "channels": 1,
+      "peakDbfs": -3.9,
+      "activeRmsDbfs": -19.2,
+      "leadingSilenceMs": 44,
+      "trailingSilenceMs": 62,
+      "warnings": []
+    },
+    "home-dance": {
+      "sha256": "cb16aed0d452d2ed9c1e452f73c26bcf97ea23bf0c46003682927439ef7f41e9",
+      "seconds": 4.459,
+      "sampleRate": 24000,
+      "channels": 1,
+      "peakDbfs": -3.6,
+      "activeRmsDbfs": -20.6,
+      "leadingSilenceMs": 33,
+      "trailingSilenceMs": 68,
+      "warnings": []
+    },
+    "home-splash": {
+      "sha256": "b99f1d9e6ca4579e16d1d1b8b7070c2f2cd1c0e991dd662860194e141dce0c4a",
+      "seconds": 2.795,
+      "sampleRate": 24000,
+      "channels": 1,
+      "peakDbfs": -3.9,
+      "activeRmsDbfs": -19.9,
+      "leadingSilenceMs": 52,
+      "trailingSilenceMs": 71,
+      "warnings": []
+    },
+    "home-swing": {
+      "sha256": "4815a5588c433af556d7ad05a507eda3a24785d4e9fa1b96ab4b4b9cc2d76292",
+      "seconds": 3.691,
+      "sampleRate": 24000,
+      "channels": 1,
+      "peakDbfs": -3.6,
+      "activeRmsDbfs": -19.7,
+      "leadingSilenceMs": 28,
+      "trailingSilenceMs": 65,
+      "warnings": []
+    },
+    "home-light-on": {
+      "sha256": "f1f15a00fe7255d6f71d2e2b731e675eb01785ce2762596f8ce74bda2d94b96f",
+      "seconds": 4.267,
+      "sampleRate": 24000,
+      "channels": 1,
+      "peakDbfs": -3.5,
+      "activeRmsDbfs": -18.0,
+      "leadingSilenceMs": 47,
+      "trailingSilenceMs": 79,
+      "warnings": []
+    },
+    "home-light-off": {
+      "sha256": "6106286e9daf48dd42b9acf772b3449e6efbfec071f91ba3602db768160d4af3",
+      "seconds": 3.051,
+      "sampleRate": 24000,
+      "channels": 1,
+      "peakDbfs": -3.7,
+      "activeRmsDbfs": -17.2,
+      "leadingSilenceMs": 46,
+      "trailingSilenceMs": 77,
+      "warnings": []
     }
   },
   "phonemes": {

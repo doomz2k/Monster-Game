@@ -362,6 +362,7 @@ export function createVillage(
       a.furnitureTurns,
       a.gardenFurniture,
       a.gardenTurns,
+      a.unlit,
     ]);
     if (key === contentsKey) return;
     contentsKey = key;
@@ -386,6 +387,7 @@ export function createVillage(
         const item = SHOP_ITEMS.find((it) => it.id === id);
         if (!item) return;
         const model = createFurniture(item.id, item.colour, textures.timber);
+        model.setLit(!a.unlit.includes(item.id));
         const position = furniturePosition(i, item.kind === 'garden');
         model.root.position.set(position.x, position.y, position.z);
         model.root.rotation.y = ((a[turnsKey][i] ?? 0) * Math.PI) / 2;

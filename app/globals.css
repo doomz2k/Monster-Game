@@ -15,6 +15,7 @@
 @import './companions.css';
 @import './furniture.css';
 @import './shop.css';
+@import './home-play.css';
 @custom-variant dark (&:is(.dark *));
 @theme inline {
   --color-background: var(--background);
