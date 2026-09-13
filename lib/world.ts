@@ -35,6 +35,11 @@ import { worldTextures } from './world-materials';
 import { createAtmosphere } from './world-atmosphere';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 import { createMonster } from './monster-model';
+import {
+  MonsterAttention,
+  nearbyAttention,
+  type AttentionMoment,
+} from './monster-attention';
 import { ZONES, clampToIsland, nearestZone, type ZoneId } from './learning';
 import { COSMETICS, type Outfit } from './wardrobe';
 import { createCostume } from './monster-outfit';
@@ -119,6 +124,14 @@ export class MonsterWorld {
   private companionMotion = new CompanionMotion();
   private companionIdle = 0;
   private character = createMonster();
+  private attention = new MonsterAttention();
+  private attentionMoment: AttentionMoment | null = null;
+  private attentionButterflies: {
+    id: string;
+    x: number;
+    z: number;
+    object: THREE.Object3D;
+  }[] = [];
   private rig = this.character.root;
   private pizzaParcel = createPizzaParcel();
   private rover = createRoverModel();
@@ -225,6 +238,18 @@ export class MonsterWorld {
     light.shadow.normalBias = 0.04;
     this.scene.add(light);
     this.buildIsland();
+    this.attentionButterflies = this.ornaments.flatMap((o, i) =>
+      o.kind === 'butterfly'
+        ? [
+            {
+              id: 'butterfly-' + i,
+              x: o.object.position.x,
+              z: o.object.position.z,
+              object: o.object,
+            },
+          ]
+        : [],
+    );
     this.village = createVillage(height, this.textures);
     this.roverStops = createRoverStops();
     this.rover.root.position.set(ROVER_DOCK.x, 0, ROVER_DOCK.z);
@@ -1116,6 +1141,12 @@ export class MonsterWorld {
         near,
         s.talking === npc.id,
         this.reducedMotion,
+        0,
+        s.active &&
+          this.attentionMoment?.kind === 'wave' &&
+          this.attentionMoment.target.id === 'friend-' + npc.id
+          ? this.attentionMoment
+          : { age: 0, weight: 0 },
       );
     }
     const lookKey = JSON.stringify(s.appearance ?? defaultAppearance());
@@ -1286,6 +1317,44 @@ export class MonsterWorld {
         this.celebration = Math.max(this.celebration, 0.8);
       }
     }
+    for (const butterfly of this.attentionButterflies) {
+      butterfly.x = butterfly.object.position.x;
+      butterfly.z = butterfly.object.position.z;
+    }
+    this.attentionMoment = this.attention.update(dt, {
+      active: s.active && !show,
+      moving: moving > 0.03,
+      blocked:
+        this.driving ||
+        this.jumpY > 0 ||
+        this.celebration > 0 ||
+        !!s.adventure?.deliveries.parcel,
+      reduced: this.reducedMotion || !!s.preferences?.calm,
+      x: this.player.position.x,
+      z: this.player.position.z,
+      facing: this.player.rotation.y,
+      target: nearbyAttention(
+        this.player.position.x,
+        this.player.position.z,
+        this.region,
+        this.village.flowerSpots(),
+        this.attentionButterflies,
+      ),
+    });
+    if (this.attentionMoment) {
+      const { target, weight } = this.attentionMoment;
+      const facing = Math.atan2(
+        target.x - this.player.position.x,
+        target.z - this.player.position.z,
+      );
+      this.player.rotation.y +=
+        Math.atan2(
+          Math.sin(facing - this.player.rotation.y),
+          Math.cos(facing - this.player.rotation.y),
+        ) *
+        (1 - Math.exp(-2.5 * dt)) *
+        weight;
+    }
     this.character.animate({
       delta: dt,
       time,
@@ -1293,6 +1362,7 @@ export class MonsterWorld {
       airborne: show ? 0 : this.jumpY,
       celebrating: this.celebration > 0,
       greeting: s.welcome,
+      attention: this.attentionMoment,
       reducedMotion: this.reducedMotion,
       carrying: (!!s.adventure?.deliveries.parcel || this.driving) && !show,
     });

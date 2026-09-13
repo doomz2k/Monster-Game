@@ -6,6 +6,7 @@ import { createNeighbour } from './neighbours';
 import { createGardenPlant, createGardenWildlife } from './garden-models';
 import { createRocketModel } from './rocket-model';
 import { createFurniture } from './furniture-model';
+import { flowerFor } from './flowers';
 import { furniturePosition, layoutFields } from './furniture-layout';
 
 export function createVillage(
@@ -338,6 +339,7 @@ export function createVillage(
   home.position.y = height(home.position.x, home.position.z);
   beds.position.y = height(beds.position.x, beds.position.z);
   let contentsKey = '';
+  let flowerSpots: { id: string; x: number; z: number }[] = [];
   let furnitureModels: ReturnType<typeof createFurniture>[] = [];
   let plantModels: ReturnType<typeof createGardenPlant>[] = [];
   let wildlife: ReturnType<typeof createGardenWildlife> | null = null;
@@ -370,6 +372,7 @@ export function createVillage(
     furnitureModels = [];
     clear(crops);
     plantModels = [];
+    flowerSpots = [];
     wildlife = createGardenWildlife(a.plots);
     crops.add(wildlife.root);
     a.plots.forEach((plant, i) => {
@@ -378,6 +381,12 @@ export function createVillage(
       model.root.position.set((i % 3) * 2.1, 0.22, Math.floor(i / 3) * 1.7);
       crops.add(model.root);
       plantModels.push(model);
+      if (plant.water >= 3 && flowerFor(plant.seed))
+        flowerSpots.push({
+          id: 'flower-' + i,
+          x: beds.position.x + model.root.position.x,
+          z: beds.position.z + model.root.position.z,
+        });
     });
     for (const [listKey, turnsKey] of [
       layoutFields('house'),
@@ -400,6 +409,7 @@ export function createVillage(
     moon,
     neighbours,
     update,
+    flowerSpots: () => flowerSpots,
     setEvening(amount: number) {
       windows.forEach((m) => {
         m.color.set('#79bdb8').lerp(eveningWindow, amount);

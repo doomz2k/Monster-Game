@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
 import { BODY_SCALE, defaultAppearance, type Appearance } from './appearance';
 import type { HomeAction } from './home-play';
+import type { AttentionPose } from './monster-attention';
 
 export type MonsterPose = {
   delta: number;
@@ -13,6 +14,7 @@ export type MonsterPose = {
   reducedMotion: boolean;
   carrying?: boolean;
   homeActivity?: HomeAction;
+  attention?: AttentionPose | null;
 };
 
 // A continuous, gently squared silhouette, with a fuller head and a soft tummy.
@@ -824,9 +826,22 @@ export function createMonster(look: Appearance = defaultAppearance()) {
       const phase = ((time % 23) - start) / duration;
       return phase > 0 && phase < 1 ? Math.sin(phase * Math.PI) ** 2 * idle : 0;
     };
-    const scratch = gesture(7, 3.1),
-      stretchArms = gesture(16, 3.4),
-      curious = gesture(11, 3);
+    const attention =
+      !pose.reducedMotion &&
+      !pose.carrying &&
+      !pose.homeActivity &&
+      !pose.celebrating &&
+      pose.airborne === 0 &&
+      speed < 0.06
+        ? pose.attention
+        : null;
+    const attentionWeight =
+      attention && Number.isFinite(attention.weight)
+        ? Math.max(0, Math.min(1, attention.weight))
+        : 0;
+    const scratch = gesture(7, 3.1) * (1 - attentionWeight),
+      stretchArms = gesture(16, 3.4) * (1 - attentionWeight),
+      curious = gesture(11, 3) * (1 - attentionWeight);
     const wobble = Math.sin(stride * 2) * speed * 0.018 * gentle;
     const stretch =
       (pose.airborne > 0 ? 0.035 : 0) - landing + wobble + stretchArms * 0.035;
@@ -870,6 +885,32 @@ export function createMonster(look: Appearance = defaultAppearance()) {
       pose.celebrating || wave
         ? -1.95 + Math.sin(time * 7) * 0.14 * gentle
         : -0.09 - stretchArms * 2.35;
+    if (attention && attentionWeight > 0) {
+      const age = Number.isFinite(attention.age)
+        ? Math.max(0, attention.age)
+        : 0;
+      if (attention.kind === 'wave') {
+        arms[1].rotation.z = THREE.MathUtils.lerp(
+          arms[1].rotation.z,
+          -1.95 + Math.sin(age * 7) * 0.15,
+          attentionWeight,
+        );
+        arms[1].rotation.x = THREE.MathUtils.lerp(
+          arms[1].rotation.x,
+          -0.22,
+          attentionWeight,
+        );
+      } else if (attention.kind === 'sniff') {
+        root.rotation.x += 0.16 * attentionWeight;
+        root.position.y -= 0.06 * attentionWeight;
+        root.scale.z *= 1 + Math.sin(age * 8) * 0.012 * attentionWeight;
+        arms[0].rotation.x -= 0.25 * attentionWeight;
+        arms[1].rotation.x -= 0.25 * attentionWeight;
+      } else {
+        root.rotation.z += Math.sin(age * 1.5) * 0.05 * attentionWeight;
+        root.rotation.x -= 0.065 * attentionWeight;
+      }
+    }
     if (pose.carrying) {
       arms[0].rotation.set(-1.05, 0, -0.12);
       arms[1].rotation.set(-1.05, 0, 0.12);
@@ -931,6 +972,22 @@ export function createMonster(look: Appearance = defaultAppearance()) {
         Math.sin(time * 0.31) * 0.012 * gentle + scratch * 0.015,
         0,
       );
+      if (attentionWeight > 0 && attention) {
+        gaze.position.x +=
+          Math.max(
+            -1,
+            Math.min(1, Number.isFinite(attention.lookX) ? attention.lookX : 0),
+          ) *
+          0.045 *
+          attentionWeight;
+        gaze.position.y +=
+          Math.max(
+            -1,
+            Math.min(1, Number.isFinite(attention.lookY) ? attention.lookY : 0),
+          ) *
+          0.035 *
+          attentionWeight;
+      }
     });
     ears.forEach((ear, i) => {
       ear.rotation.z =

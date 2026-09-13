@@ -647,6 +647,7 @@ export function createNeighbour(
       talking: boolean,
       reduced: boolean,
       walking = 0,
+      greeting?: { age: number; weight: number },
     ) {
       const motion = reduced ? 0 : 1,
         speed = Math.max(0, Math.min(1, walking)),
@@ -663,16 +664,34 @@ export function createNeighbour(
         motion;
       head.rotation.z = Math.sin(time * 0.65) * 0.025 * motion;
       head.rotation.y = Math.sin(time * 0.43) * 0.07 * motion;
-      const wave = !reduced && near && time % 11 < 2.5 && speed < 0.1;
+      const wave =
+        !reduced && near && speed < 0.1
+          ? greeting
+            ? Math.max(
+                0,
+                Math.min(
+                  1,
+                  Number.isFinite(greeting.weight) ? greeting.weight : 0,
+                ),
+              )
+            : Number(time % 11 < 2.5)
+          : 0;
       arms.forEach((arm, i) => {
         const side = i ? 1 : -1;
         arm.rotation.z =
           side *
-          (wave
-            ? 2.1 + Math.sin(time * 6) * 0.16 * motion
-            : talking
-              ? 0.45 + Math.sin(time * 2.2) * 0.12 * motion
-              : 0.22);
+          THREE.MathUtils.lerp(
+            talking ? 0.45 + Math.sin(time * 2.2) * 0.12 * motion : 0.22,
+            2.1 +
+              Math.sin(
+                (greeting && Number.isFinite(greeting.age)
+                  ? greeting.age
+                  : time) * 6,
+              ) *
+                0.16 *
+                motion,
+            wave,
+          );
         arm.rotation.x =
           Math.sin(stride + (i ? Math.PI : 0)) * speed * 0.55 * motion;
       });

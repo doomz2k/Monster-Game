@@ -108,3 +108,5 @@ The next checkpoint, [DISCOVERIES-AND-FRIENDS.md](DISCOVERIES-AND-FRIENDS.md), a
 [ISLAND-MUSIC.md](ISLAND-MUSIC.md) adds four original local musical themes (5), phrase-boundary transitions, independent parent volume, calm-play attenuation and complete silence during instructions (10). Tests cover active-time scheduling, speech/mute gates, resource limits and preference persistence; subjective listening remains a human acceptance check.
 
 [CHILD-PROFILES.md](CHILD-PROFILES.md) adds four parent-managed adventures (14), independent preferences/progress/recovery copies, preserved legacy save keys, generic British welcomes and protection against quota or metadata failures (13). A browser switch between an isolated new adventure and the original confirmed the original rewards and practice remained intact.
+
+[MONSTER-REACTIONS.md](MONSTER-REACTIONS.md) adds contextual greetings, flower sniffing and butterfly watching (36), with responding neighbour waves (3). Short blended gestures, target cooldowns, movement priority and calm/reduced-motion support make these reactions optional details of exploration.
