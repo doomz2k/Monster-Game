@@ -2170,5 +2170,61 @@
   "visit-move-wiggle": {
     "voice": "narrator",
     "text": "Wiggle gently from side to side. Choose that picture, then press green A. Take your time."
+  },
+  "flowers-intro": {
+    "voice": "tilly",
+    "text": "Welcome to your flower book. Each flower you grow gets a place here. Grow the pictured pairs and I will share some special seeds. Choose a picture, then green A to hear about it."
+  },
+  "flower-seed-ready": {
+    "voice": "tilly",
+    "text": "Your seed is ready. Choose an empty garden patch, then press green A to plant it. Give it three little drinks to help it grow."
+  },
+  "flower-grown": {
+    "voice": "tilly",
+    "text": "A new flower for your book! You have earned a star. Lovely growing, little friend."
+  },
+  "flower-daisy": {
+    "voice": "tilly",
+    "text": "A daisy, with pale petals and a sunny middle. Plant a daisy seed and give it three little drinks. You can get seeds from Poppy."
+  },
+  "flower-sunflower": {
+    "voice": "tilly",
+    "text": "A sunflower, tall and bright. Plant a sunflower seed and give it three little drinks. You can get seeds from Poppy."
+  },
+  "flower-tulip": {
+    "voice": "tilly",
+    "text": "A tulip, with pink petals shaped like a little cup. Plant a tulip seed and give it three little drinks. You can get seeds from Poppy."
+  },
+  "flower-moonflower": {
+    "voice": "tilly",
+    "text": "Our make-believe moonflower has lovely lilac petals. Repair the rocket, then Poppy will have moonflower seeds for you."
+  },
+  "flower-apricot-daisy": {
+    "voice": "tilly",
+    "text": "An apricot daisy, with warm peachy petals. Grow a daisy and a tulip, and I will share a free packet of these special seeds."
+  },
+  "flower-coral-sunflower": {
+    "voice": "tilly",
+    "text": "A coral sunflower, with rosy petals. Grow a sunflower and a tulip, and I will share a free packet of these special seeds."
+  },
+  "flower-golden-tulip": {
+    "voice": "tilly",
+    "text": "A golden tulip, with sunny yellow petals. Grow a daisy and a sunflower, and I will share a free packet of these special seeds."
+  },
+  "flower-starlight-daisy": {
+    "voice": "tilly",
+    "text": "A starlight daisy, with soft blue petals. Grow a daisy and a moonflower, and I will share a free packet of these special seeds."
+  },
+  "flower-twilight-sunflower": {
+    "voice": "tilly",
+    "text": "A twilight sunflower, with purple petals and a pale middle. Grow a sunflower and a moonflower, and I will share a free packet of these special seeds."
+  },
+  "flower-moonlight-tulip": {
+    "voice": "tilly",
+    "text": "A moonlight tulip, with soft green petals. Grow a tulip and a moonflower, and I will share a free packet of these special seeds."
+  },
+  "flower-garden-full": {
+    "voice": "tilly",
+    "text": "Your seed is ready, and your garden is full. You can keep your seed for later, or choose Make space when you want a new place to plant it."
   }
 }

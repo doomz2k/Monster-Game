@@ -19,6 +19,7 @@
 @import './practice.css';
 @import './observatory.css';
 @import './home-visits.css';
+@import './flower-garden.css';
 @custom-variant dark (&:is(.dark *));
 @theme inline {
   --color-background: var(--background);

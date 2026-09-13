@@ -6,7 +6,13 @@ import { createGardenPlant, createGardenWildlife } from '@/lib/garden-models';
 import { useGamePreferences } from './game-preferences';
 import { graphicsPixelRatio } from '@/lib/graphics-quality';
 
-export function GardenPreview({ plots }: { plots: Plant[] }) {
+export function GardenPreview({
+  plots,
+  spotlight,
+}: {
+  plots: Plant[];
+  spotlight?: string;
+}) {
   const host = useRef<HTMLDivElement>(null),
     { reducedMotion, preferences } = useGamePreferences();
   const tier =
@@ -17,9 +23,16 @@ export function GardenPreview({ plots }: { plots: Plant[] }) {
       camera = new THREE.PerspectiveCamera(36, 1, 0.1, 30);
     camera.position.set(7.5, 7, 9);
     camera.lookAt(2.1, 0.3, 0.85);
+    if (spotlight) {
+      camera.position.set(2.1, 2.2, 3.5);
+      camera.lookAt(0, 0.65, 0);
+    }
     let renderer: THREE.WebGLRenderer;
     try {
-      renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+      renderer = new THREE.WebGLRenderer({
+        alpha: true,
+        antialias: tier !== 'simple',
+      });
     } catch {
       return;
     }
@@ -42,11 +55,12 @@ export function GardenPreview({ plots }: { plots: Plant[] }) {
       new THREE.BoxGeometry(7, 0.26, 4.7),
       new THREE.MeshStandardMaterial({ color: '#a5bb7d', roughness: 0.9 }),
     );
-    ground.position.set(2.1, -0.3, 0.85);
+    ground.position.set(spotlight ? 0 : 2.1, -0.3, spotlight ? 0 : 0.85);
+    if (spotlight) ground.scale.set(0.43, 1, 0.64);
     ground.receiveShadow = true;
     scene.add(ground);
     const models: ReturnType<typeof createGardenPlant>[] = [];
-    for (let i = 0; i < 6; i++) {
+    for (let i = 0; i < (spotlight ? 1 : 6); i++) {
       const x = (i % 3) * 2.1,
         z = Math.floor(i / 3) * 1.7;
       const bed = new THREE.Mesh(
@@ -63,7 +77,7 @@ export function GardenPreview({ plots }: { plots: Plant[] }) {
       soil.position.set(x, 0.06, z);
       soil.receiveShadow = true;
       scene.add(soil);
-      const plant = plots[i];
+      const plant = spotlight ? { seed: spotlight, water: 3 } : plots[i];
       if (plant) {
         const model = createGardenPlant(plant.seed, plant.water);
         model.root.position.set(x, 0.12, z);
@@ -111,16 +125,21 @@ export function GardenPreview({ plots }: { plots: Plant[] }) {
       });
       geometries.forEach((g) => g.dispose());
       materials.forEach((m) => m.dispose());
+      sun.shadow.dispose();
       renderer.dispose();
       renderer.forceContextLoss();
       renderer.domElement.remove();
     };
-  }, [plots, reducedMotion, tier]);
+  }, [plots, spotlight, reducedMotion, tier]);
   return (
     <figure
       className="garden-preview"
       ref={host}
-      aria-label="Your growing garden and its little visitors"
+      aria-label={
+        spotlight
+          ? 'A close look at your chosen flower'
+          : 'Your growing garden and its little visitors'
+      }
     />
   );
 }

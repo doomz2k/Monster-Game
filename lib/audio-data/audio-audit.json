@@ -5973,6 +5973,160 @@
       "leadingSilenceMs": 34,
       "trailingSilenceMs": 60,
       "warnings": []
+    },
+    "flowers-intro": {
+      "sha256": "38f989e08944c0251ab2a112ce3547a5469a89c10320700f9e5b8ce7bb61a73e",
+      "seconds": 9.877,
+      "sampleRate": 24000,
+      "channels": 1,
+      "peakDbfs": -3.8,
+      "activeRmsDbfs": -21.2,
+      "leadingSilenceMs": 44,
+      "trailingSilenceMs": 95,
+      "warnings": []
+    },
+    "flower-seed-ready": {
+      "sha256": "8d76430495b6d5ab0251d91c5ade46ee19632c88e969bff76639a2634ab6cd8a",
+      "seconds": 6.869,
+      "sampleRate": 24000,
+      "channels": 1,
+      "peakDbfs": -4.0,
+      "activeRmsDbfs": -20.0,
+      "leadingSilenceMs": 45,
+      "trailingSilenceMs": 104,
+      "warnings": []
+    },
+    "flower-grown": {
+      "sha256": "bd788b3638c35f5ad607ddc56efa4db807ec00625c8cf504c3b43076d2f9d7df",
+      "seconds": 4.288,
+      "sampleRate": 24000,
+      "channels": 1,
+      "peakDbfs": -3.6,
+      "activeRmsDbfs": -19.3,
+      "leadingSilenceMs": 36,
+      "trailingSilenceMs": 127,
+      "warnings": []
+    },
+    "flower-daisy": {
+      "sha256": "e3e32555d9477a76c43d6a9daa503ed48c7bd5cefee67d6e2745fdc68d4aa01a",
+      "seconds": 7.211,
+      "sampleRate": 24000,
+      "channels": 1,
+      "peakDbfs": -3.8,
+      "activeRmsDbfs": -22.2,
+      "leadingSilenceMs": 37,
+      "trailingSilenceMs": 102,
+      "warnings": []
+    },
+    "flower-sunflower": {
+      "sha256": "bc8d2536e43dabb79e9d4d433de60a3ea98f6eba557a5d17fdefbcc4f438b082",
+      "seconds": 6.336,
+      "sampleRate": 24000,
+      "channels": 1,
+      "peakDbfs": -3.4,
+      "activeRmsDbfs": -20.4,
+      "leadingSilenceMs": 36,
+      "trailingSilenceMs": 103,
+      "warnings": []
+    },
+    "flower-tulip": {
+      "sha256": "0794a2125a90f46340f668ad24a1a00eb29e7f902378c95d3df607f858345e79",
+      "seconds": 7.552,
+      "sampleRate": 24000,
+      "channels": 1,
+      "peakDbfs": -3.6,
+      "activeRmsDbfs": -21.8,
+      "leadingSilenceMs": 35,
+      "trailingSilenceMs": 100,
+      "warnings": []
+    },
+    "flower-moonflower": {
+      "sha256": "3211e35134cc4e78b918c6bf36d6c5e0d7c1b9ef2dd2f16f909b3f65486d3137",
+      "seconds": 6.741,
+      "sampleRate": 24000,
+      "channels": 1,
+      "peakDbfs": -3.9,
+      "activeRmsDbfs": -18.8,
+      "leadingSilenceMs": 39,
+      "trailingSilenceMs": 111,
+      "warnings": []
+    },
+    "flower-apricot-daisy": {
+      "sha256": "d59935d3663208875806fa76f57ab66d01cca7017cd5590a0c46033a46397033",
+      "seconds": 7.573,
+      "sampleRate": 24000,
+      "channels": 1,
+      "peakDbfs": -3.7,
+      "activeRmsDbfs": -20.0,
+      "leadingSilenceMs": 22,
+      "trailingSilenceMs": 98,
+      "warnings": []
+    },
+    "flower-coral-sunflower": {
+      "sha256": "63b8217a73c40f5935088fdf3366ea25706953f46ab07cc6e4a558d81a582fe4",
+      "seconds": 7.552,
+      "sampleRate": 24000,
+      "channels": 1,
+      "peakDbfs": -3.6,
+      "activeRmsDbfs": -18.9,
+      "leadingSilenceMs": 37,
+      "trailingSilenceMs": 108,
+      "warnings": []
+    },
+    "flower-golden-tulip": {
+      "sha256": "dbe2c97d2062048f3a6da4690eba35240300602d8b3c7878a9cbc7811973622e",
+      "seconds": 7.637,
+      "sampleRate": 24000,
+      "channels": 1,
+      "peakDbfs": -3.9,
+      "activeRmsDbfs": -20.2,
+      "leadingSilenceMs": 38,
+      "trailingSilenceMs": 97,
+      "warnings": []
+    },
+    "flower-starlight-daisy": {
+      "sha256": "1a3185c94a52c564ba4de0e8932192bc64ce632cdc132c431c15db276d1c7b89",
+      "seconds": 7.595,
+      "sampleRate": 24000,
+      "channels": 1,
+      "peakDbfs": -4.0,
+      "activeRmsDbfs": -19.4,
+      "leadingSilenceMs": 38,
+      "trailingSilenceMs": 98,
+      "warnings": []
+    },
+    "flower-twilight-sunflower": {
+      "sha256": "156c3708e065beb399633d2b622488b35a42e7a0a4993efa2dcbe88a5b5f1edc",
+      "seconds": 8.747,
+      "sampleRate": 24000,
+      "channels": 1,
+      "peakDbfs": -3.5,
+      "activeRmsDbfs": -18.8,
+      "leadingSilenceMs": 39,
+      "trailingSilenceMs": 100,
+      "warnings": []
+    },
+    "flower-moonlight-tulip": {
+      "sha256": "21e43edf5029dfc36dbccabe9f88addfb0cffcd3f4b971bfa74cb7198e10ee5d",
+      "seconds": 7.616,
+      "sampleRate": 24000,
+      "channels": 1,
+      "peakDbfs": -3.6,
+      "activeRmsDbfs": -17.9,
+      "leadingSilenceMs": 38,
+      "trailingSilenceMs": 96,
+      "warnings": []
+    },
+    "flower-garden-full": {
+      "sha256": "bcec486961f72a7e864bf3181f0a5a1432821290584638620949e97840d11d21",
+      "seconds": 7.509,
+      "sampleRate": 24000,
+      "channels": 1,
+      "peakDbfs": -3.6,
+      "activeRmsDbfs": -19.7,
+      "leadingSilenceMs": 48,
+      "trailingSilenceMs": 104,
+      "warnings": []
     }
   },
   "phonemes": {

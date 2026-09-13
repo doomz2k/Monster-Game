@@ -98,3 +98,5 @@ The next checkpoint, [DISCOVERIES-AND-FRIENDS.md](DISCOVERIES-AND-FRIENDS.md), a
 [OBSERVATORY.md](OBSERVATORY.md) opens Nova's planet viewer and eight-stamp collection (42/39), with a narrated orbit model and a proportional Earth comparison (43). Shared procedural planet surfaces also improve the existing Moon questions (4), with responsive layouts, reduced motion and bounded rendering.
 
 [HOME-VISITS.md](HOME-VISITS.md) brings all seven neighbours into the decorated home (32), with furniture reactions, recorded greetings and optional pictured dances. Saved visit progression, varied move sequences and reversible controller actions add social play and character expression (23/36).
+
+[FLOWER-BOOK.md](FLOWER-BOOK.md) adds ten collected flower varieties, six earned special seed packets, one-time growing rewards and coloured plants shared with the island (29/28/39). Paged seed pictures, direct controller focus, full-garden guidance and a narrated 3D flower book expand gardening without timers or random purchases.

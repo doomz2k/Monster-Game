@@ -23,6 +23,13 @@ import { needsExample, reviewFact } from './practice-support';
 import { readPlanetCollection, type PlanetId } from './observatory';
 import { freshVisits, readVisits, type VisitProgress } from './home-visits';
 import {
+  SPECIAL_FLOWERS,
+  flowerFor,
+  readFlowers,
+  rememberBloom,
+  type FlowerId,
+} from './flowers';
+import {
   arithmeticFact,
   countQuantity,
   pizzaFact,
@@ -159,6 +166,7 @@ export type AdventureProgress = {
   unlit: string[];
   planets: PlanetId[];
   visits: VisitProgress;
+  flowers: FlowerId[];
 };
 export const SHOP_ITEMS = [
   {
@@ -321,6 +329,7 @@ export const freshAdventure = (legacyStars = 0): AdventureProgress => ({
     carrot: 0,
     strawberry: 0,
     moonflower: 0,
+    ...Object.fromEntries(SPECIAL_FLOWERS.map((f) => [f.id, 0])),
   },
   plots: Array.from({ length: 6 }, () => null),
   furniture: ['table', null, null, null, null, null],
@@ -339,6 +348,7 @@ export const freshAdventure = (legacyStars = 0): AdventureProgress => ({
   unlit: [],
   planets: [],
   visits: freshVisits(),
+  flowers: [],
 });
 const integer = (v: unknown, max = 100000) =>
   typeof v === 'number' && Number.isSafeInteger(v) && v >= 0
@@ -371,7 +381,10 @@ export function readAdventure(
   ];
   p.seeds = {};
   if (v.seeds && typeof v.seeds === 'object')
-    for (const item of SHOP_ITEMS.filter((i) => i.kind === 'seed'))
+    for (const item of [
+      ...SHOP_ITEMS.filter((i) => i.kind === 'seed'),
+      ...SPECIAL_FLOWERS,
+    ])
       p.seeds[item.id] = integer(
         (v.seeds as Record<string, unknown>)[item.id],
         99,
@@ -381,12 +394,14 @@ export function readAdventure(
     p.plots = Array.from({ length: 6 }, (_, i) => {
       const plant = savedPlots[i] as Plant;
       return plant &&
-        SHOP_ITEMS.some(
-          (item) => item.id === plant.seed && item.kind === 'seed',
-        )
+        (flowerFor(plant.seed) ||
+          SHOP_ITEMS.some(
+            (item) => item.id === plant.seed && item.kind === 'seed',
+          ))
         ? { seed: plant.seed, water: integer(plant.water, 3) }
         : null;
     });
+  p.flowers = readFlowers(v.flowers, p.plots);
   if (Array.isArray(v.furniture))
     p.furniture = Array.from({ length: 6 }, (_, i) => {
       const id = (v.furniture as unknown[])[i];
@@ -508,7 +523,11 @@ export function plantSeed(
     slot < 0 ||
     slot >= 6 ||
     p.adventure.plots[slot] ||
-    !(p.adventure.seeds[seed] > 0)
+    !(p.adventure.seeds[seed] > 0) ||
+    !(
+      flowerFor(seed) ||
+      SHOP_ITEMS.some((item) => item.kind === 'seed' && item.id === seed)
+    )
   )
     return p;
   const plots = [...p.adventure.plots];
@@ -523,13 +542,16 @@ export function plantSeed(
   };
 }
 export function waterPlant(p: ProgressData, slot: number): ProgressData {
+  if (!Number.isInteger(slot) || slot < 0 || slot >= 6) return p;
   const plant = p.adventure.plots[slot];
   if (!plant || plant.water >= 3) return p;
   const plots = [...p.adventure.plots];
   plots[slot] = { ...plant, water: plant.water + 1 };
-  return { ...p, adventure: { ...p.adventure, plots } };
+  const next = { ...p, adventure: { ...p.adventure, plots } };
+  return plots[slot]!.water === 3 ? rememberBloom(next, plant.seed) : next;
 }
 export function clearPlot(p: ProgressData, slot: number): ProgressData {
+  if (!Number.isInteger(slot) || slot < 0 || slot >= 6) return p;
   if (!p.adventure.plots[slot]) return p;
   const plots = [...p.adventure.plots];
   plots[slot] = null;

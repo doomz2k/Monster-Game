@@ -1,5 +1,6 @@
 import type { ProgressData } from './learning';
 import type { Plant } from './adventure';
+import { plantFamily } from './flowers';
 
 export const PRODUCE = ['tomato', 'pepper'] as const;
 export type ProduceId = (typeof PRODUCE)[number];
@@ -37,7 +38,9 @@ export function harvestPlant(p: ProgressData, slot: number): ProgressData {
 }
 /** Helpful visitors are cosmetic. They never eat crops or depend on real-world time. */
 export function gardenVisitors(plots: Plant[]) {
-  const blooms = plots.filter((p) => p?.water === 3).map((p) => p!.seed);
+  const blooms = plots
+    .filter((p) => p?.water === 3)
+    .map((p) => plantFamily(p!.seed));
   return {
     bee: blooms.some((s) => ['daisy', 'sunflower', 'tulip'].includes(s)),
     butterfly: blooms.some((s) => ['tulip', 'moonflower', 'daisy'].includes(s)),

@@ -1,9 +1,12 @@
 import * as THREE from 'three';
 import { gardenVisitors } from './garden';
 import type { Plant } from './adventure';
+import { flowerFor, plantFamily } from './flowers';
 
 /** Distinct reusable botanical toys for both the island and the close-up garden. */
 export function createGardenPlant(seed: string, water: number) {
+  const flower = flowerFor(seed);
+  seed = plantFamily(seed);
   const root = new THREE.Group();
   root.name = seed + ' plant';
   const stage = Number.isFinite(water)
@@ -137,7 +140,7 @@ export function createGardenPlant(seed: string, water: number) {
       for (let i = 0; i < 5; i++) {
         const a = (i * Math.PI * 2) / 5;
         const p = ball(
-          i % 2 ? '#f4a4bb' : '#e783a5',
+          i % 2 ? (flower?.centre ?? '#f4a4bb') : (flower?.petals ?? '#e783a5'),
           Math.cos(a) * 0.09,
           h + 0.06,
           Math.sin(a) * 0.09,
@@ -153,7 +156,8 @@ export function createGardenPlant(seed: string, water: number) {
       for (let i = 0; i < count; i++) {
         const a = (i * Math.PI * 2) / count;
         const petal = ball(
-          tall ? '#f3c84c' : seed === 'moonflower' ? '#c6b4ed' : '#fff4d2',
+          flower?.petals ??
+            (tall ? '#f3c84c' : seed === 'moonflower' ? '#c6b4ed' : '#fff4d2'),
           Math.cos(a) * radius,
           h + Math.sin(a) * radius,
           0,
@@ -164,7 +168,8 @@ export function createGardenPlant(seed: string, water: number) {
         petal.rotation.z = a;
       }
       ball(
-        tall ? '#97704b' : seed === 'moonflower' ? '#e3d9ff' : '#e7bd4d',
+        flower?.centre ??
+          (tall ? '#97704b' : seed === 'moonflower' ? '#e3d9ff' : '#e7bd4d'),
         0,
         h,
         0.045,

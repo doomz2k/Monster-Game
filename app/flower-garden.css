@@ -1,0 +1,517 @@
+.garden-play-panel {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+.garden-book-open {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  margin: 5px 10px;
+  padding: 9px;
+  border: 2px solid #c3cca8;
+  border-radius: 15px;
+  background: #fff9e4;
+  color: #567048;
+}
+.garden-book-open span {
+  font-size: 13px;
+  color: #718662;
+}
+.garden-seed-picker {
+  border-radius: 16px;
+  padding: 8px 10px;
+  background: #eee9d5;
+}
+.garden-seed-label {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 14px;
+  margin-bottom: 5px;
+  color: #64734f;
+}
+.garden-seed-label span {
+  white-space: nowrap;
+}
+.garden-seed-row {
+  display: flex;
+  align-items: stretch;
+  gap: 7px;
+}
+.garden-seed-tray {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+}
+.garden-seed-tray button {
+  position: relative;
+  display: grid;
+  place-items: center;
+  border: 2px solid #d4d9b9;
+  border-radius: 14px;
+  background: #fffaed;
+  padding: 3px;
+  min-width: 0;
+}
+.garden-seed-tray button[aria-pressed='true'] {
+  border-color: #87a76d;
+  background: #e0eacb;
+}
+.garden-seed-tray .flower-picture,
+.garden-seed-tray .game-picture {
+  width: 49px;
+  height: 51px;
+}
+.garden-seed-tray small {
+  position: absolute;
+  bottom: 3px;
+  right: 5px;
+  min-width: 18px;
+  background: #f9eed4;
+  border-radius: 50%;
+  font-size: 12px;
+  text-align: center;
+}
+.garden-seed-row .seed-page {
+  border: 2px solid #c6d0ac;
+  border-radius: 12px;
+  padding: 3px;
+  background: #f5f0db;
+}
+.seed-page:disabled {
+  opacity: 0.35;
+}
+.garden-plot {
+  position: relative;
+}
+.home-dialog .garden-plot > .garden-patch-number {
+  position: absolute;
+  top: 6px;
+  left: 8px;
+  font-size: 12px;
+  color: #eee1c8;
+}
+.garden-plot > .flower-picture,
+.garden-plot > .game-picture {
+  height: min(80px, 11vh);
+  width: min(80px, 11vh);
+  flex: 1;
+  min-height: 0;
+}
+.garden-plot .empty-patch-picture {
+  width: 41px;
+  height: 41px;
+  color: #a4b584;
+  opacity: 0.7;
+}
+.home-dialog .garden-plot > .garden-sprout {
+  font-size: 45px;
+}
+.plant-drinks {
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+  padding: 2px;
+}
+.plant-drinks svg {
+  width: 17px;
+  height: 17px;
+  color: #b1b79c;
+}
+.plant-drinks svg.watered {
+  color: #75a3b0;
+  fill: #b7d5dd;
+}
+.flower-album {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex: 1;
+  min-height: 0;
+  color: #546b49;
+}
+.flower-album-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.flower-album-heading h2 {
+  margin: 0;
+  font-size: 24px;
+}
+.flower-album-heading h2 span {
+  font-size: 14px;
+  padding-left: 10px;
+  color: #85926c;
+}
+.flower-album-heading button {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  border: 2px solid #d0d4b7;
+  background: #f0eddb;
+  padding: 7px 12px;
+  border-radius: 15px;
+  font-size: 14px;
+}
+.flower-album-heading .pad-key {
+  width: 26px;
+  height: 26px;
+  font-size: 16px;
+}
+.flower-album-workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.6fr);
+  gap: 22px;
+  flex: 1;
+  min-height: 0;
+}
+.flower-album-preview {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  border: 2px solid #d7dcbf;
+  border-radius: 27px;
+  overflow: hidden;
+  text-align: center;
+  background: radial-gradient(ellipse at center, #e1edcc, #ede4c7);
+  padding: 0 0 17px;
+}
+.flower-album-preview strong {
+  font-size: 27px;
+}
+.flower-album-preview > span {
+  font-size: 14px;
+  margin-top: 5px;
+}
+.flower-album-preview .garden-preview {
+  position: relative;
+}
+.flower-album-preview canvas {
+  position: absolute;
+  inset: 0;
+}
+.flower-album-choices {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  gap: 12px;
+}
+.flower-catalogue {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+  gap: 9px;
+  flex: 1;
+  min-height: 0;
+}
+.flower-catalogue button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+  padding: 7px;
+  gap: 5px;
+  position: relative;
+  border: 2px solid #d9dbbc;
+  background: #fff9e8;
+  border-radius: 19px;
+}
+.flower-catalogue button[aria-pressed='true'] {
+  background: #e6edcf;
+  border-color: #8da97b;
+}
+.flower-catalogue .flower-picture {
+  width: 100%;
+  max-width: 90px;
+  min-height: 0;
+  height: 95px;
+  flex: 1;
+}
+.flower-catalogue strong {
+  font-size: 13px;
+  text-align: center;
+  line-height: 1.2;
+}
+.flower-stamp,
+.flower-lock {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 17px;
+  height: 17px;
+  color: #75945e;
+}
+.flower-stamp {
+  border-radius: 50%;
+  background: #e4eed3;
+}
+.flower-lock {
+  color: #999d7f;
+}
+.flower-seed-action {
+  min-height: 105px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+}
+.flower-seed-action > .adventure-primary {
+  align-self: stretch;
+  justify-content: center;
+  gap: 9px;
+  padding: 10px 16px;
+  font-size: 18px;
+}
+.flower-seed-action > .adventure-primary:disabled {
+  opacity: 0.55;
+}
+.flower-pair {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+.flower-pair > span:first-child {
+  font-size: 13px;
+}
+.flower-pair > span:not(:first-child) {
+  position: relative;
+}
+.flower-pair .flower-picture {
+  width: 39px;
+  height: 45px;
+}
+.flower-pair > span > svg:not(.flower-picture) {
+  width: 16px;
+  height: 16px;
+  position: absolute;
+  right: -6px;
+  bottom: 0;
+  background: #f5efd7;
+  border-radius: 50%;
+}
+[data-contrast='high'] .flower-catalogue button,
+[data-contrast='high'] .garden-seed-tray button {
+  border-color: #607448;
+}
+@media (max-height: 620px) {
+  .flower-album {
+    gap: 7px;
+  }
+  .flower-album-heading h2 {
+    font-size: 20px;
+  }
+  .flower-album-heading button {
+    padding: 3px 10px;
+  }
+  .flower-catalogue {
+    gap: 6px;
+  }
+  .flower-catalogue button {
+    padding: 4px;
+    gap: 3px;
+    border-radius: 14px;
+  }
+  .flower-catalogue strong {
+    font-size: 11px;
+  }
+  .flower-catalogue .flower-picture {
+    max-height: 72px;
+  }
+  .flower-seed-action {
+    min-height: 81px;
+    gap: 4px;
+  }
+  .flower-seed-action > .adventure-primary {
+    padding: 5px 12px;
+    font-size: 16px;
+  }
+  .flower-pair .flower-picture {
+    height: 32px;
+  }
+  .flower-album-preview strong {
+    font-size: 23px;
+  }
+  .flower-album-preview > span {
+    font-size: 12px;
+  }
+  .garden-seed-tray .flower-picture,
+  .garden-seed-tray .game-picture {
+    width: 37px;
+    height: 37px;
+  }
+  .garden-seed-picker {
+    padding: 4px 7px;
+  }
+  .garden-seed-label {
+    font-size: 12px;
+    margin-bottom: 3px;
+  }
+  .garden-book-open {
+    padding: 6px;
+    font-size: 13px;
+  }
+  .garden-book-open span {
+    font-size: 11px;
+  }
+  .home-dialog .garden-play-panel .garden-plots {
+    gap: 7px;
+    padding: 6px;
+  }
+  .home-dialog .garden-play-panel .garden-plot small {
+    font-size: 11px;
+  }
+}
+@media (max-width: 650px) {
+  .garden-play-panel .garden-workspace {
+    grid-template-columns: 1fr;
+    grid-template-rows: minmax(110px, 0.65fr) minmax(0, 1.35fr);
+    gap: 7px;
+  }
+  .garden-play-panel .garden-view {
+    position: relative;
+  }
+  .garden-play-panel .garden-preview {
+    min-height: 0;
+  }
+  .garden-play-panel .garden-pantry {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    padding: 3px;
+    font-size: 11px;
+    background: #faf3dfcf;
+    border-radius: 10px;
+  }
+  .garden-play-panel .garden-pantry strong {
+    display: none;
+  }
+  .garden-play-panel .garden-pantry .game-picture {
+    width: 24px;
+    height: 24px;
+  }
+  .garden-play-panel .garden-visitors {
+    display: none;
+  }
+  .garden-book-open {
+    position: absolute;
+    bottom: 4px;
+    right: 4px;
+    padding: 5px;
+    margin: 0;
+    gap: 4px;
+    font-size: 12px;
+  }
+  .garden-book-open svg {
+    width: 17px;
+  }
+  .garden-book-open span {
+    font-size: 10px;
+  }
+  .garden-seed-tray .flower-picture,
+  .garden-seed-tray .game-picture {
+    height: 36px;
+    width: 36px;
+  }
+  .garden-seed-picker {
+    padding: 5px 7px;
+  }
+  .garden-seed-label {
+    font-size: 12px;
+  }
+  .home-dialog .garden-play-panel .garden-plots {
+    padding: 6px;
+    gap: 7px;
+  }
+  .home-dialog .garden-play-panel .garden-plot small {
+    font-size: 11px;
+  }
+  .home-dialog .garden-play-panel .garden-plot > .garden-sprout {
+    font-size: 28px;
+  }
+  .flower-album-heading h2 {
+    font-size: 17px;
+  }
+  .flower-album-heading h2 span {
+    display: block;
+    padding: 0;
+    font-size: 12px;
+  }
+  .flower-album-heading button {
+    padding: 4px 7px;
+    gap: 4px;
+    font-size: 11px;
+  }
+  .flower-album-heading .round-control > svg {
+    display: none;
+  }
+  .flower-album-workspace {
+    grid-template-columns: 1fr;
+    grid-template-rows: minmax(110px, 0.65fr) minmax(0, 1.35fr);
+    gap: 9px;
+  }
+  .flower-album-preview {
+    position: relative;
+    padding: 0;
+  }
+  .flower-album-preview > strong {
+    position: absolute;
+    bottom: 8px;
+    left: 10px;
+    font-size: 18px;
+    background: #f7edcfd9;
+    border-radius: 10px;
+    padding: 4px 8px;
+  }
+  .flower-album-preview > span {
+    display: none;
+  }
+  .flower-catalogue {
+    gap: 5px;
+  }
+  .flower-catalogue button {
+    padding: 3px;
+    border-radius: 13px;
+    gap: 3px;
+  }
+  .flower-catalogue strong {
+    font-size: 10px;
+  }
+  .flower-catalogue .flower-picture {
+    max-height: 76px;
+  }
+  .flower-lock,
+  .flower-stamp {
+    width: 12px;
+    height: 12px;
+    top: 2px;
+    right: 2px;
+  }
+  .flower-seed-action {
+    min-height: 82px;
+    gap: 4px;
+  }
+  .flower-seed-action > .adventure-primary {
+    padding: 6px 10px;
+    font-size: 15px;
+  }
+  .flower-pair {
+    gap: 7px;
+  }
+  .flower-pair .flower-picture {
+    height: 32px;
+  }
+  .flower-pair > span:first-child {
+    font-size: 12px;
+  }
+}
