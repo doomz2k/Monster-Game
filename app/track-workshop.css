@@ -1,0 +1,403 @@
+.workshop-activity {
+  background: #ede9db;
+}
+.track-workshop {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  width: min(1300px, 100%);
+  margin: 0 auto;
+  padding: 4px 28px 16px;
+  gap: 12px;
+  color: #475447;
+}
+.track-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+.track-heading small {
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.14em;
+  color: #7b826a;
+}
+.track-heading h1 {
+  font-size: clamp(25px, 3vw, 38px);
+  margin: 3px 0;
+}
+.track-heading .round-control {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.track-workspace {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(280px, 1fr);
+  align-items: center;
+  justify-items: center;
+  gap: 50px;
+  padding: 8px 45px;
+  border-radius: 30px;
+  background:
+    repeating-linear-gradient(
+      1deg,
+      #dac4a433 0px,
+      #dac4a433 2px,
+      transparent 2px,
+      transparent 36px
+    ),
+    #e3d6bb;
+  border: 3px solid #d1c3a4;
+  box-shadow: inset 0 2px 3px #9d886633;
+}
+.track-table {
+  position: relative;
+  width: min(100%, calc(100dvh - 260px));
+  aspect-ratio: 1;
+}
+.track-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-rows: repeat(3, minmax(0, 1fr));
+  gap: 5px;
+  width: 100%;
+  height: 100%;
+  border-radius: 22px;
+  background: #cab695;
+  border: 6px solid #bda57e;
+  box-shadow:
+    0 7px 0 #a48b66,
+    0 15px 20px #665f3820;
+}
+.track-tile,
+.track-scenery {
+  position: relative;
+  min-height: 0;
+  min-width: 0;
+  border: 0;
+  border-radius: 12px;
+  padding: 0;
+  background: #f5ebd2;
+}
+.track-scenery {
+  display: grid;
+  place-items: center;
+  background: #c9d2a5;
+}
+.track-scenery .game-picture {
+  width: 75%;
+  height: 75%;
+  filter: drop-shadow(0 3px 2px #6d794a44);
+}
+.track-tile > svg:not(.track-turn-mark) {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.track-tile > svg:nth-child(2):not(.track-turn-mark) {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.track-turnable {
+  box-shadow:
+    inset 0 0 0 3px #d7b44e,
+    0 3px 0 #b09241;
+  cursor: pointer;
+}
+.track-turnable:disabled {
+  opacity: 1;
+  cursor: default;
+}
+.track-turnable:focus {
+  outline: 5px solid #456d41;
+  outline-offset: 2px;
+  z-index: 2;
+}
+.track-highlight {
+  background: #fff5ce;
+}
+.track-turn-mark {
+  position: absolute;
+  right: 4px;
+  top: 4px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #fff6c5;
+  color: #967330;
+  padding: 3px;
+}
+.track-start,
+.track-finish {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #faf2d7;
+  transform: translateY(-50%);
+  border: 2px solid #bba984;
+  color: #6b8156;
+}
+.track-start {
+  left: -41px;
+}
+.track-finish {
+  right: -41px;
+}
+.track-start svg,
+.track-finish svg {
+  width: 23px;
+  height: 23px;
+}
+.track-cart {
+  position: absolute;
+  width: 25%;
+  pointer-events: none;
+  z-index: 3;
+  filter: drop-shadow(0 5px 3px #39443f55);
+}
+.track-cart svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.track-coach {
+  display: flex;
+  width: 100%;
+  min-height: 0;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 15px;
+  border-radius: 24px;
+  background: #faf4e5db;
+  border: 2px solid #d4c8aa;
+  box-shadow: 0 5px 0 #c6b79a;
+}
+.track-coach .neighbour-portrait {
+  width: 170px;
+  height: 150px;
+  border-radius: 50%;
+  background: #dedec5;
+}
+.track-status {
+  text-align: center;
+  min-height: 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.track-status h2 {
+  margin: 0 0 5px;
+  font-size: 25px;
+}
+.track-status p {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  margin: 0;
+  font-size: 16px;
+}
+.track-status p svg {
+  width: 20px;
+}
+.track-coach .adventure-primary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+}
+.track-prize {
+  display: flex;
+  justify-content: center;
+}
+.track-prize .game-picture {
+  width: 55px;
+  height: 55px;
+}
+.track-undo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  font-size: 14px;
+  border: 2px solid #d2c8ae;
+  border-radius: 14px;
+  background: #f2e8d2;
+  padding: 7px 12px;
+}
+.track-undo:disabled {
+  opacity: 0.45;
+}
+.track-undo > svg {
+  width: 18px;
+}
+.track-undo .pad-key {
+  width: 25px;
+  height: 25px;
+  font-size: 15px;
+}
+.track-footer {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  font-weight: 800;
+  font-size: 14px;
+}
+.track-footer > span {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.track-footer > span:nth-child(2) {
+  margin-left: auto;
+}
+[data-contrast='high'] .track-turnable {
+  box-shadow: inset 0 0 0 3px #806222;
+}
+@media (max-height: 620px) {
+  .track-workshop {
+    gap: 6px;
+    padding: 0 20px 8px;
+  }
+  .track-heading h1 {
+    font-size: 27px;
+  }
+  .track-table {
+    width: min(100%, calc(100dvh - 210px));
+  }
+  .track-coach {
+    gap: 7px;
+    padding: 8px 14px;
+  }
+  .track-coach .neighbour-portrait {
+    width: 112px;
+    height: 98px;
+  }
+  .track-status {
+    min-height: 62px;
+  }
+  .track-status h2 {
+    font-size: 21px;
+  }
+  .track-status p {
+    font-size: 14px;
+  }
+  .track-prize .game-picture {
+    width: 36px;
+    height: 36px;
+  }
+  .track-coach .adventure-primary {
+    padding: 8px;
+    font-size: 17px;
+  }
+  .track-undo {
+    padding: 4px 10px;
+  }
+}
+@media (max-width: 740px) {
+  .track-workshop {
+    padding: 0 12px 10px;
+    gap: 8px;
+  }
+  .track-heading h1 {
+    font-size: 23px;
+  }
+  .track-heading small {
+    font-size: 9px;
+  }
+  .track-heading .round-control {
+    gap: 4px;
+  }
+  .track-workspace {
+    grid-template-columns: 1fr;
+    grid-template-rows: minmax(0, 1fr) auto;
+    gap: 12px;
+    padding: 10px 38px 12px;
+    border-radius: 23px;
+  }
+  .track-table {
+    width: min(100%, calc(100dvh - 395px));
+  }
+  .track-grid {
+    border-width: 4px;
+    gap: 3px;
+    border-radius: 14px;
+  }
+  .track-tile,
+  .track-scenery {
+    border-radius: 8px;
+  }
+  .track-turn-mark {
+    width: 19px;
+    height: 19px;
+    right: 1px;
+    top: 1px;
+  }
+  .track-start,
+  .track-finish {
+    width: 28px;
+    height: 28px;
+  }
+  .track-start {
+    left: -32px;
+  }
+  .track-finish {
+    right: -32px;
+  }
+  .track-start svg,
+  .track-finish svg {
+    width: 18px;
+    height: 18px;
+  }
+  .track-coach {
+    padding: 10px;
+    gap: 8px;
+    width: calc(100% + 45px);
+  }
+  .track-coach .neighbour-portrait {
+    display: none;
+  }
+  .track-status {
+    min-height: 53px;
+  }
+  .track-status h2 {
+    font-size: 20px;
+  }
+  .track-status p {
+    font-size: 13px;
+  }
+  .track-coach .adventure-primary {
+    padding: 9px;
+    font-size: 16px;
+  }
+  .track-prize .game-picture {
+    width: 34px;
+    height: 34px;
+  }
+  .track-undo {
+    font-size: 12px;
+    padding: 3px 10px;
+  }
+  .track-footer {
+    font-size: 11px;
+    gap: 9px;
+  }
+  .track-footer .pad-key {
+    width: 25px;
+    height: 25px;
+    font-size: 15px;
+  }
+}

@@ -167,6 +167,7 @@ export type AdventureProgress = {
   planets: PlanetId[];
   visits: VisitProgress;
   flowers: FlowerId[];
+  workshop: number;
 };
 export const SHOP_ITEMS = [
   {
@@ -349,6 +350,7 @@ export const freshAdventure = (legacyStars = 0): AdventureProgress => ({
   planets: [],
   visits: freshVisits(),
   flowers: [],
+  workshop: 0,
 });
 const integer = (v: unknown, max = 100000) =>
   typeof v === 'number' && Number.isSafeInteger(v) && v >= 0
@@ -452,6 +454,7 @@ export function readAdventure(
   p.rover = readRoverProgress(v.rover, p.rounds.rocket >= 3);
   p.planets = readPlanetCollection(v.planets, p.rounds.rocket >= 3);
   p.visits = readVisits(v.visits);
+  p.workshop = integer(v.workshop);
   p.companion = readCompanion(v.companion, p);
   const unlit = v.unlit;
   p.unlit = Array.isArray(unlit)

@@ -1,0 +1,15 @@
+# Pip’s track workshop
+
+After helping Pip once, choose **Build a rover road** in his conversation. This optional full-screen toy uses chunky turnable road pieces, a pictured start and finish, and a little rover carrying the monster's chosen colour. D-pad chooses a piece, green A turns it or confirms a trip, X undoes a turn, Y shows a golden route hint and repeats Pip's recorded instructions, and red B returns to Pip. There is no dragging, timer, life loss or penalty for trying a disconnected road.
+
+The first three roads each have one turnable piece. Later rounds cycle through 29 unique, self-avoiding left-to-right routes on a three-by-three board, introducing at most two then three editable pieces. Fixed pieces anchor the route. Each initial arrangement is disconnected, and every puzzle has a solution. The hint accepts equivalent straight-piece rotations. Reward validation follows actual matching ports rather than comparing a memorised answer; a valid alternate route is accepted and is the route the rover follows.
+
+The rover follows the same quadratic curves drawn on the tiles, with continuous direction at boundaries. Start preserves the puzzle, undo history and elapsed trip. Reduced motion arrives immediately; green A can also skip a trip to its actual endpoint. A finished road awards two stars once using a saved round ticket. Returning or replaying a completion cannot claim that ticket again. This is exploratory spatial play: it does not change phonics, school practice records or the rocket repair requirements.
+
+Old saves start at workshop round zero. Six new Pip recordings use the free, local British `bm_fable` voice, bringing narration to 563 files. The technical audit passes all narration, while human listening and phonics approvals remain pending. Neighbour portraits skip rendering when inactive or hidden and honour the simple graphics option's antialiasing budget.
+
+Validation: all 184 tests pass, including 500 generated task checks, all rotation combinations across a complete route deck, continuous travel, stale/invalid reward requests, old saves and exported saves. Browser checks covered four completed roads, a disconnected attempt, X undo, Y hint, Start during travel, ready-road focus after Start, normal/instant/reduced travel, and 1280×720, 960×540 and 390×844 layouts. The local QA wallet increased from 61 to 69 while the 17 completed practice records stayed unchanged. These are agent-generated test actions, not child-learning evidence. Physical-controller and family acceptance remain outstanding.
+
+The new menu choice prompted a companion layout fix: full-screen neighbour conversations use a whole small portrait and full-width text on phones, and tighter spacing at short television sizes keeps Pip's flight, gift and both activities visible without scrollbars.
+
+Production build passes. Normal-play scripts total 1,549,664 bytes (441,681 bytes individually gzipped); the large listening studio remains deferred. This is a build-size measurement, not a loading-speed benchmark. The existing shared Three.js chunk advisory remains.

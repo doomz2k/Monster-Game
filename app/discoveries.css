@@ -294,6 +294,27 @@
   margin: 4px;
 }
 @media (max-height: 600px) {
+  .conversation-dialog .friend-chat-copy {
+    gap: 4px;
+  }
+  .conversation-dialog h2 {
+    font-size: 30px;
+  }
+  .conversation-dialog .friend-dialogue p:not(.game-eyebrow) {
+    font-size: 16px;
+    line-height: 1.35;
+  }
+  .conversation-dialog .big-actions {
+    margin-top: 4px;
+  }
+  .conversation-dialog .observatory-open {
+    margin: 0;
+    padding: 7px 12px;
+  }
+  .conversation-dialog .home-flight-button {
+    margin: 0;
+    padding: 6px 10px;
+  }
   .conversation-dialog .friend-dialogue {
     grid-template-columns: 0.65fr 1.35fr;
   }
@@ -394,5 +415,67 @@
   .discovery-story button {
     font-size: 15px;
     padding: 10px;
+  }
+}
+@media (max-width: 600px) {
+  .conversation-dialog .friend-dialogue {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 6px;
+    padding: 0;
+  }
+  .conversation-dialog .friend-dialogue .neighbour-portrait {
+    width: 120px;
+    height: clamp(75px, 12dvh, 110px);
+    flex-shrink: 0;
+    border-radius: 50%;
+    background: #e4e6c9;
+  }
+  .conversation-dialog .friend-chat-copy {
+    width: 100%;
+    gap: 6px;
+  }
+  .conversation-dialog h2 {
+    font-size: 28px;
+  }
+  .conversation-dialog .game-eyebrow {
+    font-size: 9px;
+  }
+  .conversation-dialog .friend-dialogue p:not(.game-eyebrow) {
+    font-size: 16px;
+    line-height: 1.35;
+  }
+  .conversation-dialog .big-actions {
+    flex-direction: row;
+    width: 100%;
+    margin-top: 4px;
+    gap: 8px;
+  }
+  .conversation-dialog .big-actions > button {
+    flex: 1;
+    min-height: 50px;
+    padding: 8px;
+    font-size: 14px;
+    gap: 5px;
+  }
+  .conversation-dialog .big-actions .pad-key {
+    width: 25px;
+    height: 25px;
+    font-size: 16px;
+  }
+  .conversation-dialog .rocket-parts {
+    margin: 2px;
+  }
+  .conversation-dialog .friend-gift {
+    margin: 0;
+    padding: 7px 12px;
+  }
+  .conversation-dialog .friendship-row {
+    margin: 2px;
+  }
+  .conversation-dialog .observatory-open {
+    margin-top: 2px;
+    padding: 8px 12px;
   }
 }

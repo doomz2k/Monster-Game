@@ -40,6 +40,8 @@ import { RoverPicture } from './rover-picture';
 import { RoverSurvey } from './rover-survey';
 import { Observatory } from './observatory';
 import { HomeVisits } from './home-visits';
+import { TrackWorkshop } from './track-workshop';
+import { finishTrack } from '@/lib/track-workshop';
 import { finishVisit } from '@/lib/home-visits';
 import { observePlanet } from '@/lib/observatory';
 import {
@@ -120,6 +122,7 @@ type Mode =
   | 'rover'
   | 'observatory'
   | 'visiting'
+  | 'workshop'
   | 'scrapbook';
 const CHOICE = { 'data-game-choice': true };
 export default function AdventureGame() {
@@ -132,6 +135,7 @@ export default function AdventureGame() {
     roverSurface = useRef<HTMLElement>(null),
     observatorySurface = useRef<HTMLElement>(null),
     visitSurface = useRef<HTMLElement>(null),
+    workshopSurface = useRef<HTMLElement>(null),
     world = useRef<MonsterWorld | null>(null),
     input = useRef<GameInput | null>(null),
     actionRef = useRef<(action: Action) => void>(() => {});
@@ -197,6 +201,7 @@ export default function AdventureGame() {
   const [roverTask, setRoverTask] = useState<RoverTask | null>(null);
   const [observatoryOpen, setObservatoryOpen] = useState(false);
   const [visitsOpen, setVisitsOpen] = useState(false);
+  const [workshopOpen, setWorkshopOpen] = useState(false);
   const [homeEntry, setHomeEntry] = useState<'garden' | 'house'>('garden');
   const [roverTarget, setRoverTarget] = useState<RoverStopId | null>(null);
   const [roverGuiding, setRoverGuiding] = useState(false);
@@ -273,6 +278,7 @@ export default function AdventureGame() {
     'rover',
     'observatory',
     'visiting',
+    'workshop',
     'scrapbook',
   ].includes(mode);
   const change = (next: ProgressData) => setP(next);
@@ -286,6 +292,8 @@ export default function AdventureGame() {
     void audio.line(id);
   };
   const go = (next: Mode, line?: string) => {
+    if (next === 'workshop') setWorkshopOpen(true);
+    else if (!['pause', 'parents'].includes(next)) setWorkshopOpen(false);
     if (next === 'visiting') setVisitsOpen(true);
     else if (!['pause', 'parents'].includes(next)) setVisitsOpen(false);
     if (next === 'explore') setHomeEntry('garden');
@@ -349,7 +357,8 @@ export default function AdventureGame() {
         currentMode.current === 'mission' ||
         currentMode.current === 'tutorial' ||
         currentMode.current === 'flight' ||
-        currentMode.current === 'rover'
+        currentMode.current === 'rover' ||
+        currentMode.current === 'workshop'
       ) {
         resumeMode.current = currentMode.current;
         setMode('pause');
@@ -393,19 +402,21 @@ export default function AdventureGame() {
     if (mode === 'explore' || mode === 'parents' || mode === 'flight') return;
     const frame = requestAnimationFrame(() => {
       const root =
-        mode === 'visiting'
-          ? visitSurface.current
-          : mode === 'observatory'
-            ? observatorySurface.current
-            : mode === 'rover'
-              ? roverSurface.current
-              : mode === 'scrapbook'
-                ? bookSurface.current
-                : mode === 'mission'
-                  ? missionSurface.current
-                  : modal
-                    ? modalSurface.current
-                    : surface.current;
+        mode === 'workshop'
+          ? workshopSurface.current
+          : mode === 'visiting'
+            ? visitSurface.current
+            : mode === 'observatory'
+              ? observatorySurface.current
+              : mode === 'rover'
+                ? roverSurface.current
+                : mode === 'scrapbook'
+                  ? bookSurface.current
+                  : mode === 'mission'
+                    ? missionSurface.current
+                    : modal
+                      ? modalSurface.current
+                      : surface.current;
       (
         root?.querySelector<HTMLElement>(
           '[data-game-autofocus]:not(:disabled)',
@@ -652,6 +663,12 @@ export default function AdventureGame() {
     return true;
   };
   const repeat = () => {
+    if (mode === 'workshop') {
+      workshopSurface.current
+        ?.querySelector<HTMLButtonElement>('[data-repeat-prompt]')
+        ?.click();
+      return;
+    }
     if (mode === 'visiting') {
       visitSurface.current
         ?.querySelector<HTMLButtonElement>('[data-repeat-prompt]')
@@ -739,6 +756,10 @@ export default function AdventureGame() {
     );
   };
   const back = () => {
+    if (mode === 'workshop') {
+      go('dialogue', rocketChapter(p.adventure.rounds.rocket).line);
+      return;
+    }
     if (mode === 'visiting') {
       visitSurface.current
         ?.querySelector<HTMLButtonElement>('[data-visit-back]')
@@ -810,6 +831,7 @@ export default function AdventureGame() {
         mode === 'rover' ||
         mode === 'observatory' ||
         mode === 'visiting' ||
+        mode === 'workshop' ||
         mode === 'tutorial' ||
         mode === 'flight'
       ) {
@@ -824,6 +846,12 @@ export default function AdventureGame() {
       return;
     }
     if (action === 'map') {
+      if (mode === 'workshop') {
+        workshopSurface.current
+          ?.querySelector<HTMLButtonElement>('[data-game-undo]:not(:disabled)')
+          ?.click();
+        return;
+      }
       if (mode === 'visiting') {
         visitSurface.current
           ?.querySelector<HTMLButtonElement>('[data-game-undo]:not(:disabled)')
@@ -858,19 +886,21 @@ export default function AdventureGame() {
       return;
     }
     const base =
-      mode === 'visiting'
-        ? visitSurface.current
-        : mode === 'observatory'
-          ? observatorySurface.current
-          : mode === 'rover'
-            ? roverSurface.current
-            : mode === 'scrapbook'
-              ? bookSurface.current
-              : mode === 'mission'
-                ? missionSurface.current
-                : modal
-                  ? modalSurface.current
-                  : surface.current;
+      mode === 'workshop'
+        ? workshopSurface.current
+        : mode === 'visiting'
+          ? visitSurface.current
+          : mode === 'observatory'
+            ? observatorySurface.current
+            : mode === 'rover'
+              ? roverSurface.current
+              : mode === 'scrapbook'
+                ? bookSurface.current
+                : mode === 'mission'
+                  ? missionSurface.current
+                  : modal
+                    ? modalSurface.current
+                    : surface.current;
     const root =
       base?.querySelector<HTMLElement>('[data-choice-scope]') ?? base;
     if (!root) return;
@@ -949,7 +979,8 @@ export default function AdventureGame() {
         mode !== 'flight' &&
         mode !== 'rover' &&
         mode !== 'observatory' &&
-        mode !== 'visiting',
+        mode !== 'visiting' &&
+        mode !== 'workshop',
       roverTarget: roverGuiding ? roverDestination : null,
       discoveryTarget,
       deliveryTarget: deliveryGuiding,
@@ -1422,6 +1453,33 @@ export default function AdventureGame() {
             <button onClick={() => location.reload()}>Try again</button>
           </div>
         )}
+        {workshopOpen && ['workshop', 'parents', 'pause'].includes(mode) && (
+          <section
+            ref={workshopSurface}
+            className="activity-screen workshop-activity"
+            hidden={mode !== 'workshop'}
+            aria-label="Pip’s track workshop"
+          >
+            <div className="activity-topbar">
+              <button className="back-control" onClick={back}>
+                <b className="pad-key b-key">B</b> Back
+              </button>
+              <span>MAKE SOMETHING TOGETHER</span>
+              <span className="activity-wallet">⭐ {p.adventure.wallet}</span>
+            </div>
+            <TrackWorkshop
+              progress={p}
+              active={mode === 'workshop'}
+              audio={audio}
+              onComplete={(round, turns) => {
+                if (finishTrack(p, round, turns) === p) return false;
+                setP((old) => finishTrack(old, round, turns));
+                return true;
+              }}
+              onBack={back}
+            />
+          </section>
+        )}
         {visitsOpen && ['visiting', 'parents', 'pause'].includes(mode) && (
           <section
             ref={visitSurface}
@@ -1580,13 +1638,15 @@ export default function AdventureGame() {
             }
             finalFocus={() => {
               const target =
-                mode === 'visiting'
-                  ? visitSurface.current
-                  : mode === 'observatory'
-                    ? observatorySurface.current
-                    : mode === 'mission'
-                      ? missionSurface.current
-                      : surface.current;
+                mode === 'workshop'
+                  ? workshopSurface.current
+                  : mode === 'visiting'
+                    ? visitSurface.current
+                    : mode === 'observatory'
+                      ? observatorySurface.current
+                      : mode === 'mission'
+                        ? missionSurface.current
+                        : surface.current;
               return (
                 target?.querySelector<HTMLElement>(
                   '[data-game-autofocus]:not(:disabled)',
@@ -1977,6 +2037,15 @@ export default function AdventureGame() {
                         🚀 Fly home
                       </button>
                     )}
+                    {place === 'rocket' && p.adventure.rounds.rocket >= 1 && (
+                      <button
+                        {...CHOICE}
+                        className="observatory-open"
+                        onClick={() => go('workshop')}
+                      >
+                        <RotateCw /> Build a rover road
+                      </button>
+                    )}
                     {place === 'rocket' &&
                       rocketParts(p) === 3 &&
                       deliveryThanks !== place && (
@@ -2022,6 +2091,7 @@ export default function AdventureGame() {
         {mode !== 'parents' &&
           mode !== 'observatory' &&
           mode !== 'visiting' &&
+          mode !== 'workshop' &&
           mode !== 'rover' &&
           !(mode === 'explore' && position.driving) &&
           mode !== 'flight' &&

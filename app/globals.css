@@ -20,6 +20,7 @@
 @import './observatory.css';
 @import './home-visits.css';
 @import './flower-garden.css';
+@import './track-workshop.css';
 @custom-variant dark (&:is(.dark *));
 @theme inline {
   --color-background: var(--background);

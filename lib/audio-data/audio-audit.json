@@ -6127,6 +6127,72 @@
       "leadingSilenceMs": 48,
       "trailingSilenceMs": 104,
       "warnings": []
+    },
+    "workshop-intro": {
+      "sha256": "5b17d2709ca93867d22e7a09d7022cadeed8ddcbb20f6ca99d85d90ae439bec3",
+      "seconds": 7.211,
+      "sampleRate": 24000,
+      "channels": 1,
+      "peakDbfs": -3.9,
+      "activeRmsDbfs": -26.5,
+      "leadingSilenceMs": 82,
+      "trailingSilenceMs": 132,
+      "warnings": []
+    },
+    "workshop-help": {
+      "sha256": "36ca6f0a92e3390ec96456f71f3685ad586dde9cdf9b74770e58bdb06fe0ce03",
+      "seconds": 8.32,
+      "sampleRate": 24000,
+      "channels": 1,
+      "peakDbfs": -3.4,
+      "activeRmsDbfs": -22.2,
+      "leadingSilenceMs": 44,
+      "trailingSilenceMs": 120,
+      "warnings": []
+    },
+    "workshop-try": {
+      "sha256": "d4139869469c42abcc22191aa7193d0767d6aa8f2181390a36c16e8ac79a5914",
+      "seconds": 5.013,
+      "sampleRate": 24000,
+      "channels": 1,
+      "peakDbfs": -3.1,
+      "activeRmsDbfs": -23.7,
+      "leadingSilenceMs": 45,
+      "trailingSilenceMs": 105,
+      "warnings": []
+    },
+    "workshop-ready": {
+      "sha256": "6a8112890a6e1f4d56311553878a96f336142433616c9d9d1df782a4636fd4d7",
+      "seconds": 3.52,
+      "sampleRate": 24000,
+      "channels": 1,
+      "peakDbfs": -3.6,
+      "activeRmsDbfs": -21.5,
+      "leadingSilenceMs": 64,
+      "trailingSilenceMs": 73,
+      "warnings": []
+    },
+    "workshop-drive": {
+      "sha256": "04e210ccae16a03117fa250e6f334028238b6e9b4d07fce8a872b0dae3f7297d",
+      "seconds": 3.755,
+      "sampleRate": 24000,
+      "channels": 1,
+      "peakDbfs": -4.0,
+      "activeRmsDbfs": -23.6,
+      "leadingSilenceMs": 58,
+      "trailingSilenceMs": 77,
+      "warnings": []
+    },
+    "workshop-success": {
+      "sha256": "4cda492a6962b0eef2541328af84c80a8d4371d28bef8eb9ca80395cabc779f3",
+      "seconds": 4.139,
+      "sampleRate": 24000,
+      "channels": 1,
+      "peakDbfs": -1.4,
+      "activeRmsDbfs": -23.0,
+      "leadingSilenceMs": 40,
+      "trailingSilenceMs": 156,
+      "warnings": []
     }
   },
   "phonemes": {

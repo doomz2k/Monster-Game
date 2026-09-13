@@ -9,21 +9,25 @@ export function NeighbourPortrait({
   id,
   talking = false,
   isTalking,
+  active = true,
 }: {
   id: PlaceId;
   talking?: boolean;
   isTalking?: () => boolean;
+  active?: boolean;
 }) {
   const { reducedMotion: reduced, preferences } = useGamePreferences();
   const tier =
     preferences.graphics === 'auto' ? 'balanced' : preferences.graphics;
   const host = useRef<HTMLDivElement>(null),
     speech = useRef(talking),
-    speechState = useRef(isTalking);
+    speechState = useRef(isTalking),
+    playing = useRef(active);
   useEffect(() => {
     speech.current = talking;
     speechState.current = isTalking;
-  }, [talking, isTalking]);
+    playing.current = active;
+  }, [talking, isTalking, active]);
   useEffect(() => {
     if (!host.current) return;
     const scene = new THREE.Scene(),
@@ -32,7 +36,10 @@ export function NeighbourPortrait({
     camera.lookAt(0, 1.3, 0);
     let renderer: THREE.WebGLRenderer;
     try {
-      renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+      renderer = new THREE.WebGLRenderer({
+        alpha: true,
+        antialias: tier !== 'simple',
+      });
     } catch {
       return;
     }
@@ -46,10 +53,17 @@ export function NeighbourPortrait({
     light.position.set(-3, 4, 5);
     scene.add(light);
     let frame = 0,
+      drawable = false,
       lastFrame = -1000;
     const draw = (t: number) => {
       if (!reduced) frame = requestAnimationFrame(draw);
-      if (document.hidden || (t !== 0 && t - lastFrame < 1000 / 30)) return;
+      if (
+        !drawable ||
+        !playing.current ||
+        document.hidden ||
+        (t !== 0 && t - lastFrame < 1000 / 30)
+      )
+        return;
       lastFrame = t;
       rig.animate(
         t / 1000,
@@ -61,7 +75,8 @@ export function NeighbourPortrait({
     };
     const resize = new ResizeObserver(([e]) => {
       const { width, height } = e.contentRect;
-      if (!width || !height) return;
+      drawable = width > 0 && height > 0;
+      if (!drawable) return;
       renderer.setPixelRatio(
         graphicsPixelRatio(tier, width, height, devicePixelRatio),
       );

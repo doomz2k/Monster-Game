@@ -2226,5 +2226,29 @@
   "flower-garden-full": {
     "voice": "tilly",
     "text": "Your seed is ready, and your garden is full. You can keep your seed for later, or choose Make space when you want a new place to plant it."
+  },
+  "workshop-intro": {
+    "voice": "pip",
+    "text": "Let's make a little road for our rover. Choose a bright track. Green A turns it. Join the arrow to the flag, then try our rover."
+  },
+  "workshop-help": {
+    "voice": "pip",
+    "text": "The golden dotted line shows how this piece needs to go. Choose that track and press green A to turn it. X takes one turn back. Take your time."
+  },
+  "workshop-try": {
+    "voice": "pip",
+    "text": "There is a little gap. Try turning the glowing track, then we can test our rover again."
+  },
+  "workshop-ready": {
+    "voice": "pip",
+    "text": "The road joins up! Press green A to try our rover."
+  },
+  "workshop-drive": {
+    "voice": "pip",
+    "text": "Off we go! Follow our little rover all the way to the flag."
+  },
+  "workshop-success": {
+    "voice": "pip",
+    "text": "All the way home! Two stars for our little road. Shall we make another?"
   }
 }

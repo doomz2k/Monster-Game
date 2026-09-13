@@ -556,7 +556,13 @@
     "flower-starlight-daisy": "/audio/voices/flower-starlight-daisy-5737896109c4c9ac.ogg",
     "flower-twilight-sunflower": "/audio/voices/flower-twilight-sunflower-ee2a341e71dc3920.ogg",
     "flower-moonlight-tulip": "/audio/voices/flower-moonlight-tulip-f55b4c31b526705e.ogg",
-    "flower-garden-full": "/audio/voices/flower-garden-full-9cf462428cad751d.ogg"
+    "flower-garden-full": "/audio/voices/flower-garden-full-9cf462428cad751d.ogg",
+    "workshop-intro": "/audio/voices/workshop-intro-b85b4af0268345a9.ogg",
+    "workshop-help": "/audio/voices/workshop-help-b6fa85498b645bf5.ogg",
+    "workshop-try": "/audio/voices/workshop-try-86d181e81f78de9b.ogg",
+    "workshop-ready": "/audio/voices/workshop-ready-c22375e95214aee2.ogg",
+    "workshop-drive": "/audio/voices/workshop-drive-7ef37ac958fa0549.ogg",
+    "workshop-success": "/audio/voices/workshop-success-c383aca471086405.ogg"
   },
   "phonemes": {
     "m": {
