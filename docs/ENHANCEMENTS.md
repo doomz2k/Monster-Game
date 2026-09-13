@@ -94,3 +94,5 @@ The next checkpoint, [DISCOVERIES-AND-FRIENDS.md](DISCOVERIES-AND-FRIENDS.md), a
 [PRACTICE-RECORD.md](PRACTICE-RECORD.md) adds a Start-only, device-local practice summary based on actual question answers (47), including per-topping arithmetic, first/retried results, example replays and explicit adult-prompt labels. Bounded, persistent observations provide groundwork for 17/18 without changing learning levels or claiming assessment results.
 
 [PRACTICE-SUPPORT.md](PRACTICE-SUPPORT.md) uses those observations to remember familiar activity examples (9), restore help after retries and revisit occasional addition/subtraction facts after intervening play (18). Saved parent overrides preserve control, and phonics modelling remains explicit.
+
+[OBSERVATORY.md](OBSERVATORY.md) opens Nova's planet viewer and eight-stamp collection (42/39), with a narrated orbit model and a proportional Earth comparison (43). Shared procedural planet surfaces also improve the existing Moon questions (4), with responsive layouts, reduced motion and bounded rendering.

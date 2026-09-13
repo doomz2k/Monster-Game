@@ -17,6 +17,7 @@ import {
   BookOpen,
   Heart,
   Droplets,
+  Telescope,
 } from 'lucide-react';
 import {
   Dialog,
@@ -37,6 +38,8 @@ import { RocketFlight } from './rocket-flight';
 import { RocketProgress } from './rocket-progress';
 import { RoverPicture } from './rover-picture';
 import { RoverSurvey } from './rover-survey';
+import { Observatory } from './observatory';
+import { observePlanet } from '@/lib/observatory';
 import {
   ROVER_STOPS,
   finishRoverSurvey,
@@ -113,6 +116,7 @@ type Mode =
   | 'shop'
   | 'flight'
   | 'rover'
+  | 'observatory'
   | 'scrapbook';
 const CHOICE = { 'data-game-choice': true };
 export default function AdventureGame() {
@@ -123,6 +127,7 @@ export default function AdventureGame() {
     missionSurface = useRef<HTMLDivElement>(null),
     bookSurface = useRef<HTMLDivElement>(null),
     roverSurface = useRef<HTMLElement>(null),
+    observatorySurface = useRef<HTMLElement>(null),
     world = useRef<MonsterWorld | null>(null),
     input = useRef<GameInput | null>(null),
     actionRef = useRef<(action: Action) => void>(() => {});
@@ -186,6 +191,7 @@ export default function AdventureGame() {
   const [deliveryThanks, setDeliveryThanks] = useState<PlaceId | null>(null);
   const [deliveryGuiding, setDeliveryGuiding] = useState(true);
   const [roverTask, setRoverTask] = useState<RoverTask | null>(null);
+  const [observatoryOpen, setObservatoryOpen] = useState(false);
   const [roverTarget, setRoverTarget] = useState<RoverStopId | null>(null);
   const [roverGuiding, setRoverGuiding] = useState(false);
   const [graphicsSnapshot, setGraphicsSnapshot] = useState<GraphicsSnapshot>();
@@ -259,6 +265,7 @@ export default function AdventureGame() {
     'flight',
     'mission',
     'rover',
+    'observatory',
     'scrapbook',
   ].includes(mode);
   const change = (next: ProgressData) => setP(next);
@@ -272,6 +279,8 @@ export default function AdventureGame() {
     void audio.line(id);
   };
   const go = (next: Mode, line?: string) => {
+    if (next === 'observatory') setObservatoryOpen(true);
+    else if (!['pause', 'parents'].includes(next)) setObservatoryOpen(false);
     if (next === 'welcome' || next === 'creator') world.current?.exitRover();
     if (['welcome', 'explore', 'creator', 'map'].includes(next))
       setFlightRunning(false);
@@ -374,15 +383,17 @@ export default function AdventureGame() {
     if (mode === 'explore' || mode === 'parents' || mode === 'flight') return;
     const frame = requestAnimationFrame(() => {
       const root =
-        mode === 'rover'
-          ? roverSurface.current
-          : mode === 'scrapbook'
-            ? bookSurface.current
-            : mode === 'mission'
-              ? missionSurface.current
-              : modal
-                ? modalSurface.current
-                : surface.current;
+        mode === 'observatory'
+          ? observatorySurface.current
+          : mode === 'rover'
+            ? roverSurface.current
+            : mode === 'scrapbook'
+              ? bookSurface.current
+              : mode === 'mission'
+                ? missionSurface.current
+                : modal
+                  ? modalSurface.current
+                  : surface.current;
       (
         root?.querySelector<HTMLElement>(
           '[data-game-autofocus]:not(:disabled)',
@@ -629,6 +640,12 @@ export default function AdventureGame() {
     return true;
   };
   const repeat = () => {
+    if (mode === 'observatory') {
+      observatorySurface.current
+        ?.querySelector<HTMLButtonElement>('[data-repeat-prompt]')
+        ?.click();
+      return;
+    }
     if (mode === 'home' || mode === 'shop') {
       modalSurface.current
         ?.querySelector<HTMLButtonElement>('[data-repeat-prompt]')
@@ -704,6 +721,10 @@ export default function AdventureGame() {
     );
   };
   const back = () => {
+    if (mode === 'observatory') {
+      go('dialogue', 'nova-hello');
+      return;
+    }
     if (mode === 'explore' && position.driving) {
       world.current?.exitRover();
       say('rover-exit');
@@ -763,6 +784,7 @@ export default function AdventureGame() {
         mode === 'explore' ||
         mode === 'mission' ||
         mode === 'rover' ||
+        mode === 'observatory' ||
         mode === 'tutorial' ||
         mode === 'flight'
       ) {
@@ -777,6 +799,12 @@ export default function AdventureGame() {
       return;
     }
     if (action === 'map') {
+      if (mode === 'observatory') {
+        observatorySurface.current
+          ?.querySelector<HTMLButtonElement>('[data-observatory-switch]')
+          ?.click();
+        return;
+      }
       if (mode === 'mission')
         missionSurface.current
           ?.querySelector<HTMLButtonElement>('[data-game-undo]')
@@ -799,15 +827,17 @@ export default function AdventureGame() {
       return;
     }
     const base =
-      mode === 'rover'
-        ? roverSurface.current
-        : mode === 'scrapbook'
-          ? bookSurface.current
-          : mode === 'mission'
-            ? missionSurface.current
-            : modal
-              ? modalSurface.current
-              : surface.current;
+      mode === 'observatory'
+        ? observatorySurface.current
+        : mode === 'rover'
+          ? roverSurface.current
+          : mode === 'scrapbook'
+            ? bookSurface.current
+            : mode === 'mission'
+              ? missionSurface.current
+              : modal
+                ? modalSurface.current
+                : surface.current;
     const root =
       base?.querySelector<HTMLElement>('[data-choice-scope]') ?? base;
     if (!root) return;
@@ -884,7 +914,8 @@ export default function AdventureGame() {
         mode !== 'dialogue' &&
         mode !== 'home' &&
         mode !== 'flight' &&
-        mode !== 'rover',
+        mode !== 'rover' &&
+        mode !== 'observatory',
       roverTarget: roverGuiding ? roverDestination : null,
       discoveryTarget,
       deliveryTarget: deliveryGuiding,
@@ -1357,6 +1388,30 @@ export default function AdventureGame() {
             <button onClick={() => location.reload()}>Try again</button>
           </div>
         )}
+        {observatoryOpen &&
+          ['observatory', 'parents', 'pause'].includes(mode) && (
+            <section
+              ref={observatorySurface}
+              className="activity-screen observatory-activity"
+              hidden={mode !== 'observatory'}
+              aria-label="Nova’s observatory"
+            >
+              <div className="activity-topbar">
+                <button className="back-control" onClick={back}>
+                  <b className="pad-key b-key">B</b> Back
+                </button>
+                <span>MOON EXPLORERS</span>
+                <span className="activity-wallet">⭐ {p.adventure.wallet}</span>
+              </div>
+              <Observatory
+                collection={p.adventure.planets}
+                active={mode === 'observatory'}
+                audio={audio}
+                onObserve={(id) => setP((old) => observePlanet(old, id))}
+                onBack={back}
+              />
+            </section>
+          )}
         {roverTask && ['rover', 'pause', 'parents'].includes(mode) && (
           <section
             ref={roverSurface}
@@ -1458,14 +1513,23 @@ export default function AdventureGame() {
                         ? 'home-dialog shop-dialog'
                         : '')
             }
-            finalFocus={() =>
-              (mode === 'mission'
-                ? missionSurface.current
-                : surface.current
-              )?.querySelector<HTMLElement>(
-                '[data-game-choice]:not(:disabled)',
-              ) ?? false
-            }
+            finalFocus={() => {
+              const target =
+                mode === 'observatory'
+                  ? observatorySurface.current
+                  : mode === 'mission'
+                    ? missionSurface.current
+                    : surface.current;
+              return (
+                target?.querySelector<HTMLElement>(
+                  '[data-game-autofocus]:not(:disabled)',
+                ) ??
+                target?.querySelector<HTMLElement>(
+                  '[data-game-choice]:not(:disabled)',
+                ) ??
+                false
+              );
+            }}
             initialFocus={() =>
               modalSurface.current?.querySelector<HTMLElement>(
                 '[data-game-choice]:not(:disabled)',
@@ -1554,6 +1618,19 @@ export default function AdventureGame() {
                     ))}
                   </div>
                   <div className="map-bottom-links">
+                    {p.adventure.region === 'moon' && (
+                      <button
+                        {...CHOICE}
+                        className="observatory-open"
+                        onClick={() => {
+                          setPlace('moon');
+                          go('observatory');
+                        }}
+                      >
+                        <Telescope /> Observatory{' '}
+                        <span>{p.adventure.planets.length} / 8</span>
+                      </button>
+                    )}
                     {p.adventure.wish && p.adventure.region === 'island' && (
                       <button
                         {...CHOICE}
@@ -1818,6 +1895,15 @@ export default function AdventureGame() {
                     {place === 'moon' && (
                       <button
                         {...CHOICE}
+                        className="observatory-open"
+                        onClick={() => go('observatory')}
+                      >
+                        <Telescope /> Look through my telescope
+                      </button>
+                    )}
+                    {place === 'moon' && (
+                      <button
+                        {...CHOICE}
                         className="home-flight-button"
                         onClick={() => launch('island')}
                       >
@@ -1865,6 +1951,7 @@ export default function AdventureGame() {
           </output>
         )}
         {mode !== 'parents' &&
+          mode !== 'observatory' &&
           mode !== 'rover' &&
           !(mode === 'explore' && position.driving) &&
           mode !== 'flight' &&

@@ -1,0 +1,460 @@
+.observatory-activity {
+  background: #e9e4f3;
+}
+.observatory {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: min(1440px, 100%);
+  margin: 0 auto;
+  padding: 8px 28px 20px;
+  color: #393c59;
+}
+.observatory-heading {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+}
+.observatory-heading small {
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  font-weight: 900;
+  color: #6e6991;
+}
+.observatory-heading h1 {
+  font-size: clamp(25px, 3vw, 38px);
+  margin: 0;
+}
+.observatory-heading .round-control {
+  margin-left: auto;
+  display: flex;
+  gap: 8px;
+}
+.planet-collection {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-radius: 16px;
+  background: #fff4d6;
+  padding: 10px 15px;
+  color: #826320;
+}
+.observatory-workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 1.45fr) minmax(310px, 1fr);
+  flex: 1;
+  min-height: 0;
+  gap: 20px;
+}
+.observatory-window {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  border: 8px solid #cec2a6;
+  border-radius: 40px;
+  background: radial-gradient(ellipse at 40% 30%, #253c61, #101e37 65%);
+  box-shadow:
+    inset 0 0 0 3px #ac9878,
+    0 9px 0 #bab09f;
+  overflow: hidden;
+}
+.observatory-stage {
+  margin: 0;
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+}
+.observatory-stage canvas {
+  display: block;
+  position: absolute;
+  inset: 0;
+}
+.telescope-reticle {
+  position: absolute;
+  pointer-events: none;
+  width: 72%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 1px solid #b6d1ed30;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow:
+    0 0 0 10px #e6e1c208,
+    0 0 0 12px #e6e1c219;
+}
+.telescope-reticle::before,
+.telescope-reticle::after {
+  content: '';
+  position: absolute;
+  background: #e8efd16b;
+  top: 50%;
+  left: -9px;
+  width: 18px;
+  height: 2px;
+}
+.telescope-reticle::after {
+  left: auto;
+  right: -9px;
+}
+.observatory-view-note {
+  text-align: center;
+  padding: 10px 18px 14px;
+  color: #cbd9eb;
+  font-size: 13px;
+  line-height: 1.35;
+}
+.comparison-names {
+  position: absolute;
+  display: flex;
+  justify-content: space-around;
+  bottom: 14%;
+  left: 0;
+  right: 0;
+  color: #f2f1e5;
+  font-weight: 800;
+  font-size: 18px;
+}
+.observatory-fallback {
+  position: absolute;
+  inset: 12%;
+  display: grid;
+  place-items: center;
+}
+.observatory-fallback .planet-picture {
+  width: 70%;
+  height: 100%;
+  max-width: none;
+}
+.fallback-comparison {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+}
+.fallback-comparison > div {
+  width: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.fallback-comparison span {
+  display: block;
+}
+.fallback-comparison .planet-picture {
+  width: 100%;
+  height: auto;
+}
+.fallback-planets {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  color: white;
+  font-size: 11px;
+  text-align: center;
+}
+.fallback-planets .planet-picture {
+  width: 100%;
+  height: auto;
+}
+.fallback-planets span {
+  display: block;
+}
+.observatory-controls {
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  justify-content: center;
+}
+.planet-targets {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 9px;
+}
+.planet-targets button {
+  position: relative;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 2px solid #c8c2d7;
+  border-radius: 19px;
+  background: #f9f5ef;
+  padding: 3px 2px 9px;
+  font-weight: 800;
+  font-size: 13px;
+}
+.planet-targets button[aria-pressed='true'] {
+  border-color: #746399;
+  background: #e4dcf3;
+  box-shadow: 0 0 0 3px #fff7d0;
+}
+.planet-picture {
+  width: 100%;
+  max-width: 100px;
+  height: 76px;
+  flex-shrink: 0;
+}
+.planet-stamp {
+  width: 17px;
+  height: 17px;
+  border-radius: 50%;
+  background: #5e8966;
+  color: white;
+  position: absolute;
+  right: 3px;
+  top: 4px;
+  padding: 2px;
+}
+.planet-fact {
+  border-radius: 23px;
+  padding: 18px 20px;
+  background: #fffaf1;
+  border: 2px solid #d8ceb9;
+  min-height: 144px;
+}
+.planet-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.planet-title h2 {
+  font-size: 27px;
+  margin: 0;
+}
+.planet-title > span {
+  font-size: 12px;
+  color: #6b677b;
+}
+.planet-title b {
+  display: inline-grid;
+  place-items: center;
+  width: 25px;
+  height: 25px;
+  background: #e9dff4;
+  border-radius: 50%;
+  font-size: 15px;
+}
+.planet-fact p {
+  font-size: 18px;
+  line-height: 1.35;
+  margin: 10px 0;
+}
+.planet-stamp-line {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 14px;
+  font-weight: 800;
+  color: #4b7958;
+}
+.planet-stamp-line > svg {
+  width: 21px;
+}
+.planet-seen {
+  border-color: #a5c1a2;
+}
+.observatory-footer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 5px;
+}
+.observatory-views {
+  display: flex;
+  gap: 8px;
+  flex: 1;
+}
+.observatory-views button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-weight: 800;
+  font-size: 15px;
+  padding: 13px 16px;
+  border-radius: 17px;
+  border: 2px solid #c4bbd4;
+  background: #f7f3eb;
+}
+.observatory-views button[aria-pressed='true'] {
+  color: #fbf4e7;
+  background: #615584;
+  border-color: #615584;
+}
+.observatory-pad-note {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 800;
+}
+.observatory-pad-note .pad-key {
+  width: 26px;
+  height: 26px;
+  font-size: 14px;
+}
+.observatory-open {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 800;
+  border: 2px solid #aaa2c6;
+  background: #eee7f9;
+  color: #594e78;
+  padding: 12px 17px;
+  border-radius: 17px;
+}
+@media (max-width: 740px) and (min-height: 651px) {
+  .observatory .planet-targets {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 6px;
+  }
+  .observatory .planet-targets .planet-picture {
+    height: 52px;
+  }
+  .observatory .planet-targets button {
+    font-size: 12px;
+    min-height: 68px;
+  }
+}
+[data-contrast='high'] .observatory-view-note {
+  color: white;
+}
+[data-contrast='high'] .planet-targets button {
+  border-color: #514360;
+}
+@media (max-height: 620px) {
+  .observatory {
+    gap: 8px;
+    padding: 0 20px 12px;
+  }
+  .observatory-workspace {
+    gap: 14px;
+    grid-template-columns: minmax(0, 1.5fr) minmax(320px, 1fr);
+  }
+  .observatory-heading h1 {
+    font-size: 26px;
+  }
+  .planet-collection {
+    padding: 7px 11px;
+  }
+  .planet-picture {
+    height: 56px;
+  }
+  .planet-targets {
+    gap: 6px;
+  }
+  .planet-targets button {
+    padding: 0 0 5px;
+    font-size: 12px;
+    border-radius: 13px;
+  }
+  .planet-fact {
+    padding: 10px 14px;
+    min-height: 115px;
+  }
+  .planet-title h2 {
+    font-size: 23px;
+  }
+  .planet-fact p {
+    font-size: 16px;
+    margin: 6px 0;
+  }
+  .planet-stamp-line {
+    font-size: 12px;
+  }
+  .observatory-views button {
+    padding: 8px 11px;
+    font-size: 13px;
+  }
+  .observatory-pad-note {
+    font-size: 11px;
+    gap: 5px;
+  }
+  .observatory-view-note {
+    font-size: 11px;
+    padding: 7px 12px;
+  }
+}
+@media (max-width: 740px) {
+  .observatory {
+    padding: 0 12px 12px;
+  }
+  .observatory-workspace {
+    grid-template-columns: 1fr;
+    grid-template-rows: minmax(140px, 1fr) auto;
+    gap: 10px;
+  }
+  .observatory-controls {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+  .planet-targets {
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+    gap: 3px;
+  }
+  .planet-targets .planet-picture {
+    height: 38px;
+  }
+  .planet-targets button {
+    font-size: 9px;
+    padding-bottom: 5px;
+    border-radius: 9px;
+  }
+  .planet-fact {
+    min-height: 0;
+    padding: 8px 12px;
+  }
+  .planet-title h2 {
+    font-size: 20px;
+  }
+  .planet-fact p {
+    font-size: 14px;
+    margin: 4px 0;
+  }
+  .observatory-heading {
+    gap: 10px;
+  }
+  .observatory-heading h1 {
+    font-size: 25px;
+  }
+  .observatory-heading small {
+    font-size: 9px;
+  }
+  .planet-collection {
+    font-size: 12px;
+    padding: 6px;
+    gap: 3px;
+  }
+  .observatory-views {
+    gap: 4px;
+  }
+  .observatory-views button {
+    padding: 8px;
+    font-size: 11px;
+    gap: 4px;
+  }
+  .observatory-views svg {
+    width: 16px;
+  }
+  .observatory-pad-note {
+    display: none;
+  }
+  .observatory-footer > .back-control {
+    font-size: 0;
+  }
+  .observatory-view-note {
+    font-size: 10px;
+    padding: 5px 10px;
+  }
+  .comparison-names {
+    bottom: 7%;
+    font-size: 14px;
+  }
+}

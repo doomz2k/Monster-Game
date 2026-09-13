@@ -2523,5 +2523,65 @@
     "path": "/audio/voices/puddle-hop-03c2624e05d81b9b.ogg",
     "voice": "bf_emma",
     "text": "A puddle! Press the green button to hop in. Splish, splash!"
+  },
+  "observatory-intro": {
+    "path": "/audio/voices/observatory-intro-dc1a37e04af1ea66.ogg",
+    "voice": "bf_isabella",
+    "text": "Welcome to my observatory. Move between the planet pictures. Press green A to look closer and listen. You get a star the first time you look at each planet."
+  },
+  "observatory-telescope": {
+    "path": "/audio/voices/observatory-telescope-7486deed7a8cc4e4.ogg",
+    "voice": "bf_isabella",
+    "text": "Our planet viewer brings faraway worlds close enough to see. Choose a picture and press green A."
+  },
+  "observatory-orbits": {
+    "path": "/audio/voices/observatory-orbits-4ebcacccb6db8354.ogg",
+    "voice": "bf_isabella",
+    "text": "This little model shows eight planets going around the Sun. I've squeezed the spaces and changed the sizes and speeds so they fit. Choose a planet and follow its golden circle."
+  },
+  "observatory-sizes": {
+    "path": "/audio/voices/observatory-sizes-70ce512d1f9e9d4d.ogg",
+    "voice": "bf_isabella",
+    "text": "Let's compare planets. Earth is on the left. Your chosen planet is on the right. We use the same ruler for both. A planet's width doesn't include its rings."
+  },
+  "observatory-fact-mercury": {
+    "path": "/audio/voices/observatory-fact-mercury-bc1db3fa60ac16ff.ogg",
+    "voice": "bf_isabella",
+    "text": "Mercury. The smallest planet, and the nearest planet to the Sun. It's first in our line of planets."
+  },
+  "observatory-fact-venus": {
+    "path": "/audio/voices/observatory-fact-venus-24b79aff469d81f9.ogg",
+    "voice": "bf_isabella",
+    "text": "Venus. Second from the Sun. It's almost as wide as Earth."
+  },
+  "observatory-fact-earth": {
+    "path": "/audio/voices/observatory-fact-earth-5917bc2b9082b975.ogg",
+    "voice": "bf_isabella",
+    "text": "Earth. Our home planet. It's third from the Sun. That's where our island is!"
+  },
+  "observatory-fact-mars": {
+    "path": "/audio/voices/observatory-fact-mars-d60b80842f971d24.ogg",
+    "voice": "bf_isabella",
+    "text": "Mars. The red planet. It's fourth from the Sun, and about half as wide as Earth."
+  },
+  "observatory-fact-jupiter": {
+    "path": "/audio/voices/observatory-fact-jupiter-a5669f24a6c932f2.ogg",
+    "voice": "bf_isabella",
+    "text": "Jupiter. Fifth from the Sun, and the biggest planet. It's about eleven Earths across!"
+  },
+  "observatory-fact-saturn": {
+    "path": "/audio/voices/observatory-fact-saturn-eaa5672266ae3a7c.ogg",
+    "voice": "bf_isabella",
+    "text": "Saturn. Sixth from the Sun. Its beautiful rings are made of pieces of ice and rock."
+  },
+  "observatory-fact-uranus": {
+    "path": "/audio/voices/observatory-fact-uranus-03d8ed5ec4aea721.ogg",
+    "voice": "bf_isabella",
+    "text": "Uranus. Seventh from the Sun. It's about four Earths across."
+  },
+  "observatory-fact-neptune": {
+    "path": "/audio/voices/observatory-fact-neptune-77bdba8dee889558.ogg",
+    "voice": "bf_isabella",
+    "text": "Neptune. Eighth from the Sun. It's the farthest of our eight planets from the Sun."
   }
 }

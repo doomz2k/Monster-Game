@@ -5555,6 +5555,138 @@
       "leadingSilenceMs": 37,
       "trailingSilenceMs": 59,
       "warnings": []
+    },
+    "observatory-intro": {
+      "sha256": "f2f8018cfae94a3e80ba86ec440a8fc094be2806678b9e600cccfc69be1cbc7a",
+      "seconds": 8.491,
+      "sampleRate": 24000,
+      "channels": 1,
+      "peakDbfs": -4.0,
+      "activeRmsDbfs": -20.1,
+      "leadingSilenceMs": 28,
+      "trailingSilenceMs": 68,
+      "warnings": []
+    },
+    "observatory-telescope": {
+      "sha256": "0db7192cc7c50afab8f424fa7e17be18a174071ed7b50eac37870f3684a2bc78",
+      "seconds": 5.12,
+      "sampleRate": 24000,
+      "channels": 1,
+      "peakDbfs": -3.8,
+      "activeRmsDbfs": -18.4,
+      "leadingSilenceMs": 46,
+      "trailingSilenceMs": 60,
+      "warnings": []
+    },
+    "observatory-orbits": {
+      "sha256": "6fc484c99a42382947bfd3e12391a9a44df6c67e7e019e8a2866c7252ea86f1e",
+      "seconds": 9.579,
+      "sampleRate": 24000,
+      "channels": 1,
+      "peakDbfs": -3.7,
+      "activeRmsDbfs": -18.8,
+      "leadingSilenceMs": 31,
+      "trailingSilenceMs": 75,
+      "warnings": []
+    },
+    "observatory-sizes": {
+      "sha256": "f96384f3eddfbafb4ef16225001ff592b12fbb56325446d99b9c1de06001a9e1",
+      "seconds": 8.725,
+      "sampleRate": 24000,
+      "channels": 1,
+      "peakDbfs": -2.8,
+      "activeRmsDbfs": -18.1,
+      "leadingSilenceMs": 27,
+      "trailingSilenceMs": 58,
+      "warnings": []
+    },
+    "observatory-fact-mercury": {
+      "sha256": "6c82ba7896eb359803381b8e4136cd71daa362e0e536052fc1e365d0c629ef2c",
+      "seconds": 5.163,
+      "sampleRate": 24000,
+      "channels": 1,
+      "peakDbfs": -3.8,
+      "activeRmsDbfs": -17.7,
+      "leadingSilenceMs": 36,
+      "trailingSilenceMs": 53,
+      "warnings": []
+    },
+    "observatory-fact-venus": {
+      "sha256": "340d6fc174ddb61c1f20dcd74bd8c2005fb3919809ee714cd75dad93dbda8537",
+      "seconds": 3.285,
+      "sampleRate": 24000,
+      "channels": 1,
+      "peakDbfs": -3.6,
+      "activeRmsDbfs": -18.7,
+      "leadingSilenceMs": 25,
+      "trailingSilenceMs": 66,
+      "warnings": []
+    },
+    "observatory-fact-earth": {
+      "sha256": "d95082296422eda0ca7034578053bbbf3e9dfbffffd20a39bcd5b673c749188a",
+      "seconds": 3.947,
+      "sampleRate": 24000,
+      "channels": 1,
+      "peakDbfs": -3.7,
+      "activeRmsDbfs": -17.4,
+      "leadingSilenceMs": 24,
+      "trailingSilenceMs": 58,
+      "warnings": []
+    },
+    "observatory-fact-mars": {
+      "sha256": "1ff406b7098690baf69df8a6a66439dcd22855ed147f2eabc0203555fd54f96d",
+      "seconds": 4.203,
+      "sampleRate": 24000,
+      "channels": 1,
+      "peakDbfs": -3.8,
+      "activeRmsDbfs": -19.1,
+      "leadingSilenceMs": 30,
+      "trailingSilenceMs": 64,
+      "warnings": []
+    },
+    "observatory-fact-jupiter": {
+      "sha256": "7fb715b4af54b2972c40e4cddf5ebfe24c4f3eec1b9ccf1d5c3bb6a38fa99caf",
+      "seconds": 4.651,
+      "sampleRate": 24000,
+      "channels": 1,
+      "peakDbfs": -3.9,
+      "activeRmsDbfs": -19.3,
+      "leadingSilenceMs": 36,
+      "trailingSilenceMs": 66,
+      "warnings": []
+    },
+    "observatory-fact-saturn": {
+      "sha256": "e8eb3e0069a1cbfa1a0b7fa6bb5c66a2e34a2e6abd7f4d80c17b7f5ef7d5a666",
+      "seconds": 4.843,
+      "sampleRate": 24000,
+      "channels": 1,
+      "peakDbfs": -4.0,
+      "activeRmsDbfs": -19.2,
+      "leadingSilenceMs": 42,
+      "trailingSilenceMs": 64,
+      "warnings": []
+    },
+    "observatory-fact-uranus": {
+      "sha256": "74ba1a05b89d96b02e3de9857daa6071737557b6f11aa532acbd6a2ce72ce186",
+      "seconds": 3.563,
+      "sampleRate": 24000,
+      "channels": 1,
+      "peakDbfs": -3.7,
+      "activeRmsDbfs": -19.1,
+      "leadingSilenceMs": 29,
+      "trailingSilenceMs": 48,
+      "warnings": []
+    },
+    "observatory-fact-neptune": {
+      "sha256": "ceacbbcfcf3387ccacaa9d677922e8d661cc32fe6ba052dcc2218022f2d6cfd7",
+      "seconds": 4.331,
+      "sampleRate": 24000,
+      "channels": 1,
+      "peakDbfs": -3.8,
+      "activeRmsDbfs": -18.6,
+      "leadingSilenceMs": 27,
+      "trailingSilenceMs": 82,
+      "warnings": []
     }
   },
   "phonemes": {

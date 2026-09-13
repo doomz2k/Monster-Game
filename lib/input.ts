@@ -47,6 +47,7 @@ export class GameInput {
       Space: 'confirm',
       Escape: 'back',
       KeyM: 'map',
+      KeyX: 'map',
       KeyY: 'listen',
       KeyP: 'pause',
       ArrowLeft: 'left',

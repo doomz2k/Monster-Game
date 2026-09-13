@@ -20,6 +20,7 @@ import { discoveryFor } from './discovery-catalogue';
 import { freshPantry, readPantry, type Pantry, type ProduceId } from './garden';
 import { spaceCard } from './space-learning';
 import { needsExample, reviewFact } from './practice-support';
+import { readPlanetCollection, type PlanetId } from './observatory';
 import {
   arithmeticFact,
   countQuantity,
@@ -155,6 +156,7 @@ export type AdventureProgress = {
   companion: CompanionId | null;
   wish: string | null;
   unlit: string[];
+  planets: PlanetId[];
 };
 export const SHOP_ITEMS = [
   {
@@ -333,6 +335,7 @@ export const freshAdventure = (legacyStars = 0): AdventureProgress => ({
   companion: 'sprig',
   wish: null,
   unlit: [],
+  planets: [],
 });
 const integer = (v: unknown, max = 100000) =>
   typeof v === 'number' && Number.isSafeInteger(v) && v >= 0
@@ -429,6 +432,7 @@ export function readAdventure(
   p.pantry = readPantry(v.pantry);
   p.deliveries = readDeliveries(v.deliveries, p.rounds.meadow);
   p.rover = readRoverProgress(v.rover, p.rounds.rocket >= 3);
+  p.planets = readPlanetCollection(v.planets, p.rounds.rocket >= 3);
   p.companion = readCompanion(v.companion, p);
   const unlit = v.unlit;
   p.unlit = Array.isArray(unlit)

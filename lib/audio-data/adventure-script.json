@@ -2018,5 +2018,53 @@
   "puddle-hop": {
     "voice": "narrator",
     "text": "A puddle! Press the green button to hop in. Splish, splash!"
+  },
+  "observatory-intro": {
+    "voice": "nova",
+    "text": "Welcome to my observatory. Move between the planet pictures. Press green A to look closer and listen. You get a star the first time you look at each planet."
+  },
+  "observatory-telescope": {
+    "voice": "nova",
+    "text": "Our planet viewer brings faraway worlds close enough to see. Choose a picture and press green A."
+  },
+  "observatory-orbits": {
+    "voice": "nova",
+    "text": "This little model shows eight planets going around the Sun. I've squeezed the spaces and changed the sizes and speeds so they fit. Choose a planet and follow its golden circle."
+  },
+  "observatory-sizes": {
+    "voice": "nova",
+    "text": "Let's compare planets. Earth is on the left. Your chosen planet is on the right. We use the same ruler for both. A planet's width doesn't include its rings."
+  },
+  "observatory-fact-mercury": {
+    "voice": "nova",
+    "text": "Mercury. The smallest planet, and the nearest planet to the Sun. It's first in our line of planets."
+  },
+  "observatory-fact-venus": {
+    "voice": "nova",
+    "text": "Venus. Second from the Sun. It's almost as wide as Earth."
+  },
+  "observatory-fact-earth": {
+    "voice": "nova",
+    "text": "Earth. Our home planet. It's third from the Sun. That's where our island is!"
+  },
+  "observatory-fact-mars": {
+    "voice": "nova",
+    "text": "Mars. The red planet. It's fourth from the Sun, and about half as wide as Earth."
+  },
+  "observatory-fact-jupiter": {
+    "voice": "nova",
+    "text": "Jupiter. Fifth from the Sun, and the biggest planet. It's about eleven Earths across!"
+  },
+  "observatory-fact-saturn": {
+    "voice": "nova",
+    "text": "Saturn. Sixth from the Sun. Its beautiful rings are made of pieces of ice and rock."
+  },
+  "observatory-fact-uranus": {
+    "voice": "nova",
+    "text": "Uranus. Seventh from the Sun. It's about four Earths across."
+  },
+  "observatory-fact-neptune": {
+    "voice": "nova",
+    "text": "Neptune. Eighth from the Sun. It's the farthest of our eight planets from the Sun."
   }
 }

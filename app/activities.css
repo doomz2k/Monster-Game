@@ -531,6 +531,7 @@
   box-shadow: 0 10px 25px #66648416;
 }
 .space-object {
+  position: relative;
   width: 100%;
   height: clamp(100px, 26vh, 240px);
   display: grid;
@@ -539,6 +540,8 @@
 }
 .space-object canvas {
   display: block;
+  position: absolute;
+  inset: 0;
 }
 .space-answers strong {
   font-size: clamp(17px, 2vw, 26px);
