@@ -8,6 +8,7 @@ import {
   type RoverSurvey as Survey,
 } from '@/lib/rover';
 import type { AudioDirector } from '@/lib/audio';
+import { roverPractice, type PracticeEvent } from '@/lib/practice';
 import { QuantityDial } from './quantity-dial';
 import { RoverPicture } from './rover-picture';
 
@@ -17,13 +18,15 @@ export function RoverSurvey({
   active,
   audio,
   onComplete,
+  onPractice,
   onBack,
 }: {
   survey: Survey;
   progress: RoverProgress;
   active: boolean;
   audio: AudioDirector;
-  onComplete: (answer: number) => boolean;
+  onComplete: (answer: number, event: PracticeEvent) => boolean;
+  onPractice: (event: PracticeEvent) => void;
   onBack: () => void;
 }) {
   const [answer, setAnswer] = useState(0),
@@ -45,14 +48,20 @@ export function RoverSurvey({
   }, [active, audio, line]);
   const submit = () => {
     if (finished.current) return;
+    const event: PracticeEvent = {
+      question: roverPractice(survey),
+      answer: String(answer),
+      correct: answer === survey.target,
+    };
     if (answer !== survey.target) {
+      onPractice(event);
       setHint(true);
       void audio.response(
         answer < survey.target ? 'rover-more' : 'rover-fewer',
       );
       return;
     }
-    if (!onComplete(answer)) return;
+    if (!onComplete(answer, event)) return;
     finished.current = true;
     setCelebrationLine(audio.responseId('rover-success'));
     setDone(true);

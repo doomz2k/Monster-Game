@@ -238,12 +238,14 @@ export function PizzaKitchen({
   max,
   audio,
   onComplete,
+  onPractice,
 }: {
   recipe: PizzaRecipe;
   active?: boolean;
   max: number;
   audio: AudioDirector;
   onComplete: () => void;
+  onPractice: (step: number, answer: number, correct: boolean) => void;
 }) {
   const [counts, setCounts] = useState<Partial<Record<ToppingId, number>>>({}),
     [step, setStep] = useState(0),
@@ -291,6 +293,12 @@ export function PizzaKitchen({
     void audio.line('number-' + value);
   };
   const next = () => {
+    if (finished.current) return;
+    onPractice(
+      step,
+      counts[topping.id] ?? 0,
+      (counts[topping.id] ?? 0) === current.quantity,
+    );
     if ((counts[topping.id] ?? 0) !== current.quantity) {
       setFeedback('Let’s match the recipe');
       void audio.response(

@@ -1,0 +1,89 @@
+.practice-summary {
+  margin: 20px 0;
+  border: 1px solid #c8d8c8;
+  border-radius: 18px;
+  background: #f6f9f1;
+  color: #304a3b;
+  padding: 18px;
+}
+.practice-summary > summary {
+  cursor: pointer;
+  font-size: 19px;
+  font-weight: 700;
+}
+.practice-summary > summary > span {
+  font-size: 14px;
+  font-weight: 400;
+  margin-left: 8px;
+  color: #4e6559;
+}
+.practice-summary .practice-explanation,
+.practice-summary .practice-empty {
+  font-size: 14px;
+  line-height: 1.6;
+  margin: 16px 0;
+}
+.practice-skills {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr));
+  gap: 12px;
+}
+.practice-skill {
+  background: #fffdf5;
+  border: 1px solid #dce5d6;
+  border-radius: 12px;
+  padding: 16px;
+}
+.practice-summary h4 {
+  font-size: 17px;
+  margin: 0 0 12px;
+}
+.practice-skill dl {
+  margin: 0;
+  font-size: 14px;
+}
+.practice-skill dl > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 8px 0;
+}
+.practice-skill dd {
+  font-weight: 700;
+  margin: 0;
+}
+.practice-skill > p {
+  border-top: 1px solid #e3e8dc;
+  padding-top: 12px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #52695a;
+}
+.practice-skills + h4 {
+  margin-top: 24px;
+}
+.practice-recent {
+  list-style: none;
+  padding: 0;
+}
+.practice-recent li {
+  border-top: 1px solid #dce5d6;
+  padding: 12px 0;
+}
+.practice-recent li > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.practice-recent strong {
+  font-size: 14px;
+}
+.practice-recent span {
+  font-size: 12px;
+  color: #52695a;
+}
+.practice-recent p {
+  font-size: 13px;
+  margin: 5px 0 0;
+}

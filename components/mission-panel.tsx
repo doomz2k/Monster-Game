@@ -10,6 +10,11 @@ import { GamePicture } from './game-picture';
 import { QuantityHint } from './quantity-hint';
 import { firstMismatch } from '@/lib/learning-hints';
 import { PATTERN_LABELS } from '@/lib/maths-variety';
+import {
+  missionPractice,
+  pizzaPractice,
+  type PracticeEvent,
+} from '@/lib/practice';
 import { SpaceObject } from './space-object';
 import { QuantityDial } from './quantity-dial';
 import { PizzaKitchen } from './pizza-kitchen';
@@ -21,6 +26,7 @@ export function MissionPanel({
   audio,
   reviews,
   onComplete,
+  onPractice,
   onAgain,
   onBack,
   delivery,
@@ -30,7 +36,8 @@ export function MissionPanel({
   active?: boolean;
   audio: AudioDirector;
   reviews: SoundReviews;
-  onComplete: () => number;
+  onComplete: (event?: PracticeEvent) => number;
+  onPractice: (event: PracticeEvent) => void;
   onAgain: () => void;
   onBack: () => void;
   delivery?: PizzaParcel | null;
@@ -47,6 +54,7 @@ export function MissionPanel({
   const adultNeeded = m.parts.some((g) => !approvedPath(g, reviews));
   const [modelled, setModelled] = useState(!m.introduce && !adultNeeded);
   const completed = useRef(false);
+  const exampleReplayed = useRef(false);
   const celebration = useRef<HTMLDivElement>(null);
   const activityContent = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -72,9 +80,20 @@ export function MissionPanel({
     else if (active && !demo && m.kind !== 'pizza') void speak();
     return () => audio.stop();
   }, [m, audio, reviews, demo, active, done, celebrationLine]); // eslint-disable-line react-hooks/exhaustive-deps
-  const finish = (correct: boolean) => {
+  const finish = (correct: boolean, response = String(quantity)) => {
     if (completed.current) return;
+    const question = missionPractice(m);
+    const event: PracticeEvent | undefined = question
+      ? {
+          question,
+          answer: response,
+          correct,
+          adultModel: adultNeeded,
+          example: exampleReplayed.current,
+        }
+      : undefined;
     if (!correct) {
+      if (event) onPractice(event);
       setFeedback(
         m.kind === 'spell'
           ? 'Look at the glowing sound space. X takes the last sound back.'
@@ -104,7 +123,7 @@ export function MissionPanel({
     }
     completed.current = true;
     setDone(true);
-    const earned = onComplete();
+    const earned = onComplete(event);
     setEarnedStars(earned);
     audio.chime();
     setCelebrationLine(
@@ -195,7 +214,14 @@ export function MissionPanel({
   return (
     <div className={'mission-panel mission-' + m.kind}>
       {demo && active && (
-        <LessonDemo mission={m} audio={audio} onReady={() => setDemo(false)} />
+        <LessonDemo
+          mission={m}
+          audio={audio}
+          onReady={() => setDemo(false)}
+          onReplay={() => {
+            exampleReplayed.current = true;
+          }}
+        />
       )}
       <div ref={activityContent} className="mission-content" hidden={demo}>
         <div className="mission-heading">
@@ -210,6 +236,7 @@ export function MissionPanel({
             data-repeat-prompt={!demo || undefined}
             className="round-control"
             onClick={() => {
+              exampleReplayed.current = true;
               setDemo(true);
             }}
             aria-label="Listen again"
@@ -228,6 +255,16 @@ export function MissionPanel({
             recipe={m.recipe}
             max={m.total}
             audio={audio}
+            onPractice={(step, response, correct) => {
+              const question = pizzaPractice(m, step);
+              if (question)
+                onPractice({
+                  question,
+                  answer: String(response),
+                  correct,
+                  example: exampleReplayed.current,
+                });
+            }}
             onComplete={() => finish(true)}
           />
         ) : (
@@ -296,7 +333,7 @@ export function MissionPanel({
                           <div className="maths-scene">
                             <div
                               className="quantity-group"
-                              aria-label={`${m.total} ${m.kind === 'take' ? 'with ' + m.second + ' taken away' : 'objects'}`}
+                              aria-label={`${m.total} ${m.kind === 'take' ? 'with ' + m.second + ' taken away' : m.total === 1 ? 'object' : 'objects'}`}
                             >
                               {Array.from({ length: m.total }, (_, i) => (
                                 <span
@@ -381,7 +418,7 @@ export function MissionPanel({
                           aria-pressed={shape === answer}
                           onClick={() => {
                             setAnswer(shape);
-                            finish(shape === m.answer);
+                            finish(shape === m.answer, shape);
                           }}
                         >
                           <GamePicture symbol={shape} />
@@ -400,7 +437,7 @@ export function MissionPanel({
                         className={answer === g ? 'chosen' : ''}
                         onClick={() => {
                           setAnswer(g);
-                          finish(g === m.answer);
+                          finish(g === m.answer, g);
                         }}
                       >
                         {g}
@@ -437,7 +474,10 @@ export function MissionPanel({
                             if (letters.length < m.parts.length) {
                               setLetters(next);
                               if (next.length === m.parts.length)
-                                finish(next.join('') === m.answer);
+                                finish(
+                                  next.join('') === m.answer,
+                                  next.join(''),
+                                );
                             }
                           }}
                         >
@@ -468,7 +508,7 @@ export function MissionPanel({
                         aria-pressed={answer === symbol}
                         onClick={() => {
                           setAnswer(symbol);
-                          finish(symbol === m.answer);
+                          finish(symbol === m.answer, symbol);
                         }}
                       >
                         <SpaceObject id={symbol} />

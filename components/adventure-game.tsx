@@ -28,6 +28,8 @@ import { ControllerTutorial } from './controller-tutorial';
 import { tutorialAction, TUTORIAL_STEPS } from '@/lib/tutorial';
 import { PreferencesContext, useMotionPreference } from './game-preferences';
 import { SaveAndComfort } from './save-and-comfort';
+import { PracticeSummary } from './practice-summary';
+import { recordPractice, type PracticeEvent } from '@/lib/practice';
 import { DiscoveryBook } from './discovery-book';
 import { GamePicture } from './game-picture';
 import { NeighbourPortrait } from './neighbour-portrait';
@@ -538,10 +540,21 @@ export default function AdventureGame() {
     setMission(next);
     go('mission');
   };
-  const complete = () => {
+  const notePractice = (event: PracticeEvent) =>
+    setP((old) => {
+      const practice = recordPractice(old.practice, event);
+      return practice === old.practice ? old : { ...old, practice };
+    });
+  const complete = (event?: PracticeEvent) => {
     if (!mission) return 0;
     const next = finishMission(p, mission);
-    setP(next);
+    if (next === p) return 0;
+    setP((old) => {
+      const updated = finishMission(old, mission);
+      return event
+        ? { ...updated, practice: recordPractice(updated.practice, event) }
+        : updated;
+    });
     world.current?.celebrate();
     return next.adventure.wallet - p.adventure.wallet;
   };
@@ -589,7 +602,7 @@ export default function AdventureGame() {
       say('rover-drive');
     }
   };
-  const completeSurvey = (answer: number) => {
+  const completeSurvey = (answer: number, event: PracticeEvent) => {
     if (!roverTask) return false;
     const next = finishRoverSurvey(
       p,
@@ -599,7 +612,18 @@ export default function AdventureGame() {
       position.z,
     );
     if (next === p) return false;
-    setP(next);
+    setP((old) => {
+      const updated = finishRoverSurvey(
+        old,
+        roverTask,
+        answer,
+        position.x,
+        position.z,
+      );
+      return updated === old
+        ? old
+        : { ...updated, practice: recordPractice(updated.practice, event) };
+    });
     setRoverTarget(null);
     world.current?.celebrate();
     return true;
@@ -1354,6 +1378,7 @@ export default function AdventureGame() {
               active={mode === 'rover'}
               audio={audio}
               onComplete={completeSurvey}
+              onPractice={notePractice}
               onBack={() => go('explore', 'rover-next')}
             />
           </section>
@@ -1380,6 +1405,7 @@ export default function AdventureGame() {
                 audio={audio}
                 reviews={reviews}
                 onComplete={complete}
+                onPractice={notePractice}
                 delivery={mission.kind === 'pizza' ? offeredDelivery : null}
                 onDeliver={takeDelivery}
                 onAgain={beginMission}
@@ -1650,6 +1676,7 @@ export default function AdventureGame() {
                   >
                     Return to main menu
                   </button>
+                  <PracticeSummary log={p.practice} />
                   <SaveAndComfort
                     progress={p}
                     onProgress={change}

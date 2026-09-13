@@ -1,4 +1,5 @@
 import { SOUNDS, decodableWords, soundChoices } from './phonics';
+import { freshPractice, readPractice, type PracticeLog } from './practice';
 import {
   defaultPreferences,
   readPreferences,
@@ -86,6 +87,7 @@ export type ProgressData = {
   version: 1;
   tutorialComplete: boolean;
   preferences: GamePreferences;
+  practice: PracticeLog;
   completed: string[];
   rounds: Record<ZoneId, number>;
   knownSounds: string[];
@@ -99,6 +101,7 @@ export const freshProgress = (): ProgressData => ({
   version: 1,
   tutorialComplete: false,
   preferences: defaultPreferences(),
+  practice: freshPractice(),
   completed: [],
   rounds: { meadow: 0, woods: 0, cove: 0, garden: 0 },
   knownSounds: [],
@@ -115,6 +118,7 @@ export function readProgress(raw: string | null): ProgressData {
     const clean = freshProgress();
     clean.tutorialComplete = p.tutorialComplete === true;
     clean.preferences = readPreferences(p.preferences);
+    clean.practice = readPractice(p.practice);
     clean.completed = Array.isArray(p.completed)
       ? [
           ...new Set<string>(

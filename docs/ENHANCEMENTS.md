@@ -90,3 +90,5 @@ The next checkpoint, [DISCOVERIES-AND-FRIENDS.md](DISCOVERIES-AND-FRIENDS.md), a
 [MATHS-VARIETY.md](MATHS-VARIETY.md) resolves the repeated harbour answers, adds complete arithmetic fact banks, ten pizza topping combinations, 24 rocket patterns and repeat-unit-specific demonstrations and hints (9/16/19/25). Saved round counters continue through the banks, and repaired-rocket dialogue keeps Pip's activities accessible.
 
 [ISLAND-WEATHER.md](ISLAND-WEATHER.md) adds gentle active-play showers, a rainbow, terrain-following puddles, walking ripples and green-A splashes (33/36), with saved parent choices, calm/reduced options and explicit rendering budgets.
+
+[PRACTICE-RECORD.md](PRACTICE-RECORD.md) adds a Start-only, device-local practice summary based on actual question answers (47), including per-topping arithmetic, first/retried results, example replays and explicit adult-prompt labels. Bounded, persistent observations provide groundwork for 17/18 without changing learning levels or claiming assessment results.

@@ -10,10 +10,12 @@ export function LessonDemo({
   mission: m,
   audio,
   onReady,
+  onReplay,
 }: {
   mission: Mission;
   audio: AudioDirector;
   onReady: () => void;
+  onReplay?: () => void;
 }) {
   const [phase, setPhase] = useState(0),
     ready = useRef<HTMLButtonElement>(null);
@@ -24,6 +26,7 @@ export function LessonDemo({
     ? PATTERN_UNITS[m.patternStyle].map((i) => ['🔵', '🔺', '🟨'][i])
     : null;
   const replay = () => {
+    onReplay?.();
     setPhase(0);
     void audio.line(voiceId);
   };
