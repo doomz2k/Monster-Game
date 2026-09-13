@@ -174,6 +174,17 @@ export function SaveAndComfort({
           />
         </label>
         <label>
+          Music volume · {Math.round(progress.preferences.musicVolume * 100)}%
+          <input
+            type="range"
+            min="0"
+            max="100"
+            step="5"
+            value={progress.preferences.musicVolume * 100}
+            onChange={(e) => set('musicVolume', Number(e.target.value) / 100)}
+          />
+        </label>
+        <label>
           Environment volume ·{' '}
           {Math.round(progress.preferences.environmentVolume * 100)}%
           <input

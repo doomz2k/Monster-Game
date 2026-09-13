@@ -104,3 +104,5 @@ The next checkpoint, [DISCOVERIES-AND-FRIENDS.md](DISCOVERIES-AND-FRIENDS.md), a
 [LOADING-AND-AUDIO.md](LOADING-AND-AUDIO.md) defers the large listening studio until Start, reduces normal-play compressed JavaScript by about 15%, and adds a repeatable import-graph budget report (12). A compact generated playback index preserves every recording path, exact phonics approval fingerprint and technical block.
 
 [TRACK-WORKSHOP.md](TRACK-WORKSHOP.md) adds Pip's optional road-building toy: 29 varied routes, forgiving turn/undo/hint controls, a rover following curved pieces, saved rewards and pause support. It expands hands-on play and replayability while keeping learning records separate, and fixes cramped neighbour conversations at phone and television sizes.
+
+[ISLAND-MUSIC.md](ISLAND-MUSIC.md) adds four original local musical themes (5), phrase-boundary transitions, independent parent volume, calm-play attenuation and complete silence during instructions (10). Tests cover active-time scheduling, speech/mute gates, resource limits and preference persistence; subjective listening remains a human acceptance check.

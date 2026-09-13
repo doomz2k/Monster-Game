@@ -492,6 +492,7 @@ export default function AdventureGame() {
     audio.setLevels(
       p.preferences.speechVolume,
       p.preferences.environmentVolume * (p.preferences.calm ? 0.4 : 1),
+      p.preferences.musicVolume * (p.preferences.calm ? 0.3 : 1),
     );
   }, [audio, p.preferences]);
 

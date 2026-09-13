@@ -1,0 +1,11 @@
+# Original island music
+
+Exploration now has four original, spacious instrumental themes: home and the open island, Olive's woods, Marina's harbour and the Moon. Each has eight phrases, rests and a quieter answering variation. Shared harmony lets district changes happen at phrase boundaries; a wider exit boundary prevents rapid switching while standing near the edge of an area. The soundtrack is generated locally from small periodic waveforms, without downloaded music, paid services or network synthesis.
+
+Music uses its own **Music volume** control behind Start, defaults to 35%, and remains independent of speech and environmental sound. Calm play lowers it further. The music bus, including its short echo, goes silent before recorded speech begins and throughout lessons, menus, mute, hidden tabs and music-off. Notes scheduled just ahead of playback are cancelled on suspension. The transport advances only during active, audible exploration and never catches up a long absence. Resuming continues the score without a burst of overdue notes.
+
+Instrument envelopes have soft attacks and decays, restrained stereo placement and a low-pass filter. A 24-voice cap bounds resources; ended notes release their audio nodes, and disposal clears the timer and bus. No phoneme recording, approval, learning level or earned reward is changed.
+
+Validation: 190 tests pass, including district boundaries, all score pitches/dynamics/polyphony, phrase changes, pause/stall timing, save migration, mute/hidden/volume gates, queued-note cancellation and resource disposal. A test using the actual AudioDirector confirms the music bus reaches zero before a recorded instruction's playback begins. Type checks, lint and the production build pass. Normal-play JavaScript measures 1,554,585 bytes, or 443,098 bytes individually gzipped; the listening desk remains deferred. The existing shared Three.js chunk advisory remains.
+
+Browser checks exercised a fresh launch, instruction replay, Start, setting music to zero, persistence after reload, unchanged speech/environment volumes, restoring the default and visiting the woods. These checks establish control behaviour, not subjective sound quality. Human listening on the intended television/speakers remains outstanding, alongside the already documented British narration and phonics review.

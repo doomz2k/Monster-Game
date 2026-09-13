@@ -8,6 +8,7 @@ export type GamePreferences = {
   calm: boolean;
   speechVolume: number;
   environmentVolume: number;
+  musicVolume: number;
   camera: 'gentle' | 'fixed';
   graphics: GraphicsMode;
   daylight: DaylightMode;
@@ -22,6 +23,7 @@ export const defaultPreferences = (): GamePreferences => ({
   calm: false,
   speechVolume: 1,
   environmentVolume: 0.65,
+  musicVolume: 0.35,
   camera: 'gentle',
   graphics: 'auto',
   daylight: 'cycle',
@@ -52,7 +54,11 @@ export function readPreferences(raw: unknown): GamePreferences {
       Object.assign(p, { [key]: value[key] });
   }
   p.calm = value.calm === true;
-  for (const key of ['speechVolume', 'environmentVolume'] as const)
+  for (const key of [
+    'speechVolume',
+    'environmentVolume',
+    'musicVolume',
+  ] as const)
     if (typeof value[key] === 'number' && Number.isFinite(value[key]))
       p[key] = Math.min(1, Math.max(0, value[key]));
   return p;

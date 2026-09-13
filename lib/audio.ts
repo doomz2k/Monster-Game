@@ -1,5 +1,6 @@
 import { SOUNDS } from './phonics';
 import { Soundscape, type SoundScene } from './soundscape';
+import { IslandMusic } from './music';
 import { ResponseRotation } from './response-rotation';
 import runtime from './audio-data/audio-runtime.json';
 import adventureScript from './audio-data/adventure-script.json';
@@ -133,7 +134,9 @@ export class AudioDirector {
   private context: AudioContext | null = null;
   private speechVolume = 1;
   private environmentVolume = 0.65;
-  setLevels(speech: number, environment: number) {
+  private musicVolume = 0.35;
+  private music: IslandMusic | null = null;
+  setLevels(speech: number, environment: number, music = 0.35) {
     this.speechVolume = Math.max(
       0,
       Math.min(1, Number.isFinite(speech) ? speech : 1),
@@ -144,6 +147,10 @@ export class AudioDirector {
     );
     if (this.player) this.player.volume = this.speechVolume;
     this.soundscape?.setVolume(this.environmentVolume);
+    this.musicVolume = Number.isFinite(music)
+      ? Math.max(0, Math.min(1, music))
+      : 0.35;
+    this.music?.setVolume(this.musicVolume);
   }
   private soundscape: Soundscape | null = null;
   private scene: SoundScene = {
@@ -156,6 +163,7 @@ export class AudioDirector {
   setScene(scene: SoundScene) {
     this.scene = scene;
     this.soundscape?.update(scene);
+    this.music?.update(scene);
   }
   public muted = false;
   private responses = new ResponseRotation();
@@ -170,6 +178,7 @@ export class AudioDirector {
     this.muted = value;
     this.stop();
     this.soundscape?.update(this.scene);
+    this.music?.update(this.scene);
     if (!value) this.unlock();
   }
   constructor(
@@ -188,6 +197,12 @@ export class AudioDirector {
       );
       this.soundscape.update(this.scene);
       this.soundscape.setVolume(this.environmentVolume);
+      this.music ??= new IslandMusic(
+        this.context,
+        () => this.muted || this.busy,
+      );
+      this.music.setVolume(this.musicVolume);
+      this.music.update(this.scene);
       void this.context.resume();
     } catch {
       /* Spoken and visual instructions still work. */
@@ -208,6 +223,7 @@ export class AudioDirector {
     const generation = this.generation;
     this.playingGeneration = generation;
     this.soundscape?.update(this.scene);
+    this.music?.update(this.scene);
     try {
       for (const step of steps) {
         if (generation !== this.generation || this.muted) return;
@@ -347,6 +363,8 @@ export class AudioDirector {
     this.stop();
     this.soundscape?.dispose();
     this.soundscape = null;
+    this.music?.dispose();
+    this.music = null;
     void this.context?.close();
     this.context = null;
   }
