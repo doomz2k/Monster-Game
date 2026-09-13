@@ -1893,5 +1893,25 @@
     "path": "/audio/voices/companion-rest-bb1e54ee2f39a72a.ogg",
     "voice": "bf_emma",
     "text": "Your friends are resting at home. You can choose a friend again whenever you like."
+  },
+  "room-place": {
+    "path": "/audio/voices/room-place-0846cb7a46a42714.ogg",
+    "voice": "bf_emma",
+    "text": "Choose something from your shelf. Choose a numbered space, then press green A to put it there."
+  },
+  "room-turn": {
+    "path": "/audio/voices/room-turn-e8db77d59388ae29.ogg",
+    "voice": "bf_emma",
+    "text": "Choose a numbered space. Green A turns the thing in that space. You can turn it again if you like."
+  },
+  "room-remove": {
+    "path": "/audio/voices/room-remove-c571e6cc1984ac93.ogg",
+    "voice": "bf_emma",
+    "text": "Choose a numbered space. Green A puts that thing back on your shelf."
+  },
+  "room-undo": {
+    "path": "/audio/voices/room-undo-01398dc136dc3e7b.ogg",
+    "voice": "bf_emma",
+    "text": "Back just the way it was. You can try a different spot."
   }
 }

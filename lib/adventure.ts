@@ -1,6 +1,11 @@
 import { WORLD_SCALE } from './world-layout';
 import { readCompanion, type CompanionId } from './companion';
 import {
+  readFurnitureTurns,
+  layoutFields,
+  type FurnitureArea,
+} from './furniture-layout';
+import {
   freshRoverProgress,
   readRoverProgress,
   type RoverProgress,
@@ -127,6 +132,9 @@ export type AdventureProgress = {
   seeds: Record<string, number>;
   plots: Plant[];
   furniture: (string | null)[];
+  furnitureTurns: number[];
+  gardenFurniture: (string | null)[];
+  gardenTurns: number[];
   region: Region;
   moonVisits: number;
   discoveries: string[];
@@ -300,6 +308,9 @@ export const freshAdventure = (legacyStars = 0): AdventureProgress => ({
   },
   plots: Array.from({ length: 6 }, () => null),
   furniture: ['table', null, null, null, null, null],
+  furnitureTurns: [0, 0, 0, 0, 0, 0],
+  gardenFurniture: [null, null, null, null, null, null],
+  gardenTurns: [0, 0, 0, 0, 0, 0],
   region: 'island',
   moonVisits: 0,
   discoveries: [],
@@ -361,6 +372,27 @@ export function readAdventure(
       const id = (v.furniture as unknown[])[i];
       return typeof id === 'string' && p.inventory.includes(id) ? id : null;
     });
+  // Older adventures stored outside decorations in the same six slots as indoor furniture.
+  const oldGarden = p.furniture.map((id) =>
+    SHOP_ITEMS.some((item) => item.id === id && item.kind === 'garden')
+      ? id
+      : null,
+  );
+  p.furniture = p.furniture.map((id) =>
+    SHOP_ITEMS.some((item) => item.id === id && item.kind === 'garden')
+      ? null
+      : id,
+  );
+  p.gardenFurniture = Array.isArray(v.gardenFurniture)
+    ? Array.from({ length: 6 }, (_, i) => {
+        const id = (v.gardenFurniture as unknown[])[i];
+        return typeof id === 'string' &&
+          p.inventory.includes(id) &&
+          SHOP_ITEMS.some((item) => item.id === id && item.kind === 'garden')
+          ? id
+          : null;
+      })
+    : oldGarden;
   // A single owned item cannot occupy several spaces in a restored save.
   const used = new Set<string>();
   p.furniture = p.furniture.map((id) => {
@@ -368,6 +400,16 @@ export function readAdventure(
     used.add(id);
     return id;
   });
+  p.furnitureTurns = readFurnitureTurns(v.furnitureTurns, p.furniture);
+  p.gardenFurniture = p.gardenFurniture.map((id) => {
+    if (!id || used.has(id)) return null;
+    used.add(id);
+    return id;
+  });
+  p.gardenTurns = readFurnitureTurns(
+    Array.isArray(v.gardenFurniture) ? v.gardenTurns : v.furnitureTurns,
+    p.gardenFurniture,
+  );
   p.region = v.region === 'moon' && p.rounds.rocket >= 3 ? 'moon' : 'island';
   p.moonVisits = integer(v.moonVisits);
   p.pantry = readPantry(v.pantry);
@@ -461,19 +503,40 @@ export function placeFurniture(
   p: ProgressData,
   slot: number,
   id: string | null,
+  area?: FurnitureArea,
 ): ProgressData {
+  const item = SHOP_ITEMS.find((item) => item.id === id);
+  const targetArea = area ?? (item?.kind === 'garden' ? 'garden' : 'house');
+  const [itemsKey, turnsKey] = layoutFields(targetArea);
   if (
     !Number.isInteger(slot) ||
     slot < 0 ||
     slot >= 6 ||
-    (id && !p.adventure.inventory.includes(id))
+    (id &&
+      (!p.adventure.inventory.includes(id) ||
+        !item ||
+        (item.kind === 'garden') !== (targetArea === 'garden')))
   )
     return p;
-  const furniture = p.adventure.furniture.map((entry) =>
+  if (p.adventure[itemsKey][slot] === id) return p;
+  const previousSlot = id ? p.adventure[itemsKey].indexOf(id) : -1;
+  const turn = previousSlot >= 0 ? p.adventure[turnsKey][previousSlot] : 0;
+  const furniture = p.adventure[itemsKey].map((entry) =>
     entry === id ? null : entry,
   );
   furniture[slot] = id;
-  return { ...p, adventure: { ...p.adventure, furniture } };
+  const furnitureTurns = p.adventure[turnsKey].map((n, i) =>
+    furniture[i] ? n : 0,
+  );
+  furnitureTurns[slot] = id ? turn : 0;
+  return {
+    ...p,
+    adventure: {
+      ...p.adventure,
+      [itemsKey]: furniture,
+      [turnsKey]: furnitureTurns,
+    },
+  };
 }
 export function changeRegion(p: ProgressData, region: Region): ProgressData {
   if (region === 'moon' && rocketParts(p) < 3) return p;

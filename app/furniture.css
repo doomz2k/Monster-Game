@@ -1,0 +1,231 @@
+.furniture-studio {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 0;
+}
+.home-dialog .furniture-studio .furniture-shelf button {
+  padding: 6px;
+}
+.home-dialog .furniture-studio .furniture-shelf button > span {
+  font-size: 29px;
+}
+.furniture-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  justify-content: flex-end;
+}
+.furniture-toolbar > .furniture-pages {
+  margin-right: auto;
+  gap: 10px;
+}
+.furniture-toolbar > button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  border: 2px solid #d9ddcb;
+  background: #fffdf1;
+  border-radius: 14px;
+  padding: 8px 15px;
+  color: #45604e;
+}
+.furniture-toolbar > button[aria-pressed='true'] {
+  border-color: #79a488;
+  background: #e8f0db;
+}
+.furniture-toolbar > button:disabled {
+  opacity: 0.3;
+}
+.furniture-workbench {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  gap: 20px;
+  flex: 1;
+  min-height: 0;
+}
+.furniture-preview {
+  position: relative;
+  min-height: 0;
+  margin: 0;
+  border-radius: 24px;
+  overflow: hidden;
+  background: radial-gradient(ellipse at 50% 45%, #ebecd5, #d7dfc5);
+}
+.furniture-preview canvas {
+  display: block;
+  position: absolute;
+  inset: 0;
+}
+.furniture-placement {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  gap: 10px;
+}
+.furniture-space-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  flex: 1;
+  min-height: 0;
+}
+.furniture-space-grid button {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  border-radius: 20px;
+  border: 3px solid #dcdcc6;
+  background: #fffdf1;
+  min-height: 0;
+  padding: 10px 5px;
+  color: #3e5649;
+}
+.furniture-space-grid button[data-current='true'] {
+  border-color: #c6ac56;
+  background: #fff4c8;
+}
+.furniture-space-grid button > b {
+  position: absolute;
+  top: 8px;
+  left: 10px;
+  display: grid;
+  place-items: center;
+  width: 27px;
+  height: 27px;
+  background: #ece7cd;
+  border-radius: 50%;
+  font-size: 17px;
+}
+.furniture-space-grid button > span {
+  font-size: clamp(30px, 3.5vw, 48px);
+  line-height: 1.15;
+}
+.furniture-space-grid button > small {
+  font-size: 13px;
+  line-height: 1.1;
+}
+.furniture-message {
+  font-size: 16px;
+  min-height: 24px;
+  text-align: center;
+  color: #48614a;
+}
+@media (max-height: 600px) and (min-width: 700px) {
+  .home-dialog:has(.furniture-studio) .shop-heading {
+    position: absolute;
+    top: 21px;
+    left: 135px;
+    right: 125px;
+  }
+  .home-dialog:has(.furniture-studio) .shop-heading h2 {
+    font-size: 22px;
+  }
+}
+@media (max-height: 600px) {
+  .furniture-studio {
+    gap: 6px;
+  }
+  .home-dialog .furniture-studio .furniture-shelf button {
+    padding: 5px;
+  }
+  .home-dialog .furniture-studio .furniture-shelf button > span {
+    font-size: 27px;
+  }
+  .home-dialog .furniture-studio .furniture-shelf small {
+    font-size: 11px;
+  }
+  .furniture-toolbar > button {
+    padding: 4px 10px;
+    font-size: 14px;
+  }
+  .furniture-toolbar svg {
+    width: 19px;
+  }
+  .furniture-toolbar > .furniture-pages {
+    font-size: 13px;
+  }
+  .furniture-toolbar .furniture-pages button {
+    padding: 4px 14px;
+  }
+  .furniture-workbench {
+    gap: 12px;
+  }
+  .furniture-space-grid {
+    gap: 7px;
+  }
+  .furniture-space-grid button {
+    padding: 3px;
+    gap: 3px;
+  }
+  .furniture-space-grid button > b {
+    top: 4px;
+    left: 6px;
+    width: 21px;
+    height: 21px;
+    font-size: 13px;
+  }
+  .furniture-space-grid button > span {
+    font-size: 27px;
+  }
+  .furniture-space-grid button > small {
+    font-size: 11px;
+  }
+  .furniture-message {
+    min-height: 16px;
+    font-size: 12px;
+  }
+  .furniture-placement {
+    gap: 5px;
+  }
+}
+@media (max-width: 650px) {
+  .furniture-workbench {
+    grid-template-columns: 1fr;
+    grid-template-rows: minmax(80px, 1fr) minmax(120px, 0.9fr);
+    gap: 7px;
+  }
+  .furniture-toolbar {
+    gap: 5px;
+    flex-wrap: wrap;
+  }
+  .furniture-toolbar > button {
+    padding: 5px;
+    font-size: 12px;
+  }
+  .furniture-toolbar > .furniture-pages {
+    gap: 5px;
+  }
+  .furniture-toolbar .furniture-pages button {
+    padding: 4px 8px;
+  }
+  .furniture-space-grid button > span {
+    font-size: 24px;
+  }
+  .furniture-space-grid button > small {
+    font-size: 10px;
+  }
+  .furniture-space-grid button > b {
+    top: 4px;
+    left: 5px;
+    width: 20px;
+    height: 20px;
+    font-size: 12px;
+  }
+  .furniture-space-grid button {
+    padding: 4px;
+  }
+  .furniture-message {
+    font-size: 12px;
+    min-height: 16px;
+  }
+  .furniture-placement {
+    gap: 4px;
+  }
+}

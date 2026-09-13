@@ -4169,6 +4169,50 @@
       "leadingSilenceMs": 32,
       "trailingSilenceMs": 74,
       "warnings": []
+    },
+    "room-place": {
+      "sha256": "219554eee7eb8dba425c3436b237a7af18ad6d5a56ee4aa2168d42083e32040a",
+      "seconds": 4.629,
+      "sampleRate": 24000,
+      "channels": 1,
+      "peakDbfs": -3.5,
+      "activeRmsDbfs": -19.0,
+      "leadingSilenceMs": 37,
+      "trailingSilenceMs": 73,
+      "warnings": []
+    },
+    "room-turn": {
+      "sha256": "b70a982d84969102fd1d9926a081bbaf58d97b3b7e84197be0bec3b407fee996",
+      "seconds": 5.312,
+      "sampleRate": 24000,
+      "channels": 1,
+      "peakDbfs": -3.7,
+      "activeRmsDbfs": -17.4,
+      "leadingSilenceMs": 38,
+      "trailingSilenceMs": 72,
+      "warnings": []
+    },
+    "room-remove": {
+      "sha256": "91a52c7887618df9cbc07427c6bf76493d6883186fbc1d6d49ce9d5f9db3ce89",
+      "seconds": 3.776,
+      "sampleRate": 24000,
+      "channels": 1,
+      "peakDbfs": -3.9,
+      "activeRmsDbfs": -19.0,
+      "leadingSilenceMs": 32,
+      "trailingSilenceMs": 53,
+      "warnings": []
+    },
+    "room-undo": {
+      "sha256": "671052b2390684c2834701f1ae1b78dfc42d0aaf49530384d5252cafa5cb4abb",
+      "seconds": 3.264,
+      "sampleRate": 24000,
+      "channels": 1,
+      "peakDbfs": -3.4,
+      "activeRmsDbfs": -18.7,
+      "leadingSilenceMs": 69,
+      "trailingSilenceMs": 82,
+      "warnings": []
     }
   },
   "phonemes": {

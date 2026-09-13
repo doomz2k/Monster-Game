@@ -80,3 +80,5 @@ The next checkpoint, [DISCOVERIES-AND-FRIENDS.md](DISCOVERIES-AND-FRIENDS.md), a
 [ISLAND-DAYLIGHT.md](ISLAND-DAYLIGHT.md) adds an active-play daylight cycle, sunset, bright evening, warm windows, path lanterns, stars and fireflies (34), with saved fixed-time choices behind Start and separate Moon lighting.
 
 [COMPANIONS.md](COMPANIONS.md) adds three travelling friends with saved choices, permanent quest unlocks, full-screen home previews, idle reactions and a rover perch (37), plus contextual home-screen instruction replay.
+
+[FURNITURE-STUDIO.md](FURNITURE-STUDIO.md) adds a 3D decorating preview, numbered placement, saved rotation, undo and separate indoor/outdoor layouts (30), ten shared furniture models, and a fix for controller focus jumping diagonally off wide shelves.

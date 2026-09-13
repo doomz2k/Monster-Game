@@ -1514,5 +1514,21 @@
   "companion-rest": {
     "voice": "narrator",
     "text": "Your friends are resting at home. You can choose a friend again whenever you like."
+  },
+  "room-place": {
+    "voice": "narrator",
+    "text": "Choose something from your shelf. Choose a numbered space, then press green A to put it there."
+  },
+  "room-turn": {
+    "voice": "narrator",
+    "text": "Choose a numbered space. Green A turns the thing in that space. You can turn it again if you like."
+  },
+  "room-remove": {
+    "voice": "narrator",
+    "text": "Choose a numbered space. Green A puts that thing back on your shelf."
+  },
+  "room-undo": {
+    "voice": "narrator",
+    "text": "Back just the way it was. You can try a different spot."
   }
 }

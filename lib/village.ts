@@ -5,6 +5,8 @@ import { PLACES, SHOP_ITEMS, type AdventureProgress } from './adventure';
 import { createNeighbour } from './neighbours';
 import { createGardenPlant, createGardenWildlife } from './garden-models';
 import { createRocketModel } from './rocket-model';
+import { createFurniture } from './furniture-model';
+import { furniturePosition, layoutFields } from './furniture-layout';
 
 export function createVillage(
   height: (x: number, z: number) => number,
@@ -336,6 +338,7 @@ export function createVillage(
   home.position.y = height(home.position.x, home.position.z);
   beds.position.y = height(beds.position.x, beds.position.z);
   let contentsKey = '';
+  let furnitureModels: ReturnType<typeof createFurniture>[] = [];
   let plantModels: ReturnType<typeof createGardenPlant>[] = [];
   let wildlife: ReturnType<typeof createGardenWildlife> | null = null;
   function clear(group: THREE.Group) {
@@ -353,10 +356,17 @@ export function createVillage(
     roof.visible =
       Math.hypot(playerX - home.position.x, playerZ - home.position.z) > 8;
     rocketModel.setRepairStage(a.rounds.rocket);
-    const key = JSON.stringify([a.plots, a.furniture]);
+    const key = JSON.stringify([
+      a.plots,
+      a.furniture,
+      a.furnitureTurns,
+      a.gardenFurniture,
+      a.gardenTurns,
+    ]);
     if (key === contentsKey) return;
     contentsKey = key;
     clear(furnishings);
+    furnitureModels = [];
     clear(crops);
     plantModels = [];
     wildlife = createGardenWildlife(a.plots);
@@ -368,83 +378,20 @@ export function createVillage(
       crops.add(model.root);
       plantModels.push(model);
     });
-    a.furniture.forEach((id, i) => {
-      if (!id) return;
-      const item = SHOP_ITEMS.find((it) => it.id === id);
-      if (!item) return;
-      const g = new THREE.Group();
-      furnishings.add(g);
-      g.position.set(((i % 3) - 1) * 2.1, 0.17, Math.floor(i / 3) * 2 - 1.2);
-      const c = item.colour;
-      if (id === 'sofa') {
-        box(g, c, 0, 0.43, 0, 1.75, 0.5, 0.9);
-        box(g, c, 0, 0.85, -0.35, 1.75, 0.7, 0.24);
-        for (const side of [-1, 1])
-          box(g, '#eeb2c9', side * 0.76, 0.66, 0, 0.23, 0.65, 0.94);
-      } else if (id === 'bed') {
-        box(g, '#c39172', 0, 0.27, 0, 1.35, 0.4, 1.8);
-        box(g, c, 0, 0.53, 0.12, 1.32, 0.18, 1.5);
-        ball(g, '#fff1cf', 0, 0.7, -0.6, 0.52, 0.1, 0.24);
-      } else if (id === 'rug') {
-        mesh(
-          g,
-          new THREE.CylinderGeometry(0.84, 0.84, 0.04, 32),
-          c,
-          0,
-          0.04,
-          0,
-          1,
-          1,
-          0.8,
-        );
-      } else if (id === 'books') {
-        box(g, '#c59372', 0, 0.7, 0, 1.3, 1.4, 0.45);
-        for (let j = 0; j < 6; j++)
-          box(
-            g,
-            ['#87b3cc', '#dda76f', '#a498cd'][j % 3],
-            -0.47 + j * 0.19,
-            0.95,
-            0.27,
-            0.15,
-            0.56,
-            0.28,
-          );
-      } else if (id === 'lamp' || id === 'lantern') {
-        box(g, '#997958', 0, 0.7, 0, 0.12, 1.4, 0.12);
-        ball(g, c, 0, 1.4, 0, 0.4, 0.32, 0.4);
-      } else if (id === 'mushroom') {
-        mesh(
-          g,
-          new THREE.CylinderGeometry(0.15, 0.2, 0.5, 12),
-          '#f5ddb5',
-          0,
-          0.25,
-          0,
-        );
-        ball(g, c, 0, 0.62, 0, 0.55, 0.27, 0.55);
-      } else if (id === 'birdbath') {
-        mesh(g, new THREE.CylinderGeometry(0.12, 0.24, 0.8, 12), c, 0, 0.4, 0);
-        mesh(g, new THREE.CylinderGeometry(0.6, 0.36, 0.2, 24), c, 0, 0.88, 0);
-      } else if (id === 'swing') {
-        for (const side of [-1, 1])
-          box(g, c, side * 0.7, 0.9, 0, 0.13, 1.8, 0.13);
-        box(g, c, 0, 1.75, 0, 1.6, 0.13, 0.16);
-        for (const side of [-1, 1])
-          box(g, '#ece2bd', side * 0.44, 1.2, 0, 0.04, 1.1, 0.04);
-        box(g, '#a8795f', 0, 0.64, 0, 1.1, 0.12, 0.5);
-      } else {
-        box(g, c, 0, 0.75, 0, 1.7, 0.14, 1.1);
-        for (const side of [-1, 1])
-          box(g, '#aa835e', side * 0.6, 0.38, 0, 0.17, 0.75, 0.7);
-      }
-      if (item.kind === 'garden')
-        g.position.set(
-          ((i % 3) - 1) * 2.3,
-          0.05,
-          6.7 + Math.floor(i / 3) * 1.5,
-        );
-    });
+    for (const [listKey, turnsKey] of [
+      layoutFields('house'),
+      layoutFields('garden'),
+    ])
+      a[listKey].forEach((id, i) => {
+        const item = SHOP_ITEMS.find((it) => it.id === id);
+        if (!item) return;
+        const model = createFurniture(item.id, item.colour, textures.timber);
+        const position = furniturePosition(i, item.kind === 'garden');
+        model.root.position.set(position.x, position.y, position.z);
+        model.root.rotation.y = ((a[turnsKey][i] ?? 0) * Math.PI) / 2;
+        furnishings.add(model.root);
+        furnitureModels.push(model);
+      });
   }
   return {
     root,
@@ -458,6 +405,7 @@ export function createVillage(
       });
     },
     animateGarden(time: number, reduced: boolean) {
+      furnitureModels.forEach((m) => m.animate(time, reduced));
       plantModels.forEach((m, i) => m.animate(time + i, reduced));
       wildlife?.animate(time, reduced);
     },

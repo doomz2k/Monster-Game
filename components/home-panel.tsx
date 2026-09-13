@@ -1,19 +1,18 @@
 'use client';
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import {
   Check,
   Sprout,
   Armchair,
   Droplets,
   Undo2,
-  ArrowLeft,
-  ArrowRight,
   PawPrint,
 } from 'lucide-react';
 import type { ProgressData } from '@/lib/learning';
 import { harvestPlant, PRODUCE, gardenVisitors } from '@/lib/garden';
 import { GardenPreview } from './garden-preview';
 import { CompanionPanel } from './companion-panel';
+import { FurnitureStudio } from './furniture-studio';
 import { GamePicture } from './game-picture';
 import {
   SHOP_ITEMS,
@@ -21,7 +20,6 @@ import {
   plantSeed,
   waterPlant,
   clearPlot,
-  placeFurniture,
 } from '@/lib/adventure';
 import type { AudioDirector } from '@/lib/audio';
 
@@ -138,16 +136,8 @@ export function HomePanel({
   audio: AudioDirector;
   onShop: () => void;
 }) {
-  const shelf = useRef<HTMLDivElement>(null);
-  const [furniturePage, setFurniturePage] = useState(0);
-  useEffect(() => {
-    shelf.current
-      ?.querySelector<HTMLElement>('[data-game-choice]')
-      ?.focus({ preventScroll: true });
-  }, [furniturePage]);
   const [tab, setTab] = useState<'garden' | 'house' | 'friends'>('garden'),
     [seed, setSeed] = useState('daisy'),
-    [item, setItem] = useState<string | null>('table'),
     [tool, setTool] = useState<'plant' | 'water' | 'clear'>('plant'),
     [pendingClear, setPendingClear] = useState<number | null>(null);
   const [message, setMessage] = useState('');
@@ -166,12 +156,12 @@ export function HomePanel({
   };
   return (
     <div className="home-panel">
-      {tab !== 'friends' && (
+      {tab === 'garden' && (
         <button
           hidden
           data-repeat-prompt
           onClick={() => {
-            void audio.line(tab === 'garden' ? 'garden' : 'furniture');
+            void audio.line('garden');
           }}
         >
           Listen again
@@ -203,7 +193,7 @@ export function HomePanel({
           onClick={() => {
             setTab('house');
             setMessage('');
-            void audio.line('furniture');
+            void audio.line('room-place');
           }}
         >
           <Armchair /> My house
@@ -397,82 +387,7 @@ export function HomePanel({
           </div>
         </div>
       ) : (
-        <>
-          <div className="furniture-shelf" ref={shelf}>
-            {p.adventure.inventory
-              .slice(furniturePage * 6, furniturePage * 6 + 6)
-              .map((id) => {
-                const shopItem = SHOP_ITEMS.find((s) => s.id === id)!;
-                return (
-                  <button
-                    data-game-choice
-                    key={id}
-                    aria-pressed={item === id}
-                    onClick={() => setItem(id)}
-                  >
-                    <span>{shopItem.icon}</span>
-                    <small>{shopItem.name}</small>
-                  </button>
-                );
-              })}
-            <button
-              data-game-choice
-              aria-pressed={item === null}
-              onClick={() => setItem(null)}
-            >
-              <Undo2 />
-              <small>Put away</small>
-            </button>
-          </div>
-          <nav className="furniture-pages" aria-label="Furniture pages">
-            <button
-              data-game-choice
-              disabled={furniturePage === 0}
-              onClick={() => setFurniturePage(furniturePage - 1)}
-              aria-label="Previous furniture"
-            >
-              <ArrowLeft />
-            </button>
-            <span>
-              {furniturePage + 1} /{' '}
-              {Math.ceil(p.adventure.inventory.length / 6)}
-            </span>
-            <button
-              data-game-choice
-              disabled={(furniturePage + 1) * 6 >= p.adventure.inventory.length}
-              onClick={() => setFurniturePage(furniturePage + 1)}
-              aria-label="More furniture"
-            >
-              <ArrowRight />
-            </button>
-          </nav>
-          <div className="room-plan">
-            {p.adventure.furniture.map((id, i) => {
-              const placed = SHOP_ITEMS.find((s) => s.id === id);
-              return (
-                <button
-                  data-game-choice
-                  key={i}
-                  aria-label={
-                    'Space ' +
-                    (i + 1) +
-                    (placed ? ', ' + placed.name : ', empty')
-                  }
-                  onClick={() =>
-                    update(
-                      placeFurniture(p, i, item),
-                      item ? 'Just right!' : 'Put away',
-                      item ? 'ready' : 'put-away',
-                    )
-                  }
-                >
-                  <span>{placed?.icon ?? '＋'}</span>
-                  <small>{placed?.name ?? 'Put it here'}</small>
-                </button>
-              );
-            })}
-          </div>
-        </>
+        <FurnitureStudio progress={p} onChange={onChange} audio={audio} />
       )}
       <output aria-live="polite" className="home-feedback">
         {message}
