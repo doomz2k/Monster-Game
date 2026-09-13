@@ -1186,5 +1186,53 @@
   "pip-repair-3": {
     "voice": "pip",
     "text": "You did it! All three systems are ready. Our rocket can fly to the Moon. Thank you, little explorer!"
+  },
+  "rover-intro": {
+    "voice": "nova",
+    "text": "This little rover is yours to explore in! Press the green button to climb in. We can visit three expedition stops together."
+  },
+  "rover-drive": {
+    "voice": "nova",
+    "text": "Move the control pad to drive. Let go to stop. The green button can follow the star for you, or explore a stop when you arrive. The red button lets you climb out."
+  },
+  "rover-exit": {
+    "voice": "nova",
+    "text": "Here you are! Your rover will wait here. You can find it again on the picture map."
+  },
+  "rover-next": {
+    "voice": "nova",
+    "text": "Another little adventure! Follow the golden star to the next expedition stop. There is no hurry."
+  },
+  "rover-success": {
+    "voice": "nova",
+    "text": "What a careful explorer! Here is your expedition stamp, and one star. Shall we see what is at the next stop?"
+  },
+  "rover-route-rocks": {
+    "voice": "nova",
+    "text": "Let us visit the rock trail. Follow the golden star to stop one."
+  },
+  "rover-route-panels": {
+    "voice": "nova",
+    "text": "Let us visit the sunshine station. Follow the golden star to stop two."
+  },
+  "rover-route-signals": {
+    "voice": "nova",
+    "text": "Let us visit signal hill. Follow the golden star to stop three."
+  },
+  "rover-count-rocks": {
+    "voice": "nova",
+    "text": "How many Moon rocks are in the tray? Count each picture once. Move the control pad to choose a number, then press the green button."
+  },
+  "rover-count-panels": {
+    "voice": "nova",
+    "text": "How many solar panels are in the tray? Count each picture once. Move the control pad to choose a number, then press the green button."
+  },
+  "rover-count-signals": {
+    "voice": "nova",
+    "text": "How many signal lights are in the tray? Count each picture once. Move the control pad to choose a number, then press the green button."
+  },
+  "rover-follow": {
+    "voice": "nova",
+    "text": "Off we go! Your rover is following the star. Move the control pad whenever you want to take over. The green button can stop the ride."
   }
 }

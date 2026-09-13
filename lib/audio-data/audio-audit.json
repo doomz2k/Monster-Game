@@ -3267,6 +3267,138 @@
       "leadingSilenceMs": 89,
       "trailingSilenceMs": 132,
       "warnings": []
+    },
+    "rover-intro": {
+      "sha256": "f5c18af9f687d6520c40326a5b7679f23b3dfcc2c948284f9a8a6bbe28c07a03",
+      "seconds": 6.805,
+      "sampleRate": 24000,
+      "channels": 1,
+      "peakDbfs": -3.6,
+      "activeRmsDbfs": -19.3,
+      "leadingSilenceMs": 26,
+      "trailingSilenceMs": 70,
+      "warnings": []
+    },
+    "rover-drive": {
+      "sha256": "438f05dc1ee07ce0a95e9a1053c671c21658d4f62fd915375cc5925986783de4",
+      "seconds": 9.045,
+      "sampleRate": 24000,
+      "channels": 1,
+      "peakDbfs": -3.9,
+      "activeRmsDbfs": -18.9,
+      "leadingSilenceMs": 29,
+      "trailingSilenceMs": 58,
+      "warnings": []
+    },
+    "rover-exit": {
+      "sha256": "5f60d4a1ff8b04841d150c759cd28c8405653b449a6f1f882b6cfecefd2a31d2",
+      "seconds": 4.075,
+      "sampleRate": 24000,
+      "channels": 1,
+      "peakDbfs": -3.3,
+      "activeRmsDbfs": -18.1,
+      "leadingSilenceMs": 42,
+      "trailingSilenceMs": 70,
+      "warnings": []
+    },
+    "rover-next": {
+      "sha256": "1f337169433b4061d83b7227f397f92d2783fca585da719215b0132b265534fa",
+      "seconds": 5.312,
+      "sampleRate": 24000,
+      "channels": 1,
+      "peakDbfs": -3.7,
+      "activeRmsDbfs": -18.8,
+      "leadingSilenceMs": 38,
+      "trailingSilenceMs": 84,
+      "warnings": []
+    },
+    "rover-success": {
+      "sha256": "366dc7dfa92e8194d52e42003b48a025c59e488ddc677ffc6616d982afc633fb",
+      "seconds": 5.76,
+      "sampleRate": 24000,
+      "channels": 1,
+      "peakDbfs": -4.1,
+      "activeRmsDbfs": -19.2,
+      "leadingSilenceMs": 29,
+      "trailingSilenceMs": 62,
+      "warnings": []
+    },
+    "rover-route-rocks": {
+      "sha256": "f873e0a4915caf382c106e50bbaa49fe7f3bfc6d842235ea581e3d68ed96de86",
+      "seconds": 3.584,
+      "sampleRate": 24000,
+      "channels": 1,
+      "peakDbfs": -3.9,
+      "activeRmsDbfs": -18.2,
+      "leadingSilenceMs": 26,
+      "trailingSilenceMs": 76,
+      "warnings": []
+    },
+    "rover-route-panels": {
+      "sha256": "0b0712cc8360e892b3a261803737f2f6a18e901cf8b0a1d9587a366084b1cac5",
+      "seconds": 4.053,
+      "sampleRate": 24000,
+      "channels": 1,
+      "peakDbfs": -3.8,
+      "activeRmsDbfs": -18.2,
+      "leadingSilenceMs": 28,
+      "trailingSilenceMs": 77,
+      "warnings": []
+    },
+    "rover-route-signals": {
+      "sha256": "98b58f81c257ca64fc30bde831de697bee1dd2806c46aa94a2d48927823c3c9c",
+      "seconds": 3.712,
+      "sampleRate": 24000,
+      "channels": 1,
+      "peakDbfs": -3.9,
+      "activeRmsDbfs": -18.2,
+      "leadingSilenceMs": 44,
+      "trailingSilenceMs": 70,
+      "warnings": []
+    },
+    "rover-count-rocks": {
+      "sha256": "10d5216f27ac508b93d5d56ba6edbed6d1f84d8c8adfe8a0983959b76cc702ca",
+      "seconds": 6.656,
+      "sampleRate": 24000,
+      "channels": 1,
+      "peakDbfs": -3.9,
+      "activeRmsDbfs": -16.9,
+      "leadingSilenceMs": 24,
+      "trailingSilenceMs": 58,
+      "warnings": []
+    },
+    "rover-count-panels": {
+      "sha256": "98fac9a8229540271da6a1b084eee0612593d7e66bd3e5c44f11a497ac8e1db5",
+      "seconds": 6.955,
+      "sampleRate": 24000,
+      "channels": 1,
+      "peakDbfs": -3.8,
+      "activeRmsDbfs": -16.9,
+      "leadingSilenceMs": 28,
+      "trailingSilenceMs": 61,
+      "warnings": []
+    },
+    "rover-count-signals": {
+      "sha256": "f5c739250608c11ae19a54926fc855accb0ef637377cbdab8399cdd512d18957",
+      "seconds": 6.763,
+      "sampleRate": 24000,
+      "channels": 1,
+      "peakDbfs": -3.8,
+      "activeRmsDbfs": -18.1,
+      "leadingSilenceMs": 28,
+      "trailingSilenceMs": 68,
+      "warnings": []
+    },
+    "rover-follow": {
+      "sha256": "a673833934920e0bde0760003edc816e731d1db5bc3a460f50a41ec044d2a4ad",
+      "seconds": 7.275,
+      "sampleRate": 24000,
+      "channels": 1,
+      "peakDbfs": -3.5,
+      "activeRmsDbfs": -18.8,
+      "leadingSilenceMs": 40,
+      "trailingSilenceMs": 53,
+      "warnings": []
     }
   },
   "phonemes": {

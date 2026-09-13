@@ -1,5 +1,8 @@
 import * as THREE from 'three';
 import { createPizzaParcel } from './pizza-parcel';
+import { createRoverModel, createRoverStops } from './rover-model';
+import { roverRoute } from './rover-route';
+import { ROVER_DOCK, roverExit, roverStop, type RoverStopId } from './rover';
 import {
   GRAPHICS,
   GraphicsGovernor,
@@ -53,6 +56,7 @@ export type WorldState = {
   visible?: boolean;
   discoveryTarget?: string | null;
   deliveryTarget?: boolean;
+  roverTarget?: RoverStopId | null;
 };
 export type WorldUpdate = {
   x: number;
@@ -60,6 +64,9 @@ export type WorldUpdate = {
   zone: ZoneId;
   near: ZoneId | null;
   place?: PlaceId | null;
+  driving?: boolean;
+  nearRover?: boolean;
+  roverFollowing?: boolean;
 };
 export class MonsterWorld {
   private graphics = new GraphicsGovernor();
@@ -86,6 +93,12 @@ export class MonsterWorld {
   private character = createMonster();
   private rig = this.character.root;
   private pizzaParcel = createPizzaParcel();
+  private rover = createRoverModel();
+  private roverParcel = createPizzaParcel();
+  private roverStops: ReturnType<typeof createRoverStops>;
+  private driving = false;
+  private roverPath: { x: number; z: number }[] = [];
+  private roverPathTarget: RoverStopId | null = null;
   private appearanceKey = JSON.stringify(defaultAppearance());
   private village: ReturnType<typeof createVillage>;
   private discoveryMarkers: ReturnType<typeof createDiscoveryMarkers>;
@@ -185,6 +198,12 @@ export class MonsterWorld {
     this.scene.add(light);
     this.buildIsland();
     this.village = createVillage(height, this.textures);
+    this.roverStops = createRoverStops();
+    this.rover.root.position.set(ROVER_DOCK.x, 0, ROVER_DOCK.z);
+    this.roverParcel.position.set(0, 0.1, 0);
+    this.roverParcel.scale.setScalar(0.72);
+    this.rover.parcelRack.add(this.roverParcel);
+    this.village.moon.add(this.rover.root, this.roverStops.root);
     this.discoveryMarkers = createDiscoveryMarkers(height);
     this.scene.add(this.discoveryMarkers.island);
     this.village.moon.add(this.discoveryMarkers.moon);
@@ -261,6 +280,12 @@ export class MonsterWorld {
         this.update({
           x,
           z,
+          driving: this.driving,
+          roverFollowing: this.roverPath.length > 0,
+          nearRover:
+            this.region === 'moon' &&
+            !this.driving &&
+            this.player.position.distanceTo(this.rover.root.position) < 4.6,
           zone: zone.id,
           near: Math.hypot(x - zone.x, z - zone.z) < 3.8 ? zone.id : null,
           place:
@@ -969,11 +994,11 @@ export class MonsterWorld {
       s.adventure?.discoveries ?? [],
       this.reducedMotion,
     );
-    const moving = s.active ? Math.min(1, Math.hypot(s.moveX, s.moveY)) : 0;
-    if (moving > 0.03 && !this.wasMoving) this.movementAngle = this.angle;
-    this.wasMoving = moving > 0.03;
     const region = s.adventure?.region ?? 'island';
     if (region !== this.region) {
+      this.driving = false;
+      this.roverPath = [];
+      this.rover.root.position.set(ROVER_DOCK.x, 0, ROVER_DOCK.z);
       this.region = region;
       this.skyLight.intensity = region === 'moon' ? 0.5 : 0.95;
       this.sun.intensity = region === 'moon' ? 1.6 : 2.35;
@@ -996,12 +1021,43 @@ export class MonsterWorld {
       this.cameraGoal = 0;
       this.wasMoving = false;
     }
-    if (s.adventure)
+    let moveX = s.moveX,
+      moveY = s.moveY;
+    const manual = Math.hypot(moveX, moveY) > 0.03;
+    if (manual || (s.roverTarget && s.roverTarget !== this.roverPathTarget))
+      this.roverPath = [];
+    if (s.active && this.driving && this.roverPath.length) {
+      const target = this.roverPath[0];
+      const dx = target.x - this.player.position.x,
+        dz = target.z - this.player.position.z,
+        d = Math.hypot(dx, dz);
+      if (d < (this.roverPath.length === 1 ? 4.4 : 0.35))
+        this.roverPath.shift();
+      else {
+        moveX =
+          ((dx * Math.cos(this.movementAngle) -
+            dz * Math.sin(this.movementAngle)) /
+            d) *
+          0.8;
+        moveY =
+          ((dx * Math.sin(this.movementAngle) +
+            dz * Math.cos(this.movementAngle)) /
+            d) *
+          0.8;
+      }
+    }
+    const moving = s.active ? Math.min(1, Math.hypot(moveX, moveY)) : 0;
+    if (manual && moving > 0.03 && !this.wasMoving)
+      this.movementAngle = this.angle;
+    this.wasMoving = manual && moving > 0.03;
+    if (s.adventure) {
+      this.roverStops.update(s.adventure.rover);
       this.village.update(
         s.adventure,
         this.player.position.x,
         this.player.position.z,
       );
+    }
     this.village.animateGarden(time, this.reducedMotion);
     for (const npc of this.village.neighbours) {
       const near =
@@ -1089,19 +1145,21 @@ export class MonsterWorld {
         1 - Math.exp(-7 * dt),
       );
     }
+    const beforeMove = this.player.position.clone();
     if (s.active) {
-      const length = Math.max(1, Math.hypot(s.moveX, s.moveY)),
+      const speed = this.driving ? 9.5 : 6.7;
+      const length = Math.max(1, Math.hypot(moveX, moveY)),
         dx =
-          ((s.moveX * Math.cos(this.movementAngle) +
-            s.moveY * Math.sin(this.movementAngle)) *
+          ((moveX * Math.cos(this.movementAngle) +
+            moveY * Math.sin(this.movementAngle)) *
             dt *
-            6.7) /
+            speed) /
           length,
         dz =
-          ((-s.moveX * Math.sin(this.movementAngle) +
-            s.moveY * Math.cos(this.movementAngle)) *
+          ((-moveX * Math.sin(this.movementAngle) +
+            moveY * Math.cos(this.movementAngle)) *
             dt *
-            6.7) /
+            speed) /
           length;
       if (moving > 0.03) {
         const next = s.adventure
@@ -1113,11 +1171,22 @@ export class MonsterWorld {
         Object.assign(next, clampToPlayArea(next.x, next.z));
         for (const o of this.region === 'island'
           ? this.colliders
-          : this.atmosphere.moonColliders) {
+          : [
+              ...this.atmosphere.moonColliders,
+              ...(!this.driving
+                ? [
+                    {
+                      x: this.rover.root.position.x,
+                      z: this.rover.root.position.z,
+                      r: 1.6,
+                    },
+                  ]
+                : []),
+            ]) {
           const x = next.x - o.x,
             z = next.z - o.z,
             d = Math.hypot(x, z),
-            r = o.r + 0.43;
+            r = o.r + (this.driving ? 1.7 : 0.43);
           if (d < r) {
             next.x = o.x + (d ? x / d : 1) * r;
             next.z = o.z + (d ? z / d : 0) * r;
@@ -1164,15 +1233,33 @@ export class MonsterWorld {
     this.character.animate({
       delta: dt,
       time,
-      speed: moving,
+      speed: this.driving ? 0 : moving,
       airborne: show ? 0 : this.jumpY,
       celebrating: this.celebration > 0,
       greeting: s.welcome,
       reducedMotion: this.reducedMotion,
-      carrying: !!s.adventure?.deliveries.parcel && !show,
+      carrying: (!!s.adventure?.deliveries.parcel || this.driving) && !show,
     });
+    if (this.driving && !show) {
+      this.rig.scale.multiplyScalar(0.8);
+      this.rig.position.y += 0.9;
+      this.rover.root.position.copy(this.player.position);
+      this.rover.root.rotation.y = this.player.rotation.y;
+    }
+    this.rover.animate(
+      this.driving
+        ? Math.hypot(
+            this.player.position.x - beforeMove.x,
+            this.player.position.z - beforeMove.z,
+          )
+        : 0,
+      time,
+      this.reducedMotion,
+    );
     if (this.pizzaParcel.parent !== this.rig) this.rig.add(this.pizzaParcel);
-    this.pizzaParcel.visible = !!s.adventure?.deliveries.parcel && !show;
+    this.pizzaParcel.visible =
+      !!s.adventure?.deliveries.parcel && !show && !this.driving;
+    this.roverParcel.visible = !!s.adventure?.deliveries.parcel && this.driving;
     this.shadow.position.set(
       this.player.position.x,
       (this.region === 'moon'
@@ -1183,7 +1270,7 @@ export class MonsterWorld {
           )) + 0.025,
       this.player.position.z,
     );
-    this.shadow.scale.setScalar(1 - this.jumpY * 0.14);
+    this.shadow.scale.setScalar(this.driving ? 1.8 : 1 - this.jumpY * 0.14);
     for (const o of this.ornaments) {
       if (o.kind === 'tree' && !this.reducedMotion) {
         o.object.rotation.z = Math.sin(time * 0.8 + o.phase) * 0.014;
@@ -1210,17 +1297,21 @@ export class MonsterWorld {
       ? discoveryFor(s.discoveryTarget)
       : undefined;
     const target =
-        s.deliveryTarget && s.adventure?.deliveries.parcel
-          ? this.region === 'moon'
-            ? { x: 0, z: 6 }
-            : placeFor(s.adventure.deliveries.parcel.recipient)
-          : discovery &&
-              discovery.region === this.region &&
-              !s.adventure?.discoveries.includes(discovery.id)
-            ? discovery
-            : s.destination
-              ? placeFor(s.destination)
-              : ZONES.find((z) => z.id === s.target)!,
+        s.roverTarget && this.region === 'moon'
+          ? this.driving
+            ? roverStop(s.roverTarget)
+            : this.rover.root.position
+          : s.deliveryTarget && s.adventure?.deliveries.parcel
+            ? this.region === 'moon'
+              ? { x: 0, z: 6 }
+              : placeFor(s.adventure.deliveries.parcel.recipient)
+            : discovery &&
+                discovery.region === this.region &&
+                !s.adventure?.discoveries.includes(discovery.id)
+              ? discovery
+              : s.destination
+                ? placeFor(s.destination)
+                : ZONES.find((z) => z.id === s.target)!,
       d = Math.hypot(
         target.x - this.player.position.x,
         target.z - this.player.position.z,
@@ -1332,9 +1423,93 @@ export class MonsterWorld {
     this.showcaseAngle += Math.PI / 2;
   }
   jump() {
-    if (this.jumpY === 0 && this.state().active) this.jumpVelocity = 5.8;
+    if (!this.driving && this.jumpY === 0 && this.state().active)
+      this.jumpVelocity = 5.8;
+  }
+  enterRover() {
+    if (
+      this.region !== 'moon' ||
+      this.driving ||
+      this.player.position.distanceTo(this.rover.root.position) >= 4.6
+    )
+      return false;
+    this.driving = true;
+    this.player.position.copy(this.rover.root.position);
+    this.player.rotation.y = this.rover.root.rotation.y;
+    this.jumpY = this.jumpVelocity = 0;
+    this.reportRover();
+    return true;
+  }
+  exitRover() {
+    if (!this.driving) return false;
+    this.driving = false;
+    this.roverPath = [];
+    const next = roverExit(
+      this.rover.root.position.x,
+      this.rover.root.position.z,
+      this.rover.root.rotation.y,
+      this.atmosphere.moonColliders,
+    );
+    this.player.position.set(next.x, 0, next.z);
+    this.reportRover();
+    return true;
+  }
+  visitRover() {
+    if (this.region !== 'moon') return;
+    this.exitRover();
+    const next = roverExit(
+      this.rover.root.position.x,
+      this.rover.root.position.z,
+      this.rover.root.rotation.y,
+      this.atmosphere.moonColliders,
+    );
+    this.player.position.set(next.x, 0, next.z);
+    this.jumpY = this.jumpVelocity = 0;
+    this.angle = this.cameraGoal = 0;
+    this.wasMoving = false;
+    this.player.rotation.y = -Math.PI / 2;
+    this.reportRover();
+  }
+  private reportRover() {
+    const { x, z } = this.player.position;
+    const zone = nearestZone(x, z);
+    this.update({
+      x,
+      z,
+      zone: zone.id,
+      near: null,
+      place: null,
+      driving: this.driving,
+      roverFollowing: this.roverPath.length > 0,
+      nearRover:
+        !this.driving &&
+        this.region === 'moon' &&
+        this.player.position.distanceTo(this.rover.root.position) < 4.6,
+    });
+  }
+  followRoverTrail(id: RoverStopId) {
+    if (!this.driving || this.region !== 'moon') return false;
+    if (this.roverPath.length) {
+      this.roverPath = [];
+      this.reportRover();
+      return false;
+    }
+    this.roverPathTarget = id;
+    this.roverPath = roverRoute(
+      this.player.position,
+      roverStop(id),
+      this.atmosphere.moonColliders,
+    );
+    this.reportRover();
+    return this.roverPath.length > 0;
+  }
+  takeRoverControl() {
+    if (!this.roverPath.length) return;
+    this.roverPath = [];
+    this.reportRover();
   }
   travel(id: PlaceId) {
+    this.exitRover();
     const z = placeFor(id);
     this.player.position.set(
       z.x - 1.6,
@@ -1356,6 +1531,8 @@ export class MonsterWorld {
       zone: zone.id,
       near: Math.hypot(x - zone.x, playerZ - zone.z) < 3.8 ? zone.id : null,
       place: id,
+      driving: false,
+      nearRover: false,
     });
   }
   celebrate() {

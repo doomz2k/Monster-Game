@@ -575,22 +575,6 @@ export function createAtmosphere(
     0.7,
     1.8,
   ).rotation.x = 0.8;
-  const rover = at(-23, -28, moon);
-  rover.name = 'Moon rover';
-  box(rover, '#ebdec4', 0, 1, 0, 2.2, 0.75, 3);
-  box(rover, '#8495ac', 0, 1.7, -0.4, 1.9, 0.7, 1.6);
-  for (const side of [-1, 1])
-    for (const z of [-1, 0, 1])
-      mesh(
-        rover,
-        new THREE.CylinderGeometry(0.45, 0.45, 0.32, 16),
-        '#646a81',
-        side * 1.2,
-        0.45,
-        z,
-      ).rotation.z = Math.PI / 2;
-  box(rover, '#a6afc6', 0, 2.5, -0.8, 0.12, 1.4, 0.12);
-  mesh(rover, sphere, '#748797', 0, 3.2, -0.8, 0.3, 0.2, 0.2);
   for (let i = 0; i < 35; i++)
     for (const side of [-1, 1])
       box(
@@ -648,10 +632,7 @@ export function createAtmosphere(
       { x: 58, z: 17, r: 1.8 },
       { x: 28, z: 48, r: 2 },
     ],
-    moonColliders: [
-      { x: 19, z: -17, r: 3.5 },
-      { x: -23, z: -28, r: 2 },
-    ],
+    moonColliders: [{ x: 19, z: -17, r: 3.5 }],
     surfaceHeight(x: number, z: number) {
       if (Math.abs(z - 23) < 1.1 && Math.abs(x + 44) < 7.25) {
         const f = Math.max(0, Math.min(1, (x + 51) / 14));

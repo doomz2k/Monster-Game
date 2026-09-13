@@ -1,5 +1,10 @@
 import { WORLD_SCALE } from './world-layout';
 import {
+  freshRoverProgress,
+  readRoverProgress,
+  type RoverProgress,
+} from './rover';
+import {
   PIZZA_CUSTOMERS,
   freshDeliveries,
   readDeliveries,
@@ -127,6 +132,7 @@ export type AdventureProgress = {
   friendshipGifts: QuestId[];
   pantry: Pantry;
   deliveries: DeliveryProgress;
+  rover: RoverProgress;
 };
 export const SHOP_ITEMS = [
   {
@@ -298,6 +304,7 @@ export const freshAdventure = (legacyStars = 0): AdventureProgress => ({
   friendshipGifts: [],
   pantry: freshPantry(),
   deliveries: freshDeliveries(),
+  rover: freshRoverProgress(),
 });
 const integer = (v: unknown, max = 100000) =>
   typeof v === 'number' && Number.isSafeInteger(v) && v >= 0
@@ -362,6 +369,7 @@ export function readAdventure(
   p.moonVisits = integer(v.moonVisits);
   p.pantry = readPantry(v.pantry);
   p.deliveries = readDeliveries(v.deliveries, p.rounds.meadow);
+  p.rover = readRoverProgress(v.rover, p.rounds.rocket >= 3);
   p.discoveries = [
     ...new Set(
       Array.isArray(v.discoveries)

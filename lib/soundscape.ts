@@ -5,6 +5,7 @@ export type SoundScene = {
   x: number;
   z: number;
   moving: boolean;
+  driving?: boolean;
 };
 export function environmentalMix(scene: SoundScene) {
   const source = (
@@ -25,7 +26,10 @@ export function environmentalMix(scene: SoundScene) {
       scene.region === 'island' ? source('woods', 45) : { gain: 0, pan: 0 },
     oven:
       scene.region === 'island' ? source('meadow', 20) : { gain: 0, pan: 0 },
-    machine: source(scene.region === 'moon' ? 'moon' : 'rocket', 24),
+    machine:
+      scene.driving && scene.region === 'moon'
+        ? { gain: scene.active && scene.moving ? 0.75 : 0, pan: 0 }
+        : source(scene.region === 'moon' ? 'moon' : 'rocket', 24),
   };
 }
 /** Quiet original procedural foley. Shares the narration context, mute and lifecycle. */
@@ -129,7 +133,7 @@ export class Soundscape {
       this.loops[key].pan.pan.setTargetAtTime(mix[key].pan, t, 0.3);
     }
     if (!active) return;
-    if (scene.moving && t - this.lastStep > 0.36) {
+    if (scene.moving && !scene.driving && t - this.lastStep > 0.36) {
       this.lastStep = t;
       this.puff(scene.region === 'moon' ? 170 : 310, 0.075, 0.075);
     }

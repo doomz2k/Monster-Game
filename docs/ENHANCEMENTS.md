@@ -72,3 +72,5 @@ The next checkpoint, [DISCOVERIES-AND-FRIENDS.md](DISCOVERIES-AND-FRIENDS.md), a
 [GRAPHICS-QUALITY.md](GRAPHICS-QUALITY.md) adds adaptive and manual rendering tiers, explicit pixel/shadow/vegetation budgets and hidden local performance information (12). Initial browser measurements and outstanding low-spec hardware acceptance are recorded there.
 
 [ROCKET-STORY.md](ROCKET-STORY.md) adds narrated repair chapters, visibly repaired rocket systems and a personalised 3D departure/landing journey (22), with pause, cancel, skip and reduced-motion support.
+
+[MOON-ROVER.md](MOON-ROVER.md) adds a drivable Moon expedition (41), optional guided rides, three counting destinations, persistent stamps and repeatable rewards. Route, save, controller-keyboard and responsive-layout checks are recorded there.

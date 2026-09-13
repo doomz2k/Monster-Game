@@ -1483,5 +1483,65 @@
     "path": "/audio/voices/pip-repair-3-150028b772ba4ecb.ogg",
     "voice": "bm_fable",
     "text": "You did it! All three systems are ready. Our rocket can fly to the Moon. Thank you, little explorer!"
+  },
+  "rover-intro": {
+    "path": "/audio/voices/rover-intro-0a2ac44e57412e5a.ogg",
+    "voice": "bf_isabella",
+    "text": "This little rover is yours to explore in! Press the green button to climb in. We can visit three expedition stops together."
+  },
+  "rover-drive": {
+    "path": "/audio/voices/rover-drive-1518c9f13eb0ff2e.ogg",
+    "voice": "bf_isabella",
+    "text": "Move the control pad to drive. Let go to stop. The green button can follow the star for you, or explore a stop when you arrive. The red button lets you climb out."
+  },
+  "rover-exit": {
+    "path": "/audio/voices/rover-exit-7c9c0223884fa190.ogg",
+    "voice": "bf_isabella",
+    "text": "Here you are! Your rover will wait here. You can find it again on the picture map."
+  },
+  "rover-next": {
+    "path": "/audio/voices/rover-next-957c36a726e74113.ogg",
+    "voice": "bf_isabella",
+    "text": "Another little adventure! Follow the golden star to the next expedition stop. There is no hurry."
+  },
+  "rover-success": {
+    "path": "/audio/voices/rover-success-51ff5b5659a25bda.ogg",
+    "voice": "bf_isabella",
+    "text": "What a careful explorer! Here is your expedition stamp, and one star. Shall we see what is at the next stop?"
+  },
+  "rover-route-rocks": {
+    "path": "/audio/voices/rover-route-rocks-3fd36747714be841.ogg",
+    "voice": "bf_isabella",
+    "text": "Let us visit the rock trail. Follow the golden star to stop one."
+  },
+  "rover-route-panels": {
+    "path": "/audio/voices/rover-route-panels-1b7bffe1e33dc226.ogg",
+    "voice": "bf_isabella",
+    "text": "Let us visit the sunshine station. Follow the golden star to stop two."
+  },
+  "rover-route-signals": {
+    "path": "/audio/voices/rover-route-signals-7d17deabda5ebd7d.ogg",
+    "voice": "bf_isabella",
+    "text": "Let us visit signal hill. Follow the golden star to stop three."
+  },
+  "rover-count-rocks": {
+    "path": "/audio/voices/rover-count-rocks-3f2407b8e7deb9cb.ogg",
+    "voice": "bf_isabella",
+    "text": "How many Moon rocks are in the tray? Count each picture once. Move the control pad to choose a number, then press the green button."
+  },
+  "rover-count-panels": {
+    "path": "/audio/voices/rover-count-panels-33b60e1e1fc3efcd.ogg",
+    "voice": "bf_isabella",
+    "text": "How many solar panels are in the tray? Count each picture once. Move the control pad to choose a number, then press the green button."
+  },
+  "rover-count-signals": {
+    "path": "/audio/voices/rover-count-signals-8ff6c0f365ee0d2b.ogg",
+    "voice": "bf_isabella",
+    "text": "How many signal lights are in the tray? Count each picture once. Move the control pad to choose a number, then press the green button."
+  },
+  "rover-follow": {
+    "path": "/audio/voices/rover-follow-434a119cf49e8a67.ogg",
+    "voice": "bf_isabella",
+    "text": "Off we go! Your rover is following the star. Move the control pad whenever you want to take over. The green button can stop the ride."
   }
 }

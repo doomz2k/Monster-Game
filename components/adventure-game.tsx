@@ -32,6 +32,17 @@ import { GamePicture } from './game-picture';
 import { NeighbourPortrait } from './neighbour-portrait';
 import { RocketFlight } from './rocket-flight';
 import { RocketProgress } from './rocket-progress';
+import { RoverPicture } from './rover-picture';
+import { RoverSurvey } from './rover-survey';
+import {
+  ROVER_STOPS,
+  finishRoverSurvey,
+  nearbyRoverStop,
+  nextRoverStop,
+  roverSurvey,
+  type RoverStopId,
+  type RoverSurvey as RoverTask,
+} from '@/lib/rover';
 import { rocketChapter } from '@/lib/rocket-story';
 import { collectDiscovery } from '@/lib/discoveries';
 import {
@@ -96,6 +107,7 @@ type Mode =
   | 'home'
   | 'shop'
   | 'flight'
+  | 'rover'
   | 'scrapbook';
 const CHOICE = { 'data-game-choice': true };
 export default function AdventureGame() {
@@ -104,6 +116,7 @@ export default function AdventureGame() {
     modalSurface = useRef<HTMLDivElement>(null),
     missionSurface = useRef<HTMLDivElement>(null),
     bookSurface = useRef<HTMLDivElement>(null),
+    roverSurface = useRef<HTMLElement>(null),
     world = useRef<MonsterWorld | null>(null),
     input = useRef<GameInput | null>(null),
     actionRef = useRef<(action: Action) => void>(() => {});
@@ -166,6 +179,9 @@ export default function AdventureGame() {
   const [flightRun, setFlightRun] = useState(0);
   const [deliveryThanks, setDeliveryThanks] = useState<PlaceId | null>(null);
   const [deliveryGuiding, setDeliveryGuiding] = useState(true);
+  const [roverTask, setRoverTask] = useState<RoverTask | null>(null);
+  const [roverTarget, setRoverTarget] = useState<RoverStopId | null>(null);
+  const [roverGuiding, setRoverGuiding] = useState(false);
   const [graphicsSnapshot, setGraphicsSnapshot] = useState<GraphicsSnapshot>();
   const [parentReturnMode, setParentReturnMode] = useState<Mode>('explore');
   const returnMode = useRef<Mode>('welcome'),
@@ -207,6 +223,12 @@ export default function AdventureGame() {
   const nearLaunchPad =
     p.adventure.region === 'moon' &&
     Math.hypot(position.x, position.z - 6) < 3.6;
+  const roverDestination = roverTarget ?? nextRoverStop(p.adventure.rover);
+  const closestSurvey = position.driving
+    ? nearbyRoverStop(position.x, position.z)
+    : undefined;
+  const nearSurvey =
+    closestSurvey?.id === roverDestination ? closestSurvey : undefined;
   const openBook = (id: string | null = null) => {
     bookReturnMode.current =
       mode === 'map' || mode === 'pause' ? mode : 'explore';
@@ -230,6 +252,7 @@ export default function AdventureGame() {
     'creator',
     'flight',
     'mission',
+    'rover',
     'scrapbook',
   ].includes(mode);
   const change = (next: ProgressData) => setP(next);
@@ -243,6 +266,7 @@ export default function AdventureGame() {
     void audio.line(id);
   };
   const go = (next: Mode, line?: string) => {
+    if (next === 'welcome' || next === 'creator') world.current?.exitRover();
     if (['welcome', 'explore', 'creator', 'map'].includes(next))
       setFlightRunning(false);
     stop();
@@ -298,7 +322,9 @@ export default function AdventureGame() {
       if (
         currentMode.current === 'explore' ||
         currentMode.current === 'mission' ||
-        currentMode.current === 'tutorial'
+        currentMode.current === 'tutorial' ||
+        currentMode.current === 'flight' ||
+        currentMode.current === 'rover'
       ) {
         resumeMode.current = currentMode.current;
         setMode('pause');
@@ -342,13 +368,15 @@ export default function AdventureGame() {
     if (mode === 'explore' || mode === 'parents' || mode === 'flight') return;
     const frame = requestAnimationFrame(() => {
       const root =
-        mode === 'scrapbook'
-          ? bookSurface.current
-          : mode === 'mission'
-            ? missionSurface.current
-            : modal
-              ? modalSurface.current
-              : surface.current;
+        mode === 'rover'
+          ? roverSurface.current
+          : mode === 'scrapbook'
+            ? bookSurface.current
+            : mode === 'mission'
+              ? missionSurface.current
+              : modal
+                ? modalSurface.current
+                : surface.current;
       root
         ?.querySelector<HTMLElement>('[data-game-choice]:not(:disabled)')
         ?.focus({ preventScroll: true });
@@ -356,7 +384,7 @@ export default function AdventureGame() {
     return () => cancelAnimationFrame(frame);
   }, [mode, modal, mission, creatorTab, slot, ready]);
   useEffect(() => {
-    if (mode !== 'explore') return;
+    if (mode !== 'explore' || position.driving) return;
     const id = position.place ?? null,
       now = performance.now();
     if (recentArrival.current.id !== id)
@@ -394,7 +422,10 @@ export default function AdventureGame() {
       region: p.adventure.region,
       x: position.x,
       z: position.z,
-      moving: Math.hypot(runtime.current.moveX, runtime.current.moveY) > 0.1,
+      moving:
+        !!position.roverFollowing ||
+        Math.hypot(runtime.current.moveX, runtime.current.moveY) > 0.1,
+      driving: !!position.driving,
     });
   }, [audio, mode, tutorialStep, position, p.adventure.region]);
 
@@ -406,6 +437,7 @@ export default function AdventureGame() {
   }, [audio, p.preferences]);
 
   const openCreator = () => {
+    world.current?.exitRover();
     returnMode.current = mode === 'welcome' ? 'welcome' : 'explore';
     setCreatorTab('look');
     go('creator', 'creator');
@@ -442,6 +474,7 @@ export default function AdventureGame() {
       );
   };
   const visit = (id: PlaceId) => {
+    setRoverGuiding(false);
     setDeliveryGuiding(false);
     if (id === 'moon' && p.adventure.region !== 'moon') {
       setPlace('rocket');
@@ -464,6 +497,8 @@ export default function AdventureGame() {
   };
   const launch = (region: Region) => {
     if (region === 'moon' && rocketParts(p) < 3) return;
+    world.current?.exitRover();
+    setRoverGuiding(false);
     setFlightTo(region);
     setFlightRun((old) => old + 1);
     setFlightRunning(true);
@@ -499,6 +534,8 @@ export default function AdventureGame() {
   };
   const followDelivery = () => {
     if (!parcel) return;
+    world.current?.exitRover();
+    setRoverGuiding(false);
     setDeliveryGuiding(true);
     setDiscoveryTarget(null);
     go(
@@ -508,7 +545,53 @@ export default function AdventureGame() {
         : 'delivery-route-' + parcel.recipient,
     );
   };
+  const visitRover = () => {
+    if (p.adventure.region !== 'moon') return;
+    world.current?.visitRover();
+    setRoverGuiding(true);
+    setRoverTarget(null);
+    setDiscoveryTarget(null);
+    go('explore', 'rover-intro');
+  };
+  const operateRover = () => {
+    if (position.driving && nearSurvey) {
+      setRoverTask(roverSurvey(nearSurvey.id, p.adventure.rover));
+      go('rover');
+    } else if (position.driving) {
+      const following = world.current?.followRoverTrail(roverDestination);
+      say(following ? 'rover-follow' : 'rover-drive');
+    } else if (world.current?.enterRover()) {
+      setRoverGuiding(true);
+      setDiscoveryTarget(null);
+      say('rover-drive');
+    }
+  };
+  const completeSurvey = (answer: number) => {
+    if (!roverTask) return false;
+    const next = finishRoverSurvey(
+      p,
+      roverTask,
+      answer,
+      position.x,
+      position.z,
+    );
+    if (next === p) return false;
+    setP(next);
+    setRoverTarget(null);
+    world.current?.celebrate();
+    return true;
+  };
   const repeat = () => {
+    if (mode === 'rover') {
+      roverSurface.current
+        ?.querySelector<HTMLButtonElement>('[data-repeat-prompt]')
+        ?.click();
+      return;
+    }
+    if (mode === 'explore' && (position.driving || position.nearRover)) {
+      say(position.driving ? 'rover-drive' : 'rover-intro');
+      return;
+    }
     if (mode === 'flight') {
       say(flightTo === 'moon' ? 'launch' : 'return');
       return;
@@ -562,6 +645,11 @@ export default function AdventureGame() {
     );
   };
   const back = () => {
+    if (mode === 'explore' && position.driving) {
+      world.current?.exitRover();
+      say('rover-exit');
+      return;
+    }
     if (mode === 'flight') setFlightRunning(false);
     if (mode === 'scrapbook') {
       bookSurface.current
@@ -615,6 +703,7 @@ export default function AdventureGame() {
       if (
         mode === 'explore' ||
         mode === 'mission' ||
+        mode === 'rover' ||
         mode === 'tutorial' ||
         mode === 'flight'
       ) {
@@ -638,9 +727,12 @@ export default function AdventureGame() {
       return;
     }
     if (mode === 'explore') {
+      if (['left', 'right', 'up', 'down'].includes(action))
+        world.current?.takeRoverControl();
       if (action === 'confirm') {
         audio.unlock();
-        if (find) collect();
+        if (position.driving || position.nearRover) operateRover();
+        else if (find) collect();
         else if (nearLaunchPad) launch('island');
         else if (position.place) talk(position.place);
         else world.current?.jump();
@@ -648,17 +740,22 @@ export default function AdventureGame() {
       return;
     }
     const base =
-      mode === 'scrapbook'
-        ? bookSurface.current
-        : mode === 'mission'
-          ? missionSurface.current
-          : modal
-            ? modalSurface.current
-            : surface.current;
+      mode === 'rover'
+        ? roverSurface.current
+        : mode === 'scrapbook'
+          ? bookSurface.current
+          : mode === 'mission'
+            ? missionSurface.current
+            : modal
+              ? modalSurface.current
+              : surface.current;
     const root =
       base?.querySelector<HTMLElement>('[data-choice-scope]') ?? base;
     if (!root) return;
-    if (mode === 'mission' && root.querySelector('[data-quantity-dial]')) {
+    if (
+      (mode === 'mission' || mode === 'rover') &&
+      root.querySelector('[data-quantity-dial]')
+    ) {
       const selector =
         action === 'left' || action === 'down'
           ? '[data-quantity-less]'
@@ -727,7 +824,9 @@ export default function AdventureGame() {
         mode !== 'scrapbook' &&
         mode !== 'dialogue' &&
         mode !== 'home' &&
-        mode !== 'flight',
+        mode !== 'flight' &&
+        mode !== 'rover',
+      roverTarget: roverGuiding ? roverDestination : null,
       discoveryTarget,
       deliveryTarget: deliveryGuiding,
       completed: p.completed,
@@ -849,44 +948,54 @@ export default function AdventureGame() {
                   <Map />
                 </button>
               </div>
-              {find && mode === 'explore' && (
-                <button
-                  className="talk-cue discovery-cue"
-                  onClick={collect}
-                  aria-label={'Discover ' + find.name}
-                >
-                  <GamePicture symbol={find.picture} />
-                  <b className="pad-key a-key">A</b>
-                </button>
-              )}
-              {nearLaunchPad && !find && (
-                <button
-                  className="talk-cue"
-                  onClick={() => launch('island')}
-                  aria-label="Fly home from the landing pad"
-                >
-                  <GamePicture symbol="🚀" />
-                  <b className="pad-key a-key">A</b>
-                </button>
-              )}
-              {nearby && !find && !nearLaunchPad && (
-                <button
-                  className="talk-cue"
-                  onClick={() => talk(nearby.id)}
-                  aria-label={
-                    (parcel?.recipient === nearby.id
-                      ? 'Give pizza to '
-                      : 'Visit ') + nearby.friend
-                  }
-                >
-                  {parcel?.recipient === nearby.id && (
-                    <GamePicture symbol="🍕" />
-                  )}
-                  <span>{nearby.icon}</span>
-                  <b className="pad-key a-key">A</b>
-                </button>
-              )}
-              {parcel && (
+              {find &&
+                !position.driving &&
+                !position.nearRover &&
+                mode === 'explore' && (
+                  <button
+                    className="talk-cue discovery-cue"
+                    onClick={collect}
+                    aria-label={'Discover ' + find.name}
+                  >
+                    <GamePicture symbol={find.picture} />
+                    <b className="pad-key a-key">A</b>
+                  </button>
+                )}
+              {nearLaunchPad &&
+                !position.driving &&
+                !position.nearRover &&
+                !find && (
+                  <button
+                    className="talk-cue"
+                    onClick={() => launch('island')}
+                    aria-label="Fly home from the landing pad"
+                  >
+                    <GamePicture symbol="🚀" />
+                    <b className="pad-key a-key">A</b>
+                  </button>
+                )}
+              {nearby &&
+                !position.driving &&
+                !position.nearRover &&
+                !find &&
+                !nearLaunchPad && (
+                  <button
+                    className="talk-cue"
+                    onClick={() => talk(nearby.id)}
+                    aria-label={
+                      (parcel?.recipient === nearby.id
+                        ? 'Give pizza to '
+                        : 'Visit ') + nearby.friend
+                    }
+                  >
+                    {parcel?.recipient === nearby.id && (
+                      <GamePicture symbol="🍕" />
+                    )}
+                    <span>{nearby.icon}</span>
+                    <b className="pad-key a-key">A</b>
+                  </button>
+                )}
+              {parcel && p.adventure.region !== 'moon' && (
                 <button
                   className="delivery-trail"
                   onClick={followDelivery}
@@ -907,6 +1016,70 @@ export default function AdventureGame() {
                   />
                   <strong>For {placeFor(parcel.recipient).friend}</strong>
                 </button>
+              )}
+              {p.adventure.region === 'moon' && (
+                <div className="rover-route" aria-label="Moon expedition trail">
+                  <button
+                    onClick={visitRover}
+                    aria-label="Visit the Moon rover"
+                  >
+                    <RoverPicture />
+                    <small>Rover</small>
+                  </button>
+                  {ROVER_STOPS.map((s, i) => (
+                    <button
+                      key={s.id}
+                      className={
+                        roverGuiding && roverDestination === s.id
+                          ? 'chosen-stop'
+                          : ''
+                      }
+                      onClick={() => {
+                        setRoverTarget(s.id);
+                        setRoverGuiding(true);
+                        say('rover-route-' + s.id);
+                      }}
+                      aria-label={'Follow the trail to ' + s.name}
+                    >
+                      <RoverPicture kind={s.id} />
+                      <small>{i + 1}</small>
+                      {p.adventure.rover[s.id] > 0 && <b>✓</b>}
+                    </button>
+                  ))}
+                </div>
+              )}
+              {!position.driving && position.nearRover && (
+                <button
+                  className="talk-cue"
+                  onClick={operateRover}
+                  aria-label="Climb into the rover"
+                >
+                  <RoverPicture kind={nearSurvey?.id} />
+                  <b className="pad-key a-key">A</b>
+                </button>
+              )}
+              {position.driving && (
+                <div className="rover-drive-controls">
+                  <span>✚ Drive</span>
+                  <button onClick={operateRover}>
+                    <b className="pad-key a-key">A</b>
+                    {nearSurvey
+                      ? 'Explore'
+                      : position.roverFollowing
+                        ? 'Stop here'
+                        : 'Follow the star'}
+                  </button>
+                  <button onClick={back}>
+                    <b className="pad-key b-key">B</b>Climb out
+                  </button>
+                  <button
+                    onClick={repeat}
+                    aria-label="Hear the driving instructions"
+                  >
+                    <b className="pad-key y-key">Y</b>
+                    <Volume2 size={18} />
+                  </button>
+                </div>
               )}
               {p.adventure.region === 'moon' && (
                 <button
@@ -940,15 +1113,19 @@ export default function AdventureGame() {
                   </button>
                 ))}
               </div>
-              {!nearby && !find && !nearLaunchPad && (
-                <button
-                  className="touch-hop"
-                  aria-label="Hop"
-                  onClick={() => world.current?.jump()}
-                >
-                  <Footprints />
-                </button>
-              )}
+              {!nearby &&
+                !find &&
+                !nearLaunchPad &&
+                !position.driving &&
+                !position.nearRover && (
+                  <button
+                    className="touch-hop"
+                    aria-label="Hop"
+                    onClick={() => world.current?.jump()}
+                  >
+                    <Footprints />
+                  </button>
+                )}
             </>
           )}
           {(mode === 'scrapbook' ||
@@ -1102,6 +1279,31 @@ export default function AdventureGame() {
             <p>Try Chrome or Edge with graphics acceleration enabled.</p>
             <button onClick={() => location.reload()}>Try again</button>
           </div>
+        )}
+        {roverTask && ['rover', 'pause', 'parents'].includes(mode) && (
+          <section
+            ref={roverSurface}
+            className="activity-screen rover-activity"
+            hidden={mode !== 'rover'}
+            aria-label="Moon expedition"
+          >
+            <div className="activity-topbar">
+              <button className="back-control" onClick={back}>
+                <b className="pad-key b-key">B</b>Back
+              </button>
+              <span>MOON EXPLORERS</span>
+              <span className="activity-wallet">⭐ {p.adventure.wallet}</span>
+            </div>
+            <RoverSurvey
+              key={roverTask.stop + '-' + roverTask.round}
+              survey={roverTask}
+              progress={p.adventure.rover}
+              active={mode === 'rover'}
+              audio={audio}
+              onComplete={completeSurvey}
+              onBack={() => go('explore', 'rover-next')}
+            />
+          </section>
         )}
         {mission &&
           (mode === 'mission' || mode === 'pause' || mode === 'parents') && (
@@ -1270,14 +1472,26 @@ export default function AdventureGame() {
                       </button>
                     ))}
                   </div>
-                  <button
-                    {...CHOICE}
-                    className="scrapbook-open"
-                    onClick={() => openBook()}
-                  >
-                    <BookOpen /> My discoveries{' '}
-                    <span>{p.adventure.discoveries.length} / 12</span>
-                  </button>
+                  <div className="map-bottom-links">
+                    <button
+                      {...CHOICE}
+                      className="scrapbook-open"
+                      onClick={() => openBook()}
+                    >
+                      <BookOpen /> My discoveries{' '}
+                      <span>{p.adventure.discoveries.length} / 12</span>
+                    </button>
+                    {p.adventure.region === 'moon' && (
+                      <button
+                        {...CHOICE}
+                        className="moon-expedition-link"
+                        onClick={visitRover}
+                      >
+                        <RoverPicture />
+                        Moon rover<b className="pad-key a-key">A</b>
+                      </button>
+                    )}
+                  </div>
                 </>
               )}
               {mode === 'pause' && (
@@ -1527,6 +1741,8 @@ export default function AdventureGame() {
           </output>
         )}
         {mode !== 'parents' &&
+          mode !== 'rover' &&
+          !(mode === 'explore' && position.driving) &&
           mode !== 'flight' &&
           mode !== 'mission' &&
           mode !== 'scrapbook' && (
