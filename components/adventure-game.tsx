@@ -1751,6 +1751,17 @@ export default function AdventureGame() {
                         🚀 Fly home
                       </button>
                     )}
+                    {place === 'rocket' &&
+                      rocketParts(p) === 3 &&
+                      deliveryThanks !== place && (
+                        <button
+                          {...CHOICE}
+                          className="home-flight-button"
+                          onClick={beginMission}
+                        >
+                          🔧 Play with Pip
+                        </button>
+                      )}
                   </div>
                 </div>
               )}

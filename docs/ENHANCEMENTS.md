@@ -86,3 +86,5 @@ The next checkpoint, [DISCOVERIES-AND-FRIENDS.md](DISCOVERIES-AND-FRIENDS.md), a
 [POPPYS-SHOP.md](POPPYS-SHOP.md) adds a full-screen illustrated shop, shared 3D item previews, explicit purchase receipts, repeat-press spending protection and a persistent pictured saving goal with a map shortcut (38). Matching item illustrations also improve the furniture studio (4/30).
 
 [HOME-PLAY.md](HOME-PLAY.md) adds optional furniture activities for the customised monster (31), a picture-based playroom, a moving swing seat, a settling companion and persistent lamp switches shared with the island. It also records a harbour answer-repetition issue found during the reward walkthrough for the next content pass.
+
+[MATHS-VARIETY.md](MATHS-VARIETY.md) resolves the repeated harbour answers, adds complete arithmetic fact banks, ten pizza topping combinations, 24 rocket patterns and repeat-unit-specific demonstrations and hints (9/16/19/25). Saved round counters continue through the banks, and repaired-rocket dialogue keeps Pip's activities accessible.

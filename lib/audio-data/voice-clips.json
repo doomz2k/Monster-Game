@@ -240,9 +240,9 @@
     "text": "Let's collect 1 star for our moon map. Choose them, then press the tick."
   },
   "take-1": {
-    "path": "/audio/voices/take-1-0893752de49133cf.ogg",
+    "path": "/audio/voices/take-1-72baa2abb8a475bd.ogg",
     "voice": "bf_emma",
-    "text": "1 fish swim away. How many are left? Choose your number, then press the green button."
+    "text": "One fish swims away. How many are left? Choose your number, then press the green button."
   },
   "number-2": {
     "path": "/audio/voices/number-2-90957944291d6ea8.ogg",
@@ -2083,5 +2083,440 @@
     "path": "/audio/voices/home-light-off-f7265f2fdf3c3275.ogg",
     "voice": "bf_emma",
     "text": "Click! The light is off. Green A switches it on again."
+  },
+  "pizza-plus-0-2": {
+    "path": "/audio/voices/pizza-plus-0-2-786247aa8586f223.ogg",
+    "voice": "bm_george",
+    "text": "0 plus 2. How many is that altogether?"
+  },
+  "pizza-plus-0-3": {
+    "path": "/audio/voices/pizza-plus-0-3-634fdcc430637011.ogg",
+    "voice": "bm_george",
+    "text": "0 plus 3. How many is that altogether?"
+  },
+  "pizza-plus-0-4": {
+    "path": "/audio/voices/pizza-plus-0-4-5595f030fdfc4e36.ogg",
+    "voice": "bm_george",
+    "text": "0 plus 4. How many is that altogether?"
+  },
+  "pizza-plus-0-5": {
+    "path": "/audio/voices/pizza-plus-0-5-854eeb5bdd70e3d5.ogg",
+    "voice": "bm_george",
+    "text": "0 plus 5. How many is that altogether?"
+  },
+  "pizza-plus-0-6": {
+    "path": "/audio/voices/pizza-plus-0-6-1107c29021ec3ca4.ogg",
+    "voice": "bm_george",
+    "text": "0 plus 6. How many is that altogether?"
+  },
+  "pizza-plus-0-7": {
+    "path": "/audio/voices/pizza-plus-0-7-1ca95e738f071dd1.ogg",
+    "voice": "bm_george",
+    "text": "0 plus 7. How many is that altogether?"
+  },
+  "pizza-plus-0-8": {
+    "path": "/audio/voices/pizza-plus-0-8-ab219faa2beac80e.ogg",
+    "voice": "bm_george",
+    "text": "0 plus 8. How many is that altogether?"
+  },
+  "pizza-plus-0-9": {
+    "path": "/audio/voices/pizza-plus-0-9-6155c5b701807597.ogg",
+    "voice": "bm_george",
+    "text": "0 plus 9. How many is that altogether?"
+  },
+  "pizza-plus-0-10": {
+    "path": "/audio/voices/pizza-plus-0-10-d9cbeb5f76f5a4aa.ogg",
+    "voice": "bm_george",
+    "text": "0 plus 10. How many is that altogether?"
+  },
+  "pizza-plus-1-3": {
+    "path": "/audio/voices/pizza-plus-1-3-d2034b7a0a57f217.ogg",
+    "voice": "bm_george",
+    "text": "1 plus 3. How many is that altogether?"
+  },
+  "pizza-plus-1-4": {
+    "path": "/audio/voices/pizza-plus-1-4-872a07687f4fcefc.ogg",
+    "voice": "bm_george",
+    "text": "1 plus 4. How many is that altogether?"
+  },
+  "pizza-plus-1-5": {
+    "path": "/audio/voices/pizza-plus-1-5-94f740f5723c84e7.ogg",
+    "voice": "bm_george",
+    "text": "1 plus 5. How many is that altogether?"
+  },
+  "pizza-plus-1-6": {
+    "path": "/audio/voices/pizza-plus-1-6-5d165a5d34bbc436.ogg",
+    "voice": "bm_george",
+    "text": "1 plus 6. How many is that altogether?"
+  },
+  "pizza-plus-1-7": {
+    "path": "/audio/voices/pizza-plus-1-7-9ceffecf8987b8d1.ogg",
+    "voice": "bm_george",
+    "text": "1 plus 7. How many is that altogether?"
+  },
+  "pizza-plus-1-8": {
+    "path": "/audio/voices/pizza-plus-1-8-50edb2f1b1a11729.ogg",
+    "voice": "bm_george",
+    "text": "1 plus 8. How many is that altogether?"
+  },
+  "pizza-plus-1-9": {
+    "path": "/audio/voices/pizza-plus-1-9-371c7f924b4763fa.ogg",
+    "voice": "bm_george",
+    "text": "1 plus 9. How many is that altogether?"
+  },
+  "pizza-plus-2-1": {
+    "path": "/audio/voices/pizza-plus-2-1-337ff0ba59a0982f.ogg",
+    "voice": "bm_george",
+    "text": "2 plus 1. How many is that altogether?"
+  },
+  "pizza-plus-2-4": {
+    "path": "/audio/voices/pizza-plus-2-4-7359a2d956a61a49.ogg",
+    "voice": "bm_george",
+    "text": "2 plus 4. How many is that altogether?"
+  },
+  "pizza-plus-2-5": {
+    "path": "/audio/voices/pizza-plus-2-5-00309f900f368153.ogg",
+    "voice": "bm_george",
+    "text": "2 plus 5. How many is that altogether?"
+  },
+  "pizza-plus-2-6": {
+    "path": "/audio/voices/pizza-plus-2-6-89c6325a9c107c4c.ogg",
+    "voice": "bm_george",
+    "text": "2 plus 6. How many is that altogether?"
+  },
+  "pizza-plus-2-7": {
+    "path": "/audio/voices/pizza-plus-2-7-870f73c5eb82691c.ogg",
+    "voice": "bm_george",
+    "text": "2 plus 7. How many is that altogether?"
+  },
+  "pizza-plus-2-8": {
+    "path": "/audio/voices/pizza-plus-2-8-ec90c251f237996b.ogg",
+    "voice": "bm_george",
+    "text": "2 plus 8. How many is that altogether?"
+  },
+  "pizza-plus-3-1": {
+    "path": "/audio/voices/pizza-plus-3-1-3d113b58fea0416a.ogg",
+    "voice": "bm_george",
+    "text": "3 plus 1. How many is that altogether?"
+  },
+  "pizza-plus-3-2": {
+    "path": "/audio/voices/pizza-plus-3-2-d61902b8b0577f88.ogg",
+    "voice": "bm_george",
+    "text": "3 plus 2. How many is that altogether?"
+  },
+  "pizza-plus-3-5": {
+    "path": "/audio/voices/pizza-plus-3-5-335df97fd3a2f939.ogg",
+    "voice": "bm_george",
+    "text": "3 plus 5. How many is that altogether?"
+  },
+  "pizza-plus-3-6": {
+    "path": "/audio/voices/pizza-plus-3-6-2fe84dd5a0971447.ogg",
+    "voice": "bm_george",
+    "text": "3 plus 6. How many is that altogether?"
+  },
+  "pizza-plus-3-7": {
+    "path": "/audio/voices/pizza-plus-3-7-70cbba7ea7a73dec.ogg",
+    "voice": "bm_george",
+    "text": "3 plus 7. How many is that altogether?"
+  },
+  "pizza-plus-4-1": {
+    "path": "/audio/voices/pizza-plus-4-1-c1dff833c3548445.ogg",
+    "voice": "bm_george",
+    "text": "4 plus 1. How many is that altogether?"
+  },
+  "pizza-plus-4-2": {
+    "path": "/audio/voices/pizza-plus-4-2-e2d92227202180dc.ogg",
+    "voice": "bm_george",
+    "text": "4 plus 2. How many is that altogether?"
+  },
+  "pizza-plus-4-3": {
+    "path": "/audio/voices/pizza-plus-4-3-60ca6db7f2df996d.ogg",
+    "voice": "bm_george",
+    "text": "4 plus 3. How many is that altogether?"
+  },
+  "pizza-plus-4-6": {
+    "path": "/audio/voices/pizza-plus-4-6-1b5ba25296b67fbd.ogg",
+    "voice": "bm_george",
+    "text": "4 plus 6. How many is that altogether?"
+  },
+  "pizza-plus-5-1": {
+    "path": "/audio/voices/pizza-plus-5-1-74c14643653aabdc.ogg",
+    "voice": "bm_george",
+    "text": "5 plus 1. How many is that altogether?"
+  },
+  "pizza-plus-5-2": {
+    "path": "/audio/voices/pizza-plus-5-2-3b7a6f90831fd70a.ogg",
+    "voice": "bm_george",
+    "text": "5 plus 2. How many is that altogether?"
+  },
+  "pizza-plus-5-3": {
+    "path": "/audio/voices/pizza-plus-5-3-f287789748afbf52.ogg",
+    "voice": "bm_george",
+    "text": "5 plus 3. How many is that altogether?"
+  },
+  "pizza-plus-5-4": {
+    "path": "/audio/voices/pizza-plus-5-4-b7498d3afb2c7a08.ogg",
+    "voice": "bm_george",
+    "text": "5 plus 4. How many is that altogether?"
+  },
+  "pizza-plus-6-1": {
+    "path": "/audio/voices/pizza-plus-6-1-7f81845f0165b791.ogg",
+    "voice": "bm_george",
+    "text": "6 plus 1. How many is that altogether?"
+  },
+  "pizza-plus-6-2": {
+    "path": "/audio/voices/pizza-plus-6-2-f208e2dc48ad37e5.ogg",
+    "voice": "bm_george",
+    "text": "6 plus 2. How many is that altogether?"
+  },
+  "pizza-plus-6-3": {
+    "path": "/audio/voices/pizza-plus-6-3-f0de69b2daea0417.ogg",
+    "voice": "bm_george",
+    "text": "6 plus 3. How many is that altogether?"
+  },
+  "pizza-plus-6-4": {
+    "path": "/audio/voices/pizza-plus-6-4-661a7e64961d18c0.ogg",
+    "voice": "bm_george",
+    "text": "6 plus 4. How many is that altogether?"
+  },
+  "pizza-plus-7-1": {
+    "path": "/audio/voices/pizza-plus-7-1-e8bc81c054e35946.ogg",
+    "voice": "bm_george",
+    "text": "7 plus 1. How many is that altogether?"
+  },
+  "pizza-plus-7-2": {
+    "path": "/audio/voices/pizza-plus-7-2-d68fd726b774e897.ogg",
+    "voice": "bm_george",
+    "text": "7 plus 2. How many is that altogether?"
+  },
+  "pizza-plus-7-3": {
+    "path": "/audio/voices/pizza-plus-7-3-0e934f57ca74f9a1.ogg",
+    "voice": "bm_george",
+    "text": "7 plus 3. How many is that altogether?"
+  },
+  "pizza-plus-8-1": {
+    "path": "/audio/voices/pizza-plus-8-1-8146b53a1b65eb43.ogg",
+    "voice": "bm_george",
+    "text": "8 plus 1. How many is that altogether?"
+  },
+  "pizza-plus-8-2": {
+    "path": "/audio/voices/pizza-plus-8-2-27df1e372856817c.ogg",
+    "voice": "bm_george",
+    "text": "8 plus 2. How many is that altogether?"
+  },
+  "pizza-plus-9-1": {
+    "path": "/audio/voices/pizza-plus-9-1-fffd9d8e903516e9.ogg",
+    "voice": "bm_george",
+    "text": "9 plus 1. How many is that altogether?"
+  },
+  "pizza-minus-3-2": {
+    "path": "/audio/voices/pizza-minus-3-2-5554048c32017f5a.ogg",
+    "voice": "bm_george",
+    "text": "3 take away 2. How many are left?"
+  },
+  "pizza-minus-4-2": {
+    "path": "/audio/voices/pizza-minus-4-2-1afca447b0069159.ogg",
+    "voice": "bm_george",
+    "text": "4 take away 2. How many are left?"
+  },
+  "pizza-minus-4-3": {
+    "path": "/audio/voices/pizza-minus-4-3-13c3c6e6a55ca345.ogg",
+    "voice": "bm_george",
+    "text": "4 take away 3. How many are left?"
+  },
+  "pizza-minus-5-2": {
+    "path": "/audio/voices/pizza-minus-5-2-c125f56a569ac622.ogg",
+    "voice": "bm_george",
+    "text": "5 take away 2. How many are left?"
+  },
+  "pizza-minus-5-3": {
+    "path": "/audio/voices/pizza-minus-5-3-4fc2cd9c2a798171.ogg",
+    "voice": "bm_george",
+    "text": "5 take away 3. How many are left?"
+  },
+  "pizza-minus-5-4": {
+    "path": "/audio/voices/pizza-minus-5-4-41c39b624a73f543.ogg",
+    "voice": "bm_george",
+    "text": "5 take away 4. How many are left?"
+  },
+  "pizza-minus-6-2": {
+    "path": "/audio/voices/pizza-minus-6-2-a5bd736bf4509a05.ogg",
+    "voice": "bm_george",
+    "text": "6 take away 2. How many are left?"
+  },
+  "pizza-minus-6-3": {
+    "path": "/audio/voices/pizza-minus-6-3-786484bb5f3c4159.ogg",
+    "voice": "bm_george",
+    "text": "6 take away 3. How many are left?"
+  },
+  "pizza-minus-6-4": {
+    "path": "/audio/voices/pizza-minus-6-4-40df5a7819cbcef3.ogg",
+    "voice": "bm_george",
+    "text": "6 take away 4. How many are left?"
+  },
+  "pizza-minus-6-5": {
+    "path": "/audio/voices/pizza-minus-6-5-a3e87ac117ae181d.ogg",
+    "voice": "bm_george",
+    "text": "6 take away 5. How many are left?"
+  },
+  "pizza-minus-7-2": {
+    "path": "/audio/voices/pizza-minus-7-2-fb37f1b3e878639e.ogg",
+    "voice": "bm_george",
+    "text": "7 take away 2. How many are left?"
+  },
+  "pizza-minus-7-3": {
+    "path": "/audio/voices/pizza-minus-7-3-792e6fa59623e2fc.ogg",
+    "voice": "bm_george",
+    "text": "7 take away 3. How many are left?"
+  },
+  "pizza-minus-7-4": {
+    "path": "/audio/voices/pizza-minus-7-4-898f307d294b2f54.ogg",
+    "voice": "bm_george",
+    "text": "7 take away 4. How many are left?"
+  },
+  "pizza-minus-7-5": {
+    "path": "/audio/voices/pizza-minus-7-5-024409c23ab177c6.ogg",
+    "voice": "bm_george",
+    "text": "7 take away 5. How many are left?"
+  },
+  "pizza-minus-7-6": {
+    "path": "/audio/voices/pizza-minus-7-6-947828ba02663d34.ogg",
+    "voice": "bm_george",
+    "text": "7 take away 6. How many are left?"
+  },
+  "pizza-minus-8-2": {
+    "path": "/audio/voices/pizza-minus-8-2-63c7a7f687103658.ogg",
+    "voice": "bm_george",
+    "text": "8 take away 2. How many are left?"
+  },
+  "pizza-minus-8-3": {
+    "path": "/audio/voices/pizza-minus-8-3-41651b92d7b09aa8.ogg",
+    "voice": "bm_george",
+    "text": "8 take away 3. How many are left?"
+  },
+  "pizza-minus-8-4": {
+    "path": "/audio/voices/pizza-minus-8-4-17d8c1bc16c28f14.ogg",
+    "voice": "bm_george",
+    "text": "8 take away 4. How many are left?"
+  },
+  "pizza-minus-8-5": {
+    "path": "/audio/voices/pizza-minus-8-5-3dd457144df0b84c.ogg",
+    "voice": "bm_george",
+    "text": "8 take away 5. How many are left?"
+  },
+  "pizza-minus-8-6": {
+    "path": "/audio/voices/pizza-minus-8-6-0a3627ebcbf9a5b7.ogg",
+    "voice": "bm_george",
+    "text": "8 take away 6. How many are left?"
+  },
+  "pizza-minus-8-7": {
+    "path": "/audio/voices/pizza-minus-8-7-2205dfcb6d58a391.ogg",
+    "voice": "bm_george",
+    "text": "8 take away 7. How many are left?"
+  },
+  "pizza-minus-9-2": {
+    "path": "/audio/voices/pizza-minus-9-2-70ff7e0c0a160450.ogg",
+    "voice": "bm_george",
+    "text": "9 take away 2. How many are left?"
+  },
+  "pizza-minus-9-3": {
+    "path": "/audio/voices/pizza-minus-9-3-a59fd6c06254524a.ogg",
+    "voice": "bm_george",
+    "text": "9 take away 3. How many are left?"
+  },
+  "pizza-minus-9-4": {
+    "path": "/audio/voices/pizza-minus-9-4-9aa3b9ae11408a56.ogg",
+    "voice": "bm_george",
+    "text": "9 take away 4. How many are left?"
+  },
+  "pizza-minus-9-5": {
+    "path": "/audio/voices/pizza-minus-9-5-b4dba7bc428d2969.ogg",
+    "voice": "bm_george",
+    "text": "9 take away 5. How many are left?"
+  },
+  "pizza-minus-9-6": {
+    "path": "/audio/voices/pizza-minus-9-6-fefdbcbb9c42cbf8.ogg",
+    "voice": "bm_george",
+    "text": "9 take away 6. How many are left?"
+  },
+  "pizza-minus-9-7": {
+    "path": "/audio/voices/pizza-minus-9-7-4e3e1b27f9cbbc7a.ogg",
+    "voice": "bm_george",
+    "text": "9 take away 7. How many are left?"
+  },
+  "pizza-minus-9-8": {
+    "path": "/audio/voices/pizza-minus-9-8-01e0e767a31234cd.ogg",
+    "voice": "bm_george",
+    "text": "9 take away 8. How many are left?"
+  },
+  "pizza-minus-10-2": {
+    "path": "/audio/voices/pizza-minus-10-2-1ad3ce5cff2085f4.ogg",
+    "voice": "bm_george",
+    "text": "10 take away 2. How many are left?"
+  },
+  "pizza-minus-10-3": {
+    "path": "/audio/voices/pizza-minus-10-3-ad8ffffe9be8dd15.ogg",
+    "voice": "bm_george",
+    "text": "10 take away 3. How many are left?"
+  },
+  "pizza-minus-10-4": {
+    "path": "/audio/voices/pizza-minus-10-4-8a27c28187a7f55e.ogg",
+    "voice": "bm_george",
+    "text": "10 take away 4. How many are left?"
+  },
+  "pizza-minus-10-5": {
+    "path": "/audio/voices/pizza-minus-10-5-e45502aff5c581e5.ogg",
+    "voice": "bm_george",
+    "text": "10 take away 5. How many are left?"
+  },
+  "pizza-minus-10-6": {
+    "path": "/audio/voices/pizza-minus-10-6-1be85bb38ca4cb65.ogg",
+    "voice": "bm_george",
+    "text": "10 take away 6. How many are left?"
+  },
+  "pizza-minus-10-7": {
+    "path": "/audio/voices/pizza-minus-10-7-bd74742759d809b2.ogg",
+    "voice": "bm_george",
+    "text": "10 take away 7. How many are left?"
+  },
+  "pizza-minus-10-8": {
+    "path": "/audio/voices/pizza-minus-10-8-b1df8b4b4f03268f.ogg",
+    "voice": "bm_george",
+    "text": "10 take away 8. How many are left?"
+  },
+  "pizza-minus-10-9": {
+    "path": "/audio/voices/pizza-minus-10-9-eddc3265bbb8f88b.ogg",
+    "voice": "bm_george",
+    "text": "10 take away 9. How many are left?"
+  },
+  "demo-pip-pattern-ab": {
+    "path": "/audio/voices/demo-pip-pattern-ab-146b6d6caa9af195.ogg",
+    "voice": "bm_fable",
+    "text": "Watch the little group. Circle, triangle. Circle, triangle. The group begins again with a circle. Choose the next picture, then press green A."
+  },
+  "demo-pip-pattern-aab": {
+    "path": "/audio/voices/demo-pip-pattern-aab-42cc97b8cf7f855e.ogg",
+    "voice": "bm_fable",
+    "text": "Watch the little group. Circle, circle, triangle. Circle, circle, triangle. The group begins again with a circle. Choose the next picture, then press green A."
+  },
+  "demo-pip-pattern-abb": {
+    "path": "/audio/voices/demo-pip-pattern-abb-04efde89aafebb8c.ogg",
+    "voice": "bm_fable",
+    "text": "Watch the little group. Circle, triangle, triangle. Circle, triangle, triangle. The group begins again with a circle. Choose the next picture, then press green A."
+  },
+  "demo-pip-pattern-abc": {
+    "path": "/audio/voices/demo-pip-pattern-abc-0f42fd3e10b16166.ogg",
+    "voice": "bm_fable",
+    "text": "Watch the little group. Circle, triangle, square. Circle, triangle, square. The group begins again with a circle. Choose the next picture, then press green A."
+  },
+  "demo-nova-pattern-ab": {
+    "path": "/audio/voices/demo-nova-pattern-ab-05f9204eda405c3c.ogg",
+    "voice": "bf_isabella",
+    "text": "Watch the little group. Circle, triangle. Circle, triangle. The group begins again with a circle. Choose the next picture, then press green A."
+  },
+  "demo-nova-pattern-aab": {
+    "path": "/audio/voices/demo-nova-pattern-aab-49b84531abf2bf66.ogg",
+    "voice": "bf_isabella",
+    "text": "Watch the little group. Circle, circle, triangle. Circle, circle, triangle. The group begins again with a circle. Choose the next picture, then press green A."
   }
 }

@@ -9,6 +9,7 @@ import { LessonDemo } from './lesson-demo';
 import { GamePicture } from './game-picture';
 import { QuantityHint } from './quantity-hint';
 import { firstMismatch } from '@/lib/learning-hints';
+import { PATTERN_LABELS } from '@/lib/maths-variety';
 import { SpaceObject } from './space-object';
 import { QuantityDial } from './quantity-dial';
 import { PizzaKitchen } from './pizza-kitchen';
@@ -347,25 +348,36 @@ export function MissionPanel({
                 )}
                 {m.kind === 'pattern' && (
                   <>
-                    <div
+                    <fieldset
+                      aria-label={
+                        m.sequence
+                          .map((shape) => PATTERN_LABELS[shape] ?? shape)
+                          .join(', ') + ', then what?'
+                      }
                       className={
                         'pattern-sequence ' + (feedback ? 'pattern-hint' : '')
                       }
                     >
                       {m.sequence.map((shape, i) => (
-                        <span key={i}>
+                        <span
+                          key={i}
+                          data-pattern-unit={
+                            i < (m.patternUnit ?? 2) ? '' : undefined
+                          }
+                        >
                           <GamePicture symbol={shape} />
                         </span>
                       ))}
                       <span className="pattern-gap">
                         {answer ? <GamePicture symbol={answer} /> : '?'}
                       </span>
-                    </div>
+                    </fieldset>
                     <div className="answer-row picture-answers">
                       {m.choices.map((shape) => (
                         <button
                           data-game-choice
                           key={shape}
+                          aria-label={PATTERN_LABELS[shape] ?? shape}
                           aria-pressed={shape === answer}
                           onClick={() => {
                             setAnswer(shape);

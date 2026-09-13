@@ -19,6 +19,15 @@ import {
 import { discoveryFor } from './discovery-catalogue';
 import { freshPantry, readPantry, type Pantry, type ProduceId } from './garden';
 import { spaceCard } from './space-learning';
+import {
+  arithmeticFact,
+  countQuantity,
+  pizzaFact,
+  pizzaToppingIndices,
+  rocketPattern,
+  patternStructure,
+  type PatternStyle,
+} from './maths-variety';
 import type { ProgressData } from './learning';
 import { decodableWords, SOUNDS, soundChoices } from './phonics';
 
@@ -594,6 +603,7 @@ export type PizzaRecipe = {
 };
 export function pizzaRecipe(round: number, max: number): PizzaRecipe {
   const customer = PIZZA_CUSTOMERS[round % PIZZA_CUSTOMERS.length];
+  const toppings = pizzaToppingIndices(round);
   return {
     customer,
     name: ['Woodland pizza', 'Garden pizza', 'Harbour pizza', 'Space pizza'][
@@ -601,13 +611,14 @@ export function pizzaRecipe(round: number, max: number): PizzaRecipe {
     ],
     intro: 'pizza-order-' + customer,
     steps: Array.from({ length: 3 }, (_, i) => {
-      const topping = TOPPINGS[(round + i * 2) % TOPPINGS.length].id;
-      const quantity = 1 + ((round + i + 1) % max);
-      const subtract = (round + i) % 2 === 1;
-      const left = subtract
-        ? Math.min(max, quantity + 1)
-        : Math.floor(quantity / 2);
-      const right = subtract ? left - quantity : quantity - left;
+      const topping = TOPPINGS[toppings[i]].id;
+      const {
+        left,
+        right,
+        target: quantity,
+        operation,
+      } = pizzaFact(round, i, max);
+      const subtract = operation === '−';
       return {
         topping,
         left,
@@ -650,6 +661,8 @@ export type Mission = {
   answer: string;
   parts: string[];
   introduce?: string;
+  patternStyle?: PatternStyle;
+  patternUnit?: number;
   sequence: string[];
   total: number;
   second: number;
@@ -694,8 +707,9 @@ export function missionFor(npc: QuestId, p: ProgressData): Mission {
     m.title = 'Grow a flower path';
     m.voice = 'tilly';
     m.icon = '🌼';
-    m.total = 1 + (round % Math.max(1, p.mathsMax - 1));
-    m.second = 1 + (Math.floor(round / 2) % (p.mathsMax - m.total));
+    const fact = arithmeticFact(round, p.mathsMax, '+');
+    m.total = fact.left;
+    m.second = fact.right;
     m.target = m.total + m.second;
     m.answer = String(m.target);
     m.prompt = 'add';
@@ -705,8 +719,9 @@ export function missionFor(npc: QuestId, p: ProgressData): Mission {
     m.title = 'Help the little boats';
     m.voice = 'marina';
     m.icon = '🐟';
-    m.total = Math.min(p.mathsMax, 3 + (round % 3));
-    m.second = 1 + (round % m.total);
+    const fact = arithmeticFact(round, p.mathsMax, '−');
+    m.total = fact.left;
+    m.second = fact.right;
     m.target = m.total - m.second;
     m.answer = String(m.target);
     m.prompt = 'take-' + m.second;
@@ -719,21 +734,26 @@ export function missionFor(npc: QuestId, p: ProgressData): Mission {
       'Connect the star battery',
     ][round % 3];
     if (round % 3 === 0) {
+      const pattern = rocketPattern(Math.floor(round / 3));
       m.kind = 'pattern';
       m.prompt = 'pattern';
-      m.choices = ['🔵', '🔺', '🟨'];
-      m.sequence =
-        round % 2 ? ['🟨', '🔵', '🟨', '🔵'] : ['🔵', '🔺', '🔵', '🔺'];
-      m.answer = m.sequence[0];
+      m.choices = pattern.choices;
+      m.sequence = pattern.sequence;
+      m.answer = pattern.answer;
+      m.patternStyle = pattern.style;
+      m.patternUnit = pattern.unitLength;
     } else if (round % 3 === 1) {
       m.icon = '💎';
-      m.prompt = 'fuel-' + target;
+      m.target = countQuantity(Math.floor(round / 3), p.mathsMax);
+      m.answer = String(m.target);
+      m.prompt = 'fuel-' + m.target;
     } else {
       m.kind = 'add';
       m.icon = '⚡';
       m.prompt = 'battery';
-      m.total = 2;
-      m.second = Math.min(p.mathsMax - 2, 1 + (round % 3));
+      const fact = arithmeticFact(Math.floor(round / 3), p.mathsMax, '+', 1);
+      m.total = fact.left;
+      m.second = fact.right;
       m.target = m.total + m.second;
       m.answer = String(m.target);
     }
@@ -775,6 +795,11 @@ export function missionFor(npc: QuestId, p: ProgressData): Mission {
     m.choices = card.choices;
     m.answer = card.answer;
     m.sequence = card.sequence ?? [];
+    if (m.kind === 'pattern') {
+      const structure = patternStructure(m.sequence, m.answer);
+      m.patternStyle = structure?.style;
+      m.patternUnit = structure?.unitLength;
+    }
     m.icon = card.icon ?? '🌙';
     m.target = card.target ?? 0;
     m.total = p.mathsMax;

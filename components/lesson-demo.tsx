@@ -4,6 +4,7 @@ import type { Mission } from '@/lib/adventure';
 import type { AudioDirector } from '@/lib/audio';
 import { GamePicture } from './game-picture';
 import { NeighbourPortrait } from './neighbour-portrait';
+import { PATTERN_UNITS } from '@/lib/maths-variety';
 
 export function LessonDemo({
   mission: m,
@@ -17,7 +18,11 @@ export function LessonDemo({
   const [phase, setPhase] = useState(0),
     ready = useRef<HTMLButtonElement>(null);
   const counting = ['pack', 'pizza', 'add', 'take'].includes(m.kind);
-  const voiceId = `demo-${m.voice}-${m.kind}`;
+  const voiceId =
+    `demo-${m.voice}-${m.kind}` + (m.patternStyle ? '-' + m.patternStyle : '');
+  const patternExample = m.patternStyle
+    ? PATTERN_UNITS[m.patternStyle].map((i) => ['🔵', '🔺', '🟨'][i])
+    : null;
   const replay = () => {
     setPhase(0);
     void audio.line(voiceId);
@@ -29,9 +34,12 @@ export function LessonDemo({
   }, [audio, voiceId]);
   useEffect(() => {
     if (phase >= 3) return;
-    const timer = setTimeout(() => setPhase(phase + 1), 1600);
+    const timer = setTimeout(
+      () => setPhase(phase + 1),
+      m.patternUnit ? m.patternUnit * 900 : 1600,
+    );
     return () => clearTimeout(timer);
-  }, [phase]);
+  }, [phase, m.patternUnit]);
   return (
     <div className="lesson-demo" data-choice-scope>
       <button
@@ -78,10 +86,33 @@ export function LessonDemo({
             </div>
           </>
         ) : m.kind === 'pattern' ? (
-          <div className="demo-pattern">
-            {['🔵', '🔺', '🔵', phase >= 2 ? '🔺' : '?'].map((s, i) => (
-              <GamePicture key={i} symbol={s} />
-            ))}
+          <div
+            className={
+              'demo-pattern' + (patternExample ? ' pattern-demo-groups' : '')
+            }
+          >
+            {patternExample ? (
+              <>
+                {[0, 1].map((group) => (
+                  <div
+                    key={group}
+                    className={
+                      'demo-repeat-group' +
+                      (phase === group ? ' current-group' : '')
+                    }
+                  >
+                    {patternExample.map((s, i) => (
+                      <GamePicture key={i} symbol={s} />
+                    ))}
+                  </div>
+                ))}
+                <GamePicture symbol={phase >= 2 ? patternExample[0] : '?'} />
+              </>
+            ) : (
+              ['🔵', '🔺', '🔵', phase >= 2 ? '🔺' : '?'].map((s, i) => (
+                <GamePicture key={i} symbol={s} />
+              ))
+            )}
           </div>
         ) : m.kind === 'spell' ? (
           <div className="demo-spelling">
