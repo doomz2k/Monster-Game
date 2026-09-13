@@ -1347,6 +1347,16 @@ export class MonsterWorld {
     this.cameraGoal = 0;
     this.wasMoving = false;
     this.player.rotation.y = Math.PI;
+    const x = this.player.position.x,
+      playerZ = this.player.position.z;
+    const zone = nearestZone(x, playerZ);
+    this.update({
+      x,
+      z: playerZ,
+      zone: zone.id,
+      near: Math.hypot(x - zone.x, playerZ - zone.z) < 3.8 ? zone.id : null,
+      place: id,
+    });
   }
   celebrate() {
     this.celebration = 3.5;

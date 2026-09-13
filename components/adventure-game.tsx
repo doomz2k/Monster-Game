@@ -30,6 +30,9 @@ import { SaveAndComfort } from './save-and-comfort';
 import { DiscoveryBook } from './discovery-book';
 import { GamePicture } from './game-picture';
 import { NeighbourPortrait } from './neighbour-portrait';
+import { RocketFlight } from './rocket-flight';
+import { RocketProgress } from './rocket-progress';
+import { rocketChapter } from '@/lib/rocket-story';
 import { collectDiscovery } from '@/lib/discoveries';
 import {
   acceptDelivery,
@@ -159,6 +162,8 @@ export default function AdventureGame() {
     [discoveryTarget, setDiscoveryTarget] = useState<string | null>(null);
   const bookReturnMode = useRef<Mode>('explore');
   const [flightTo, setFlightTo] = useState<Region>('moon');
+  const [flightRunning, setFlightRunning] = useState(false);
+  const [flightRun, setFlightRun] = useState(0);
   const [deliveryThanks, setDeliveryThanks] = useState<PlaceId | null>(null);
   const [deliveryGuiding, setDeliveryGuiding] = useState(true);
   const [graphicsSnapshot, setGraphicsSnapshot] = useState<GraphicsSnapshot>();
@@ -238,6 +243,8 @@ export default function AdventureGame() {
     void audio.line(id);
   };
   const go = (next: Mode, line?: string) => {
+    if (['welcome', 'explore', 'creator', 'map'].includes(next))
+      setFlightRunning(false);
     stop();
     setMode(next);
     if (line) say(line);
@@ -331,15 +338,6 @@ export default function AdventureGame() {
       ),
     [],
   );
-  useEffect(() => {
-    if (mode !== 'flight') return;
-    const timer = setTimeout(() => {
-      setP((old) => changeRegion(old, flightTo));
-      setPlace(flightTo === 'moon' ? 'moon' : 'home');
-      setMode('explore');
-    }, 3400);
-    return () => clearTimeout(timer);
-  }, [mode, flightTo]);
   useEffect(() => {
     if (mode === 'explore' || mode === 'parents' || mode === 'flight') return;
     const frame = requestAnimationFrame(() => {
@@ -438,8 +436,8 @@ export default function AdventureGame() {
     else
       go(
         'dialogue',
-        id === 'rocket' && rocketParts(p) === 3
-          ? 'pip-repaired'
+        id === 'rocket'
+          ? rocketChapter(p.adventure.rounds.rocket).line
           : placeFor(id).intro,
       );
   };
@@ -467,7 +465,15 @@ export default function AdventureGame() {
   const launch = (region: Region) => {
     if (region === 'moon' && rocketParts(p) < 3) return;
     setFlightTo(region);
+    setFlightRun((old) => old + 1);
+    setFlightRunning(true);
     go('flight', region === 'moon' ? 'launch' : 'return');
+  };
+  const arriveFlight = () => {
+    if (!flightRunning) return;
+    setP((old) => changeRegion(old, flightTo));
+    setPlace(flightTo === 'moon' ? 'moon' : 'home');
+    go('explore', flightTo === 'moon' ? 'nova-hello' : 'visit-home');
   };
   const beginMission = () => {
     const next = missionFor(place as QuestId, p);
@@ -503,6 +509,10 @@ export default function AdventureGame() {
     );
   };
   const repeat = () => {
+    if (mode === 'flight') {
+      say(flightTo === 'moon' ? 'launch' : 'return');
+      return;
+    }
     if (mode === 'explore' && parcel) {
       say(
         p.adventure.region === 'moon'
@@ -537,7 +547,9 @@ export default function AdventureGame() {
         : mode === 'creator'
           ? 'creator'
           : mode === 'dialogue'
-            ? placeFor(place).intro
+            ? place === 'rocket'
+              ? rocketChapter(p.adventure.rounds.rocket).line
+              : placeFor(place).intro
             : mode === 'home'
               ? 'home'
               : mode === 'shop'
@@ -550,6 +562,7 @@ export default function AdventureGame() {
     );
   };
   const back = () => {
+    if (mode === 'flight') setFlightRunning(false);
     if (mode === 'scrapbook') {
       bookSurface.current
         ?.querySelector<HTMLButtonElement>('[data-book-back]')
@@ -599,7 +612,12 @@ export default function AdventureGame() {
       return;
     }
     if (action === 'suspend') {
-      if (mode === 'explore' || mode === 'mission' || mode === 'tutorial') {
+      if (
+        mode === 'explore' ||
+        mode === 'mission' ||
+        mode === 'tutorial' ||
+        mode === 'flight'
+      ) {
         resumeMode.current = mode;
         go('pause');
       }
@@ -708,7 +726,8 @@ export default function AdventureGame() {
         mode !== 'parents' &&
         mode !== 'scrapbook' &&
         mode !== 'dialogue' &&
-        mode !== 'home',
+        mode !== 'home' &&
+        mode !== 'flight',
       discoveryTarget,
       deliveryTarget: deliveryGuiding,
       completed: p.completed,
@@ -1065,15 +1084,16 @@ export default function AdventureGame() {
               </div>
             </section>
           )}
-          {mode === 'flight' && (
-            <section className="rocket-flight">
-              <div className="flight-stars">✦ · ✧ · ✦</div>
-              <div className="flying-rocket">🚀</div>
-              <h2>{flightTo === 'moon' ? 'To the moon!' : 'Home we go!'}</h2>
-              <button {...CHOICE} onClick={back}>
-                <b className="pad-key b-key">B</b> Back
-              </button>
-            </section>
+          {flightRunning && (
+            <RocketFlight
+              key={flightRun}
+              to={flightTo}
+              active={mode === 'flight'}
+              appearance={p.appearance}
+              outfit={p.outfit}
+              onArrive={arriveFlight}
+              onBack={back}
+            />
           )}
         </div>
         {failed && (
@@ -1388,8 +1408,8 @@ export default function AdventureGame() {
                         (script as Record<string, { text: string }>)[
                           deliveryThanks === place
                             ? 'delivery-thanks-' + place
-                            : place === 'rocket' && rocketParts(p) === 3
-                              ? 'pip-repaired'
+                            : place === 'rocket'
+                              ? rocketChapter(p.adventure.rounds.rocket).line
                               : placeFor(place).intro
                         ]?.text
                       }
@@ -1403,17 +1423,7 @@ export default function AdventureGame() {
                       </div>
                     )}
                     {place === 'rocket' && deliveryThanks !== place && (
-                      <div className="rocket-parts">
-                        {['🧩', '💎', '⚡'].map((icon, i) => (
-                          <span
-                            key={icon}
-                            className={i < rocketParts(p) ? 'fixed' : ''}
-                          >
-                            {icon}
-                            {i < rocketParts(p) && <Check />}
-                          </span>
-                        ))}
-                      </div>
+                      <RocketProgress rounds={p.adventure.rounds.rocket} />
                     )}
                     <div className="big-actions">
                       <button

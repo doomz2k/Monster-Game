@@ -1162,5 +1162,29 @@
   "delivery-home": {
     "voice": "bramble",
     "text": "Your pizza is safe. Follow the golden star to the little rocket, and press the green button to fly home. Your friend is waiting on the island."
+  },
+  "pip-chapter-panel": {
+    "voice": "pip",
+    "text": "Oh dear, my rocket needs a little help. First, let us mend the control panel. Can you find the next shape in the pattern?"
+  },
+  "pip-chapter-fuel": {
+    "voice": "pip",
+    "text": "The control panel is working! Now we need some shiny fuel crystals. Will you help me count them into the fuel tank?"
+  },
+  "pip-chapter-battery": {
+    "voice": "pip",
+    "text": "The fuel tank is full! Just one more job. Let us add the power cells together to connect the star battery."
+  },
+  "pip-repair-1": {
+    "voice": "pip",
+    "text": "The control panel is mended! Look, the little buttons are working. Next, we can fill the fuel tank."
+  },
+  "pip-repair-2": {
+    "voice": "pip",
+    "text": "The fuel tank is full! Our rocket is nearly ready. Just the star battery to connect now."
+  },
+  "pip-repair-3": {
+    "voice": "pip",
+    "text": "You did it! All three systems are ready. Our rocket can fly to the Moon. Thank you, little explorer!"
   }
 }

@@ -10,6 +10,7 @@
 @import './discoveries.css';
 @import './garden.css';
 @import './deliveries.css';
+@import './rocket-story.css';
 @custom-variant dark (&:is(.dark *));
 @theme inline {
   --color-background: var(--background);

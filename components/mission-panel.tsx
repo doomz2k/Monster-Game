@@ -108,7 +108,7 @@ export function MissionPanel({
       earned > 2 && m.kind === 'pizza'
         ? 'garden-pizza-success'
         : m.npc === 'rocket' && m.round < 3
-          ? 'part'
+          ? 'pip-repair-' + (m.round + 1)
           : m.voice + '-success',
     );
   };

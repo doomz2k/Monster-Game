@@ -1,0 +1,177 @@
+.rocket-repair-story {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  width: 100%;
+}
+.rocket-repair-story > div {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 7px 10px;
+  flex: 1;
+  border-radius: 18px;
+  border: 2px solid #d9d4c7;
+  background: #eee9df;
+  max-width: 145px;
+}
+.rocket-repair-story .game-picture {
+  width: 44px;
+  height: 44px;
+}
+.rocket-repair-story span:not(.game-picture):not(.picture-cell) {
+  font-size: 12px;
+  font-weight: 750;
+}
+.rocket-repair-story svg,
+.rocket-repair-story b {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 18px;
+  height: 18px;
+  font-size: 12px;
+}
+.rocket-repair-story .repaired {
+  background: #e1edd6;
+  border-color: #9cbe8b;
+  color: #477348;
+}
+.rocket-repair-story .next-repair {
+  background: #fff0cb;
+  border-color: #dfb365;
+}
+.space-flight {
+  position: absolute;
+  inset: 0;
+  z-index: 12;
+  background: #1e324c;
+  color: #fff5de;
+  overflow: hidden;
+}
+.space-flight[hidden] {
+  display: none;
+}
+.flight-canvas {
+  position: absolute;
+  inset: 0;
+}
+.flight-canvas canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.flight-topline {
+  position: absolute;
+  top: 24px;
+  left: 24px;
+  right: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.flight-topline > span {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 800;
+  background: #173348cc;
+  border: 1px solid #cbe4ea4d;
+  padding: 6px 16px;
+  border-radius: 24px;
+}
+.flight-topline .game-picture {
+  width: 46px;
+  height: 46px;
+}
+.flight-caption {
+  position: absolute;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  pointer-events: none;
+  background: #173047d9;
+  border: 1px solid #e4e8e51f;
+  border-radius: 22px;
+  padding: 10px 22px 0;
+}
+.flight-caption p {
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  font-weight: 800;
+  color: #c7dce4;
+  margin: 0 0 6px;
+}
+.flight-caption h2 {
+  font-size: clamp(24px, 3vw, 40px);
+  margin: 0;
+  white-space: nowrap;
+  text-shadow: 0 3px 15px #14233c;
+}
+.flight-dots {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin: 12px;
+}
+.flight-dots span {
+  width: 9px;
+  height: 9px;
+  background: #ffffff35;
+  border-radius: 50%;
+}
+.flight-dots .lit {
+  background: #f1d287;
+}
+.flight-land {
+  position: absolute;
+  right: 24px;
+  bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #fff3d9;
+  color: #395440;
+  border: 3px solid white;
+  border-radius: 22px;
+  padding: 8px 14px;
+  font-weight: 800;
+}
+.flight-land .game-picture {
+  width: 40px;
+  height: 40px;
+}
+@media (max-width: 800px) {
+  .flight-land > span:last-child {
+    display: none;
+  }
+  .flight-caption {
+    bottom: 23px;
+  }
+  .flight-topline {
+    top: 14px;
+    left: 14px;
+    right: 14px;
+  }
+}
+@media (max-height: 600px) {
+  .rocket-repair-story .game-picture {
+    width: 32px;
+    height: 32px;
+  }
+  .rocket-repair-story > div {
+    padding: 5px;
+  }
+  .rocket-repair-story span:not(.game-picture):not(.picture-cell) {
+    font-size: 11px;
+  }
+  .flight-caption {
+    bottom: 12px;
+  }
+  .flight-dots {
+    margin: 8px;
+  }
+}

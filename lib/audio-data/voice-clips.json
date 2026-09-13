@@ -1453,5 +1453,35 @@
     "path": "/audio/voices/delivery-home-22e660405976caeb.ogg",
     "voice": "bm_george",
     "text": "Your pizza is safe. Follow the golden star to the little rocket, and press the green button to fly home. Your friend is waiting on the island."
+  },
+  "pip-chapter-panel": {
+    "path": "/audio/voices/pip-chapter-panel-137c96035f149fde.ogg",
+    "voice": "bm_fable",
+    "text": "Oh dear, my rocket needs a little help. First, let us mend the control panel. Can you find the next shape in the pattern?"
+  },
+  "pip-chapter-fuel": {
+    "path": "/audio/voices/pip-chapter-fuel-677e74c19485f616.ogg",
+    "voice": "bm_fable",
+    "text": "The control panel is working! Now we need some shiny fuel crystals. Will you help me count them into the fuel tank?"
+  },
+  "pip-chapter-battery": {
+    "path": "/audio/voices/pip-chapter-battery-9d8f41c7e00511fb.ogg",
+    "voice": "bm_fable",
+    "text": "The fuel tank is full! Just one more job. Let us add the power cells together to connect the star battery."
+  },
+  "pip-repair-1": {
+    "path": "/audio/voices/pip-repair-1-221d4ba917722d21.ogg",
+    "voice": "bm_fable",
+    "text": "The control panel is mended! Look, the little buttons are working. Next, we can fill the fuel tank."
+  },
+  "pip-repair-2": {
+    "path": "/audio/voices/pip-repair-2-2f8764d72452c175.ogg",
+    "voice": "bm_fable",
+    "text": "The fuel tank is full! Our rocket is nearly ready. Just the star battery to connect now."
+  },
+  "pip-repair-3": {
+    "path": "/audio/voices/pip-repair-3-150028b772ba4ecb.ogg",
+    "voice": "bm_fable",
+    "text": "You did it! All three systems are ready. Our rocket can fly to the Moon. Thank you, little explorer!"
   }
 }

@@ -4,6 +4,7 @@ import { surfaceMaterial, type WorldTextures } from './world-materials';
 import { PLACES, SHOP_ITEMS, type AdventureProgress } from './adventure';
 import { createNeighbour } from './neighbours';
 import { createGardenPlant, createGardenWildlife } from './garden-models';
+import { createRocketModel } from './rocket-model';
 
 export function createVillage(
   height: (x: number, z: number) => number,
@@ -209,35 +210,10 @@ export function createVillage(
     );
   }
   marker(pizzeria, '🍕', -1, 4.2, 0.2);
-  const rocket = new THREE.Group();
+  const rocketModel = createRocketModel(0);
+  const rocket = rocketModel.root;
   root.add(rocket);
   rocket.position.set(-13, height(-13, -30), -30.8);
-  mesh(
-    rocket,
-    new THREE.CylinderGeometry(1.1, 1.25, 3.7, 32),
-    '#e5ece4',
-    0,
-    2.5,
-    0,
-  );
-  mesh(rocket, new THREE.ConeGeometry(1.1, 1.8, 32), '#e79293', 0, 5.25, 0);
-  ball(rocket, '#6596c0', 0, 3.2, 1.02, 0.57, 0.57, 0.12);
-  const parts: THREE.Object3D[] = [];
-  for (let i = 0; i < 3; i++) {
-    const a = (i / 3) * Math.PI * 2;
-    parts.push(
-      box(
-        rocket,
-        ['#a799d9', '#83cbb3', '#f5ce6a'][i],
-        Math.cos(a) * 1.25,
-        0.7,
-        Math.sin(a) * 1.25,
-        0.55,
-        1.4,
-        1.2,
-      ),
-    );
-  }
   marker(rocket, '🚀', 0, 6.8, 0);
   // The moon is a separate playable location, sharing the same movement rig.
   const moonGround = mesh(
@@ -331,49 +307,10 @@ export function createVillage(
     (lamp.material as THREE.MeshStandardMaterial).emissiveIntensity = 0.6;
   }
   // The return craft sits behind the walkable centre of the pad.
-  const returnCraft = new THREE.Group();
+  const returnCraft = createRocketModel(3).root;
   returnCraft.position.set(0, 0, -3.5);
+  returnCraft.scale.setScalar(0.65);
   landing.add(returnCraft);
-  mesh(
-    returnCraft,
-    new THREE.CylinderGeometry(0.65, 0.85, 2.6, 24),
-    '#e6e4d7',
-    0,
-    1.7,
-    0,
-  );
-  mesh(
-    returnCraft,
-    new THREE.ConeGeometry(0.65, 1.15, 24),
-    '#d18777',
-    0,
-    3.57,
-    0,
-  );
-  const windowRim = mesh(
-    returnCraft,
-    new THREE.TorusGeometry(0.28, 0.07, 8, 24),
-    '#d5ac65',
-    0,
-    2.2,
-    0.7,
-  );
-  windowRim.rotation.x = 0.08;
-  ball(returnCraft, '#81bed0', 0, 2.2, 0.7, 0.25, 0.25, 0.09);
-  for (const side of [-1, 1]) {
-    const fin = box(
-      returnCraft,
-      '#ca837b',
-      side * 0.8,
-      0.65,
-      0,
-      0.22,
-      1.3,
-      0.9,
-    );
-    fin.rotation.z = -side * 0.25;
-    box(returnCraft, '#666e82', side * 0.95, 0.13, 0, 0.75, 0.15, 1.1);
-  }
   moon.visible = false;
   // Increase distances, keeping houses and characters at their original human scale.
   const npcRoots = new Set<THREE.Object3D>(neighbours.map((n) => n.root));
@@ -404,10 +341,7 @@ export function createVillage(
   function update(a: AdventureProgress, playerX: number, playerZ: number) {
     roof.visible =
       Math.hypot(playerX - home.position.x, playerZ - home.position.z) > 8;
-    rocket.rotation.z = Math.max(0, 3 - a.rounds.rocket) * 0.11;
-    parts.forEach((part, i) => {
-      part.visible = a.rounds.rocket > i;
-    });
+    rocketModel.setRepairStage(a.rounds.rocket);
     const key = JSON.stringify([a.plots, a.furniture]);
     if (key === contentsKey) return;
     contentsKey = key;

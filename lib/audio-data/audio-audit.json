@@ -3201,6 +3201,72 @@
       "leadingSilenceMs": 39,
       "trailingSilenceMs": 80,
       "warnings": []
+    },
+    "pip-chapter-panel": {
+      "sha256": "f22fa948d1cee3174c159df6ede90ada80cd4c74eb0d04122b031f7d26b1291d",
+      "seconds": 6.699,
+      "sampleRate": 24000,
+      "channels": 1,
+      "peakDbfs": -3.4,
+      "activeRmsDbfs": -24.0,
+      "leadingSilenceMs": 90,
+      "trailingSilenceMs": 367,
+      "warnings": []
+    },
+    "pip-chapter-fuel": {
+      "sha256": "bd1dd04bb7c8f21e1f2a407bd9195f8a1ac96891860614c064b25a392ab230ba",
+      "seconds": 6.72,
+      "sampleRate": 24000,
+      "channels": 1,
+      "peakDbfs": -3.6,
+      "activeRmsDbfs": -23.1,
+      "leadingSilenceMs": 41,
+      "trailingSilenceMs": 94,
+      "warnings": []
+    },
+    "pip-chapter-battery": {
+      "sha256": "a0ed217ab4ba3a1a1f4af2aba431eff6a1d9fcb35b26b957eb29b5bee7f92299",
+      "seconds": 6.315,
+      "sampleRate": 24000,
+      "channels": 1,
+      "peakDbfs": -4.5,
+      "activeRmsDbfs": -23.1,
+      "leadingSilenceMs": 42,
+      "trailingSilenceMs": 105,
+      "warnings": []
+    },
+    "pip-repair-1": {
+      "sha256": "16c1c7a453dc5d1b265a11e51514e8a1d0da18195f752ec646aa36a8320f9104",
+      "seconds": 6.101,
+      "sampleRate": 24000,
+      "channels": 1,
+      "peakDbfs": -3.7,
+      "activeRmsDbfs": -23.6,
+      "leadingSilenceMs": 43,
+      "trailingSilenceMs": 123,
+      "warnings": []
+    },
+    "pip-repair-2": {
+      "sha256": "534603c19ea88e4694c149174aad4d647dd550cbaed30aa9c202c0333a2e1bd4",
+      "seconds": 5.397,
+      "sampleRate": 24000,
+      "channels": 1,
+      "peakDbfs": -2.4,
+      "activeRmsDbfs": -21.9,
+      "leadingSilenceMs": 42,
+      "trailingSilenceMs": 111,
+      "warnings": []
+    },
+    "pip-repair-3": {
+      "sha256": "3f27983a2f1c52b6d0cf8035f191e6f8773c694682f022780bdb815022ad029c",
+      "seconds": 5.888,
+      "sampleRate": 24000,
+      "channels": 1,
+      "peakDbfs": -3.8,
+      "activeRmsDbfs": -24.4,
+      "leadingSilenceMs": 89,
+      "trailingSilenceMs": 132,
+      "warnings": []
     }
   },
   "phonemes": {
