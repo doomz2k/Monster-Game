@@ -1,5 +1,6 @@
 import { GRAPHICS_MODES, type GraphicsMode } from './graphics-quality';
 import { DAYLIGHT_MODES, type DaylightMode } from './daylight';
+import { WEATHER_MODES, type WeatherMode } from './weather';
 export type GamePreferences = {
   motion: 'system' | 'reduced';
   contrast: 'standard' | 'high';
@@ -10,6 +11,7 @@ export type GamePreferences = {
   camera: 'gentle' | 'fixed';
   graphics: GraphicsMode;
   daylight: DaylightMode;
+  weather: WeatherMode;
 };
 export const defaultPreferences = (): GamePreferences => ({
   motion: 'system',
@@ -21,11 +23,14 @@ export const defaultPreferences = (): GamePreferences => ({
   camera: 'gentle',
   graphics: 'auto',
   daylight: 'cycle',
+  weather: 'cycle',
 });
 export function readPreferences(raw: unknown): GamePreferences {
   const p = defaultPreferences();
   if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return p;
   const value = raw as Record<string, unknown>;
+  if (WEATHER_MODES.includes(value.weather as WeatherMode))
+    p.weather = value.weather as WeatherMode;
   if (DAYLIGHT_MODES.includes(value.daylight as DaylightMode))
     p.daylight = value.daylight as DaylightMode;
   if (GRAPHICS_MODES.includes(value.graphics as GraphicsMode))

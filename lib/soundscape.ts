@@ -6,6 +6,9 @@ export type SoundScene = {
   z: number;
   moving: boolean;
   driving?: boolean;
+  rain?: number;
+  puddle?: boolean;
+  splash?: number;
 };
 export function environmentalMix(scene: SoundScene) {
   const source = (
@@ -21,6 +24,13 @@ export function environmentalMix(scene: SoundScene) {
     };
   };
   return {
+    rain: {
+      gain:
+        scene.active && scene.region === 'island' && Number.isFinite(scene.rain)
+          ? Math.max(0, Math.min(1, scene.rain!))
+          : 0,
+      pan: 0,
+    },
     shore: scene.region === 'island' ? source('cove', 58) : { gain: 0, pan: 0 },
     birds:
       scene.region === 'island' ? source('woods', 45) : { gain: 0, pan: 0 },
@@ -52,8 +62,9 @@ export class Soundscape {
   private timer: ReturnType<typeof setInterval>;
   private lastStep = 0;
   private nextBird = 0;
+  private lastSplash = 0;
   private loops: Record<
-    'shore' | 'oven' | 'machine',
+    'shore' | 'oven' | 'machine' | 'rain',
     { gain: GainNode; pan: StereoPannerNode }
   >;
   private noise: AudioBuffer;
@@ -100,6 +111,7 @@ export class Soundscape {
       shore: loop(1100),
       oven: loop(370),
       machine: loop(170, true),
+      rain: loop(2400),
     };
     this.timer = setInterval(() => this.tick(), 120);
   }
@@ -118,7 +130,7 @@ export class Soundscape {
       this.master.gain.setValueAtTime(0, t);
     }
     const mix = environmentalMix(scene);
-    for (const key of ['shore', 'oven', 'machine'] as const) {
+    for (const key of ['shore', 'oven', 'machine', 'rain'] as const) {
       const wave =
         key === 'shore'
           ? 0.5 + 0.5 * Math.sin(t * 0.6) ** 2
@@ -126,16 +138,27 @@ export class Soundscape {
             ? 0.65 + 0.35 * Math.sin(t * 3.7) ** 2
             : 1;
       this.loops[key].gain.gain.setTargetAtTime(
-        mix[key].gain * wave * (key === 'machine' ? 0.018 : 0.11),
+        mix[key].gain *
+          wave *
+          (key === 'machine' ? 0.018 : key === 'rain' ? 0.09 : 0.11),
         t,
         0.3,
       );
       this.loops[key].pan.pan.setTargetAtTime(mix[key].pan, t, 0.3);
     }
+    const splashed = (scene.splash ?? 0) !== this.lastSplash;
+    this.lastSplash = scene.splash ?? 0;
     if (!active) return;
+    if (splashed && scene.region === 'island' && scene.puddle)
+      this.puff(1800, 0.12, 0.22);
     if (scene.moving && !scene.driving && t - this.lastStep > 0.36) {
       this.lastStep = t;
-      this.puff(scene.region === 'moon' ? 170 : 310, 0.075, 0.075);
+      const wet = scene.region === 'island' && scene.puddle;
+      this.puff(
+        scene.region === 'moon' ? 170 : wet ? 1400 : 310,
+        0.075,
+        wet ? 0.12 : 0.075,
+      );
     }
     if (mix.birds.gain > 0.05 && t > this.nextBird) {
       this.nextBird = t + 3 + Math.random() * 5;

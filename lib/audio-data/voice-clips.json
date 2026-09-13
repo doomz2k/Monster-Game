@@ -2518,5 +2518,10 @@
     "path": "/audio/voices/demo-nova-pattern-aab-49b84531abf2bf66.ogg",
     "voice": "bf_isabella",
     "text": "Watch the little group. Circle, circle, triangle. Circle, circle, triangle. The group begins again with a circle. Choose the next picture, then press green A."
+  },
+  "puddle-hop": {
+    "path": "/audio/voices/puddle-hop-03c2624e05d81b9b.ogg",
+    "voice": "bf_emma",
+    "text": "A puddle! Press the green button to hop in. Splish, splash!"
   }
 }

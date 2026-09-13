@@ -2014,5 +2014,9 @@
   "demo-nova-pattern-aab": {
     "voice": "nova",
     "text": "Watch the little group. Circle, circle, triangle. Circle, circle, triangle. The group begins again with a circle. Choose the next picture, then press green A."
+  },
+  "puddle-hop": {
+    "voice": "narrator",
+    "text": "A puddle! Press the green button to hop in. Splish, splash!"
   }
 }

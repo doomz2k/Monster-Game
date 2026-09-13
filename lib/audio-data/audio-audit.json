@@ -5544,6 +5544,17 @@
       "leadingSilenceMs": 44,
       "trailingSilenceMs": 60,
       "warnings": []
+    },
+    "puddle-hop": {
+      "sha256": "644c0e2ff31396645d2e30d73432d0fd8e37f339cd7f47cadc8001a4ad23f715",
+      "seconds": 3.328,
+      "sampleRate": 24000,
+      "channels": 1,
+      "peakDbfs": -3.8,
+      "activeRmsDbfs": -19.1,
+      "leadingSilenceMs": 37,
+      "trailingSilenceMs": 59,
+      "warnings": []
     }
   },
   "phonemes": {

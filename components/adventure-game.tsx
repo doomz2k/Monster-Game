@@ -16,6 +16,7 @@ import {
   Footprints,
   BookOpen,
   Heart,
+  Droplets,
 } from 'lucide-react';
 import {
   Dialog,
@@ -113,6 +114,7 @@ type Mode =
   | 'scrapbook';
 const CHOICE = { 'data-game-choice': true };
 export default function AdventureGame() {
+  const puddleWelcomed = useRef(false);
   const host = useRef<HTMLDivElement>(null),
     surface = useRef<HTMLDivElement>(null),
     modalSurface = useRef<HTMLDivElement>(null),
@@ -431,8 +433,24 @@ export default function AdventureGame() {
         !!position.roverFollowing ||
         Math.hypot(runtime.current.moveX, runtime.current.moveY) > 0.1,
       driving: !!position.driving,
+      rain: position.rain ?? 0,
+      puddle: !!position.puddle,
+      splash: position.splash ?? 0,
     });
   }, [audio, mode, tutorialStep, position, p.adventure.region]);
+
+  useEffect(() => {
+    if (
+      mode === 'explore' &&
+      position.puddle &&
+      !nearby &&
+      !find &&
+      !puddleWelcomed.current
+    )
+      puddleWelcomed.current = audio.trySay(
+        'A puddle! Press the green button to hop in. Splish, splash!',
+      );
+  }, [audio, mode, position, nearby, find]);
 
   useEffect(() => {
     audio.setLevels(
@@ -601,6 +619,16 @@ export default function AdventureGame() {
     }
     if (mode === 'explore' && (position.driving || position.nearRover)) {
       say(position.driving ? 'rover-drive' : 'rover-intro');
+      return;
+    }
+    if (
+      mode === 'explore' &&
+      position.puddle &&
+      !nearby &&
+      !find &&
+      !nearLaunchPad
+    ) {
+      say('puddle-hop');
       return;
     }
     if (mode === 'flight') {
@@ -1002,6 +1030,22 @@ export default function AdventureGame() {
                     <b className="pad-key a-key">A</b>
                   </button>
                 )}
+              {position.puddle &&
+                !nearby &&
+                !find &&
+                !nearLaunchPad &&
+                !position.driving &&
+                !position.nearRover &&
+                mode === 'explore' && (
+                  <button
+                    className="talk-cue puddle-cue"
+                    onClick={() => world.current?.jump()}
+                    aria-label="Splash in the puddle"
+                  >
+                    <Droplets size={42} color="#5e9da8" />
+                    <b className="pad-key a-key">A</b>
+                  </button>
+                )}
               {parcel && p.adventure.region !== 'moon' && (
                 <button
                   className="delivery-trail"
@@ -1127,7 +1171,9 @@ export default function AdventureGame() {
                 !position.nearRover && (
                   <button
                     className="touch-hop"
-                    aria-label="Hop"
+                    aria-label={
+                      position.puddle ? 'Splash in the puddle' : 'Hop'
+                    }
                     onClick={() => world.current?.jump()}
                   >
                     <Footprints />

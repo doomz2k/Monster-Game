@@ -149,6 +149,20 @@ export function SaveAndComfort({
           </select>
         </label>
         <label>
+          Island weather
+          <select
+            value={progress.preferences.weather}
+            onChange={(e) =>
+              set('weather', e.target.value as GamePreferences['weather'])
+            }
+          >
+            <option value="cycle">Sunshine, gentle rain and rainbows</option>
+            <option value="sunny">Always sunny</option>
+            <option value="drizzle">Gentle drizzle and puddles</option>
+            <option value="rainbow">Rainbow and puddles</option>
+          </select>
+        </label>
+        <label>
           Speech volume · {Math.round(progress.preferences.speechVolume * 100)}%
           <input
             type="range"

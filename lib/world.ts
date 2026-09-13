@@ -4,6 +4,14 @@ import { COMPANIONS, CompanionMotion, companionSpot } from './companion';
 import { createCompanion } from './companion-model';
 import { IslandDay, daylightPalette } from './daylight';
 import { createIslandSky } from './island-sky';
+import {
+  IslandWeather,
+  PuddleSteps,
+  puddleAt,
+  weatherAt,
+  weatherPalette,
+} from './weather';
+import { createIslandWeather } from './island-weather';
 import { createRoverModel, createRoverStops } from './rover-model';
 import { roverRoute } from './rover-route';
 import { ROVER_DOCK, roverExit, roverStop, type RoverStopId } from './rover';
@@ -71,6 +79,9 @@ export type WorldUpdate = {
   driving?: boolean;
   nearRover?: boolean;
   roverFollowing?: boolean;
+  puddle?: boolean;
+  rain?: number;
+  splash?: number;
 };
 export class MonsterWorld {
   private graphics = new GraphicsGovernor();
@@ -82,6 +93,11 @@ export class MonsterWorld {
   private skyLight = new THREE.HemisphereLight('#c9edff', '#557348', 0.95);
   private islandDay = new IslandDay();
   private islandSky = createIslandSky(height);
+  private islandWeather = new IslandWeather();
+  private weatherEffects = createIslandWeather(height);
+  private weather = weatherAt(0);
+  private puddleSteps = new PuddleSteps();
+  private splashSerial = 0;
   private scene = new THREE.Scene();
   private showroom = new THREE.Scene();
   private showroomStage = new THREE.Group();
@@ -222,6 +238,7 @@ export class MonsterWorld {
     this.atmosphere = createAtmosphere(height, this.textures);
     this.scene.add(this.atmosphere.root);
     this.scene.add(this.islandSky.root);
+    this.scene.add(this.weatherEffects.root);
     this.village.moon.add(this.atmosphere.moon);
     this.scene.add(this.village.root);
     this.islandObjects = this.scene.children.filter(
@@ -296,6 +313,10 @@ export class MonsterWorld {
           z,
           driving: this.driving,
           roverFollowing: this.roverPath.length > 0,
+          puddle:
+            this.region === 'island' && puddleAt(x, z, this.weather.wet) >= 0,
+          rain: this.region === 'island' ? this.weather.rain : 0,
+          splash: this.splashSerial,
           nearRover:
             this.region === 'moon' &&
             !this.driving &&
@@ -1250,6 +1271,21 @@ export class MonsterWorld {
           )) - 0.02,
       this.player.position.z,
     );
+    const splash = this.puddleSteps.update(
+      dt,
+      this.player.position.x,
+      this.player.position.z,
+      this.jumpY > 0,
+      this.weather.wet,
+      s.active && !show && this.region === 'island',
+    );
+    if (splash) {
+      this.weatherEffects.splash(splash.x, splash.z, splash.landed);
+      if (splash.landed) {
+        this.splashSerial++;
+        this.celebration = Math.max(this.celebration, 0.8);
+      }
+    }
     this.character.animate({
       delta: dt,
       time,
@@ -1517,7 +1553,32 @@ export class MonsterWorld {
           !this.reducedMotion &&
           !s.preferences?.calm,
       );
-      const palette = daylightPalette(this.islandDay.phase(lightMode));
+      const weatherMode = s.preferences?.weather ?? 'cycle';
+      this.islandWeather.advance(
+        dt,
+        s.active &&
+          weatherMode === 'cycle' &&
+          !this.reducedMotion &&
+          !s.preferences?.calm,
+      );
+      this.weather = this.islandWeather.sample(
+        weatherMode,
+        !!s.preferences?.calm,
+        this.reducedMotion,
+      );
+      const palette = weatherPalette(
+        daylightPalette(this.islandDay.phase(lightMode)),
+        this.weather,
+      );
+      this.weatherEffects.update(
+        this.weather,
+        dt,
+        s.active,
+        this.reducedMotion,
+        this.player.position,
+        this.graphics.tier,
+        this.cameraBuildings,
+      );
       this.sun.color.set(palette.sun);
       this.sun.intensity = palette.sunlight;
       this.skyLight.color.set(palette.sky);
@@ -1705,7 +1766,11 @@ export class MonsterWorld {
       materials = new Set<THREE.Material>(),
       textures = new Set<THREE.Texture>();
     const collect = (o: THREE.Object3D) => {
-      if (o instanceof THREE.Mesh || o instanceof THREE.Points) {
+      if (
+        o instanceof THREE.Mesh ||
+        o instanceof THREE.Points ||
+        o instanceof THREE.LineSegments
+      ) {
         geometries.add(o.geometry);
         (Array.isArray(o.material) ? o.material : [o.material]).forEach((m) => {
           materials.add(m);

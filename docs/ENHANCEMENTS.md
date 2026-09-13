@@ -88,3 +88,5 @@ The next checkpoint, [DISCOVERIES-AND-FRIENDS.md](DISCOVERIES-AND-FRIENDS.md), a
 [HOME-PLAY.md](HOME-PLAY.md) adds optional furniture activities for the customised monster (31), a picture-based playroom, a moving swing seat, a settling companion and persistent lamp switches shared with the island. It also records a harbour answer-repetition issue found during the reward walkthrough for the next content pass.
 
 [MATHS-VARIETY.md](MATHS-VARIETY.md) resolves the repeated harbour answers, adds complete arithmetic fact banks, ten pizza topping combinations, 24 rocket patterns and repeat-unit-specific demonstrations and hints (9/16/19/25). Saved round counters continue through the banks, and repaired-rocket dialogue keeps Pip's activities accessible.
+
+[ISLAND-WEATHER.md](ISLAND-WEATHER.md) adds gentle active-play showers, a rainbow, terrain-following puddles, walking ripples and green-A splashes (33/36), with saved parent choices, calm/reduced options and explicit rendering budgets.
