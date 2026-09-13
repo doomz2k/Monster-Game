@@ -76,3 +76,5 @@ The next checkpoint, [DISCOVERIES-AND-FRIENDS.md](DISCOVERIES-AND-FRIENDS.md), a
 [MOON-ROVER.md](MOON-ROVER.md) adds a drivable Moon expedition (41), optional guided rides, three counting destinations, persistent stamps and repeatable rewards. Route, save, controller-keyboard and responsive-layout checks are recorded there.
 
 [RESPONSES-AND-COOKING.md](RESPONSES-AND-COOKING.md) adds 63 short British response recordings with repetition protection (15), exact result replay, corrected rover hints and cooking that pauses safely with the rest of the game.
+
+[ISLAND-DAYLIGHT.md](ISLAND-DAYLIGHT.md) adds an active-play daylight cycle, sunset, bright evening, warm windows, path lanterns, stars and fireflies (34), with saved fixed-time choices behind Start and separate Moon lighting.

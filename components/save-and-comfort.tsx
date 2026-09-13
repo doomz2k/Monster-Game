@@ -135,6 +135,20 @@ export function SaveAndComfort({
           </select>
         </label>
         <label>
+          Island light
+          <select
+            value={progress.preferences.daylight}
+            onChange={(e) =>
+              set('daylight', e.target.value as GamePreferences['daylight'])
+            }
+          >
+            <option value="cycle">Gentle daylight cycle</option>
+            <option value="day">Always daytime</option>
+            <option value="sunset">Warm sunset</option>
+            <option value="evening">Cosy evening</option>
+          </select>
+        </label>
+        <label>
           Speech volume · {Math.round(progress.preferences.speechVolume * 100)}%
           <input
             type="range"

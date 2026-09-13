@@ -194,10 +194,13 @@ export function createAtmosphere(
 
   // A moving sea replaces the flat blue plane; shoreline foam advances gently.
   const water = new THREE.ShaderMaterial({
-    uniforms: { time: clock },
+    uniforms: {
+      time: clock,
+      daylightTint: { value: new THREE.Color('#ffffff') },
+    },
     vertexShader: `varying vec3 vWorld; void main(){vWorld=(modelMatrix*vec4(position,1.)).xyz;gl_Position=projectionMatrix*viewMatrix*vec4(vWorld,1.);}`,
     fragmentShader:
-      `uniform float time;varying vec3 vWorld;void main(){vec2 p=vWorld.xz;float r=length(p);float wave=sin(p.x*.31+time*.6)+sin(p.y*.24-time*.45);float ripple=pow(max(0.,sin(p.x*1.5+p.y*.7+wave*.4-time)),16.);float shore=1.-smoothstep(${SHORE_RADIUS.toFixed(1)},110.,r);float foam=pow(max(0.,sin(r*2.5-time*.7)),18.)*shore*.6;vec3 colour=mix(vec3(.09,.38,.48),vec3(.30,.67,.66),shore);colour+=wave*.012+ripple*.035+foam*.25;gl_FragColor=vec4(colour,1.);#include <tonemapping_fragment>\n#include <colorspace_fragment>\n}`.replace(
+      `uniform float time;uniform vec3 daylightTint;varying vec3 vWorld;void main(){vec2 p=vWorld.xz;float r=length(p);float wave=sin(p.x*.31+time*.6)+sin(p.y*.24-time*.45);float ripple=pow(max(0.,sin(p.x*1.5+p.y*.7+wave*.4-time)),16.);float shore=1.-smoothstep(${SHORE_RADIUS.toFixed(1)},110.,r);float foam=pow(max(0.,sin(r*2.5-time*.7)),18.)*shore*.6;vec3 colour=mix(vec3(.09,.38,.48),vec3(.30,.67,.66),shore);colour+=wave*.012+ripple*.035+foam*.25;gl_FragColor=vec4(colour*daylightTint,1.);#include <tonemapping_fragment>\n#include <colorspace_fragment>\n}`.replace(
         ';#include',
         ';\n#include',
       ),
@@ -626,6 +629,11 @@ export function createAtmosphere(
     setQuality(tier: GraphicsTier) {
       grass.count = Math.floor(count * GRAPHICS[tier].grass);
       pollen.visible = GRAPHICS[tier].pollen;
+    },
+    setDaylight(colour: string, evening: number) {
+      water.uniforms.daylightTint.value.set(colour);
+      (beacon.material as THREE.MeshStandardMaterial).emissiveIntensity =
+        0.4 + evening * 1.1;
     },
     islandColliders: [
       { x: -43, z: -43, r: 2.25 },

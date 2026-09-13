@@ -16,6 +16,8 @@ export function createVillage(
     furnishings = new THREE.Group(),
     beds = new THREE.Group();
   root.name = 'Neighbourhood';
+  const windows: THREE.MeshStandardMaterial[] = [];
+  const eveningWindow = new THREE.Color('#bd8d50');
   moon.name = 'Moon meadow';
   function mesh(
     parent: THREE.Object3D,
@@ -101,7 +103,16 @@ export function createVillage(
   box(home, '#f5d3a1', -3.4, 1.8, 0, 0.22, 3.6, 5);
   box(home, '#f5d3a1', 3.4, 1.8, 0, 0.22, 3.6, 5);
   for (const side of [-1, 1]) {
-    box(home, '#79bdb8', side * 2, 1.9, -2.35, 1.5, 1.6, 0.08);
+    const pane = box(home, '#79bdb8', side * 2, 1.9, -2.35, 1.5, 1.6, 0.08);
+    const glass = new THREE.MeshStandardMaterial({
+      color: '#79bdb8',
+      emissive: '#ffc078',
+      emissiveIntensity: 0,
+      roughness: 0.5,
+    });
+    pane.material.dispose();
+    pane.material = glass;
+    windows.push(glass);
     box(home, '#fff7d7', side * 2, 1.9, -2.27, 0.08, 1.6, 0.05);
   }
   const roof = new THREE.Group();
@@ -440,6 +451,12 @@ export function createVillage(
     moon,
     neighbours,
     update,
+    setEvening(amount: number) {
+      windows.forEach((m) => {
+        m.color.set('#79bdb8').lerp(eveningWindow, amount);
+        m.emissiveIntensity = amount * 0.6;
+      });
+    },
     animateGarden(time: number, reduced: boolean) {
       plantModels.forEach((m, i) => m.animate(time + i, reduced));
       wildlife?.animate(time, reduced);

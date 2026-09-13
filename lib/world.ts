@@ -1,5 +1,7 @@
 import * as THREE from 'three';
 import { createPizzaParcel } from './pizza-parcel';
+import { IslandDay, daylightPalette } from './daylight';
+import { createIslandSky } from './island-sky';
 import { createRoverModel, createRoverStops } from './rover-model';
 import { roverRoute } from './rover-route';
 import { ROVER_DOCK, roverExit, roverStop, type RoverStopId } from './rover';
@@ -76,6 +78,8 @@ export class MonsterWorld {
   private atmosphere: ReturnType<typeof createAtmosphere>;
   private sun = new THREE.DirectionalLight('#ffedc6', 2.35);
   private skyLight = new THREE.HemisphereLight('#c9edff', '#557348', 0.95);
+  private islandDay = new IslandDay();
+  private islandSky = createIslandSky(height);
   private scene = new THREE.Scene();
   private showroom = new THREE.Scene();
   private showroomStage = new THREE.Group();
@@ -209,6 +213,7 @@ export class MonsterWorld {
     this.village.moon.add(this.discoveryMarkers.moon);
     this.atmosphere = createAtmosphere(height, this.textures);
     this.scene.add(this.atmosphere.root);
+    this.scene.add(this.islandSky.root);
     this.village.moon.add(this.atmosphere.moon);
     this.scene.add(this.village.root);
     this.islandObjects = this.scene.children.filter(
@@ -1003,6 +1008,11 @@ export class MonsterWorld {
       this.skyLight.intensity = region === 'moon' ? 0.5 : 0.95;
       this.sun.intensity = region === 'moon' ? 1.6 : 2.35;
       this.sun.color.set(region === 'moon' ? '#cbd8ff' : '#ffedc6');
+      if (region === 'moon') {
+        this.skyLight.color.set('#bdc5e6');
+        this.skyLight.groundColor.set('#646783');
+        this.scene.environmentIntensity = 0.2;
+      }
       this.islandObjects.forEach((o) => {
         o.visible = region === 'island';
       });
@@ -1418,6 +1428,35 @@ export class MonsterWorld {
             this.player.position.z,
           ),
     );
+    if (this.region === 'island') {
+      const lightMode = s.preferences?.daylight ?? 'cycle';
+      this.islandDay.advance(
+        dt,
+        s.active &&
+          lightMode === 'cycle' &&
+          !this.reducedMotion &&
+          !s.preferences?.calm,
+      );
+      const palette = daylightPalette(this.islandDay.phase(lightMode));
+      this.sun.color.set(palette.sun);
+      this.sun.intensity = palette.sunlight;
+      this.skyLight.color.set(palette.sky);
+      this.skyLight.groundColor.set(palette.ground);
+      this.skyLight.intensity = palette.ambient;
+      this.scene.environmentIntensity = palette.environment;
+      this.scene.fog?.color.set(palette.fog);
+      if (!show) this.renderer.setClearColor(palette.fog);
+      this.islandSky.update(
+        palette,
+        time,
+        this.reducedMotion || !!s.preferences?.calm,
+        this.camera.position,
+        this.graphics.tier,
+        this.renderer.getPixelRatio(),
+      );
+      this.atmosphere.setDaylight(palette.sea, palette.evening);
+      this.village.setEvening(palette.evening);
+    }
   }
   turnShowcase() {
     this.showcaseAngle += Math.PI / 2;
