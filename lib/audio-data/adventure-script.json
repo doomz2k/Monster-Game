@@ -2250,5 +2250,9 @@
   "workshop-success": {
     "voice": "pip",
     "text": "All the way home! Two stars for our little road. Shall we make another?"
+  },
+  "profile-welcome": {
+    "voice": "narrator",
+    "text": "Hello, little friend. Welcome to your little world. Shall we visit our friends, or make your very own monster?"
   }
 }

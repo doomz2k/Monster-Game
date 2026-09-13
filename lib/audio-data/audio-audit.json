@@ -6193,6 +6193,17 @@
       "leadingSilenceMs": 40,
       "trailingSilenceMs": 156,
       "warnings": []
+    },
+    "profile-welcome": {
+      "sha256": "d52aaf33b1f64393123650372109e2783a1d27b36ffd5a5f6dfb55f640558302",
+      "seconds": 5.909,
+      "sampleRate": 24000,
+      "channels": 1,
+      "peakDbfs": -3.5,
+      "activeRmsDbfs": -18.9,
+      "leadingSilenceMs": 31,
+      "trailingSilenceMs": 70,
+      "warnings": []
     }
   },
   "phonemes": {

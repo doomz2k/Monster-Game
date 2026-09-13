@@ -106,3 +106,5 @@ The next checkpoint, [DISCOVERIES-AND-FRIENDS.md](DISCOVERIES-AND-FRIENDS.md), a
 [TRACK-WORKSHOP.md](TRACK-WORKSHOP.md) adds Pip's optional road-building toy: 29 varied routes, forgiving turn/undo/hint controls, a rover following curved pieces, saved rewards and pause support. It expands hands-on play and replayability while keeping learning records separate, and fixes cramped neighbour conversations at phone and television sizes.
 
 [ISLAND-MUSIC.md](ISLAND-MUSIC.md) adds four original local musical themes (5), phrase-boundary transitions, independent parent volume, calm-play attenuation and complete silence during instructions (10). Tests cover active-time scheduling, speech/mute gates, resource limits and preference persistence; subjective listening remains a human acceptance check.
+
+[CHILD-PROFILES.md](CHILD-PROFILES.md) adds four parent-managed adventures (14), independent preferences/progress/recovery copies, preserved legacy save keys, generic British welcomes and protection against quota or metadata failures (13). A browser switch between an isolated new adventure and the original confirmed the original rewards and practice remained intact.

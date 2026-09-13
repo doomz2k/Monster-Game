@@ -4,6 +4,124 @@
   padding-top: 12px;
   color: #374c39;
 }
+.profile-panel {
+  margin: 20px 0;
+  padding: 14px;
+  border: 1px solid #bfcdb6;
+  border-radius: 14px;
+  background: #f4f6eb;
+}
+.profile-panel summary {
+  cursor: pointer;
+  font-weight: 800;
+}
+.profile-panel p {
+  font-size: 14px;
+  line-height: 1.5;
+}
+.profile-list {
+  display: grid;
+  gap: 8px;
+  margin: 14px 0;
+}
+.profile-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  background: #fffdf5;
+  border: 1px solid #cbd5c0;
+  border-radius: 12px;
+}
+.profile-row strong {
+  flex: 1;
+  overflow-wrap: anywhere;
+}
+.profile-badge {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: #e9cd78;
+  color: #536048;
+}
+.profile-colour-1 {
+  background: #c5dca9;
+}
+.profile-colour-2 {
+  background: #b7d3e0;
+}
+.profile-colour-3 {
+  background: #d7c5e1;
+}
+.profile-current {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: #4e754e;
+  font-size: 13px;
+}
+.profile-current svg {
+  width: 17px;
+}
+.profile-panel form {
+  display: flex;
+  align-items: end;
+  gap: 8px;
+  margin: 15px 0;
+}
+.profile-panel label {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 7px;
+  font-size: 14px;
+  font-weight: 700;
+}
+.profile-panel input {
+  background: white;
+  border: 1px solid #aabb9c;
+  padding: 10px;
+  border-radius: 9px;
+  width: 100%;
+}
+.profile-panel .secondary-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  font-size: 13px;
+  padding: 10px;
+  margin: 0;
+}
+.profile-panel .secondary-button svg {
+  width: 17px;
+}
+.profile-panel .profile-local-note {
+  color: #66725c;
+  font-size: 12px;
+}
+.profile-message {
+  display: block;
+  border-radius: 10px;
+  background: #e4ecd9;
+  padding: 10px;
+  font-size: 14px;
+}
+@media (max-width: 600px) {
+  .profile-row {
+    flex-wrap: wrap;
+  }
+  .profile-row strong {
+    flex-basis: calc(100% - 50px);
+  }
+  .profile-panel form {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
 .comfort-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));

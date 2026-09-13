@@ -2813,5 +2813,10 @@
     "path": "/audio/voices/workshop-success-c383aca471086405.ogg",
     "voice": "bm_fable",
     "text": "All the way home! Two stars for our little road. Shall we make another?"
+  },
+  "profile-welcome": {
+    "path": "/audio/voices/profile-welcome-55a30b1085d5c949.ogg",
+    "voice": "bf_emma",
+    "text": "Hello, little friend. Welcome to your little world. Shall we visit our friends, or make your very own monster?"
   }
 }

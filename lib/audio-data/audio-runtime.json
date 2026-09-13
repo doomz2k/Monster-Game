@@ -562,7 +562,8 @@
     "workshop-try": "/audio/voices/workshop-try-86d181e81f78de9b.ogg",
     "workshop-ready": "/audio/voices/workshop-ready-c22375e95214aee2.ogg",
     "workshop-drive": "/audio/voices/workshop-drive-7ef37ac958fa0549.ogg",
-    "workshop-success": "/audio/voices/workshop-success-c383aca471086405.ogg"
+    "workshop-success": "/audio/voices/workshop-success-c383aca471086405.ogg",
+    "profile-welcome": "/audio/voices/profile-welcome-55a30b1085d5c949.ogg"
   },
   "phonemes": {
     "m": {

@@ -7,6 +7,7 @@ import {
   readBackups,
   saveRecoverably,
   type SaveBackup,
+  type SaveStorage,
 } from '@/lib/save-recovery';
 import type { GamePreferences } from '@/lib/preferences';
 import { GRAPHICS, type GraphicsSnapshot } from '@/lib/graphics-quality';
@@ -14,10 +15,14 @@ export function SaveAndComfort({
   progress,
   onProgress,
   graphics,
+  storage,
+  onRestore,
 }: {
   progress: ProgressData;
   onProgress: (p: ProgressData) => void;
   graphics?: GraphicsSnapshot;
+  storage: SaveStorage | null;
+  onRestore: (p: ProgressData) => void;
 }) {
   const [message, setMessage] = useState(''),
     [preview, setPreview] = useState<ProgressData | null>(null),
@@ -36,7 +41,7 @@ export function SaveAndComfort({
     );
     const a = document.createElement('a');
     a.href = url;
-    a.download = 'clovers-monster-save.json';
+    a.download = 'monster-adventure-save.json';
     a.click();
     setTimeout(() => URL.revokeObjectURL(url), 1000);
   };
@@ -56,12 +61,18 @@ export function SaveAndComfort({
   };
   const restore = () => {
     if (!preview) return;
+    if (!storage) {
+      setMessage(
+        'Browser storage is unavailable. Your saved files have not been changed.',
+      );
+      return;
+    }
     try {
-      saveRecoverably(localStorage, preview);
-      onProgress(preview);
+      saveRecoverably(storage, preview);
+      onRestore(preview);
       setPreview(null);
       setMessage('Your adventure has been restored.');
-      setBackups(readBackups(localStorage));
+      setBackups(readBackups(storage));
     } catch {
       setMessage(
         'There was not enough storage to keep a recovery copy. Nothing was restored.',
@@ -254,7 +265,7 @@ export function SaveAndComfort({
         <button
           className="secondary-button"
           onClick={() => {
-            const copies = readBackups(localStorage);
+            const copies = storage ? readBackups(storage) : [];
             setBackups(copies);
             setMessage(
               copies.length

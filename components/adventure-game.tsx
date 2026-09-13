@@ -29,6 +29,13 @@ import { ControllerTutorial } from './controller-tutorial';
 import { tutorialAction, TUTORIAL_STEPS } from '@/lib/tutorial';
 import { PreferencesContext, useMotionPreference } from './game-preferences';
 import { SaveAndComfort } from './save-and-comfort';
+import { ProfilePanel } from './profile-panel';
+import {
+  readProfiles,
+  profileStorage,
+  loadProfile,
+  type ProfileId,
+} from '@/lib/profiles';
 import { PracticeSummary } from './practice-summary';
 import { recordPractice, type PracticeEvent } from '@/lib/practice';
 import { DiscoveryBook } from './discovery-book';
@@ -67,7 +74,7 @@ import {
   FRIEND_GIFTS,
   friendshipLevel,
 } from '@/lib/friendship';
-import { loadRecoverableProgress, saveRecoverably } from '@/lib/save-recovery';
+import { saveRecoverably, type SaveStorage } from '@/lib/save-recovery';
 import { DeferredParentPanel } from '@/components/deferred-parent-panel';
 import { AppearancePanel } from '@/components/appearance-panel';
 import { MissionPanel } from '@/components/mission-panel';
@@ -127,6 +134,11 @@ type Mode =
 const CHOICE = { 'data-game-choice': true };
 export default function AdventureGame() {
   const puddleWelcomed = useRef(false);
+  const [progressStorage, setProgressStorage] = useState<SaveStorage | null>(
+    null,
+  );
+  const [savingAllowed, setSavingAllowed] = useState(false);
+  const [profileId, setProfileId] = useState<ProfileId>('original');
   const host = useRef<HTMLDivElement>(null),
     surface = useRef<HTMLDivElement>(null),
     modalSurface = useRef<HTMLDivElement>(null),
@@ -289,7 +301,9 @@ export default function AdventureGame() {
   const say = (id: string) => {
     audio.unlock();
     setError('');
-    void audio.line(id);
+    void audio.line(
+      id === 'welcome' && profileId !== 'original' ? 'profile-welcome' : id,
+    );
   };
   const go = (next: Mode, line?: string) => {
     if (next === 'workshop') setWorkshopOpen(true);
@@ -310,7 +324,22 @@ export default function AdventureGame() {
   useEffect(() => {
     /* oxlint-disable react/react-compiler -- Hydrate and subscribe to browser storage, input and rendering APIs. */
     try {
-      const saved = loadRecoverableProgress(localStorage);
+      const index = readProfiles(localStorage);
+      let selected = index.activeId;
+      let saved;
+      try {
+        saved = loadProfile(localStorage, selected);
+      } catch (e) {
+        if (selected === 'original') throw e;
+        selected = 'original';
+        saved = loadProfile(localStorage, selected);
+        setError(
+          'That adventure needs a recovery copy. Your original adventure is open, and the other saved files have been kept.',
+        );
+      }
+      setProfileId(selected);
+      setProgressStorage(profileStorage(localStorage, selected));
+      setSavingAllowed(true);
       setP(saved.progress);
       if (saved.recovered)
         setError('Your adventure was recovered from a safe copy.');
@@ -318,7 +347,16 @@ export default function AdventureGame() {
       setMuted(silent);
       audio.setMuted(silent);
     } catch {
+      setSavingAllowed(false);
+      try {
+        setProgressStorage(profileStorage(localStorage, 'original'));
+      } catch {
+        /* Storage is unavailable. */
+      }
       setP(freshProgress());
+      setError(
+        'This browser could not open the stored adventure. Saving is paused to keep the stored files safe. Start opens adventure selection and recovery.',
+      );
     }
     setReviews(loadReviews());
     setLoaded(true);
@@ -374,15 +412,15 @@ export default function AdventureGame() {
     };
   }, [audio]);
   useEffect(() => {
-    if (!loaded) return;
+    if (!loaded || !savingAllowed || !progressStorage) return;
     try {
-      saveRecoverably(localStorage, p);
+      saveRecoverably(progressStorage, p);
     } catch {
       /* oxlint-disable-next-line react/react-compiler -- Report a browser storage failure. */ setError(
         'This browser could not save your adventure.',
       );
     }
-  }, [p, loaded]);
+  }, [p, loaded, progressStorage, savingAllowed]);
   useEffect(
     () =>
       registerGameTools(
@@ -1881,11 +1919,24 @@ export default function AdventureGame() {
                   >
                     Return to main menu
                   </button>
+                  <ProfilePanel
+                    currentId={profileId}
+                    progress={savingAllowed ? p : null}
+                    onRestart={() => {
+                      audio.stop();
+                      window.location.reload();
+                    }}
+                  />
                   <PracticeSummary log={p.practice} />
                   <SaveAndComfort
                     progress={p}
                     onProgress={change}
                     graphics={graphicsSnapshot}
+                    storage={progressStorage}
+                    onRestore={(restored) => {
+                      setSavingAllowed(true);
+                      change(restored);
+                    }}
                   />
                   <DeferredParentPanel
                     progress={p}
