@@ -1,10 +1,19 @@
 import { SOUNDS } from './phonics';
 import { Soundscape, type SoundScene } from './soundscape';
 import { ResponseRotation } from './response-rotation';
-import builtIn from './audio-data/phonemes.json';
-import voiceClips from './audio-data/voice-clips.json';
+import runtime from './audio-data/audio-runtime.json';
 import adventureScript from './audio-data/adventure-script.json';
-import audit from './audio-data/audio-audit.json';
+const voicePaths: Record<string, string> = runtime.voices;
+const phonemeClips: Record<
+  string,
+  { path: string; sha256: string; blocked: boolean }
+> = runtime.phonemes;
+const narrationPaths = new Map<string, string>();
+for (const [id, line] of Object.entries(adventureScript)) {
+  const key = line.text.toLowerCase();
+  if (voicePaths[id] && !narrationPaths.has(key))
+    narrationPaths.set(key, voicePaths[id]);
+}
 export type SoundReview = {
   approved: boolean;
   data?: string;
@@ -57,18 +66,10 @@ export function saveReviews(reviews: SoundReviews) {
   localStorage.setItem(STORAGE, JSON.stringify(reviews));
 }
 export function candidatePath(g: string, reviews: SoundReviews): string | null {
-  return (
-    reviews[g]?.data ??
-    (builtIn as Record<string, { path: string }>)[g]?.path ??
-    null
-  );
+  return reviews[g]?.data ?? phonemeClips[g]?.path ?? null;
 }
 export function approvedPath(g: string, reviews: SoundReviews): string | null {
-  const technical = (audit.phonemes as Record<string, { warnings: string[] }>)[
-    g
-  ];
-  if (!reviews[g]?.data && technical?.warnings.includes('near-clipping'))
-    return null;
+  if (!reviews[g]?.data && phonemeClips[g]?.blocked) return null;
   return reviews[g]?.approved &&
     reviews[g]?.standard === 'rwi-set1-v2' &&
     Boolean(reviews[g]?.reviewer?.trim()) &&
@@ -81,10 +82,7 @@ export function reviewSource(
   g: string,
   reviews: SoundReviews,
 ): string | undefined {
-  return (
-    reviews[g]?.data ??
-    (audit.phonemes as Record<string, { sha256: string }>)[g]?.sha256
-  );
+  return reviews[g]?.data ?? phonemeClips[g]?.sha256;
 }
 export async function importRecording(file: File): Promise<string> {
   if (file.size > 2_000_000)
@@ -224,9 +222,7 @@ export class AudioDirector {
           } else if (step.type === 'clip') {
             await this.clip(step.url, generation);
           } else {
-            const path = Object.values(voiceClips).find(
-              (line) => line.text.toLowerCase() === step.text.toLowerCase(),
-            )?.path;
+            const path = narrationPaths.get(step.text.toLowerCase());
             if (path) await this.clip(path, generation);
             else this.error(step.text);
           }
@@ -248,8 +244,8 @@ export class AudioDirector {
     return this.run([{ type: 'narration', text }]);
   }
   line(id: string) {
-    const clip = (voiceClips as Record<string, { path: string }>)[id];
-    if (clip) return this.run([{ type: 'clip', url: clip.path }]);
+    const path = voicePaths[id];
+    if (path) return this.run([{ type: 'clip', url: path }]);
     // Missing recordings stay visible; never replace the natural voice bank with a robotic voice.
     this.stop();
     const line = (adventureScript as Record<string, { text: string }>)[id];
@@ -259,15 +255,15 @@ export class AudioDirector {
   lines(ids: string[], phonemes: string[] = []) {
     const steps: AudioStep[] = [];
     for (const id of ids) {
-      const clip = (voiceClips as Record<string, { path: string }>)[id];
-      if (!clip) {
+      const path = voicePaths[id];
+      if (!path) {
         this.stop();
         this.error(
           'This instruction recording is unavailable. Please try again.',
         );
         return Promise.resolve();
       }
-      steps.push({ type: 'clip', url: clip.path });
+      steps.push({ type: 'clip', url: path });
     }
     steps.push(
       ...phonemes.map((grapheme): AudioStep => ({ type: 'phoneme', grapheme })),

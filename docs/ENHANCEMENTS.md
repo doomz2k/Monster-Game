@@ -100,3 +100,5 @@ The next checkpoint, [DISCOVERIES-AND-FRIENDS.md](DISCOVERIES-AND-FRIENDS.md), a
 [HOME-VISITS.md](HOME-VISITS.md) brings all seven neighbours into the decorated home (32), with furniture reactions, recorded greetings and optional pictured dances. Saved visit progression, varied move sequences and reversible controller actions add social play and character expression (23/36).
 
 [FLOWER-BOOK.md](FLOWER-BOOK.md) adds ten collected flower varieties, six earned special seed packets, one-time growing rewards and coloured plants shared with the island (29/28/39). Paged seed pictures, direct controller focus, full-garden guidance and a narrated 3D flower book expand gardening without timers or random purchases.
+
+[LOADING-AND-AUDIO.md](LOADING-AND-AUDIO.md) defers the large listening studio until Start, reduces normal-play compressed JavaScript by about 15%, and adds a repeatable import-graph budget report (12). A compact generated playback index preserves every recording path, exact phonics approval fingerprint and technical block.

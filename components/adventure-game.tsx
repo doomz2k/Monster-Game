@@ -66,7 +66,7 @@ import {
   friendshipLevel,
 } from '@/lib/friendship';
 import { loadRecoverableProgress, saveRecoverably } from '@/lib/save-recovery';
-import { ParentPanel } from '@/components/parent-panel';
+import { DeferredParentPanel } from '@/components/deferred-parent-panel';
 import { AppearancePanel } from '@/components/appearance-panel';
 import { MissionPanel } from '@/components/mission-panel';
 import { HomePanel } from '@/components/home-panel';
@@ -1826,7 +1826,7 @@ export default function AdventureGame() {
                     onProgress={change}
                     graphics={graphicsSnapshot}
                   />
-                  <ParentPanel
+                  <DeferredParentPanel
                     progress={p}
                     onProgress={change}
                     reviews={reviews}
