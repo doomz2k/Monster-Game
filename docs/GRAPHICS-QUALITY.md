@@ -19,6 +19,7 @@ The garden and neighbour portraits follow the chosen render budget (Balanced in 
 - All 75 tests pass, including sustained/isolated stalls, pauses, manual overrides, recovery to higher quality, pixel budgets across common resolutions and save migration.
 - TypeScript, lint and production build pass. The existing large Three.js client chunk warning remains.
 - Browser inspection switched More detail → Simpler → More detail → Simpler while preserving scenery, Monster's eyes/outfit and a held delivery. A discovered shadow-material invalidation bug was fixed and both directions rechecked. The garden's existing plants and wildlife were also inspected.
+- Entering or leaving the monster studio preserves the selected pixel budget. Browser checks confirmed a 1.00 render scale in both the studio and exploration with Simpler graphics; TypeScript, lint, the five graphics tests and the production build passed after this follow-up fix.
 - Indicative local development samples from the central island: More detail reported 57 fps, 1,571 draw calls and 970,351 triangles; Simpler reported 57 fps, 797 draw calls and 459,752 triangles. These are different live frames on this computer, not a controlled benchmark or a claim about slower hardware. Physical low-spec-device acceptance remains pending.
 
 The game is left on Automatic after testing.

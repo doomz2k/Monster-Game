@@ -1064,7 +1064,7 @@ export class MonsterWorld {
     const show = Boolean(s.showcase);
     if (show !== this.inShowcase) {
       this.inShowcase = show;
-      this.renderer.setPixelRatio(Math.min(devicePixelRatio, show ? 2 : 1.5));
+      this.resize();
       this.renderer.setClearColor(
         this.region === 'moon' ? '#252344' : '#b9dbdf',
         show ? 0 : 1,
