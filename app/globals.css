@@ -12,6 +12,7 @@
 @import './deliveries.css';
 @import './rocket-story.css';
 @import './rover.css';
+@import './companions.css';
 @custom-variant dark (&:is(.dark *));
 @theme inline {
   --color-background: var(--background);

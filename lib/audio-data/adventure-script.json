@@ -1486,5 +1486,33 @@
   "rover-fewer-take-3": {
     "voice": "nova",
     "text": "Let us count them together. Try a smaller number when you are ready."
+  },
+  "companions": {
+    "voice": "narrator",
+    "text": "Choose a little friend to come with you. Or let your friends rest at home. Green A chooses."
+  },
+  "companion-sprig": {
+    "voice": "narrator",
+    "text": "This is Sprig, your little leafy friend. Sprig is coming on your adventure!"
+  },
+  "companion-puff": {
+    "voice": "narrator",
+    "text": "Puff loves the garden. Your little fluffy friend is coming with you!"
+  },
+  "companion-twinkle": {
+    "voice": "narrator",
+    "text": "Twinkle has come from the Moon to explore with you. What a lovely little friend!"
+  },
+  "companion-puff-locked": {
+    "voice": "narrator",
+    "text": "Puff loves growing things. Help Tilly in the garden, and Puff can join you."
+  },
+  "companion-twinkle-locked": {
+    "voice": "narrator",
+    "text": "Twinkle lives on the Moon. Help Pip repair the rocket to meet your new friend."
+  },
+  "companion-rest": {
+    "voice": "narrator",
+    "text": "Your friends are resting at home. You can choose a friend again whenever you like."
   }
 }

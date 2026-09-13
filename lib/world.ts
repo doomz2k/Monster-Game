@@ -1,5 +1,7 @@
 import * as THREE from 'three';
 import { createPizzaParcel } from './pizza-parcel';
+import { COMPANIONS, CompanionMotion, companionSpot } from './companion';
+import { createCompanion } from './companion-model';
 import { IslandDay, daylightPalette } from './daylight';
 import { createIslandSky } from './island-sky';
 import { createRoverModel, createRoverStops } from './rover-model';
@@ -94,6 +96,12 @@ export class MonsterWorld {
   private frame = 0;
   private observer: ResizeObserver;
   private player = new THREE.Group();
+  private companions = COMPANIONS.map((c) => ({
+    id: c.id,
+    model: createCompanion(c.id),
+  }));
+  private companionMotion = new CompanionMotion();
+  private companionIdle = 0;
   private character = createMonster();
   private rig = this.character.root;
   private pizzaParcel = createPizzaParcel();
@@ -229,6 +237,7 @@ export class MonsterWorld {
     this.buildMonster();
     this.buildShowroom();
     this.scene.add(this.player);
+    this.companions.forEach((c) => this.scene.add(c.model.root));
     this.player.position.set(0, height(0, 5), 5);
     this.shadow = new THREE.Mesh(
       new THREE.CircleGeometry(0.88, 24),
@@ -1003,6 +1012,7 @@ export class MonsterWorld {
     if (region !== this.region) {
       this.driving = false;
       this.roverPath = [];
+      this.companionMotion.ready = false;
       this.rover.root.position.set(ROVER_DOCK.x, 0, ROVER_DOCK.z);
       this.region = region;
       this.skyLight.intensity = region === 'moon' ? 0.5 : 0.95;
@@ -1270,6 +1280,76 @@ export class MonsterWorld {
     this.pizzaParcel.visible =
       !!s.adventure?.deliveries.parcel && !show && !this.driving;
     this.roverParcel.visible = !!s.adventure?.deliveries.parcel && this.driving;
+    if (s.active)
+      this.companionIdle = moving > 0.03 ? 0 : this.companionIdle + dt;
+    const companionId = s.adventure?.companion ?? null;
+    for (const companion of this.companions) {
+      const pet = companion.model.root;
+      pet.visible = companion.id === companionId && !show && !s.welcome;
+      if (!pet.visible) continue;
+      const obstacles =
+        this.region === 'island'
+          ? this.colliders
+          : this.atmosphere.moonColliders;
+      const spot = companionSpot(
+        this.player.position,
+        this.player.rotation.y,
+        obstacles,
+      );
+      this.companionMotion.update(spot, dt, s.active, obstacles);
+      const resting = this.companionIdle > 7 && !this.driving;
+      if (this.driving) {
+        pet.position
+          .set(-0.85, 1.95, -0.25)
+          .applyAxisAngle(THREE.Object3D.DEFAULT_UP, this.player.rotation.y)
+          .add(this.player.position);
+        pet.rotation.y = this.player.rotation.y;
+      } else {
+        const { x, z } = this.companionMotion;
+        const floor =
+          this.region === 'moon' ? 0 : this.atmosphere.surfaceHeight(x, z);
+        const abovePlayer =
+          Math.hypot(x - this.player.position.x, z - this.player.position.z) <
+          0.5;
+        const targetHeight = floor + (abovePlayer ? 3 : resting ? 0.53 : 1.2);
+        pet.position.set(
+          x,
+          Math.abs(pet.position.y - targetHeight) > 3
+            ? targetHeight
+            : THREE.MathUtils.lerp(
+                pet.position.y,
+                targetHeight,
+                1 - Math.exp(-4 * dt),
+              ),
+          z,
+        );
+        const neighbour = PLACES.find(
+          (p) =>
+            p.id !== 'home' &&
+            p.id !== 'shop' &&
+            (p.id === 'moon') === (this.region === 'moon') &&
+            Math.hypot(x - p.x, z - p.z) < 7,
+        );
+        const look = neighbour ?? this.player.position;
+        const facing =
+          moving > 0.03
+            ? this.companionMotion.facing
+            : Math.atan2(look.x - x, look.z - z);
+        pet.rotation.y +=
+          Math.atan2(
+            Math.sin(facing - pet.rotation.y),
+            Math.cos(facing - pet.rotation.y),
+          ) *
+          (1 - Math.exp(-6 * dt));
+      }
+      companion.model.animate(
+        time,
+        moving,
+        this.celebration > 0,
+        this.reducedMotion,
+        resting || this.driving,
+      );
+    }
     this.shadow.position.set(
       this.player.position.x,
       (this.region === 'moon'

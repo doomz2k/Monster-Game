@@ -1858,5 +1858,40 @@
     "path": "/audio/voices/rover-fewer-take-3-fec5f2859d506c80.ogg",
     "voice": "bf_isabella",
     "text": "Let us count them together. Try a smaller number when you are ready."
+  },
+  "companions": {
+    "path": "/audio/voices/companions-fc66b620e0d8f10d.ogg",
+    "voice": "bf_emma",
+    "text": "Choose a little friend to come with you. Or let your friends rest at home. Green A chooses."
+  },
+  "companion-sprig": {
+    "path": "/audio/voices/companion-sprig-56c762bbdb01f00d.ogg",
+    "voice": "bf_emma",
+    "text": "This is Sprig, your little leafy friend. Sprig is coming on your adventure!"
+  },
+  "companion-puff": {
+    "path": "/audio/voices/companion-puff-b17c9093b2667679.ogg",
+    "voice": "bf_emma",
+    "text": "Puff loves the garden. Your little fluffy friend is coming with you!"
+  },
+  "companion-twinkle": {
+    "path": "/audio/voices/companion-twinkle-cab40c9c14c89ef5.ogg",
+    "voice": "bf_emma",
+    "text": "Twinkle has come from the Moon to explore with you. What a lovely little friend!"
+  },
+  "companion-puff-locked": {
+    "path": "/audio/voices/companion-puff-locked-1c42c1998bc5c974.ogg",
+    "voice": "bf_emma",
+    "text": "Puff loves growing things. Help Tilly in the garden, and Puff can join you."
+  },
+  "companion-twinkle-locked": {
+    "path": "/audio/voices/companion-twinkle-locked-ee7c0050c673a11c.ogg",
+    "voice": "bf_emma",
+    "text": "Twinkle lives on the Moon. Help Pip repair the rocket to meet your new friend."
+  },
+  "companion-rest": {
+    "path": "/audio/voices/companion-rest-bb1e54ee2f39a72a.ogg",
+    "voice": "bf_emma",
+    "text": "Your friends are resting at home. You can choose a friend again whenever you like."
   }
 }

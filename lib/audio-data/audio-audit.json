@@ -4092,6 +4092,83 @@
       "leadingSilenceMs": 45,
       "trailingSilenceMs": 80,
       "warnings": []
+    },
+    "companions": {
+      "sha256": "6a4341ff795ce85479f6dd0c5e934c0cca4ffdce848ea3e73b0236583c947d65",
+      "seconds": 4.779,
+      "sampleRate": 24000,
+      "channels": 1,
+      "peakDbfs": -3.3,
+      "activeRmsDbfs": -18.5,
+      "leadingSilenceMs": 37,
+      "trailingSilenceMs": 67,
+      "warnings": []
+    },
+    "companion-sprig": {
+      "sha256": "6e617eae48cafe2d712672094564c55b81d06ce9b324fa3336e99fb0852a0a31",
+      "seconds": 4.16,
+      "sampleRate": 24000,
+      "channels": 1,
+      "peakDbfs": -3.8,
+      "activeRmsDbfs": -18.7,
+      "leadingSilenceMs": 30,
+      "trailingSilenceMs": 73,
+      "warnings": []
+    },
+    "companion-puff": {
+      "sha256": "3f9626b9d1790cfdc5b56b133d1cc6d18f6a231a45e8da126a730db93759564a",
+      "seconds": 3.648,
+      "sampleRate": 24000,
+      "channels": 1,
+      "peakDbfs": -3.3,
+      "activeRmsDbfs": -19.0,
+      "leadingSilenceMs": 28,
+      "trailingSilenceMs": 73,
+      "warnings": []
+    },
+    "companion-twinkle": {
+      "sha256": "10784e93d7b5ce482e3487859e35355bf208f954d691f53676571884e8a64fa3",
+      "seconds": 4.245,
+      "sampleRate": 24000,
+      "channels": 1,
+      "peakDbfs": -3.8,
+      "activeRmsDbfs": -19.4,
+      "leadingSilenceMs": 26,
+      "trailingSilenceMs": 65,
+      "warnings": []
+    },
+    "companion-puff-locked": {
+      "sha256": "f29f7f5c46bbd91fcf1596308c11d35a93448136df305f6c0458f3ec5ceeadcd",
+      "seconds": 4.053,
+      "sampleRate": 24000,
+      "channels": 1,
+      "peakDbfs": -3.3,
+      "activeRmsDbfs": -18.6,
+      "leadingSilenceMs": 33,
+      "trailingSilenceMs": 71,
+      "warnings": []
+    },
+    "companion-twinkle-locked": {
+      "sha256": "fdde77e22b3cea1b3ffbf19ba250f38c8dee4115513f5c3e4169abc2ff9bbe0a",
+      "seconds": 4.331,
+      "sampleRate": 24000,
+      "channels": 1,
+      "peakDbfs": -3.9,
+      "activeRmsDbfs": -19.3,
+      "leadingSilenceMs": 24,
+      "trailingSilenceMs": 78,
+      "warnings": []
+    },
+    "companion-rest": {
+      "sha256": "bc8acc7bb7301e53d51f336abba893f2ebf458ef1c1c0b304b00c782c17c1285",
+      "seconds": 4.139,
+      "sampleRate": 24000,
+      "channels": 1,
+      "peakDbfs": -3.7,
+      "activeRmsDbfs": -19.9,
+      "leadingSilenceMs": 32,
+      "trailingSilenceMs": 74,
+      "warnings": []
     }
   },
   "phonemes": {

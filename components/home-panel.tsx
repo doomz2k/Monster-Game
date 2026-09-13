@@ -8,10 +8,12 @@ import {
   Undo2,
   ArrowLeft,
   ArrowRight,
+  PawPrint,
 } from 'lucide-react';
 import type { ProgressData } from '@/lib/learning';
 import { harvestPlant, PRODUCE, gardenVisitors } from '@/lib/garden';
 import { GardenPreview } from './garden-preview';
+import { CompanionPanel } from './companion-panel';
 import { GamePicture } from './game-picture';
 import {
   SHOP_ITEMS,
@@ -143,7 +145,7 @@ export function HomePanel({
       ?.querySelector<HTMLElement>('[data-game-choice]')
       ?.focus({ preventScroll: true });
   }, [furniturePage]);
-  const [tab, setTab] = useState<'garden' | 'house'>('garden'),
+  const [tab, setTab] = useState<'garden' | 'house' | 'friends'>('garden'),
     [seed, setSeed] = useState('daisy'),
     [item, setItem] = useState<string | null>('table'),
     [tool, setTool] = useState<'plant' | 'water' | 'clear'>('plant'),
@@ -164,6 +166,17 @@ export function HomePanel({
   };
   return (
     <div className="home-panel">
+      {tab !== 'friends' && (
+        <button
+          hidden
+          data-repeat-prompt
+          onClick={() => {
+            void audio.line(tab === 'garden' ? 'garden' : 'furniture');
+          }}
+        >
+          Listen again
+        </button>
+      )}
       <div className="shop-heading">
         <span className="friend-avatar">🏡</span>
         <div>
@@ -195,11 +208,24 @@ export function HomePanel({
         >
           <Armchair /> My house
         </button>
+        <button
+          data-game-choice
+          aria-pressed={tab === 'friends'}
+          onClick={() => {
+            setTab('friends');
+            setMessage('');
+            void audio.line('companions');
+          }}
+        >
+          <PawPrint /> My friends
+        </button>
         <button data-game-choice onClick={onShop}>
           <span>🐰</span> Visit Poppy
         </button>
       </div>
-      {tab === 'garden' ? (
+      {tab === 'friends' ? (
+        <CompanionPanel progress={p} onChange={onChange} audio={audio} />
+      ) : tab === 'garden' ? (
         <div className="garden-workspace">
           <aside className="garden-view">
             <GardenPreview plots={p.adventure.plots} />

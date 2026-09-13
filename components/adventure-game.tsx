@@ -582,6 +582,12 @@ export default function AdventureGame() {
     return true;
   };
   const repeat = () => {
+    if (mode === 'home') {
+      modalSurface.current
+        ?.querySelector<HTMLButtonElement>('[data-repeat-prompt]')
+        ?.click();
+      return;
+    }
     if (mode === 'rover') {
       roverSurface.current
         ?.querySelector<HTMLButtonElement>('[data-repeat-prompt]')
@@ -633,15 +639,13 @@ export default function AdventureGame() {
             ? place === 'rocket'
               ? rocketChapter(p.adventure.rounds.rocket).line
               : placeFor(place).intro
-            : mode === 'home'
-              ? 'home'
-              : mode === 'shop'
-                ? 'poppy-hello'
-                : mode === 'map'
-                  ? 'map'
-                  : mode === 'pause'
-                    ? 'pause'
-                    : 'explore',
+            : mode === 'shop'
+              ? 'poppy-hello'
+              : mode === 'map'
+                ? 'map'
+                : mode === 'pause'
+                  ? 'pause'
+                  : 'explore',
     );
   };
   const back = () => {
