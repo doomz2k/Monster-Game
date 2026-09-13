@@ -18,6 +18,7 @@
 @import './home-play.css';
 @import './practice.css';
 @import './observatory.css';
+@import './home-visits.css';
 @custom-variant dark (&:is(.dark *));
 @theme inline {
   --color-background: var(--background);

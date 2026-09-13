@@ -96,3 +96,5 @@ The next checkpoint, [DISCOVERIES-AND-FRIENDS.md](DISCOVERIES-AND-FRIENDS.md), a
 [PRACTICE-SUPPORT.md](PRACTICE-SUPPORT.md) uses those observations to remember familiar activity examples (9), restore help after retries and revisit occasional addition/subtraction facts after intervening play (18). Saved parent overrides preserve control, and phonics modelling remains explicit.
 
 [OBSERVATORY.md](OBSERVATORY.md) opens Nova's planet viewer and eight-stamp collection (42/39), with a narrated orbit model and a proportional Earth comparison (43). Shared procedural planet surfaces also improve the existing Moon questions (4), with responsive layouts, reduced motion and bounded rendering.
+
+[HOME-VISITS.md](HOME-VISITS.md) brings all seven neighbours into the decorated home (32), with furniture reactions, recorded greetings and optional pictured dances. Saved visit progression, varied move sequences and reversible controller actions add social play and character expression (23/36).

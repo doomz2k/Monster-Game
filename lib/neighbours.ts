@@ -640,6 +640,7 @@ export function createNeighbour(
   ).rotation.z = -0.2;
   return {
     root,
+    arms,
     animate(
       time: number,
       near: boolean,

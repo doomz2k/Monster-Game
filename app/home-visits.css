@@ -1,0 +1,430 @@
+.visits-activity {
+  background: #edf0dd;
+}
+.home-visits {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  flex: 1;
+  min-height: 0;
+  width: min(1440px, 100%);
+  margin: 0 auto;
+  padding: 7px 28px 18px;
+  color: #45543f;
+}
+.visits-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.visits-heading small {
+  letter-spacing: 0.14em;
+  font-size: 11px;
+  font-weight: 900;
+  color: #718064;
+}
+.visits-heading h1 {
+  font-size: clamp(27px, 3vw, 38px);
+  margin: 2px 0;
+}
+.visits-heading .round-control {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.visits-workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(310px, 1fr);
+  gap: 20px;
+  min-height: 0;
+  flex: 1;
+}
+.home-visit-stage {
+  position: relative;
+  min-height: 0;
+  margin: 0;
+  border-radius: 32px;
+  overflow: hidden;
+  border: 3px solid #d5d8bd;
+  background: radial-gradient(ellipse at 50% 30%, #f9ebd1, #dce3c5);
+}
+.home-visit-stage canvas {
+  position: absolute;
+  inset: 0;
+  display: block;
+}
+.home-visit-fallback {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  height: 100%;
+}
+.home-visit-fallback > div {
+  display: flex;
+  align-items: center;
+}
+.home-visit-fallback .game-picture {
+  width: 110px;
+  height: 110px;
+}
+.home-visit-stage:has(canvas) .home-visit-fallback {
+  display: none;
+}
+.visiting-name-tags {
+  position: absolute;
+  bottom: 12px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-evenly;
+  z-index: 1;
+  pointer-events: none;
+}
+.visiting-name-tags span {
+  padding: 5px 16px;
+  border-radius: 14px;
+  background: #fff8e9d9;
+  font-weight: 800;
+  color: #62614b;
+}
+.visits-choices {
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 12px;
+}
+.visits-choices h2 {
+  font-size: 23px;
+  margin: 0;
+  text-align: center;
+}
+.visitor-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+}
+.visitor-grid button {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 2px solid #d4d9bd;
+  border-radius: 18px;
+  background: #fffaed;
+  padding: 7px 3px;
+  font-size: 13px;
+}
+.visitor-grid button[aria-pressed='true'] {
+  background: #e1ebce;
+  border-color: #8aab78;
+}
+.visitor-grid .game-picture {
+  width: 62px;
+  height: 62px;
+}
+.visitor-grid button > svg {
+  position: absolute;
+  right: 4px;
+  top: 5px;
+  color: #779564;
+}
+.visitor-grid button:last-child {
+  grid-column: 4;
+}
+.visits-intro-copy {
+  text-align: center;
+  font-size: 16px;
+  min-height: 42px;
+  margin: 2px 0;
+}
+.dance-picture {
+  width: 100%;
+  height: 90px;
+  max-width: 115px;
+}
+.dance-sequence {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  padding: 6px 8px 8px;
+}
+.dance-sequence > div {
+  position: relative;
+  background: #faf6e9;
+  border: 2px solid #d7d9c0;
+  border-radius: 18px;
+  opacity: 0.7;
+}
+.dance-sequence .dance-picture {
+  width: 66px;
+  height: 62px;
+}
+.dance-sequence .dance-current {
+  opacity: 1;
+  border-color: #d3a442;
+  box-shadow: 0 0 0 4px #f7df8c7d;
+  background: #fff4cf;
+}
+.dance-sequence .dance-copied {
+  opacity: 1;
+  background: #e1edcf;
+  border-color: #8ca979;
+}
+.dance-sequence > div > span,
+.dance-sequence > div > svg:not(.dance-picture):not(.dance-arrow) {
+  position: absolute;
+  bottom: -10px;
+  right: -8px;
+  display: grid;
+  place-items: center;
+  background: #f6edd5;
+  border-radius: 50%;
+  width: 22px;
+  height: 22px;
+  border: 1px solid #d8ccaf;
+  font-size: 12px;
+  font-weight: 800;
+}
+.dance-sequence .dance-arrow {
+  position: absolute;
+  right: -24px;
+  top: 24px;
+  width: 20px;
+  color: #91a180;
+}
+.dance-moves {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+.dance-moves button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  padding: 7px;
+  border: 2px solid #c8d1b4;
+  border-radius: 23px;
+  background: #fffaee;
+}
+.dance-moves button.dance-help {
+  border-color: #d4ac51;
+  background: #fff1c1;
+}
+.dance-moves strong {
+  font-size: 17px;
+}
+.dance-undo {
+  align-self: center;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-radius: 15px;
+  border: 2px solid #d4d8c4;
+  padding: 5px 13px;
+  font-size: 13px;
+  background: #f8f3e3;
+}
+.dance-undo:disabled {
+  opacity: 0.4;
+}
+.dance-undo .pad-key {
+  width: 25px;
+  height: 25px;
+  font-size: 15px;
+}
+.visit-reward {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+.visit-reward .game-picture {
+  width: 90px;
+  height: 90px;
+}
+.dance-complete-strip {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+.dance-complete-strip .dance-picture {
+  width: 85px;
+}
+.visits-choices > .adventure-primary,
+.visits-choices > .adventure-secondary {
+  justify-content: center;
+  gap: 9px;
+}
+.visits-footer {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  font-size: 14px;
+  font-weight: 800;
+}
+.visits-footer > span {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.visits-footer > span:nth-child(2) {
+  margin-left: auto;
+}
+[data-contrast='high'] .visitor-grid button,
+[data-contrast='high'] .dance-moves button {
+  border-color: #53664b;
+}
+@media (max-height: 620px) {
+  .home-visits {
+    gap: 8px;
+    padding: 0 20px 9px;
+  }
+  .visits-heading h1 {
+    font-size: 26px;
+  }
+  .visits-choices {
+    gap: 7px;
+  }
+  .visits-choices h2 {
+    font-size: 19px;
+  }
+  .dance-picture {
+    height: 64px;
+  }
+  .dance-moves button {
+    padding: 3px;
+    border-radius: 17px;
+  }
+  .dance-moves strong {
+    font-size: 14px;
+  }
+  .dance-moves {
+    gap: 7px;
+  }
+  .dance-sequence {
+    gap: 23px;
+    padding-top: 0;
+  }
+  .dance-sequence .dance-picture {
+    width: 52px;
+    height: 48px;
+  }
+  .dance-sequence .dance-arrow {
+    top: 17px;
+  }
+  .visitor-grid .game-picture {
+    width: 48px;
+    height: 48px;
+  }
+  .visitor-grid button {
+    font-size: 12px;
+    padding: 4px 2px;
+  }
+  .visits-intro-copy {
+    font-size: 14px;
+    min-height: 35px;
+  }
+  .visits-choices > .adventure-primary,
+  .visits-choices > .adventure-secondary {
+    padding: 8px 12px;
+    font-size: 16px;
+  }
+  .visits-footer {
+    font-size: 12px;
+  }
+  .visiting-name-tags {
+    bottom: 8px;
+  }
+  .visiting-name-tags span {
+    font-size: 12px;
+    padding: 4px 12px;
+  }
+}
+@media (max-width: 740px) {
+  .home-visits {
+    padding: 0 12px 12px;
+  }
+  .visits-heading h1 {
+    font-size: 24px;
+  }
+  .visits-heading small {
+    font-size: 9px;
+  }
+  .visits-workspace {
+    grid-template-columns: 1fr;
+    grid-template-rows: minmax(180px, 1fr) auto;
+    gap: 9px;
+  }
+  .visits-choices {
+    gap: 8px;
+  }
+  .visits-choices h2 {
+    font-size: 19px;
+  }
+  .visitor-grid .game-picture {
+    width: 43px;
+    height: 43px;
+  }
+  .visitor-grid button {
+    padding: 4px 2px;
+    font-size: 12px;
+  }
+  .visits-intro-copy {
+    font-size: 14px;
+    min-height: 0;
+  }
+  .dance-moves {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 5px;
+  }
+  .dance-moves .dance-picture {
+    height: 57px;
+  }
+  .dance-moves button {
+    padding: 4px 2px;
+    border-radius: 15px;
+  }
+  .dance-moves strong {
+    font-size: 12px;
+  }
+  .dance-sequence .dance-picture {
+    width: 50px;
+    height: 46px;
+  }
+  .dance-sequence {
+    padding: 0 0 7px;
+  }
+  .dance-sequence .dance-arrow {
+    top: 14px;
+  }
+  .visits-footer {
+    font-size: 11px;
+    gap: 10px;
+  }
+  .visits-footer .pad-key {
+    width: 26px;
+    height: 26px;
+    font-size: 16px;
+  }
+  .visits-heading .round-control {
+    gap: 4px;
+  }
+  .visits-choices > .adventure-primary {
+    padding: 8px 12px;
+    font-size: 16px;
+  }
+  .visiting-name-tags span {
+    font-size: 12px;
+    padding: 4px 10px;
+  }
+  .dance-complete-strip .dance-picture {
+    height: 60px;
+  }
+  .visit-reward .game-picture {
+    width: 50px;
+    height: 50px;
+  }
+}

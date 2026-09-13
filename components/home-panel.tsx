@@ -15,13 +15,17 @@ export function HomePanel({
   onChange,
   audio,
   onShop,
+  onVisit,
+  initialTab = 'garden',
 }: {
   progress: ProgressData;
   onChange: (p: ProgressData) => void;
   audio: AudioDirector;
   onShop: () => void;
+  onVisit: () => void;
+  initialTab?: 'garden' | 'house';
 }) {
-  const [tab, setTab] = useState<'garden' | 'house' | 'friends'>('garden'),
+  const [tab, setTab] = useState<'garden' | 'house' | 'friends'>(initialTab),
     [seed, setSeed] = useState('daisy'),
     [tool, setTool] = useState<'plant' | 'water' | 'clear'>('plant'),
     [pendingClear, setPendingClear] = useState<number | null>(null);
@@ -272,7 +276,12 @@ export function HomePanel({
           </div>
         </div>
       ) : (
-        <HomeRoom progress={p} onChange={onChange} audio={audio} />
+        <HomeRoom
+          progress={p}
+          onChange={onChange}
+          audio={audio}
+          onInvite={onVisit}
+        />
       )}
       <output aria-live="polite" className="home-feedback">
         {message}

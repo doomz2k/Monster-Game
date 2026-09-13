@@ -1,0 +1,13 @@
+# Friends round to play
+
+From My home → My house → Invite a friend, Monster can welcome Poppy immediately and each other neighbour after helping them once. Each visit uses the player's actual outfit, companion, furniture, rotations and lamp state. Friends have individual British greetings and react to a favourite object only when it is owned and placed inside.
+
+The optional activity is copying an animated dance. Choose one of four large pictures with the direction pad and press green A: clap, reach up, hop or wiggle. The whole two- or three-move sequence stays visible. There is no timer, lives or loss of stars. An unexpected move animates Monster's choice and highlights the picture to try. Y describes the current move; X undoes one copied move; B returns to friend selection and then the house. Start preserves the visit while opening the hidden parent controls.
+
+The first four dances with each friend use two moves, then a deterministic deck covers all 36 three-move sequences with no identical adjacent moves. Friend offsets give different starting dances. A completed dance earns two stars once per saved visit counter. Social play does not increment school practice or phonics knowledge. Leaving an unfinished dance costs nothing; a later visit starts that dance again.
+
+The single scene reuses the home, furniture, neighbour and monster rigs. Soft shoulders bring clapping hands in front of the body and restore their original positions after a gesture. Rendering runs at most 30 frames per second with the existing graphics pixel budgets and stops when inactive. Reduced motion presents held gestures without bouncing. Assets are disposed on scene replacement; wallet updates do not rebuild the room. Vector move pictures remain usable when the visit renderer cannot start.
+
+Validation: 166 automated checks pass, including old-save migration, malformed counters, friend unlocks, duplicate/stale reward rejection, complete recipe coverage, placed-furniture reactions and finite/resetting poses on all seven neighbour rigs. The 26 new recorded lines bring the British narration bank to 543; all pass decoding, duration, silence and headroom checks. This is not human listening approval.
+
+Browser checks at 1280×720, 960×540 and 390×844 covered Poppy and Tilly, a wrong move, D-pad/green-A keyboard equivalents, X undo, Y replay, Start/resume, repeated dances, reward totals, reduced/simple rendering and return to the house. Three finished test dances changed the local QA wallet from 56 to 62; the practice summary remained at 17 questions. No runtime warnings or missing recordings were reported. These were agent inputs, not observed child learning or physical controller acceptance. The published player's save was not replaced.

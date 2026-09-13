@@ -1,6 +1,6 @@
 'use client';
 import { useEffect, useRef, useState } from 'react';
-import { Armchair, Sprout, Move, Play } from 'lucide-react';
+import { Armchair, Sprout, Move, Play, Users } from 'lucide-react';
 import type { ProgressData } from '@/lib/learning';
 import type { AudioDirector } from '@/lib/audio';
 import { homeActivity, toggleFurnitureLight } from '@/lib/home-play';
@@ -14,10 +14,12 @@ export function HomeRoom({
   progress: p,
   onChange,
   audio,
+  onInvite,
 }: {
   progress: ProgressData;
   onChange: (p: ProgressData) => void;
   audio: AudioDirector;
+  onInvite: () => void;
 }) {
   const [area, setArea] = useState<FurnitureArea>('house'),
     [slot, setSlot] = useState(() =>
@@ -95,6 +97,9 @@ export function HomeRoom({
             {place === 'house' ? 'Inside' : 'Outside'}
           </button>
         ))}
+        <button data-game-choice onClick={onInvite}>
+          <Users /> Invite a friend
+        </button>
         <button
           data-room-arrange
           data-game-choice

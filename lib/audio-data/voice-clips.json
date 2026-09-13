@@ -2583,5 +2583,135 @@
     "path": "/audio/voices/observatory-fact-neptune-77bdba8dee889558.ogg",
     "voice": "bf_isabella",
     "text": "Neptune. Eighth from the Sun. It's the farthest of our eight planets from the Sun."
+  },
+  "visits-intro": {
+    "path": "/audio/voices/visits-intro-4ef6608c0ab6f069.ogg",
+    "voice": "bf_emma",
+    "text": "Who shall we invite to play? Choose a friend, then press green A. Help a new friend on the island before inviting them round."
+  },
+  "visit-hello-shop": {
+    "path": "/audio/voices/visit-hello-shop-d89147b25e9c08ee.ogg",
+    "voice": "bf_alice",
+    "text": "Oh, what a lovely place for a little dance! Copy my move. Choose the matching picture, then press green A."
+  },
+  "visit-admire-shop": {
+    "path": "/audio/voices/visit-admire-shop-f7e0d3f469597d8d.ogg",
+    "voice": "bf_alice",
+    "text": "Your lamp makes this room feel so cosy. Copy my move. Choose the matching picture, then press green A."
+  },
+  "visit-success-shop": {
+    "path": "/audio/voices/visit-success-shop-2d731becee48ab19.ogg",
+    "voice": "bf_alice",
+    "text": "That was lovely! Shall we do another little dance?"
+  },
+  "visit-hello-garden": {
+    "path": "/audio/voices/visit-hello-garden-a0cf55d43a25d221.ogg",
+    "voice": "bf_lily",
+    "text": "Hello, little friend! I fancy a happy dance. Copy my move. Choose the matching picture, then press green A."
+  },
+  "visit-admire-garden": {
+    "path": "/audio/voices/visit-admire-garden-7a967284a566d4d6.ogg",
+    "voice": "bf_lily",
+    "text": "What a lovely table. We could have a little picnic here. Copy my move. Choose the matching picture, then press green A."
+  },
+  "visit-success-garden": {
+    "path": "/audio/voices/visit-success-garden-99b72a3286de002f.ogg",
+    "voice": "bf_lily",
+    "text": "We did it together! That put a spring in my step."
+  },
+  "visit-hello-meadow": {
+    "path": "/audio/voices/visit-hello-meadow-6f15e5473da682f3.ogg",
+    "voice": "bm_george",
+    "text": "Hello there! I have brought my dancing feet. Copy my move. Choose the matching picture, then press green A."
+  },
+  "visit-admire-meadow": {
+    "path": "/audio/voices/visit-admire-meadow-44ebc6fd47aaf8e9.ogg",
+    "voice": "bm_george",
+    "text": "Your table is just the place for sharing a pizza. Copy my move. Choose the matching picture, then press green A."
+  },
+  "visit-success-meadow": {
+    "path": "/audio/voices/visit-success-meadow-e3244d1e397ccbb5.ogg",
+    "voice": "bm_george",
+    "text": "Lovely moves! Two stars for our little dance."
+  },
+  "visit-hello-woods": {
+    "path": "/audio/voices/visit-hello-woods-a4c12ff92290131d.ogg",
+    "voice": "bf_isabella",
+    "text": "Hello, my friend. Shall we dance together? Copy my move. Choose the matching picture, then press green A."
+  },
+  "visit-admire-woods": {
+    "path": "/audio/voices/visit-admire-woods-70014a4cba50ca4b.ogg",
+    "voice": "bf_isabella",
+    "text": "What lovely books. I would love to read here with you. Copy my move. Choose the matching picture, then press green A."
+  },
+  "visit-success-woods": {
+    "path": "/audio/voices/visit-success-woods-f41c2b75ac470bd0.ogg",
+    "voice": "bf_isabella",
+    "text": "What a delightful dance. Thank you for inviting me."
+  },
+  "visit-hello-cove": {
+    "path": "/audio/voices/visit-hello-cove-af3363785661c4bd.ogg",
+    "voice": "bf_emma",
+    "text": "Hello! My flippers are ready for a little dance. Copy my move. Choose the matching picture, then press green A."
+  },
+  "visit-admire-cove": {
+    "path": "/audio/voices/visit-admire-cove-96f47b65616488f1.ogg",
+    "voice": "bf_emma",
+    "text": "That sofa looks comfy. A lovely place to rest after our dance. Copy my move. Choose the matching picture, then press green A."
+  },
+  "visit-success-cove": {
+    "path": "/audio/voices/visit-success-cove-d781e00d069eeed6.ogg",
+    "voice": "bf_emma",
+    "text": "A happy dance with a happy friend. Lovely!"
+  },
+  "visit-hello-rocket": {
+    "path": "/audio/voices/visit-hello-rocket-fb229388d0d11025.ogg",
+    "voice": "bm_fable",
+    "text": "Hello, Earth friend! Time for a little space dance. Copy my move. Choose the matching picture, then press green A."
+  },
+  "visit-admire-rocket": {
+    "path": "/audio/voices/visit-admire-rocket-d12c924732016393.ogg",
+    "voice": "bm_fable",
+    "text": "I love your rug. It is like a soft little landing pad. Copy my move. Choose the matching picture, then press green A."
+  },
+  "visit-success-rocket": {
+    "path": "/audio/voices/visit-success-rocket-ce287acb2bc9951d.ogg",
+    "voice": "bm_fable",
+    "text": "Brilliant! We make a splendid dancing team."
+  },
+  "visit-hello-moon": {
+    "path": "/audio/voices/visit-hello-moon-8a5de86a0595d63a.ogg",
+    "voice": "bf_isabella",
+    "text": "Hello, little explorer! I have come down for a dance. Copy my move. Choose the matching picture, then press green A."
+  },
+  "visit-admire-moon": {
+    "path": "/audio/voices/visit-admire-moon-cc8537788dd29a82.ogg",
+    "voice": "bf_isabella",
+    "text": "Your bed looks cosy. A lovely place to dream about the stars. Copy my move. Choose the matching picture, then press green A."
+  },
+  "visit-success-moon": {
+    "path": "/audio/voices/visit-success-moon-1984f1fc3147cb6b.ogg",
+    "voice": "bf_isabella",
+    "text": "A dance among friends. That was a lovely visit."
+  },
+  "visit-move-clap": {
+    "path": "/audio/voices/visit-move-clap-5ee769a3c422193a.ogg",
+    "voice": "bf_emma",
+    "text": "Clap your hands together. Choose that picture, then press green A. Take your time."
+  },
+  "visit-move-stretch": {
+    "path": "/audio/voices/visit-move-stretch-87efa2696113bf94.ogg",
+    "voice": "bf_emma",
+    "text": "Reach up high with both hands. Choose that picture, then press green A. Take your time."
+  },
+  "visit-move-hop": {
+    "path": "/audio/voices/visit-move-hop-d9e65938cecb24f4.ogg",
+    "voice": "bf_emma",
+    "text": "A little hop, up and down. Choose that picture, then press green A. Take your time."
+  },
+  "visit-move-wiggle": {
+    "path": "/audio/voices/visit-move-wiggle-f155c81d07100006.ogg",
+    "voice": "bf_emma",
+    "text": "Wiggle gently from side to side. Choose that picture, then press green A. Take your time."
   }
 }

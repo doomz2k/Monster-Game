@@ -2066,5 +2066,109 @@
   "observatory-fact-neptune": {
     "voice": "nova",
     "text": "Neptune. Eighth from the Sun. It's the farthest of our eight planets from the Sun."
+  },
+  "visits-intro": {
+    "voice": "narrator",
+    "text": "Who shall we invite to play? Choose a friend, then press green A. Help a new friend on the island before inviting them round."
+  },
+  "visit-hello-shop": {
+    "voice": "poppy",
+    "text": "Oh, what a lovely place for a little dance! Copy my move. Choose the matching picture, then press green A."
+  },
+  "visit-admire-shop": {
+    "voice": "poppy",
+    "text": "Your lamp makes this room feel so cosy. Copy my move. Choose the matching picture, then press green A."
+  },
+  "visit-success-shop": {
+    "voice": "poppy",
+    "text": "That was lovely! Shall we do another little dance?"
+  },
+  "visit-hello-garden": {
+    "voice": "tilly",
+    "text": "Hello, little friend! I fancy a happy dance. Copy my move. Choose the matching picture, then press green A."
+  },
+  "visit-admire-garden": {
+    "voice": "tilly",
+    "text": "What a lovely table. We could have a little picnic here. Copy my move. Choose the matching picture, then press green A."
+  },
+  "visit-success-garden": {
+    "voice": "tilly",
+    "text": "We did it together! That put a spring in my step."
+  },
+  "visit-hello-meadow": {
+    "voice": "bramble",
+    "text": "Hello there! I have brought my dancing feet. Copy my move. Choose the matching picture, then press green A."
+  },
+  "visit-admire-meadow": {
+    "voice": "bramble",
+    "text": "Your table is just the place for sharing a pizza. Copy my move. Choose the matching picture, then press green A."
+  },
+  "visit-success-meadow": {
+    "voice": "bramble",
+    "text": "Lovely moves! Two stars for our little dance."
+  },
+  "visit-hello-woods": {
+    "voice": "olive",
+    "text": "Hello, my friend. Shall we dance together? Copy my move. Choose the matching picture, then press green A."
+  },
+  "visit-admire-woods": {
+    "voice": "olive",
+    "text": "What lovely books. I would love to read here with you. Copy my move. Choose the matching picture, then press green A."
+  },
+  "visit-success-woods": {
+    "voice": "olive",
+    "text": "What a delightful dance. Thank you for inviting me."
+  },
+  "visit-hello-cove": {
+    "voice": "marina",
+    "text": "Hello! My flippers are ready for a little dance. Copy my move. Choose the matching picture, then press green A."
+  },
+  "visit-admire-cove": {
+    "voice": "marina",
+    "text": "That sofa looks comfy. A lovely place to rest after our dance. Copy my move. Choose the matching picture, then press green A."
+  },
+  "visit-success-cove": {
+    "voice": "marina",
+    "text": "A happy dance with a happy friend. Lovely!"
+  },
+  "visit-hello-rocket": {
+    "voice": "pip",
+    "text": "Hello, Earth friend! Time for a little space dance. Copy my move. Choose the matching picture, then press green A."
+  },
+  "visit-admire-rocket": {
+    "voice": "pip",
+    "text": "I love your rug. It is like a soft little landing pad. Copy my move. Choose the matching picture, then press green A."
+  },
+  "visit-success-rocket": {
+    "voice": "pip",
+    "text": "Brilliant! We make a splendid dancing team."
+  },
+  "visit-hello-moon": {
+    "voice": "nova",
+    "text": "Hello, little explorer! I have come down for a dance. Copy my move. Choose the matching picture, then press green A."
+  },
+  "visit-admire-moon": {
+    "voice": "nova",
+    "text": "Your bed looks cosy. A lovely place to dream about the stars. Copy my move. Choose the matching picture, then press green A."
+  },
+  "visit-success-moon": {
+    "voice": "nova",
+    "text": "A dance among friends. That was a lovely visit."
+  },
+  "visit-move-clap": {
+    "voice": "narrator",
+    "text": "Clap your hands together. Choose that picture, then press green A. Take your time."
+  },
+  "visit-move-stretch": {
+    "voice": "narrator",
+    "text": "Reach up high with both hands. Choose that picture, then press green A. Take your time."
+  },
+  "visit-move-hop": {
+    "voice": "narrator",
+    "text": "A little hop, up and down. Choose that picture, then press green A. Take your time."
+  },
+  "visit-move-wiggle": {
+    "voice": "narrator",
+    "text": "Wiggle gently from side to side. Choose that picture, then press green A. Take your time."
   }
 }
